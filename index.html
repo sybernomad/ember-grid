@@ -316,6 +316,15 @@
             z-index: 2;
         }
 
+        .card-emoji {
+            position: absolute;
+            top: 46%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.35rem;
+            z-index: 1;
+        }
+
         .stat-top {
             position: absolute;
             top: 4px;
@@ -327,7 +336,7 @@
         .stat-right {
             position: absolute;
             right: 6px;
-            top: 50%;
+            top: 46%;
             transform: translateY(-50%);
             z-index: 2;
         }
@@ -343,7 +352,7 @@
         .stat-left {
             position: absolute;
             left: 6px;
-            top: 50%;
+            top: 46%;
             transform: translateY(-50%);
             z-index: 2;
         }
@@ -486,6 +495,10 @@
             left: 2px;
             font-size: 0.42rem;
             padding: 0 2px;
+        }
+
+        .draft-card .card-emoji {
+            font-size: 0.95rem;
         }
 
         .draft-card .stat-bottom {
@@ -993,7 +1006,7 @@
                     <div class="stat-right">${formatStat(card.stats[1])}</div>
                     <div class="stat-bottom">${formatStat(card.stats[2])}</div>
                     <div class="stat-left">${formatStat(card.stats[3])}</div>
-                    <div style="font-size:1.1rem; margin-top:2px;">${card.emoji}</div>
+                    <div class="card-emoji">${card.emoji}</div>
                     <div class="card-name">${card.name}</div>
                 `;
 
@@ -1150,7 +1163,7 @@
                 <div class="stat-right">${formatStat(card.stats[1])}</div>
                 <div class="stat-bottom">${formatStat(card.stats[2])}</div>
                 <div class="stat-left">${formatStat(card.stats[3])}</div>
-                <div style="font-size:1.3rem; margin-top:2px;">${card.emoji}</div>
+                <div class="card-emoji">${card.emoji}</div>
                 <div class="card-name">${card.name}</div>
             `;
 
