@@ -271,7 +271,6 @@
             line-height: 1;
         }
 
-        /* On mobile, show only the icon part of the label to prevent top stat overlap */
         @media (max-width: 767px) {
             .ability-badge {
                 font-size: 0.75rem;
@@ -320,7 +319,6 @@
             top: 46%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 1.35ns;
             font-size: 1.35rem;
             z-index: 1;
         }
@@ -583,12 +581,19 @@
     <!-- Main Menu Modal (Loads on startup) -->
     <div id="main-menu-modal" class="modal">
         <div class="modal-content">
-            <h2 style="margin-top: 0; color: var(--accent); font-size: 1.3rem; letter-spacing: 1px;">🔥 EMBER GRID 🔥</h2>
-            <p style="font-size: 0.75rem; line-height: 1.35; opacity: 0.9; margin-bottom: 12px;">
-                A tactical card battle game! Place cards on the 3×3 grid, out-stat your opponent's adjacent sides to flip cards, and control the board to win. Watch out for special card abilities!
+            <h2 style="margin-top: 0; color: var(--accent); font-size: 1.2rem; letter-spacing: 1px;">🔥 EMBER GRID 🔥</h2>
+            <p style="font-size: 0.72rem; line-height: 1.3; opacity: 0.9; margin-bottom: 8px;">
+                A tactical card battle game! Place cards on the 3×3 grid, out-stat adjacent sides to flip enemy cards, and control the majority of the board to win.
             </p>
             
-            <div class="settings-row" style="margin-bottom: 12px;">
+            <div style="background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 6px; padding: 6px; font-size: 0.7rem; text-align: left; margin-bottom: 10px; line-height: 1.3;">
+                <strong style="color: var(--accent);">Quick Rules:</strong>
+                <div>• <strong>Stats:</strong> Top, Right, Bottom, Left (1-10 / A).</div>
+                <div>• <strong>Capturing:</strong> Play next to an enemy; if your touching stat is higher, you flip their card!</div>
+                <div>• <strong>Abilities:</strong> Special icons (⚡ Buff, 💀 Curse) passively alter adjacent card stats while active on the board.</div>
+            </div>
+
+            <div class="settings-row" style="margin-bottom: 10px;">
                 <span>AI Difficulty:</span>
                 <select id="ai-difficulty-select" class="settings-select" onchange="updateDifficulty(this.value)">
                     <option value="easy">Easy 🟢</option>
@@ -608,13 +613,13 @@
     <div id="help-modal" class="modal hidden">
         <div class="modal-content" style="text-align: left;">
             <h2 style="margin-top: 0; color: var(--accent); text-align: center;">HOW TO PLAY</h2>
-            <p style="font-size: 0.8rem; line-height: 1.4; opacity: 0.9;">
+            <p style="font-size: 0.75rem; line-height: 1.35; opacity: 0.9;">
                 <strong>1. Card Stats:</strong> Each card has 4 numbers (Top, Right, Bottom, Left) ranging from 1 to 10 (displayed as <strong>Aces/A</strong>).<br><br>
                 <strong>2. Placing & Deselecting:</strong> Click a card in your hand to select it, then click an empty cell. Click your selected card again to deselect.<br><br>
-                <strong>3. Abilities:</strong> Tap over cards with ability icons (⚡, 💀, 🔮) to view their special effects in the tooltip!<br><br>
+                <strong>3. Abilities & Auras:</strong> Cards with abilities (⚡ Buff, 💀 Curse, 🔮 Hex) passively boost or weaken adjacent/target cards as long as they stay on the board!<br><br>
                 <strong>4. Winning:</strong> The player controlling the majority of the board when all 9 squares are filled wins the match!
             </p>
-            <button class="btn" onclick="document.getElementById('help-modal').classList.add('hidden')">Got it!</button>
+            <button class="btn" style="margin-top: 8px;" onclick="document.getElementById('help-modal').classList.add('hidden')">Got it!</button>
         </div>
     </div>
 
@@ -749,66 +754,66 @@
         };
 
         const masterCards = [
-            { name: "Alien", emoji: "👽", stats: [8, 3, 5, 2], ability: { type: 'aura_buff', val: 1, label: '⚡ Buff', icon: '⚡', desc: 'Boosts adjacent friendly cards by +1 stat.' } },
-            { name: "Ghost", emoji: "👻", stats: [4, 7, 2, 6], ability: { type: 'curse_adj', val: -1, label: '💀 Curse', icon: '💀', desc: 'Reduces adjacent enemy cards by -1 stat.' } },
-            { name: "Robot", emoji: "🤖", stats: [6, 6, 6, 1] },
-            { name: "Skull", emoji: "💀", stats: [9, 2, 4, 3] },
-            { name: "Cat", emoji: "🐱", stats: [2, 5, 8, 4] },
-            { name: "Dog", emoji: "🐶", stats: [5, 4, 3, 7] },
-            { name: "Fox", emoji: "🦊", stats: [7, 6, 2, 3] },
-            { name: "Panda", emoji: "🐼", stats: [3, 3, 7, 6] },
-            { name: "Lion", emoji: "🦁", stats: [8, 7, 5, 2] },
-            { name: "Tiger", emoji: "🐯", stats: [7, 8, 2, 4] },
-            { name: "Dragon", emoji: "🐲", stats: [9, 9, 3, 1] },
-            { name: "Unicorn", emoji: "🦄", stats: [4, 5, 6, 8], ability: { type: 'aura_buff', val: 1, label: '⚡ Buff', icon: '⚡', desc: 'Boosts adjacent friendly cards by +1 stat.' } },
-            { name: "Wizard", emoji: "🧙", stats: [6, 8, 4, 5], ability: { type: 'ranged_debuff', val: -1, label: '🔮 Hex', icon: '🔮', desc: 'Curses the strongest enemy card anywhere on the board by -1.' } },
-            { name: "Vampire", emoji: "🧛", stats: [8, 4, 3, 7], ability: { type: 'curse_adj', val: -1, label: '💀 Curse', icon: '💀', desc: 'Reduces adjacent enemy cards by -1 stat.' } },
-            { name: "Genie", emoji: "🧞", stats: [7, 6, 6, 6], ability: { type: 'ranged_debuff', val: -1, label: '🔮 Hex', icon: '🔮', desc: 'Curses the strongest enemy card anywhere on the board by -1.' } },
-            { name: "Monkey", emoji: "🐵", stats: [3, 6, 4, 7] },
-            { name: "Frog", emoji: "🐸", stats: [2, 4, 5, 3] },
-            { name: "Owl", emoji: "🦉", stats: [6, 3, 2, 7] },
-            { name: "Bee", emoji: "🐝", stats: [1, 8, 3, 4] },
-            { name: "Bug", emoji: "🐛", stats: [2, 2, 4, 1] },
-            { name: "Spider", emoji: "🕷️", stats: [5, 7, 6, 3] },
-            { name: "Scorpion", emoji: "🦂", stats: [7, 4, 8, 2] },
-            { name: "Turtle", emoji: "🐢", stats: [3, 2, 9, 4] },
-            { name: "Snake", emoji: "🐍", stats: [6, 5, 4, 6] },
-            { name: "Lizard", emoji: "🦎", stats: [4, 6, 3, 5] },
-            { name: "T-Rex", emoji: "🦖", stats: [9, 6, 7, 2] },
-            { name: "Sauropod", emoji: "🦕", stats: [5, 3, 8, 5] },
-            { name: "Shark", emoji: "🦈", stats: [8, 5, 6, 4] },
-            { name: "Dolphin", emoji: "🐬", stats: [4, 7, 5, 6] },
-            { name: "Whale", emoji: "🐳", stats: [6, 4, 9, 3] },
-            { name: "Fish", emoji: "🐠", stats: [2, 3, 3, 5] },
-            { name: "Octopus", emoji: "🐙", stats: [5, 6, 6, 5] },
-            { name: "Crab", emoji: "🦀", stats: [4, 5, 7, 2] },
-            { name: "Eagle", emoji: "🦅", stats: [7, 7, 3, 3] },
-            { name: "Duck", emoji: "🦆", stats: [3, 4, 4, 3] },
-            { name: "Bat", emoji: "🦇", stats: [5, 2, 2, 8] },
-            { name: "Rooster", emoji: "🐓", stats: [4, 5, 3, 2] },
-            { name: "Peacock", emoji: "🦚", stats: [3, 6, 5, 4] },
-            { name: "Parrot", emoji: "🦜", stats: [6, 4, 4, 5] },
-            { name: "Flamingo", emoji: "🦩", stats: [5, 3, 6, 4] },
-            { name: "Gorilla", emoji: "🦍", stats: [8, 6, 7, 4] },
-            { name: "Camel", emoji: "🐪", stats: [3, 4, 6, 5] },
-            { name: "Elephant", emoji: "🐘", stats: [7, 4, 9, 2] },
-            { name: "Kangaroo", emoji: "🦘", stats: [6, 5, 4, 5] },
-            { name: "Koala", emoji: "🐨", stats: [2, 3, 5, 4] },
-            { name: "Sloth", emoji: "🦥", stats: [1, 2, 8, 2] },
-            { name: "Otter", emoji: "🦦", stats: [4, 5, 4, 6] },
-            { name: "Skunk", emoji: "🦨", stats: [3, 4, 2, 5] },
-            { name: "Badger", emoji: "🦡", stats: [5, 5, 5, 5] },
-            { name: "Pig", emoji: "🐖", stats: [3, 3, 4, 3] },
-            { name: "Ram", emoji: "🐏", stats: [6, 7, 4, 2] },
-            { name: "Llama", emoji: "🦙", stats: [4, 4, 5, 4] },
-            { name: "Giraffe", emoji: "🦒", stats: [7, 3, 6, 3] },
-            { name: "Hedgehog", emoji: "🦔", stats: [2, 6, 3, 6] },
-            { name: "Zombie", emoji: "🧟", stats: [5, 2, 7, 4] },
-            { name: "Fairy", emoji: "🧚", stats: [4, 5, 3, 7] },
-            { name: "Mage", emoji: "🧝", stats: [5, 7, 5, 6] },
-            { name: "Cyclops", emoji: "👹", stats: [9, 5, 8, 1] },
-            { name: "Goblin", emoji: "👺", stats: [6, 3, 5, 6] },
-            { name: "Alien Monster", emoji: "👾", stats: [8, 7, 7, 3] }
+            { name: "Alien", emoji: "👽", baseStats: [8, 3, 5, 2], ability: { type: 'aura_buff', val: 1, label: '⚡ Buff', icon: '⚡', desc: 'Boosts adjacent friendly cards by +1 stat.' } },
+            { name: "Ghost", emoji: "👻", baseStats: [4, 7, 2, 6], ability: { type: 'curse_adj', val: -1, label: '💀 Curse', icon: '💀', desc: 'Reduces adjacent enemy cards by -1 stat.' } },
+            { name: "Robot", emoji: "🤖", baseStats: [6, 6, 6, 1] },
+            { name: "Skull", emoji: "💀", baseStats: [9, 2, 4, 3] },
+            { name: "Cat", emoji: "🐱", baseStats: [2, 5, 8, 4] },
+            { name: "Dog", emoji: "🐶", baseStats: [5, 4, 3, 7] },
+            { name: "Fox", emoji: "🦊", baseStats: [7, 6, 2, 3] },
+            { name: "Panda", emoji: "🐼", baseStats: [3, 3, 7, 6] },
+            { name: "Lion", emoji: "🦁", baseStats: [8, 7, 5, 2] },
+            { name: "Tiger", emoji: "🐯", baseStats: [7, 8, 2, 4] },
+            { name: "Dragon", emoji: "🐲", baseStats: [9, 9, 3, 1] },
+            { name: "Unicorn", emoji: "🦄", baseStats: [4, 5, 6, 8], ability: { type: 'aura_buff', val: 1, label: '⚡ Buff', icon: '⚡', desc: 'Boosts adjacent friendly cards by +1 stat.' } },
+            { name: "Wizard", emoji: "🧙", baseStats: [6, 8, 4, 5], ability: { type: 'ranged_debuff', val: -1, label: '🔮 Hex', icon: '🔮', desc: 'Curses the strongest enemy card anywhere on the board by -1.' } },
+            { name: "Vampire", emoji: "🧛", baseStats: [8, 4, 3, 7], ability: { type: 'curse_adj', val: -1, label: '💀 Curse', icon: '💀', desc: 'Reduces adjacent enemy cards by -1 stat.' } },
+            { name: "Genie", emoji: "🧞", baseStats: [7, 6, 6, 6], ability: { type: 'ranged_debuff', val: -1, label: '🔮 Hex', icon: '🔮', desc: 'Curses the strongest enemy card anywhere on the board by -1.' } },
+            { name: "Monkey", emoji: "🐵", baseStats: [3, 6, 4, 7] },
+            { name: "Frog", emoji: "🐸", baseStats: [2, 4, 5, 3] },
+            { name: "Owl", emoji: "🦉", baseStats: [6, 3, 2, 7] },
+            { name: "Bee", emoji: "🐝", baseStats: [1, 8, 3, 4] },
+            { name: "Bug", emoji: "🐛", baseStats: [2, 2, 4, 1] },
+            { name: "Spider", emoji: "🕷️", baseStats: [5, 7, 6, 3] },
+            { name: "Scorpion", emoji: "🦂", baseStats: [7, 4, 8, 2] },
+            { name: "Turtle", emoji: "🐢", baseStats: [3, 2, 9, 4] },
+            { name: "Snake", emoji: "🐍", baseStats: [6, 5, 4, 6] },
+            { name: "Lizard", emoji: "🦎", baseStats: [4, 6, 3, 5] },
+            { name: "T-Rex", emoji: "🦖", baseStats: [9, 6, 7, 2] },
+            { name: "Sauropod", emoji: "🦕", baseStats: [5, 3, 8, 5] },
+            { name: "Shark", emoji: "🦈", baseStats: [8, 5, 6, 4] },
+            { name: "Dolphin", emoji: "🐬", baseStats: [4, 7, 5, 6] },
+            { name: "Whale", emoji: "🐳", baseStats: [6, 4, 9, 3] },
+            { name: "Fish", emoji: "🐠", baseStats: [2, 3, 3, 5] },
+            { name: "Octopus", emoji: "🐙", baseStats: [5, 6, 6, 5] },
+            { name: "Crab", emoji: "🦀", baseStats: [4, 5, 7, 2] },
+            { name: "Eagle", emoji: "🦅", baseStats: [7, 7, 3, 3] },
+            { name: "Duck", emoji: "🦆", baseStats: [3, 4, 4, 3] },
+            { name: "Bat", emoji: "🦇", baseStats: [5, 2, 2, 8] },
+            { name: "Rooster", emoji: "🐓", baseStats: [4, 5, 3, 2] },
+            { name: "Peacock", emoji: "🦚", baseStats: [3, 6, 5, 4] },
+            { name: "Parrot", emoji: "🦜", baseStats: [6, 4, 4, 5] },
+            { name: "Flamingo", emoji: "🦩", baseStats: [5, 3, 6, 4] },
+            { name: "Gorilla", emoji: "🦍", baseStats: [8, 6, 7, 4] },
+            { name: "Camel", emoji: "🐪", baseStats: [3, 4, 6, 5] },
+            { name: "Elephant", emoji: "🐘", baseStats: [7, 4, 9, 2] },
+            { name: "Kangaroo", emoji: "🦘", baseStats: [6, 5, 4, 5] },
+            { name: "Koala", emoji: "🐨", baseStats: [2, 3, 5, 4] },
+            { name: "Sloth", emoji: "🦥", baseStats: [1, 2, 8, 2] },
+            { name: "Otter", emoji: "🦦", baseStats: [4, 5, 4, 6] },
+            { name: "Skunk", emoji: "🦨", baseStats: [3, 4, 2, 5] },
+            { name: "Badger", emoji: "🦡", baseStats: [5, 5, 5, 5] },
+            { name: "Pig", emoji: "🐖", baseStats: [3, 3, 4, 3] },
+            { name: "Ram", emoji: "🐏", baseStats: [6, 7, 4, 2] },
+            { name: "Llama", emoji: "🦙", baseStats: [4, 4, 5, 4] },
+            { name: "Giraffe", emoji: "🦒", baseStats: [7, 3, 6, 3] },
+            { name: "Hedgehog", emoji: "🦔", baseStats: [2, 6, 3, 6] },
+            { name: "Zombie", emoji: "🧟", baseStats: [5, 2, 7, 4] },
+            { name: "Fairy", emoji: "🧚", baseStats: [4, 5, 3, 7] },
+            { name: "Mage", emoji: "🧝", baseStats: [5, 7, 5, 6] },
+            { name: "Cyclops", emoji: "👹", baseStats: [9, 5, 8, 1] },
+            { name: "Goblin", emoji: "👺", baseStats: [6, 3, 5, 6] },
+            { name: "Alien Monster", emoji: "👾", baseStats: [8, 7, 7, 3] }
         ];
 
         let stats = JSON.parse(localStorage.getItem('ember_grid_stats')) || {
@@ -927,8 +932,8 @@
                 gameState = 'playing';
 
                 const shuffled = [...masterCards].sort(() => Math.random() - 0.5);
-                playerHand = shuffled.slice(0, 5).map(c => ({ ...c, stats: [...c.stats], owner: 'blue' }));
-                aiHand = shuffled.slice(5, 10).map(c => ({ ...c, stats: [...c.stats], owner: 'red' }));
+                playerHand = shuffled.slice(0, 5).map(c => ({ ...c, baseStats: [...c.baseStats], owner: 'blue' }));
+                aiHand = shuffled.slice(5, 10).map(c => ({ ...c, baseStats: [...c.baseStats], owner: 'red' }));
 
                 beginMatch();
             } else if (mode === 'draft') {
@@ -943,7 +948,7 @@
             const poolSource = [...masterCards].sort(() => Math.random() - 0.5).slice(0, 16);
             draftPool = poolSource.map(c => ({
                 ...c,
-                stats: [...c.stats],
+                baseStats: [...c.baseStats],
                 id: Math.random(),
                 draftedBy: null
             }));
@@ -1005,10 +1010,10 @@
 
                 el.innerHTML = `
                     ${badgeHtml}
-                    <div class="stat-top">${formatStat(card.stats[0])}</div>
-                    <div class="stat-right">${formatStat(card.stats[1])}</div>
-                    <div class="stat-bottom">${formatStat(card.stats[2])}</div>
-                    <div class="stat-left">${formatStat(card.stats[3])}</div>
+                    <div class="stat-top">${formatStat(card.baseStats[0])}</div>
+                    <div class="stat-right">${formatStat(card.baseStats[1])}</div>
+                    <div class="stat-bottom">${formatStat(card.baseStats[2])}</div>
+                    <div class="stat-left">${formatStat(card.baseStats[3])}</div>
                     <div class="card-emoji">${card.emoji}</div>
                     <div class="card-name">${card.name}</div>
                 `;
@@ -1051,8 +1056,8 @@
             if (availableCards.length === 0) return;
 
             availableCards.sort((a, b) => {
-                const sumA = a.stats.reduce((acc, val) => acc + val, 0);
-                const sumB = b.stats.reduce((acc, val) => acc + val, 0);
+                const sumA = a.baseStats.reduce((acc, val) => acc + val, 0);
+                const sumB = b.baseStats.reduce((acc, val) => acc + val, 0);
                 return sumB - sumA;
             });
 
@@ -1081,8 +1086,8 @@
             selectedCard = null;
             gameState = 'playing';
 
-            playerHand = draftedPlayerCards.map(c => ({ ...c, stats: [...c.stats], owner: 'blue' }));
-            aiHand = draftedAICards.map(c => ({ ...c, stats: [...c.stats], owner: 'red' }));
+            playerHand = draftedPlayerCards.map(c => ({ ...c, baseStats: [...c.baseStats], owner: 'blue' }));
+            aiHand = draftedAICards.map(c => ({ ...c, baseStats: [...c.baseStats], owner: 'red' }));
 
             beginMatch();
         }
@@ -1092,10 +1097,62 @@
             statusMsg.textContent = turn === 'player' ? "Your turn! Select a card." : "AI is thinking...";
             logAction("Match started. Good luck!");
 
+            recalculateDynamicStats();
             render();
             if (turn === 'ai') {
                 setTimeout(aiTurn, 700);
             }
+        }
+
+        // Recalculates persistent auras dynamically across the board
+        function recalculateDynamicStats() {
+            // Reset all cards on board to base stats
+            board.forEach(card => {
+                if (card) {
+                    card.stats = [...card.baseStats];
+                }
+            });
+
+            // Apply persistent adjacent auras (Buff / Curse)
+            board.forEach((card, index) => {
+                if (!card || !card.ability) return;
+
+                const row = Math.floor(index / 3);
+                const col = index % 3;
+
+                if (card.ability.type === 'aura_buff' || card.ability.type === 'curse_adj') {
+                    const val = card.ability.val;
+                    const targetOwner = card.ability.type === 'aura_buff' ? card.owner : (card.owner === 'blue' ? 'red' : 'blue');
+
+                    const neighbors = [
+                        { idx: index - 3, condition: row > 0 },
+                        { idx: index + 1, condition: col < 2 },
+                        { idx: index + 3, condition: row < 2 },
+                        { idx: index - 1, condition: col > 0 }
+                    ];
+
+                    neighbors.forEach(n => {
+                        if (n.condition && board[n.idx] !== null) {
+                            const neighborCard = board[n.idx];
+                            if (neighborCard.owner === targetOwner) {
+                                neighborCard.stats = neighborCard.stats.map(s => Math.max(1, Math.min(10, s + val)));
+                            }
+                        }
+                    });
+                } else if (card.ability.type === 'ranged_debuff') {
+                    // Wizard / Genie hexes strongest enemy anywhere
+                    let enemyCards = board.map((c, i) => (c !== null && c.owner !== card.owner) ? { card: c, idx: i } : null).filter(Boolean);
+                    if (enemyCards.length > 0) {
+                        enemyCards.sort((a, b) => {
+                            const sumA = a.card.stats.reduce((x, y) => x + y, 0);
+                            const sumB = b.card.stats.reduce((x, y) => x + y, 0);
+                            return sumB - sumA;
+                        });
+                        const target = enemyCards[0].card;
+                        target.stats = target.stats.map(s => Math.max(1, s - 1));
+                    }
+                }
+            });
         }
 
         function render() {
@@ -1164,12 +1221,14 @@
                 badgeHtml = `<div class="ability-badge">${labelContent}</div>`;
             }
 
+            const activeStats = card.stats || card.baseStats;
+
             div.innerHTML = `
                 ${badgeHtml}
-                <div class="stat-top">${formatStat(card.stats[0])}</div>
-                <div class="stat-right">${formatStat(card.stats[1])}</div>
-                <div class="stat-bottom">${formatStat(card.stats[2])}</div>
-                <div class="stat-left">${formatStat(card.stats[3])}</div>
+                <div class="stat-top">${formatStat(activeStats[0])}</div>
+                <div class="stat-right">${formatStat(activeStats[1])}</div>
+                <div class="stat-bottom">${formatStat(activeStats[2])}</div>
+                <div class="stat-left">${formatStat(activeStats[3])}</div>
                 <div class="card-emoji">${card.emoji}</div>
                 <div class="card-name">${card.name}</div>
             `;
@@ -1209,6 +1268,7 @@
             sfx.place();
             hideTooltip();
             const cardToPlay = playerHand.splice(selectedCard, 1)[0];
+            cardToPlay.stats = [...cardToPlay.baseStats];
             board[index] = cardToPlay;
             selectedCard = null;
 
@@ -1219,8 +1279,9 @@
         }
 
         function processCardPlacement(index, placedCard) {
-            applyCardAbilities(index, placedCard);
+            recalculateDynamicStats();
             checkCaptures(index, placedCard);
+            recalculateDynamicStats(); // Re-verify after captures
 
             turn = turn === 'player' ? 'ai' : 'player';
             render();
@@ -1235,48 +1296,6 @@
                 setTimeout(aiTurn, 600);
             } else {
                 statusMsg.textContent = "Your turn! Select a card.";
-            }
-        }
-
-        function applyCardAbilities(placedIndex, placedCard) {
-            if (!placedCard.ability) return;
-
-            sfx.ability();
-            const row = Math.floor(placedIndex / 3);
-            const col = placedIndex % 3;
-
-            if (placedCard.ability.type === 'aura_buff' || placedCard.ability.type === 'curse_adj') {
-                const val = placedCard.ability.val;
-                const targetOwner = placedCard.ability.type === 'aura_buff' ? placedCard.owner : (placedCard.owner === 'blue' ? 'red' : 'blue');
-
-                const neighbors = [
-                    { idx: placedIndex - 3, condition: row > 0 },
-                    { idx: placedIndex + 1, condition: col < 2 },
-                    { idx: placedIndex + 3, condition: row < 2 },
-                    { idx: placedIndex - 1, condition: col > 0 }
-                ];
-
-                neighbors.forEach(n => {
-                    if (n.condition && board[n.idx] !== null) {
-                        const neighborCard = board[n.idx];
-                        if (neighborCard.owner === targetOwner) {
-                            neighborCard.stats = neighborCard.stats.map(s => Math.max(1, Math.min(10, s + val)));
-                        }
-                    }
-                });
-                logAction(`${placedCard.name} activated ${placedCard.ability.label}!`);
-            } else if (placedCard.ability.type === 'ranged_debuff') {
-                let enemyCards = board.map((c, i) => (c !== null && c.owner !== placedCard.owner) ? { card: c, idx: i } : null).filter(Boolean);
-                if (enemyCards.length > 0) {
-                    enemyCards.sort((a, b) => {
-                        const sumA = a.card.stats.reduce((x, y) => x + y, 0);
-                        const sumB = b.card.stats.reduce((x, y) => x + y, 0);
-                        return sumB - sumA;
-                    });
-                    const target = enemyCards[0].card;
-                    target.stats = target.stats.map(s => Math.max(1, s - 1));
-                    logAction(`${placedCard.name} cast Ranged Hex on enemy ${target.name}!`);
-                }
             }
         }
 
@@ -1299,8 +1318,11 @@
                 if (n.condition && board[n.idx] !== null) {
                     const neighborCard = board[n.idx];
                     if (neighborCard.owner !== placedCard.owner) {
-                        const myVal = placedCard.stats[n.pStat];
-                        const theirVal = neighborCard.stats[n.nStat];
+                        const myStats = placedCard.stats || placedCard.baseStats;
+                        const theirStats = neighborCard.stats || neighborCard.baseStats;
+
+                        const myVal = myStats[n.pStat];
+                        const theirVal = theirStats[n.nStat];
 
                         if (myVal > theirVal) {
                             const originalOwner = neighborCard.owner;
@@ -1323,7 +1345,7 @@
             });
 
             if (flipCount > 0) {
-                logAction(`${placedCard.name} captured ${flipCount} card(s)!`);
+                logAction(`${placedCard.name} captured ${flipCount} card(s)!`, placedCard);
             }
 
             if (blueFlipped) {
@@ -1368,7 +1390,9 @@
                         if (n.condition && board[n.idx] !== null) {
                             const neighborCard = board[n.idx];
                             if (neighborCard.owner === 'blue') {
-                                if (card.stats[n.pStat] > neighborCard.stats[n.nStat]) {
+                                const cardStats = card.stats || card.baseStats;
+                                const neighborStats = neighborCard.stats || neighborCard.baseStats;
+                                if (cardStats[n.pStat] > neighborStats[n.nStat]) {
                                     flipsCount++;
                                 }
                             }
@@ -1376,14 +1400,15 @@
                     });
 
                     score += flipsCount * 12;
-                    const statSum = card.stats.reduce((a, b) => a + b, 0);
+                    const statSum = card.baseStats.reduce((a, b) => a + b, 0);
                     score += statSum * 0.1;
                     if (card.ability) score += 3;
 
                     if (aiDifficulty === 'hard') {
                         neighbors.forEach(n => {
                             if (n.condition && board[n.idx] === null) {
-                                const exposedStatVal = card.stats[n.pStat];
+                                const cardStats = card.stats || card.baseStats;
+                                const exposedStatVal = cardStats[n.pStat];
                                 if (exposedStatVal <= 4) {
                                     exposureRisk += (5 - exposedStatVal);
                                 }
@@ -1409,6 +1434,7 @@
         function executeAIMove(cardIdx, cellIdx) {
             sfx.place();
             const chosenCard = aiHand.splice(cardIdx, 1)[0];
+            chosenCard.stats = [...chosenCard.baseStats];
             board[cellIdx] = chosenCard;
             logAction(`AI played ${chosenCard.name}.`);
             processCardPlacement(cellIdx, chosenCard);
