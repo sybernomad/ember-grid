@@ -226,9 +226,10 @@
             transition: border-color 0.15s, background-color 0.15s;
         }
 
-        .cell:hover {
+        .cell:hover,
+        .cell.drag-over {
             border-color: var(--accent);
-            background-color: rgba(245, 158, 11, 0.05);
+            background-color: rgba(245, 158, 11, 0.1);
         }
 
         .card {
@@ -242,10 +243,19 @@
             padding: 4px;
             font-size: var(--font-main);
             font-weight: bold;
-            cursor: pointer;
+            cursor: grab;
             position: relative;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
             transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), filter 0.15s;
+            touch-action: none;
+        }
+
+        .card:active {
+            cursor: grabbing;
+        }
+
+        .card.dragging {
+            opacity: 0.4;
         }
 
         @keyframes pulseFlip {
@@ -384,14 +394,14 @@
             background: var(--panel-bg);
             color: var(--text-color);
             border: 1px solid var(--accent);
-            padding: 5px 8px;
+            padding: 6px 10px;
             border-radius: 6px;
             font-size: 0.7rem;
             font-weight: 600;
             pointer-events: none;
             z-index: 200;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-            max-width: 160px;
+            max-width: 180px;
             text-align: center;
             display: none;
             line-height: 1.3;
@@ -518,7 +528,6 @@
             font-size: 0.75rem;
         }
 
-        /* Expanded Rules & Compendium Specs */
         .expanded-rules-list {
             display: flex;
             flex-direction: column;
@@ -581,7 +590,6 @@
             font-size: 0.42rem;
         }
 
-        /* Draft Mode Specs */
         .draft-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -634,7 +642,6 @@
             font-size: var(--draft-font-name);
         }
 
-        /* Stat Grid Specs */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -697,7 +704,7 @@
     <!-- Floating Card Tooltip -->
     <div id="card-tooltip" class="card-tooltip"></div>
 
-    <!-- Streamlined Main Menu Modal -->
+    <!-- Main Menu Modal -->
     <div id="main-menu-modal" class="modal">
         <div class="modal-content">
             <h2
@@ -775,7 +782,7 @@
                 <div class="rule-detail-item"><strong>🔮 Bolt:</strong> Zaps a random enemy card on the board, reducing
                     its stats by 2 on play.</div>
                 <div class="rule-detail-item"><strong>⚖️ Equalizer:</strong> Captures if touching stats match exactly.
-                </div>
+                    (Monk, Titan)</div>
                 <div class="rule-detail-item"><strong>💥 Blast:</strong> Temporarily grants +2 to all stats on the play
                     turn.</div>
                 <div class="rule-detail-item"><strong>🦠 Poison:</strong> Reduces all adjacent cards' stats by 1 at turn
@@ -899,8 +906,9 @@
             lose: () => {playTone(300, 'sawtooth', 0.12, 0.08); setTimeout(() => playTone(180, 'sawtooth', 0.2, 0.08), 100);}
         };
 
-        // --- Tooltip Engine ---
+        // --- Clamped Mobile-Friendly Tooltip Engine ---
         const tooltipEl = document.getElementById('card-tooltip');
+        let longPressTimer = null;
 
         function showTooltip(text, e) {
             if (!text) return;
@@ -910,15 +918,33 @@
         }
 
         function updateTooltipPosition(e) {
-            const x = e.clientX || (e.touches && e.touches[0].clientX);
-            const y = e.clientY || (e.touches && e.touches[0].clientY);
-            if (x && y) {
-                tooltipEl.style.left = (x + 12) + 'px';
-                tooltipEl.style.top = (y - 30) + 'px';
+            const x = e.clientX || (e.touches && e.touches[0] && e.touches[0].clientX);
+            const y = e.clientY || (e.touches && e.touches[0] && e.touches[0].clientY);
+            if (!x || !y) return;
+
+            const tipWidth = 180;
+            const tipHeight = 60;
+            let left = x + 14;
+            let top = y - 35;
+
+            if (left + tipWidth > window.innerWidth - 10) {
+                left = window.innerWidth - tipWidth - 10;
             }
+            if (top < 10) {
+                top = y + 20;
+            }
+
+            tooltipEl.style.left = left + 'px';
+            tooltipEl.style.top = top + 'px';
         }
 
-        function hideTooltip() {tooltipEl.style.display = 'none';}
+        function hideTooltip() {
+            tooltipEl.style.display = 'none';
+            if (longPressTimer) {
+                clearTimeout(longPressTimer);
+                longPressTimer = null;
+            }
+        }
 
         // --- Card Database ---
         const masterCards = [
@@ -952,7 +978,7 @@
             {name: "Alien Boss", emoji: "👾", baseStats: [7, 6, 6, 3]},
             {name: "Snake", emoji: "🐍", baseStats: [5, 4, 4, 5], ability: {type: 'poison', icon: '🦠', desc: 'Reduces all adjacent cards\' stats by 1 at the end of every turn.'}},
             {name: "Scorpion", emoji: "🦂", baseStats: [6, 4, 7, 2], ability: {type: 'poison', icon: '🦠', desc: 'Reduces all adjacent cards\' stats by 1 at the end of every turn.'}},
-            {name: "Titan", emoji: "🗿", baseStats: [10, 3, 4, 2]},
+            {name: "Titan", emoji: "🗿", baseStats: [10, 3, 4, 2], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
             {name: "Celestial", emoji: "✨", baseStats: [3, 2, 10, 4], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'Boosts adjacent friendly cards by +1 stat.'}}
         ];
 
@@ -1039,14 +1065,24 @@
                     <div class="card-name">${card.name}</div>
                 `;
                 if (card.ability && card.ability.desc) {
-                    el.addEventListener('mouseenter', (e) => showTooltip(`${card.name}: ${card.ability.desc}`, e));
-                    el.addEventListener('mousemove', updateTooltipPosition);
-                    el.addEventListener('mouseleave', hideTooltip);
-                    el.addEventListener('touchstart', (e) => showTooltip(`${card.name}: ${card.ability.desc}`, e), {passive: true});
-                    el.addEventListener('touchend', hideTooltip, {passive: true});
+                    addTooltipListeners(el, `${card.name}: ${card.ability.desc}`);
                 }
                 grid.appendChild(el);
             });
+        }
+
+        function addTooltipListeners(el, descText) {
+            el.addEventListener('mouseenter', (e) => showTooltip(descText, e));
+            el.addEventListener('mousemove', updateTooltipPosition);
+            el.addEventListener('mouseleave', hideTooltip);
+
+            el.addEventListener('touchstart', (e) => {
+                longPressTimer = setTimeout(() => {
+                    showTooltip(descText, e);
+                }, 400);
+            }, {passive: true});
+            el.addEventListener('touchend', hideTooltip, {passive: true});
+            el.addEventListener('touchmove', hideTooltip, {passive: true});
         }
 
         function startGame(mode) {
@@ -1108,14 +1144,12 @@
                 `;
 
                 if (card.ability && card.ability.desc) {
-                    el.addEventListener('mouseenter', (e) => showTooltip(card.ability.desc, e));
-                    el.addEventListener('mousemove', updateTooltipPosition);
-                    el.addEventListener('mouseleave', hideTooltip);
-                    el.addEventListener('touchstart', (e) => showTooltip(card.ability.desc, e), {passive: true});
-                    el.addEventListener('touchend', hideTooltip, {passive: true});
+                    addTooltipListeners(el, card.ability.desc);
                 }
 
-                if (!card.draftedBy && draftTurn === 'player') el.addEventListener('click', () => {sfx.click(); hideTooltip(); playerDraftPick(card);});
+                if (!card.draftedBy && draftTurn === 'player') {
+                    el.addEventListener('click', () => {sfx.click(); hideTooltip(); playerDraftPick(card);});
+                }
                 grid.appendChild(el);
             });
             document.getElementById('draft-status').textContent = draftTurn === 'player' ? "Your turn! Select a card." : "AI is choosing...";
@@ -1145,9 +1179,9 @@
                     case 'poison': baseScore += 5; break;
                     case 'blast': baseScore += 4; break;
                     case 'aura_buff': baseScore += 4; break;
+                    case 'equalizer': baseScore += 4; break;
                     case 'ranged_debuff':
                     case 'curse_adj': baseScore += 3; break;
-                    case 'equalizer': baseScore += 2; break;
                     default: baseScore += 2;
                 }
             }
@@ -1174,7 +1208,6 @@
             if (turn === 'ai') setTimeout(aiTurn, 700);
         }
 
-        // --- Dynamic Stat Engine (Aura Buffs Only) ---
         function recalculateDynamicStats() {
             board.forEach(c => {if (c) c.stats = [...c.baseStats];});
             board.forEach((card, index) => {
@@ -1193,7 +1226,6 @@
             });
         }
 
-        // --- Helper for Stat Val (including Blast on placement turn) ---
         function getEffectiveStat(card, statIndex, isPlacementTurn) {
             let val = (card.stats || card.baseStats)[statIndex];
             if (isPlacementTurn && card.ability && card.ability.type === 'blast') {
@@ -1202,7 +1234,6 @@
             return val;
         }
 
-        // --- One-Time On-Play Abilities (Curse/Bolt) ---
         function applyOnPlayAbilities(placedCard) {
             if (!placedCard.ability) return;
             const abType = placedCard.ability.type;
@@ -1280,6 +1311,15 @@
             const gridEl = document.getElementById('board-grid'); gridEl.innerHTML = '';
             board.forEach((cell, index) => {
                 const cellEl = document.createElement('div'); cellEl.className = 'cell';
+
+                cellEl.addEventListener('dragover', (e) => {e.preventDefault(); cellEl.classList.add('drag-over');});
+                cellEl.addEventListener('dragleave', () => cellEl.classList.remove('drag-over'));
+                cellEl.addEventListener('drop', (e) => {
+                    e.preventDefault(); cellEl.classList.remove('drag-over');
+                    const handIndex = parseInt(e.dataTransfer.getData('text/plain'));
+                    if (!isNaN(handIndex)) executeCardPlay(handIndex, index);
+                });
+
                 cellEl.addEventListener('click', () => handleCellClick(index));
                 if (cell) cellEl.appendChild(createCardElement(cell, index, 'board'));
                 gridEl.appendChild(cellEl);
@@ -1305,18 +1345,22 @@
             `;
 
             if (card.ability && card.ability.desc) {
-                div.addEventListener('mouseenter', (e) => showTooltip(card.ability.desc, e));
-                div.addEventListener('mousemove', updateTooltipPosition);
-                div.addEventListener('mouseleave', hideTooltip);
-                div.addEventListener('touchstart', (e) => showTooltip(card.ability.desc, e), {passive: true});
-                div.addEventListener('touchend', hideTooltip, {passive: true});
+                addTooltipListeners(div, card.ability.desc);
             }
 
             if (source === 'player' && turn === 'player' && gameState === 'playing') {
+                div.setAttribute('draggable', 'true');
+                div.addEventListener('dragstart', (e) => {
+                    selectedCard = index;
+                    e.dataTransfer.setData('text/plain', index);
+                    div.classList.add('dragging');
+                });
+                div.addEventListener('dragend', () => div.classList.remove('dragging'));
+
                 div.addEventListener('click', (e) => {
                     e.stopPropagation(); sfx.click(); hideTooltip();
                     selectedCard = (selectedCard === index) ? null : index;
-                    statusMsg.textContent = selectedCard !== null ? `Selected: ${card.name}. Click an empty cell.` : "Your turn! Select a card.";
+                    statusMsg.textContent = selectedCard !== null ? `Selected: ${card.name}. Click or drag to an empty cell.` : "Your turn! Select a card.";
                     render();
                 });
             }
@@ -1325,12 +1369,17 @@
 
         function handleCellClick(index) {
             if (gameState !== 'playing' || turn !== 'player' || selectedCard === null || board[index] !== null) return;
+            executeCardPlay(selectedCard, index);
+        }
+
+        function executeCardPlay(handIndex, boardIndex) {
+            if (board[boardIndex] !== null || handIndex >= playerHand.length) return;
             sfx.place(); hideTooltip();
-            const cardToPlay = playerHand.splice(selectedCard, 1)[0];
+            const cardToPlay = playerHand.splice(handIndex, 1)[0];
             cardToPlay.stats = [...cardToPlay.baseStats];
-            board[index] = cardToPlay; selectedCard = null;
+            board[boardIndex] = cardToPlay; selectedCard = null;
             stats.cardPlays[cardToPlay.name] = (stats.cardPlays[cardToPlay.name] || 0) + 1;
-            processCardPlacement(index, cardToPlay);
+            processCardPlacement(boardIndex, cardToPlay);
         }
 
         function processCardPlacement(index, placedCard) {
