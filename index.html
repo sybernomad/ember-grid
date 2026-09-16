@@ -330,6 +330,27 @@
             outline-offset: 2px;
         }
 
+        .match-chips {
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            opacity: 0.72;
+            min-height: 14px;
+            text-align: center;
+            width: 100%;
+            max-width: calc(var(--grid-w) * 3 + 18px);
+        }
+
+        .card.bolt-target {
+            box-shadow: 0 0 0 2px #60a5fa, 0 0 16px rgba(96, 165, 250, 0.45);
+            cursor: pointer;
+        }
+
+        .compendium-filter {
+            width: 100%;
+            margin: 0 0 8px;
+        }
+
         .score-board {
             display: flex;
             justify-content: space-between;
@@ -1432,6 +1453,7 @@
             <div class="turn-indicator" id="turn-indicator">BATTLE</div>
             <div class="score-pill score-red" id="score-red">Red: -</div>
         </div>
+        <div class="match-chips" id="match-chips"></div>
 
         <div class="battlefield">
             <div class="grid" id="board-grid"></div>
@@ -1534,8 +1556,8 @@
                 <div class="rule-detail-item"><strong>⚡ Buff:</strong> Boosts adjacent friendly cards by +1 stat.</div>
                 <div class="rule-detail-item"><strong>💀 Curse:</strong> Reduces the strongest enemy card's stats by 1
                     on play.</div>
-                <div class="rule-detail-item"><strong>🔮 Bolt:</strong> Zaps a random enemy card on the board, reducing
-                    its stats by 2 on play.</div>
+                <div class="rule-detail-item"><strong>🔮 Bolt:</strong> Choose an enemy on the board (AI picks the
+                    strongest) and reduce its stats by 2 on play.</div>
                 <div class="rule-detail-item"><strong>⚖️ Equalizer:</strong> Captures if touching stats match exactly.
                     (Monk, Titan)</div>
                 <div class="rule-detail-item"><strong>💥 Blast:</strong> Temporarily grants +2 to all stats on the play
@@ -1547,6 +1569,17 @@
             <div class="menu-section-title">Base Set</div>
             <p class="set-blurb">The first 32 cards. Beasts, spirits, constructs, and myths in one pile — the set that
                 taught the table.</p>
+            <select id="compendium-filter" class="settings-select compendium-filter" onchange="renderCompendium()">
+                <option value="all">All cards</option>
+                <option value="ability">Abilities only</option>
+                <option value="vanilla">No ability</option>
+                <option value="aura_buff">Buff</option>
+                <option value="curse_adj">Curse</option>
+                <option value="ranged_debuff">Bolt</option>
+                <option value="equalizer">Equalizer</option>
+                <option value="blast">Blast</option>
+                <option value="poison">Poison</option>
+            </select>
             <div class="compendium-grid" id="compendium-grid"></div>
 
             <button class="btn" onclick="closeRulesModal()">Close Guide</button>
@@ -1609,7 +1642,8 @@
             <h2 id="gameover-title" class="modal-title">Match Over</h2>
             <p id="gameover-desc" style="font-size: 0.85rem; opacity: 0.9; margin: 0 0 12px; font-weight: 700;"></p>
             <div class="gameover-actions">
-                <button class="btn" onclick="startCurrentModeAgain()">Play Again</button>
+                <button class="btn" onclick="rematchSwapFirst()">Play Again (swap first)</button>
+                <button class="btn btn-alt" onclick="newHands()">New Hands</button>
                 <button class="btn btn-alt" onclick="viewFinalBoard()">View Board</button>
                 <button class="btn btn-muted" onclick="showModeMenu()">Main Menu</button>
             </div>
@@ -1718,11 +1752,11 @@
             {name: "Lion", emoji: "🦁", baseStats: [7, 6, 4, 2]},
             {name: "Dragon", emoji: "🐲", baseStats: [9, 7, 3, 2], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
             {name: "Unicorn", emoji: "🦄", baseStats: [4, 4, 5, 7], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'Boosts adjacent friendly cards by +1 stat.'}},
-            {name: "Wizard", emoji: "🧙", baseStats: [5, 7, 3, 5], ability: {type: 'ranged_debuff', icon: '🔮', desc: 'Zaps a random enemy card on play, reducing all its stats by 2.'}},
+            {name: "Wizard", emoji: "🧙", baseStats: [5, 7, 3, 5], ability: {type: 'ranged_debuff', icon: '🔮', desc: 'On play, choose an enemy and reduce all its stats by 2.'}},
             {name: "Vampire", emoji: "🧛", baseStats: [7, 3, 3, 6], ability: {type: 'curse_adj', icon: '💀', desc: 'Permanently reduces all stats of the strongest enemy by 1 when played.'}},
             {name: "Paladin", emoji: "🛡️", baseStats: [4, 8, 8, 2]},
             {name: "Monk", emoji: "☯️", baseStats: [5, 5, 5, 5], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
-            {name: "Genie", emoji: "🧞", baseStats: [6, 5, 5, 5], ability: {type: 'ranged_debuff', icon: '🔮', desc: 'Zaps a random enemy card on play, reducing all its stats by 2.'}},
+            {name: "Genie", emoji: "🧞", baseStats: [6, 5, 5, 5], ability: {type: 'ranged_debuff', icon: '🔮', desc: 'On play, choose an enemy and reduce all its stats by 2.'}},
             {name: "Monkey", emoji: "🐵", baseStats: [3, 5, 4, 6]},
             {name: "Frog", emoji: "🐸", baseStats: [2, 4, 5, 3]},
             {name: "Owl", emoji: "🦉", baseStats: [5, 3, 2, 6]},
@@ -1770,6 +1804,7 @@
         let playerHand = [], aiHand = [], draftPool = [], draftedPlayerCards = [], draftedAICards = [];
         let selectedCard = null, turn = 'player', gameState = 'menu', activeMode = 'random', aiDifficulty = 'normal', draftTurn = 'player';
         let currentRuleset = 'ember';
+        let pendingBolt = null, lastMatch = null, matchFirst = 'player';
         let lastBlueScore = null, lastRedScore = null;
         let draftStarter = 'player', draftPickIndex = 0;
         let draftTimer = null;
@@ -1791,7 +1826,7 @@
             return `${unique.slice(0, -1).join(', ')}, and ${unique[unique.length - 1]}`;
         }
 
-        function updateDifficulty(val) {sfx.click(); aiDifficulty = val;}
+        function updateDifficulty(val) {sfx.click(); aiDifficulty = val; updateMatchChips();}
         function refreshRulesetDesc() {
             const descBox = document.getElementById('ruleset-desc');
             descBox.innerHTML = currentRuleset === 'classic'
@@ -1847,6 +1882,7 @@
             document.getElementById('main-menu-modal').classList.remove('hidden');
             gameState = 'menu'; board = Array(9).fill(null); playerHand = []; aiHand = []; selectedCard = null;
             lastBlueScore = null; lastRedScore = null;
+            pendingBolt = null; lastMatch = null;
             logAction("Ready for battle."); render();
         }
 
@@ -1871,7 +1907,13 @@
         function renderCompendium() {
             const grid = document.getElementById('compendium-grid');
             grid.innerHTML = '';
+            const filter = (document.getElementById('compendium-filter') || {}).value || 'all';
             masterCards.forEach(card => {
+                if (filter === 'ability' && !card.ability) return;
+                if (filter === 'vanilla' && card.ability) return;
+                if (filter !== 'all' && filter !== 'ability' && filter !== 'vanilla') {
+                    if (!card.ability || card.ability.type !== filter) return;
+                }
                 const el = document.createElement('div');
                 el.className = 'compendium-card';
                 el.innerHTML = `
@@ -1907,25 +1949,14 @@
         }
 
         function startGame(mode) {
-            sfx.click(); hideTooltip(); activeMode = mode;
+            sfx.click(); hideTooltip(); pendingBolt = null; activeMode = mode;
             ['main-menu-modal', 'draft-modal', 'expanded-rules-modal', 'gameover-modal'].forEach(id => document.getElementById(id).classList.add('hidden'));
 
             if (mode === 'random') {
+                const dealt = dealBalancedHands();
                 board = Array(9).fill(null); selectedCard = null; gameState = 'playing';
-                const shuffled = [...masterCards].sort(() => Math.random() - 0.5);
-
-                playerHand = shuffled.slice(0, 5).map(c => {
-                    let copy = {...c, baseStats: [...c.baseStats], owner: 'blue'};
-                    if (currentRuleset === 'classic') delete copy.ability;
-                    return copy;
-                });
-
-                aiHand = shuffled.slice(5, 10).map(c => {
-                    let copy = {...c, baseStats: [...c.baseStats], owner: 'red'};
-                    if (currentRuleset === 'classic') delete copy.ability;
-                    return copy;
-                });
-
+                playerHand = dealt.blue.map(c => cloneForOwner(c, 'blue'));
+                aiHand = dealt.red.map(c => cloneForOwner(c, 'red'));
                 beginMatch();
             } else if (mode === 'draft') {
                 startDraftMode();
@@ -1949,7 +1980,66 @@
             if (draftTurn === 'ai') scheduleAiDraftPick(600);
         }
 
-        function startCurrentModeAgain() {sfx.click(); hideTooltip(); startGame(activeMode);}
+        function startCurrentModeAgain() {rematchSwapFirst();}
+
+        function cloneForOwner(card, owner) {
+            const copy = {...card, baseStats: [...card.baseStats], owner};
+            if (card.ability) copy.ability = {...card.ability};
+            if (currentRuleset === 'classic') delete copy.ability;
+            return copy;
+        }
+
+        function cardDealScore(card) {
+            if (currentRuleset === 'classic') return card.baseStats.reduce((sum, val) => sum + val, 0);
+            return getCardDraftScore(card);
+        }
+
+        function dealBalancedHands() {
+            const pool = [...masterCards].sort(() => Math.random() - 0.5).slice(0, 10)
+                .sort((a, b) => cardDealScore(b) - cardDealScore(a));
+            const blue = [], red = [];
+            let b = 0, r = 0;
+            const bluePicksFirst = Math.random() < 0.5;
+            pool.forEach(card => {
+                const p = cardDealScore(card);
+                if (blue.length === 5) {red.push(card); r += p; return;}
+                if (red.length === 5) {blue.push(card); b += p; return;}
+                const giveBlue = b < r || (b === r && (blue.length < red.length || (blue.length === red.length && bluePicksFirst)));
+                if (giveBlue) {blue.push(card); b += p;}
+                else {red.push(card); r += p;}
+            });
+            return {blue, red};
+        }
+
+        function snapshotMatch(first) {
+            lastMatch = {
+                mode: activeMode,
+                playerIds: playerHand.map(c => c.id),
+                aiIds: aiHand.map(c => c.id),
+                first
+            };
+        }
+
+        function handsFromIds(playerIds, aiIds) {
+            playerHand = playerIds.map(id => cloneForOwner(masterCards.find(c => c.id === id), 'blue'));
+            aiHand = aiIds.map(id => cloneForOwner(masterCards.find(c => c.id === id), 'red'));
+        }
+
+        function rematchSwapFirst() {
+            if (!lastMatch) {startGame(activeMode); return;}
+            sfx.click(); hideTooltip(); pendingBolt = null;
+            document.getElementById('gameover-modal').classList.add('hidden');
+            document.getElementById('main-menu-modal').classList.add('hidden');
+            board = Array(9).fill(null); selectedCard = null; gameState = 'playing';
+            handsFromIds(lastMatch.playerIds, lastMatch.aiIds);
+            beginMatch(lastMatch.first === 'player' ? 'ai' : 'player');
+        }
+
+        function newHands() {
+            hideTooltip(); pendingBolt = null;
+            document.getElementById('gameover-modal').classList.add('hidden');
+            startGame(activeMode);
+        }
 
         function viewFinalBoard() {
             sfx.click();
@@ -2045,14 +2135,32 @@
             }
         }
 
-        function beginMatch() {
-            turn = Math.random() < 0.5 ? 'player' : 'ai';
+        function beginMatch(first) {
+            pendingBolt = null;
+            turn = first || (Math.random() < 0.5 ? 'player' : 'ai');
+            matchFirst = turn;
+            snapshotMatch(turn);
             lastBlueScore = null; lastRedScore = null;
-            statusMsg.textContent = turn === 'player' ? "Your turn! Select a card." : "AI is thinking...";
-            logAction("Match initialized."); recalculateDynamicStats(); render();
+            statusMsg.textContent = turn === 'player' ? "You go first. Select a card." : "AI goes first.";
+            logAction(turn === 'player' ? "You go first." : "AI goes first.");
+            recalculateDynamicStats(); render();
             maybeStartCoach();
             if (!coach.active || coach.step === 'wait') showTurnBanner(turn);
             if (turn === 'ai') setTimeout(aiTurn, 700);
+        }
+
+        function updateMatchChips() {
+            const el = document.getElementById('match-chips');
+            if (!el) return;
+            if (gameState !== 'playing' && gameState !== 'gameover') {
+                el.textContent = '';
+                return;
+            }
+            const mode = currentRuleset === 'classic' ? 'Classic' : 'Ember';
+            const diff = aiDifficulty[0].toUpperCase() + aiDifficulty.slice(1);
+            const first = matchFirst === 'player' ? 'You first' : 'AI first';
+            const deck = activeMode === 'draft' ? 'Draft' : 'Random';
+            el.textContent = `${mode} · ${diff} · ${deck} · ${first}`;
         }
 
         function showTurnBanner(whose) {
@@ -2291,12 +2399,13 @@
                 }
             } else if (abType === 'ranged_debuff') {
                 let enemies = board.map((c, i) => (c && c.owner !== placedCard.owner) ? {c, i} : null).filter(Boolean);
-                if (enemies.length > 0) {
-                    let randomEnemy = enemies[Math.floor(Math.random() * enemies.length)].c;
-                    randomEnemy.baseStats = randomEnemy.baseStats.map(s => Math.max(1, s - 2));
-                    randomEnemy.fxType = 'bolt';
-                    return {text: `${placedCard.name} bolted ${randomEnemy.name} (−2)`, kind: 'bolt'};
-                }
+                if (enemies.length === 0) return null;
+                if (placedCard.owner === 'blue' && enemies.length > 1) return {needTarget: true};
+                enemies.sort((a, b) => b.c.baseStats.reduce((x, y) => x + y, 0) - a.c.baseStats.reduce((x, y) => x + y, 0));
+                let targetCard = enemies[0].c;
+                targetCard.baseStats = targetCard.baseStats.map(s => Math.max(1, s - 2));
+                targetCard.fxType = 'bolt';
+                return {text: `${placedCard.name} bolted ${targetCard.name} (−2)`, kind: 'bolt'};
             } else if (abType === 'blast') {
                 placedCard.fxType = 'blast';
                 return {text: `${placedCard.name} blasted (+2 this turn)`, kind: 'blast'};
@@ -2376,7 +2485,8 @@
                 const bar = document.createElement('div');
                 bar.className = 'rematch-bar';
                 bar.innerHTML = `
-                    <button class="btn" onclick="startCurrentModeAgain()">Play Again</button>
+                    <button class="btn" onclick="rematchSwapFirst()">Swap First</button>
+                    <button class="btn btn-alt" onclick="newHands()">New Hands</button>
                     <button class="btn btn-muted" onclick="showModeMenu()">Menu</button>
                 `;
                 bottomArea.appendChild(bar);
@@ -2390,6 +2500,7 @@
                 cellEl.addEventListener('dragleave', () => cellEl.classList.remove('drag-over'));
                 cellEl.addEventListener('drop', (e) => {
                     e.preventDefault(); cellEl.classList.remove('drag-over');
+                    if (pendingBolt) return;
                     const handIndex = parseInt(e.dataTransfer.getData('text/plain'));
                     if (!isNaN(handIndex)) executeCardPlay(handIndex, index);
                 });
@@ -2402,6 +2513,7 @@
                 gridEl.appendChild(cellEl);
             });
             updateScores();
+            updateMatchChips();
             requestAnimationFrame(updateCoach);
         }
 
@@ -2412,6 +2524,7 @@
             if (card.justFlipped) card.justFlipped = false;
             if (source === 'player' && selectedCard === index && turn === 'player' && gameState === 'playing') div.classList.add('selected');
             if (coach.active && coach.step === 'hand' && source === 'player' && index === 0) div.classList.add('coach-target');
+            if (pendingBolt && source === 'board' && card.owner === 'red') div.classList.add('bolt-target');
 
             const activeStats = card.stats || card.baseStats;
             div.innerHTML = `
@@ -2431,7 +2544,7 @@
                 addTooltipListeners(div, card.ability.desc);
             }
 
-            if (source === 'player' && turn === 'player' && gameState === 'playing') {
+            if (source === 'player' && turn === 'player' && gameState === 'playing' && !pendingBolt) {
                 div.setAttribute('draggable', 'true');
                 div.addEventListener('dragstart', (e) => {
                     selectedCard = index;
@@ -2453,11 +2566,18 @@
         }
 
         function handleCellClick(index) {
-            if (gameState !== 'playing' || turn !== 'player' || selectedCard === null || board[index] !== null) return;
+            if (gameState !== 'playing' || turn !== 'player') return;
+            if (pendingBolt) {
+                const c = board[index];
+                if (c && c.owner === 'red') chooseBoltTarget(c);
+                return;
+            }
+            if (selectedCard === null || board[index] !== null) return;
             executeCardPlay(selectedCard, index);
         }
 
         function executeCardPlay(handIndex, boardIndex) {
+            if (pendingBolt) return;
             if (board[boardIndex] !== null || handIndex >= playerHand.length) return;
             sfx.place(); hideTooltip();
             const cardToPlay = playerHand.splice(handIndex, 1)[0];
@@ -2470,6 +2590,32 @@
         function processCardPlacement(index, placedCard) {
             const enemyNeighbor = hasEnemyNeighbor(index, placedCard);
             const abilityFx = applyOnPlayAbilities(placedCard);
+            if (abilityFx && abilityFx.needTarget) {
+                pendingBolt = {index, placedCard, enemyNeighbor};
+                selectedCard = null;
+                statusMsg.textContent = "Choose an enemy to bolt.";
+                logAction(`${placedCard.name} ready to bolt.`);
+                render();
+                return;
+            }
+            resolvePlacement(index, placedCard, enemyNeighbor, abilityFx);
+        }
+
+        function applyBoltTo(placedCard, targetCard) {
+            targetCard.baseStats = targetCard.baseStats.map(s => Math.max(1, s - 2));
+            targetCard.fxType = 'bolt';
+            return {text: `${placedCard.name} bolted ${targetCard.name} (−2)`, kind: 'bolt'};
+        }
+
+        function chooseBoltTarget(targetCard) {
+            if (!pendingBolt) return;
+            const {index, placedCard, enemyNeighbor} = pendingBolt;
+            pendingBolt = null;
+            sfx.click();
+            resolvePlacement(index, placedCard, enemyNeighbor, applyBoltTo(placedCard, targetCard));
+        }
+
+        function resolvePlacement(index, placedCard, enemyNeighbor, abilityFx) {
             recalculateDynamicStats();
             const buffFx = tagAuraBuffs(placedCard, index);
             let capLog = checkCaptures(index, placedCard);
