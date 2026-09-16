@@ -1104,16 +1104,13 @@
             }
         }
 
-        // Recalculates persistent auras dynamically across the board
         function recalculateDynamicStats() {
-            // Reset all cards on board to base stats
             board.forEach(card => {
                 if (card) {
                     card.stats = [...card.baseStats];
                 }
             });
 
-            // Apply persistent adjacent auras (Buff / Curse)
             board.forEach((card, index) => {
                 if (!card || !card.ability) return;
 
@@ -1140,7 +1137,6 @@
                         }
                     });
                 } else if (card.ability.type === 'ranged_debuff') {
-                    // Wizard / Genie hexes strongest enemy anywhere
                     let enemyCards = board.map((c, i) => (c !== null && c.owner !== card.owner) ? { card: c, idx: i } : null).filter(Boolean);
                     if (enemyCards.length > 0) {
                         enemyCards.sort((a, b) => {
@@ -1279,9 +1275,14 @@
         }
 
         function processCardPlacement(index, placedCard) {
+            // 1. Recalculate dynamic stats FIRST so any curses/buffs apply immediately before capture checks
             recalculateDynamicStats();
+
+            // 2. Check and perform captures using the newly debuffed/buffed stats
             checkCaptures(index, placedCard);
-            recalculateDynamicStats(); // Re-verify after captures
+
+            // 3. Recalculate once more to account for any chain effects post-capture
+            recalculateDynamicStats();
 
             turn = turn === 'player' ? 'ai' : 'player';
             render();
@@ -1345,7 +1346,7 @@
             });
 
             if (flipCount > 0) {
-                logAction(`${placedCard.name} captured ${flipCount} card(s)!`, placedCard);
+                logAction(`${placedCard.name} captured ${flipCount} card(s)!`);
             }
 
             if (blueFlipped) {
