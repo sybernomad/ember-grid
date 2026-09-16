@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ember Grid</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --text-color: #f8fafc;
+            --panel-bg: #1e293b;
+            --border-color: #334155;
+            --blue-card: #3b82f6;
+            --red-card: #ef4444;
+            --accent: #f59e0b;
+            --grid-bg: #020617;
+            --cell-bg: #1e293b;
+
+            /* Mobile default variables */
+            --container-max: 400px;
+            --grid-size: 76px;
+            --card-size: 70px;
+            --font-main: 0.65rem;
+            --font-name: 0.45rem;
+            --font-header: 1.1rem;
+            --hand-min: 72px;
+
+            /* Draft screen variables */
+            --draft-card-size: 58px;
+            --draft-font-main: 0.55rem;
+            --draft-font-name: 0.38rem;
+        }
+
+        /* Desktop responsive scale up */
+        @media (min-width: 768px) {
+            :root {
+                --container-max: 540px;
+                --grid-size: 104px;
+                --card-size: 96px;
+                --font-main: 0.85rem;
+                --font-name: 0.6rem;
+                --font-header: 1.4rem;
+                --hand-min: 96px;
+
+                /* Desktop draft screen variables */
+                --draft-card-size: 78px;
+                --draft-font-main: 0.75rem;
+                --draft-font-name: 0.48rem;
+            }
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f1f5f9;
+            --text-color: #0f172a;
+            --panel-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --blue-card: #2563eb;
+            --red-card: #dc2626;
+            --accent: #d97706;
+            --grid-bg: #e2e8f0;
+            --cell-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100vw;
+            margin: 0;
+            overflow: hidden;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: var(--container-max);
+            height: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            gap: 6px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: calc(var(--grid-size) * 3 + 18px);
+        }
+
+        h1 {
+            font-size: var(--font-header);
+            margin: 0;
+            letter-spacing: 2px;
+            color: var(--accent);
+        }
+
+        .nav-group {
+            display: flex;
+            gap: 4px;
+        }
+
+        .menu-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            background-color: var(--panel-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: border-color 0.2s, color 0.2s;
+        }
+
+        .menu-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: calc(var(--grid-size) * 3 + 18px);
+            font-weight: bold;
+            font-size: 0.95rem;
+            padding: 0 4px;
+            box-sizing: border-box;
+        }
+
+        .score-blue {
+            color: var(--blue-card);
+            text-shadow: 0 0 6px rgba(59, 130, 246, 0.3);
+        }
+
+        .score-red {
+            color: var(--red-card);
+            text-shadow: 0 0 6px rgba(239, 68, 68, 0.3);
+        }
+
+        .battlefield {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            width: 100%;
+        }
+
+        .hand {
+            display: flex;
+            gap: 6px;
+            min-height: var(--hand-min);
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, var(--grid-size));
+            grid-template-rows: repeat(3, var(--grid-size));
+            gap: 4px;
+            background: var(--grid-bg);
+            padding: 5px;
+            border-radius: 10px;
+            border: 2px solid var(--border-color);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .cell {
+            background-color: var(--cell-bg);
+            border: 2px dashed var(--border-color);
+            border-radius: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+            transition: background 0.2s;
+        }
+
+        .cell:hover {
+            border-color: var(--accent);
+        }
+
+        .card {
+            width: var(--card-size);
+            height: var(--card-size);
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 3px;
+            box-sizing: border-box;
+            font-size: var(--font-main);
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s, filter 0.2s;
+        }
+
+        @keyframes pulseFlip {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.15) rotate(3deg);
+                filter: brightness(1.3);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .card.flipped {
+            animation: pulseFlip 0.35s ease-in-out;
+        }
+
+        .card.blue {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: #fff;
+            border: 2px solid #93c5fd;
+        }
+
+        .card.red {
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
+            color: #fff;
+            border: 2px solid #fca5a5;
+        }
+
+        .card.neutral {
+            background: linear-gradient(135deg, #475569, #334155);
+            color: #fff;
+            border: 2px solid #cbd5e1;
+        }
+
+        .card.selected {
+            transform: translateY(-5px) scale(1.04);
+            box-shadow: 0 5px 14px rgba(245, 158, 11, 0.6);
+            border-color: var(--accent);
+        }
+
+        .ability-badge {
+            position: absolute;
+            top: 2px;
+            left: 4px;
+            font-size: 0.5rem;
+            z-index: 3;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 4px;
+            padding: 0 3px;
+        }
+
+        /* Tooltip style */
+        .card-tooltip {
+            position: fixed;
+            background: var(--panel-bg);
+            color: var(--text-color);
+            border: 1px solid var(--accent);
+            padding: 5px 8px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: normal;
+            pointer-events: none;
+            z-index: 200;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            max-width: 160px;
+            text-align: center;
+            display: none;
+        }
+
+        .card-name {
+            position: absolute;
+            bottom: 3px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: var(--font-name);
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 85%;
+            background: rgba(0, 0, 0, 0.4);
+            color: #fff;
+            border-radius: 3px;
+            padding: 1px 2px;
+            z-index: 2;
+        }
+
+        .stat-top {
+            position: absolute;
+            top: 1px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+        }
+
+        .stat-right {
+            position: absolute;
+            right: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 2;
+        }
+
+        .stat-bottom {
+            position: absolute;
+            bottom: 14px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+        }
+
+        .stat-left {
+            position: absolute;
+            left: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 2;
+        }
+
+        .status-msg {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: var(--accent);
+            min-height: 18px;
+            text-align: center;
+        }
+
+        .action-log {
+            font-size: 0.7rem;
+            opacity: 0.8;
+            height: 16px;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+            max-width: calc(var(--grid-size) * 3 + 18px);
+        }
+
+        .action-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            width: 100%;
+            max-width: 260px;
+            background: var(--panel-bg);
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid var(--accent);
+            box-sizing: border-box;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .modal-content {
+            background: var(--panel-bg);
+            color: var(--text-color);
+            padding: 1.2rem;
+            border-radius: 12px;
+            max-width: 420px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn {
+            background-color: var(--accent);
+            color: #0f172a;
+            border: none;
+            width: 100%;
+            padding: 9px;
+            border-radius: 6px;
+            font-weight: 900;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: filter 0.2s;
+        }
+
+        .btn:hover {
+            filter: brightness(1.1);
+        }
+
+        .btn-alt {
+            background-color: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-alt:hover {
+            background-color: var(--accent);
+            color: #0f172a;
+        }
+
+        .settings-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            margin: 6px 0;
+            padding: 0 4px;
+        }
+
+        .settings-select {
+            background: var(--bg-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .draft-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            margin: 10px 0;
+            justify-items: center;
+        }
+
+        .draft-card {
+            width: var(--draft-card-size);
+            height: var(--draft-card-size);
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2px;
+            box-sizing: border-box;
+            font-size: var(--draft-font-main);
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+            background: linear-gradient(135deg, #475569, #334155);
+            color: #fff;
+            border: 2px solid #cbd5e1;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .draft-card .ability-badge {
+            top: 1px;
+            left: 2px;
+            font-size: 0.42rem;
+            padding: 0 2px;
+        }
+
+        .draft-card .stat-bottom {
+            bottom: 11px;
+        }
+
+        .draft-card .card-name {
+            bottom: 2px;
+            font-size: var(--draft-font-name);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
+            margin: 10px 0;
+            text-align: left;
+            font-size: 0.8rem;
+        }
+
+        .stat-card {
+            background: var(--bg-color);
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-value {
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body data-theme="dark">
+
+    <div class="container">
+        <header>
+            <h1>EMBER GRID</h1>
+            <div class="nav-group">
+                <button class="menu-btn" onclick="showHelpModal()" title="Help">❓</button>
+                <button class="menu-btn" onclick="showStatsModal()" title="Stats">📊</button>
+                <button class="menu-btn" id="audio-toggle-btn" onclick="toggleAudio()" title="Toggle Audio">🔊</button>
+                <button class="menu-btn" id="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Theme">☀️</button>
+                <button class="menu-btn" onclick="showModeMenu()" title="Main Menu">⚙️</button>
+            </div>
+        </header>
+
+        <div class="score-board">
+            <div class="score-blue" id="score-blue">Blue: -</div>
+            <div class="score-red" id="score-red">Red: -</div>
+        </div>
+
+        <div class="battlefield">
+            <div class="hand" id="ai-hand"></div>
+            <div class="grid" id="board-grid"></div>
+
+            <div id="bottom-area">
+                <!-- Dynamically rendered based on gameState -->
+            </div>
+        </div>
+
+        <div class="status-msg" id="status-msg">Welcome! Choose a mode to begin.</div>
+        <div class="action-log" id="action-log">Ready for battle.</div>
+    </div>
+
+    <!-- Floating Card Tooltip -->
+    <div id="card-tooltip" class="card-tooltip"></div>
+
+    <!-- Main Menu Modal (Loads on startup) -->
+    <div id="main-menu-modal" class="modal">
+        <div class="modal-content">
+            <h2 style="margin-top: 0; color: var(--accent); font-size: 1.3rem; letter-spacing: 1px;">🔥 EMBER GRID 🔥
+            </h2>
+            <p style="font-size: 0.75rem; opacity: 0.8; margin-bottom: 10px;">Select your preferred game mode & AI
+                difficulty:</p>
+
+            <div class="settings-row" style="margin-bottom: 10px;">
+                <span>AI Difficulty:</span>
+                <select id="ai-difficulty-select" class="settings-select" onchange="updateDifficulty(this.value)">
+                    <option value="easy">Easy 🟢</option>
+                    <option value="normal" selected>Normal 🟡</option>
+                    <option value="hard">Hard 🔴</option>
+                </select>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <button class="btn" onclick="startGame('standard')">Standard Mode (Random) 🛡️</button>
+                <button class="btn btn-alt" onclick="startGame('draft')">Snake Draft Mode (Pick 5) 📋</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div id="help-modal" class="modal hidden">
+        <div class="modal-content" style="text-align: left;">
+            <h2 style="margin-top: 0; color: var(--accent); text-align: center;">HOW TO PLAY</h2>
+            <p style="font-size: 0.8rem; line-height: 1.4; opacity: 0.9;">
+                <strong>1. Card Stats:</strong> Each card has 4 numbers (Top, Right, Bottom, Left) ranging from 1 to 10
+                (displayed as <strong>Aces/A</strong>).<br><br>
+                <strong>2. Placing & Deselecting:</strong> Click a card in your hand to select it, then click an empty
+                cell. Click your selected card again to deselect.<br><br>
+                <strong>3. Abilities:</strong> Hover over cards with ability badges (⚡ Buff, 💀 Curse, 🔮 Hex) to view
+                their special effects upon placement!<br><br>
+                <strong>4. Winning:</strong> The player controlling the majority of the board when all 9 squares are
+                filled wins the match!
+            </p>
+            <button class="btn" onclick="document.getElementById('help-modal').classList.add('hidden')">Got it!</button>
+        </div>
+    </div>
+
+    <!-- Stats Modal -->
+    <div id="stats-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2 style="margin-top: 0; color: var(--accent); font-size: 1.2rem;">CAREER STATS</h2>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div style="font-size: 0.65rem; opacity: 0.7;">Record (W-L-D)</div>
+                    <div class="stat-value" id="stat-record">0-0-0</div>
+                </div>
+                <div class="stat-card">
+                    <div style="font-size: 0.65rem; opacity: 0.7;">Win Percentage</div>
+                    <div class="stat-value" id="stat-winrate">0.0%</div>
+                </div>
+                <div class="stat-card">
+                    <div style="font-size: 0.65rem; opacity: 0.7;">Streak / Best</div>
+                    <div class="stat-value" id="stat-streaks">0 / 0</div>
+                </div>
+                <div class="stat-card">
+                    <div style="font-size: 0.65rem; opacity: 0.7;">Cards Flipped</div>
+                    <div class="stat-value" id="stat-flips">0</div>
+                </div>
+            </div>
+
+            <div style="text-align: left; font-size: 0.75rem; margin-top: 6px;">
+                <strong>Top Played Cards:</strong>
+                <div id="stat-top-cards" style="margin-top: 3px; opacity: 0.8; font-size: 0.7rem; line-height: 1.2;">
+                    None yet.</div>
+            </div>
+
+            <button class="btn" style="margin-top: 8px;"
+                onclick="document.getElementById('stats-modal').classList.add('hidden')">Close</button>
+        </div>
+    </div>
+
+    <!-- Draft Modal -->
+    <div id="draft-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2 style="margin-top: 0; color: var(--blue-card); font-size: 1.1rem; margin-bottom: 4px;">SNAKE DRAFT</h2>
+            <p id="draft-status" style="font-size: 0.75rem; opacity: 0.9; margin-bottom: 4px;">Your turn to pick a card:
+            </p>
+            <div class="draft-grid" id="draft-pool-grid"></div>
+            <div style="font-size: 0.7rem; opacity: 0.7; margin-top: 4px;" id="draft-rosters">Your Deck: 0/5 | AI Deck:
+                0/5</div>
+        </div>
+    </div>
+
+    <!-- Game Over Modal Popup -->
+    <div id="gameover-modal" class="modal hidden">
+        <div class="modal-content" style="max-width: 300px;">
+            <h2 id="gameover-title" style="margin-top: 0; color: var(--accent); font-size: 1.2rem;">MATCH OVER</h2>
+            <p id="gameover-desc" style="font-size: 0.85rem; opacity: 0.9; margin-bottom: 12px;"></p>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <button class="btn btn-alt" onclick="startCurrentModeAgain()">Play Again 🔄</button>
+                <button class="btn" style="background-color: #475569; color: #fff;" onclick="showModeMenu()">Main Menu
+                    ⚙️</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Web Audio API Procedural Sound Engine ---
+        let audioCtx = null;
+        let isAudioMuted = localStorage.getItem('ember_grid_muted') === 'true';
+        updateAudioButtonIcon();
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function toggleAudio() {
+            isAudioMuted = !isAudioMuted;
+            localStorage.setItem('ember_grid_muted', isAudioMuted);
+            updateAudioButtonIcon();
+            sfx.click();
+        }
+
+        function updateAudioButtonIcon() {
+            const btn = document.getElementById('audio-toggle-btn');
+            if (btn) btn.textContent = isAudioMuted ? '🔇' : '🔊';
+        }
+
+        function playTone(freq, type, duration, gainVal = 0.1) {
+            if (isAudioMuted) return;
+            try {
+                initAudio();
+                if (!audioCtx) return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(gainVal, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) {
+                // Ignore audio policy blocks before interaction
+            }
+        }
+
+        const sfx = {
+            click: () => playTone(440, 'sine', 0.06, 0.04),
+            place: () => playTone(140, 'triangle', 0.1, 0.15),
+            ability: () => {
+                playTone(740, 'sine', 0.1, 0.05);
+                setTimeout(() => playTone(987.77, 'sine', 0.15, 0.05), 80);
+            },
+            flipBlue: () => {
+                playTone(587.33, 'sine', 0.08, 0.06);
+                setTimeout(() => playTone(880, 'sine', 0.12, 0.06), 60);
+            },
+            flipRed: () => {
+                playTone(320, 'sawtooth', 0.08, 0.06);
+                setTimeout(() => playTone(240, 'sawtooth', 0.12, 0.06), 60);
+            },
+            win: () => {
+                playTone(523.25, 'sine', 0.12, 0.08);
+                setTimeout(() => playTone(659.25, 'sine', 0.12, 0.08), 100);
+                setTimeout(() => playTone(783.99, 'sine', 0.25, 0.08), 200);
+            },
+            lose: () => {
+                playTone(300, 'sawtooth', 0.15, 0.08);
+                setTimeout(() => playTone(200, 'sawtooth', 0.25, 0.08), 120);
+            }
+        };
+
+        const masterCards = [
+            { name: "Alien", emoji: "👽", stats: [8, 3, 5, 2], ability: { type: 'aura_buff', val: 1, label: '⚡ Buff', desc: 'Boosts adjacent friendly cards by +1 stat.' } },
+            { name: "Ghost", emoji: "👻", stats: [4, 7, 2, 6], ability: { type: 'curse_adj', val: -1, label: '💀 Curse', desc: 'Reduces adjacent enemy cards by -1 stat.' } },
+            { name: "Robot", emoji: "🤖", stats: [6, 6, 6, 1] },
+            { name: "Skull", emoji: "💀", stats: [9, 2, 4, 3] },
+            { name: "Cat", emoji: "🐱", stats: [2, 5, 8, 4] },
+            { name: "Dog", emoji: "🐶", stats: [5, 4, 3, 7] },
+            { name: "Fox", emoji: "🦊", stats: [7, 6, 2, 3] },
+            { name: "Panda", emoji: "🐼", stats: [3, 3, 7, 6] },
+            { name: "Lion", emoji: "🦁", stats: [8, 7, 5, 2] },
+            { name: "Tiger", emoji: "🐯", stats: [7, 8, 2, 4] },
+            { name: "Dragon", emoji: "🐲", stats: [9, 9, 3, 1] },
+            { name: "Unicorn", emoji: "🦄", stats: [4, 5, 6, 8], ability: { type: 'aura_buff', val: 1, label: '⚡ Buff', desc: 'Boosts adjacent friendly cards by +1 stat.' } },
+            { name: "Wizard", emoji: "🧙", stats: [6, 8, 4, 5], ability: { type: 'ranged_debuff', val: -1, label: '🔮 Hex', desc: 'Curses the strongest enemy card anywhere on the board by -1.' } },
+            { name: "Vampire", emoji: "🧛", stats: [8, 4, 3, 7], ability: { type: 'curse_adj', val: -1, label: '💀 Curse', desc: 'Reduces adjacent enemy cards by -1 stat.' } },
+            { name: "Genie", emoji: "🧞", stats: [7, 6, 6, 6], ability: { type: 'ranged_debuff', val: -1, label: '🔮 Hex', desc: 'Curses the strongest enemy card anywhere on the board by -1.' } },
+            { name: "Monkey", emoji: "🐵", stats: [3, 6, 4, 7] },
+            { name: "Frog", emoji: "🐸", stats: [2, 4, 5, 3] },
+            { name: "Owl", emoji: "🦉", stats: [6, 3, 2, 7] },
+            { name: "Bee", emoji: "🐝", stats: [1, 8, 3, 4] },
+            { name: "Bug", emoji: "🐛", stats: [2, 2, 4, 1] },
+            { name: "Spider", emoji: "🕷️", stats: [5, 7, 6, 3] },
+            { name: "Scorpion", emoji: "🦂", stats: [7, 4, 8, 2] },
+            { name: "Turtle", emoji: "🐢", stats: [3, 2, 9, 4] },
+            { name: "Snake", emoji: "🐍", stats: [6, 5, 4, 6] },
+            { name: "Lizard", emoji: "🦎", stats: [4, 6, 3, 5] },
+            { name: "T-Rex", emoji: "🦖", stats: [9, 6, 7, 2] },
+            { name: "Sauropod", emoji: "🦕", stats: [5, 3, 8, 5] },
+            { name: "Shark", emoji: "🦈", stats: [8, 5, 6, 4] },
+            { name: "Dolphin", emoji: "🐬", stats: [4, 7, 5, 6] },
+            { name: "Whale", emoji: "🐳", stats: [6, 4, 9, 3] },
+            { name: "Fish", emoji: "🐠", stats: [2, 3, 3, 5] },
+            { name: "Octopus", emoji: "🐙", stats: [5, 6, 6, 5] },
+            { name: "Crab", emoji: "🦀", stats: [4, 5, 7, 2] },
+            { name: "Eagle", emoji: "🦅", stats: [7, 7, 3, 3] },
+            { name: "Duck", emoji: "🦆", stats: [3, 4, 4, 3] },
+            { name: "Bat", emoji: "🦇", stats: [5, 2, 2, 8] },
+            { name: "Rooster", emoji: "🐓", stats: [4, 5, 3, 2] },
+            { name: "Peacock", emoji: "🦚", stats: [3, 6, 5, 4] },
+            { name: "Parrot", emoji: "🦜", stats: [6, 4, 4, 5] },
+            { name: "Flamingo", emoji: "🦩", stats: [5, 3, 6, 4] },
+            { name: "Gorilla", emoji: "🦍", stats: [8, 6, 7, 4] },
+            { name: "Camel", emoji: "🐪", stats: [3, 4, 6, 5] },
+            { name: "Elephant", emoji: "🐘", stats: [7, 4, 9, 2] },
+            { name: "Kangaroo", emoji: "🦘", stats: [6, 5, 4, 5] },
+            { name: "Koala", emoji: "🐨", stats: [2, 3, 5, 4] },
+            { name: "Sloth", emoji: "🦥", stats: [1, 2, 8, 2] },
+            { name: "Otter", emoji: "🦦", stats: [4, 5, 4, 6] },
+            { name: "Skunk", emoji: "🦨", stats: [3, 4, 2, 5] },
+            { name: "Badger", emoji: "🦡", stats: [5, 5, 5, 5] },
+            { name: "Pig", emoji: "🐖", stats: [3, 3, 4, 3] },
+            { name: "Ram", emoji: "🐏", stats: [6, 7, 4, 2] },
+            { name: "Llama", emoji: "🦙", stats: [4, 4, 5, 4] },
+            { name: "Giraffe", emoji: "🦒", stats: [7, 3, 6, 3] },
+            { name: "Hedgehog", emoji: "🦔", stats: [2, 6, 3, 6] },
+            { name: "Zombie", emoji: "🧟", stats: [5, 2, 7, 4] },
+            { name: "Fairy", emoji: "🧚", stats: [4, 5, 3, 7] },
+            { name: "Mage", emoji: "🧝", stats: [5, 7, 5, 6] },
+            { name: "Cyclops", emoji: "👹", stats: [9, 5, 8, 1] },
+            { name: "Goblin", emoji: "👺", stats: [6, 3, 5, 6] },
+            { name: "Alien Monster", emoji: "👾", stats: [8, 7, 7, 3] }
+        ];
+
+        let stats = JSON.parse(localStorage.getItem('ember_grid_stats')) || {
+            played: 0, wins: 0, losses: 0, draws: 0, streak: 0, bestStreak: 0, flips: 0, cardPlays: {}
+        };
+
+        function saveStats() {
+            localStorage.setItem('ember_grid_stats', JSON.stringify(stats));
+        }
+
+        // Theme management
+        let currentTheme = localStorage.getItem('ember_grid_theme') || 'dark';
+        document.body.setAttribute('data-theme', currentTheme);
+        updateThemeButtonIcon();
+
+        function toggleTheme() {
+            sfx.click();
+            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.body.setAttribute('data-theme', currentTheme);
+            localStorage.setItem('ember_grid_theme', currentTheme);
+            updateThemeButtonIcon();
+        }
+
+        function updateThemeButtonIcon() {
+            const btn = document.getElementById('theme-toggle-btn');
+            if (btn) btn.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+        }
+
+        let board = Array(9).fill(null);
+        let playerHand = [];
+        let aiHand = [];
+        let selectedCard = null;
+        let turn = 'player';
+        let gameState = 'menu';
+        let activeMode = 'standard';
+        let aiDifficulty = 'normal';
+
+        let draftPool = [];
+        let draftedPlayerCards = [];
+        let draftedAICards = [];
+        let draftTurn = 'player';
+
+        const statusMsg = document.getElementById('status-msg');
+        const actionLog = document.getElementById('action-log');
+        const tooltipEl = document.getElementById('card-tooltip');
+
+        function logAction(msg) {
+            actionLog.textContent = msg;
+        }
+
+        function formatStat(val) {
+            let clamped = Math.max(1, Math.min(10, val));
+            return clamped === 10 ? 'A' : clamped;
+        }
+
+        function updateDifficulty(val) {
+            sfx.click();
+            aiDifficulty = val;
+        }
+
+        function showHelpModal() {
+            sfx.click();
+            document.getElementById('help-modal').classList.remove('hidden');
+        }
+
+        function showModeMenu() {
+            sfx.click();
+            hideTooltip();
+            document.getElementById('draft-modal').classList.add('hidden');
+            document.getElementById('stats-modal').classList.add('hidden');
+            document.getElementById('help-modal').classList.add('hidden');
+            document.getElementById('gameover-modal').classList.add('hidden');
+            document.getElementById('main-menu-modal').classList.remove('hidden');
+
+            gameState = 'menu';
+            board = Array(9).fill(null);
+            playerHand = [];
+            aiHand = [];
+            selectedCard = null;
+            logAction("Ready for battle.");
+            render();
+        }
+
+        function showStatsModal() {
+            sfx.click();
+            hideTooltip();
+            document.getElementById('stat-record').textContent = `${stats.wins}-${stats.losses}-${stats.draws}`;
+            const total = stats.played;
+            const pct = total > 0 ? ((stats.wins / total) * 100).toFixed(1) : '0.0';
+            document.getElementById('stat-winrate').textContent = `${pct}%`;
+            document.getElementById('stat-streaks').textContent = `${stats.streak} / ${stats.bestStreak}`;
+            document.getElementById('stat-flips').textContent = stats.flips;
+
+            const sortedCards = Object.entries(stats.cardPlays).sort((a, b) => b[1] - a[1]);
+            const topCardsEl = document.getElementById('stat-top-cards');
+            if (sortedCards.length === 0) {
+                topCardsEl.textContent = "No cards played yet.";
+            } else {
+                topCardsEl.innerHTML = sortedCards.slice(0, 3).map(([name, count]) => `• ${name}: ${count} plays`).join('<br>');
+            }
+
+            document.getElementById('stats-modal').classList.remove('hidden');
+        }
+
+        function startGame(mode) {
+            sfx.click();
+            activeMode = mode;
+            hideTooltip();
+            document.getElementById('main-menu-modal').classList.add('hidden');
+            document.getElementById('draft-modal').classList.add('hidden');
+            document.getElementById('gameover-modal').classList.add('hidden');
+
+            if (mode === 'standard') {
+                board = Array(9).fill(null);
+                selectedCard = null;
+                gameState = 'playing';
+
+                const shuffled = [...masterCards].sort(() => Math.random() - 0.5);
+                playerHand = shuffled.slice(0, 5).map(c => ({ ...c, stats: [...c.stats], owner: 'blue' }));
+                aiHand = shuffled.slice(5, 10).map(c => ({ ...c, stats: [...c.stats], owner: 'red' }));
+
+                beginMatch();
+            } else if (mode === 'draft') {
+                startDraftMode();
+            }
+        }
+
+        function startDraftMode() {
+            draftedPlayerCards = [];
+            draftedAICards = [];
+
+            const poolSource = [...masterCards].sort(() => Math.random() - 0.5).slice(0, 16);
+            draftPool = poolSource.map(c => ({
+                ...c,
+                stats: [...c.stats],
+                id: Math.random(),
+                draftedBy: null
+            }));
+
+            draftTurn = Math.random() < 0.5 ? 'player' : 'ai';
+            renderDraftPool();
+            document.getElementById('draft-modal').classList.remove('hidden');
+
+            if (draftTurn === 'ai') {
+                setTimeout(aiDraftPick, 700);
+            }
+        }
+
+        function startCurrentModeAgain() {
+            sfx.click();
+            startGame(activeMode);
+        }
+
+        function showTooltip(text, e) {
+            if (!text) return;
+            tooltipEl.textContent = text;
+            tooltipEl.style.display = 'block';
+            updateTooltipPosition(e);
+        }
+
+        function updateTooltipPosition(e) {
+            const x = e.clientX || (e.touches && e.touches[0].clientX);
+            const y = e.clientY || (e.touches && e.touches[0].clientY);
+            if (x && y) {
+                tooltipEl.style.left = (x + 12) + 'px';
+                tooltipEl.style.top = (y - 30) + 'px';
+            }
+        }
+
+        function hideTooltip() {
+            tooltipEl.style.display = 'none';
+        }
+
+        function renderDraftPool() {
+            const grid = document.getElementById('draft-pool-grid');
+            grid.innerHTML = '';
+
+            draftPool.forEach(card => {
+                const el = document.createElement('div');
+                el.className = 'draft-card';
+
+                if (card.draftedBy) {
+                    el.style.opacity = '0.2';
+                    el.style.cursor = 'default';
+                } else if (draftTurn === 'player') {
+                    el.style.cursor = 'pointer';
+                }
+
+                let badgeHtml = card.ability ? `<div class="ability-badge">${card.ability.label}</div>` : '';
+
+                el.innerHTML = `
+                    ${badgeHtml}
+                    <div class="stat-top">${formatStat(card.stats[0])}</div>
+                    <div class="stat-right">${formatStat(card.stats[1])}</div>
+                    <div class="stat-bottom">${formatStat(card.stats[2])}</div>
+                    <div class="stat-left">${formatStat(card.stats[3])}</div>
+                    <div style="font-size:1.1rem; margin-top:2px;">${card.emoji}</div>
+                    <div class="card-name">${card.name}</div>
+                `;
+
+                if (card.ability) {
+                    el.addEventListener('mouseenter', (e) => showTooltip(card.ability.desc, e));
+                    el.addEventListener('mousemove', updateTooltipPosition);
+                    el.addEventListener('mouseleave', hideTooltip);
+                    el.addEventListener('touchstart', (e) => showTooltip(card.ability.desc, e), { passive: true });
+                }
+
+                if (!card.draftedBy && draftTurn === 'player') {
+                    el.addEventListener('click', () => {
+                        sfx.click();
+                        hideTooltip();
+                        playerDraftPick(card);
+                    });
+                }
+                grid.appendChild(el);
+            });
+
+            document.getElementById('draft-status').textContent = draftTurn === 'player'
+                ? "Your turn to pick a card:"
+                : "AI is thinking about its pick...";
+
+            document.getElementById('draft-rosters').textContent = `Your Deck: ${draftedPlayerCards.length}/5 | AI Deck: ${draftedAICards.length}/5`;
+        }
+
+        function playerDraftPick(card) {
+            if (draftTurn !== 'player' || card.draftedBy) return;
+            card.draftedBy = 'player';
+            draftedPlayerCards.push(card);
+            checkDraftProgress();
+        }
+
+        function aiDraftPick() {
+            if (draftTurn !== 'ai' || draftedAICards.length >= 5) return;
+
+            const availableCards = draftPool.filter(c => !c.draftedBy);
+            if (availableCards.length === 0) return;
+
+            availableCards.sort((a, b) => {
+                const sumA = a.stats.reduce((acc, val) => acc + val, 0);
+                const sumB = b.stats.reduce((acc, val) => acc + val, 0);
+                return sumB - sumA;
+            });
+
+            const chosen = availableCards[0];
+            chosen.draftedBy = 'ai';
+            draftedAICards.push(chosen);
+            checkDraftProgress();
+        }
+
+        function checkDraftProgress() {
+            if (draftedPlayerCards.length === 5 && draftedAICards.length === 5) {
+                document.getElementById('draft-modal').classList.add('hidden');
+                launchDraftedGame();
+            } else {
+                draftTurn = draftTurn === 'player' ? 'ai' : 'player';
+                renderDraftPool();
+
+                if (draftTurn === 'ai') {
+                    setTimeout(aiDraftPick, 800);
+                }
+            }
+        }
+
+        function launchDraftedGame() {
+            board = Array(9).fill(null);
+            selectedCard = null;
+            gameState = 'playing';
+
+            playerHand = draftedPlayerCards.map(c => ({ ...c, stats: [...c.stats], owner: 'blue' }));
+            aiHand = draftedAICards.map(c => ({ ...c, stats: [...c.stats], owner: 'red' }));
+
+            beginMatch();
+        }
+
+        function beginMatch() {
+            turn = Math.random() < 0.5 ? 'player' : 'ai';
+            statusMsg.textContent = turn === 'player' ? "Your turn! Select a card." : "AI is thinking...";
+            logAction("Match started. Good luck!");
+
+            render();
+            if (turn === 'ai') {
+                setTimeout(aiTurn, 700);
+            }
+        }
+
+        function render() {
+            const bottomArea = document.getElementById('bottom-area');
+            bottomArea.innerHTML = '';
+
+            if (gameState === 'menu') {
+                statusMsg.textContent = "Select a mode to begin.";
+            } else if (gameState === 'playing') {
+                const handDiv = document.createElement('div');
+                handDiv.className = 'hand';
+                handDiv.id = 'player-hand';
+                playerHand.forEach((card, index) => {
+                    const el = createCardElement(card, index, 'player');
+                    handDiv.appendChild(el);
+                });
+                bottomArea.appendChild(handDiv);
+            }
+
+            const aiHandEl = document.getElementById('ai-hand');
+            aiHandEl.innerHTML = '';
+            if (gameState === 'playing') {
+                aiHand.forEach((card, index) => {
+                    const el = document.createElement('div');
+                    el.className = 'card red';
+                    el.style.width = window.innerWidth >= 768 ? '36px' : '28px';
+                    el.style.height = window.innerWidth >= 768 ? '48px' : '38px';
+                    el.style.fontSize = '0.5rem';
+                    el.innerHTML = `<div style="margin:auto;">🔒</div>`;
+                    aiHandEl.appendChild(el);
+                });
+            }
+
+            const gridEl = document.getElementById('board-grid');
+            gridEl.innerHTML = '';
+            board.forEach((cell, index) => {
+                const cellEl = document.createElement('div');
+                cellEl.className = 'cell';
+                cellEl.addEventListener('click', () => handleCellClick(index));
+
+                if (cell) {
+                    const cardEl = createCardElement(cell, index, 'board');
+                    cellEl.appendChild(cardEl);
+                }
+                gridEl.appendChild(cellEl);
+            });
+
+            updateScores();
+        }
+
+        function createCardElement(card, index, source) {
+            const div = document.createElement('div');
+            div.className = `card ${card.owner}`;
+            if (card.justFlipped) {
+                div.classList.add('flipped');
+                card.justFlipped = false;
+            }
+
+            if (source === 'player' && selectedCard === index && turn === 'player' && gameState === 'playing') {
+                div.classList.add('selected');
+            }
+
+            let badgeHtml = card.ability ? `<div class="ability-badge">${card.ability.label}</div>` : '';
+
+            div.innerHTML = `
+                ${badgeHtml}
+                <div class="stat-top">${formatStat(card.stats[0])}</div>
+                <div class="stat-right">${formatStat(card.stats[1])}</div>
+                <div class="stat-bottom">${formatStat(card.stats[2])}</div>
+                <div class="stat-left">${formatStat(card.stats[3])}</div>
+                <div style="font-size:1.1rem; margin-top:2px;">${card.emoji}</div>
+                <div class="card-name">${card.name}</div>
+            `;
+
+            if (card.ability) {
+                div.addEventListener('mouseenter', (e) => showTooltip(card.ability.desc, e));
+                div.addEventListener('mousemove', updateTooltipPosition);
+                div.addEventListener('mouseleave', hideTooltip);
+                div.addEventListener('touchstart', (e) => showTooltip(card.ability.desc, e), { passive: true });
+                div.addEventListener('touchend', hideTooltip, { passive: true });
+            }
+
+            if (source === 'player' && turn === 'player' && gameState === 'playing') {
+                div.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    sfx.click();
+                    hideTooltip();
+
+                    if (selectedCard === index) {
+                        // Deselect if already selected
+                        selectedCard = null;
+                        statusMsg.textContent = "Your turn! Select a card.";
+                    } else {
+                        selectedCard = index;
+                        statusMsg.textContent = `Selected: ${card.name}. Click cell or click card again to cancel.`;
+                    }
+                    render();
+                });
+            }
+
+            return div;
+        }
+
+        function handleCellClick(index) {
+            if (gameState !== 'playing' || turn !== 'player' || selectedCard === null) return;
+            if (board[index] !== null) return;
+
+            sfx.place();
+            hideTooltip();
+            const cardToPlay = playerHand.splice(selectedCard, 1)[0];
+            board[index] = cardToPlay;
+            selectedCard = null;
+
+            stats.cardPlays[cardToPlay.name] = (stats.cardPlays[cardToPlay.name] || 0) + 1;
+            logAction(`You played ${cardToPlay.name}.`);
+
+            processCardPlacement(index, cardToPlay);
+        }
+
+        function processCardPlacement(index, placedCard) {
+            applyCardAbilities(index, placedCard);
+            checkCaptures(index, placedCard);
+
+            turn = turn === 'player' ? 'ai' : 'player';
+            render();
+
+            if (board.every(cell => cell !== null)) {
+                endGame();
+                return;
+            }
+
+            if (turn === 'ai') {
+                statusMsg.textContent = "AI is thinking...";
+                setTimeout(aiTurn, 600);
+            } else {
+                statusMsg.textContent = "Your turn! Select a card.";
+            }
+        }
+
+        function applyCardAbilities(placedIndex, placedCard) {
+            if (!placedCard.ability) return;
+
+            sfx.ability();
+            const row = Math.floor(placedIndex / 3);
+            const col = placedIndex % 3;
+
+            if (placedCard.ability.type === 'aura_buff' || placedCard.ability.type === 'curse_adj') {
+                const val = placedCard.ability.val;
+                const targetOwner = placedCard.ability.type === 'aura_buff' ? placedCard.owner : (placedCard.owner === 'blue' ? 'red' : 'blue');
+
+                const neighbors = [
+                    { idx: placedIndex - 3, condition: row > 0 },
+                    { idx: placedIndex + 1, condition: col < 2 },
+                    { idx: placedIndex + 3, condition: row < 2 },
+                    { idx: placedIndex - 1, condition: col > 0 }
+                ];
+
+                neighbors.forEach(n => {
+                    if (n.condition && board[n.idx] !== null) {
+                        const neighborCard = board[n.idx];
+                        if (neighborCard.owner === targetOwner) {
+                            neighborCard.stats = neighborCard.stats.map(s => Math.max(1, Math.min(10, s + val)));
+                        }
+                    }
+                });
+                logAction(`${placedCard.name} activated ${placedCard.ability.label}!`);
+            } else if (placedCard.ability.type === 'ranged_debuff') {
+                let enemyCards = board.map((c, i) => (c !== null && c.owner !== placedCard.owner) ? { card: c, idx: i } : null).filter(Boolean);
+                if (enemyCards.length > 0) {
+                    enemyCards.sort((a, b) => {
+                        const sumA = a.card.stats.reduce((x, y) => x + y, 0);
+                        const sumB = b.card.stats.reduce((x, y) => x + y, 0);
+                        return sumB - sumA;
+                    });
+                    const target = enemyCards[0].card;
+                    target.stats = target.stats.map(s => Math.max(1, s - 1));
+                    logAction(`${placedCard.name} cast Ranged Hex on enemy ${target.name}!`);
+                }
+            }
+        }
+
+        function checkCaptures(placedIndex, placedCard) {
+            const row = Math.floor(placedIndex / 3);
+            const col = placedIndex % 3;
+
+            let blueFlipped = false;
+            let redFlipped = false;
+            let flipCount = 0;
+
+            const neighbors = [
+                { idx: placedIndex - 3, pStat: 0, nStat: 2, condition: row > 0 },     // Top
+                { idx: placedIndex + 1, pStat: 1, nStat: 3, condition: col < 2 },     // Right
+                { idx: placedIndex + 3, pStat: 2, nStat: 0, condition: row < 2 },     // Bottom
+                { idx: placedIndex - 1, pStat: 3, nStat: 1, condition: col > 0 }      // Left
+            ];
+
+            neighbors.forEach(n => {
+                if (n.condition && board[n.idx] !== null) {
+                    const neighborCard = board[n.idx];
+                    if (neighborCard.owner !== placedCard.owner) {
+                        const myVal = placedCard.stats[n.pStat];
+                        const theirVal = neighborCard.stats[n.nStat];
+
+                        if (myVal > theirVal) {
+                            const originalOwner = neighborCard.owner;
+                            neighborCard.owner = placedCard.owner;
+                            neighborCard.justFlipped = true;
+                            flipCount++;
+
+                            if (placedCard.owner === 'blue') {
+                                blueFlipped = true;
+                            } else {
+                                redFlipped = true;
+                            }
+
+                            if (placedCard.owner === 'blue' && originalOwner === 'red') {
+                                stats.flips++;
+                            }
+                        }
+                    }
+                }
+            });
+
+            if (flipCount > 0) {
+                logAction(`${placedCard.name} captured ${flipCount} card(s)!`);
+            }
+
+            if (blueFlipped) {
+                sfx.flipBlue();
+            } else if (redFlipped) {
+                sfx.flipRed();
+            }
+        }
+
+        function aiTurn() {
+            if (gameState !== 'playing') return;
+
+            const emptyCells = board.map((c, i) => c === null ? i : null).filter(i => i !== null);
+            if (emptyCells.length === 0 || aiHand.length === 0) return;
+
+            if (aiDifficulty === 'easy' && Math.random() < 0.4) {
+                const randomCardIdx = Math.floor(Math.random() * aiHand.length);
+                const randomCellIdx = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+                executeAIMove(randomCardIdx, randomCellIdx);
+                return;
+            }
+
+            let bestMove = null;
+            let maxScore = -999;
+
+            aiHand.forEach((card, cardIndex) => {
+                emptyCells.forEach(cellIdx => {
+                    let score = 0;
+                    const row = Math.floor(cellIdx / 3);
+                    const col = cellIdx % 3;
+                    const neighbors = [
+                        { idx: cellIdx - 3, pStat: 0, nStat: 2, condition: row > 0 },
+                        { idx: cellIdx + 1, pStat: 1, nStat: 3, condition: col < 2 },
+                        { idx: cellIdx + 3, pStat: 2, nStat: 0, condition: row < 2 },
+                        { idx: cellIdx - 1, pStat: 3, nStat: 1, condition: col > 0 }
+                    ];
+
+                    let flipsCount = 0;
+                    let exposureRisk = 0;
+
+                    neighbors.forEach(n => {
+                        if (n.condition && board[n.idx] !== null) {
+                            const neighborCard = board[n.idx];
+                            if (neighborCard.owner === 'blue') {
+                                if (card.stats[n.pStat] > neighborCard.stats[n.nStat]) {
+                                    flipsCount++;
+                                }
+                            }
+                        }
+                    });
+
+                    score += flipsCount * 12;
+                    const statSum = card.stats.reduce((a, b) => a + b, 0);
+                    score += statSum * 0.1;
+                    if (card.ability) score += 3;
+
+                    if (aiDifficulty === 'hard') {
+                        neighbors.forEach(n => {
+                            if (n.condition && board[n.idx] === null) {
+                                const exposedStatVal = card.stats[n.pStat];
+                                if (exposedStatVal <= 4) {
+                                    exposureRisk += (5 - exposedStatVal);
+                                }
+                            }
+                        });
+                        score -= exposureRisk * 3;
+                    }
+
+                    if (score > maxScore) {
+                        maxScore = score;
+                        bestMove = { cardIndex, cellIdx };
+                    }
+                });
+            });
+
+            if (!bestMove) {
+                bestMove = { cardIndex: 0, cellIdx: emptyCells[0] };
+            }
+
+            executeAIMove(bestMove.cardIndex, bestMove.cellIdx);
+        }
+
+        function executeAIMove(cardIdx, cellIdx) {
+            sfx.place();
+            const chosenCard = aiHand.splice(cardIdx, 1)[0];
+            board[cellIdx] = chosenCard;
+            logAction(`AI played ${chosenCard.name}.`);
+            processCardPlacement(cellIdx, chosenCard);
+        }
+
+        function updateScores() {
+            if (gameState === 'menu') {
+                document.getElementById('score-blue').textContent = `Blue: -`;
+                document.getElementById('score-red').textContent = `Red: -`;
+                return;
+            }
+
+            let blueCount = playerHand.length + board.filter(c => c && c.owner === 'blue').length;
+            let redCount = aiHand.length + board.filter(c => c && c.owner === 'red').length;
+
+            document.getElementById('score-blue').textContent = `Blue: ${blueCount}`;
+            document.getElementById('score-red').textContent = `Red: ${redCount}`;
+        }
+
+        function endGame() {
+            gameState = 'gameover';
+
+            let blueCount = board.filter(c => c && c.owner === 'blue').length;
+            let redCount = board.filter(c => c && c.owner === 'red').length;
+
+            stats.played++;
+            if (blueCount > redCount) {
+                stats.wins++;
+                stats.streak++;
+                if (stats.streak > stats.bestStreak) stats.bestStreak = stats.streak;
+                sfx.win();
+                logAction("Victory achieved!");
+            } else if (redCount > blueCount) {
+                stats.losses++;
+                stats.streak = 0;
+                sfx.lose();
+                logAction("Defeat suffered.");
+            } else {
+                stats.draws++;
+                stats.streak = 0;
+                sfx.click();
+                logAction("Match ended in a draw.");
+            }
+            saveStats();
+
+            render();
+
+            let title = "Match Drawn 🤝";
+            if (blueCount > redCount) title = "Victory! 🎉";
+            else if (redCount > blueCount) title = "Defeat 💀";
+
+            document.getElementById('gameover-title').textContent = title;
+            document.getElementById('gameover-desc').textContent = `Final Score: Blue (${blueCount}) - Red (${redCount})`;
+            document.getElementById('gameover-modal').classList.remove('hidden');
+        }
+
+        // Initialize state on load
+        showModeMenu();
+    </script>
+</body>
+
+</html>
