@@ -180,8 +180,11 @@
             .embers i { animation: none; opacity: 0; }
             .card.flipped { animation: none; }
             .card.selected { animation: none; }
-            .turn-banner, .combat-fx, .capture-pop, .fx-ring,
+            .turn-banner, .capture-pop, .fx-ring,
             .score-pill.score-tick, .turn-indicator.pulse { animation: none; }
+            .turn-banner.show {
+                animation: toastHold 1.15s ease forwards;
+            }
         }
 
         .container {
@@ -1139,49 +1142,21 @@
         @keyframes bannerIn {
             0% { opacity: 0; transform: translate(-50%, -18px) scale(0.9); }
             18% { opacity: 1; transform: translate(-50%, 0) scale(1); }
-            70% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+            62% { opacity: 1; transform: translate(-50%, 0) scale(1); }
             100% { opacity: 0; transform: translate(-50%, -8px) scale(0.98); }
         }
 
-        .combat-fx {
-            position: fixed;
-            top: 38%;
-            left: 50%;
-            transform: translate(-50%, 8px);
-            font-family: var(--font-display);
-            font-weight: 800;
-            letter-spacing: 0.04em;
-            font-size: 0.8rem;
-            padding: 8px 16px;
-            border-radius: 10px;
-            pointer-events: none;
-            z-index: 81;
-            opacity: 0;
-            background: rgba(16, 12, 9, 0.92);
-            color: var(--gold);
-            border: 1px solid var(--gold);
-            text-align: center;
-            max-width: min(380px, 86vw);
-            line-height: 1.3;
-            white-space: normal;
+        @media (max-width: 480px) {
+            .turn-banner {
+                font-size: 0.92rem;
+                letter-spacing: 0.16em;
+                padding: 8px 16px;
+            }
         }
 
-        .combat-fx.show {
-            animation: combatPop 1.2s ease forwards;
-        }
-
-        .combat-fx.capture { color: #fff6df; border-color: var(--gold); }
-        .combat-fx.curse { color: #e9d5ff; border-color: #c084fc; }
-        .combat-fx.bolt { color: #bfdbfe; border-color: #60a5fa; }
-        .combat-fx.poison { color: #bbf7d0; border-color: #4ade80; }
-        .combat-fx.buff { color: #fde68a; border-color: var(--gold); }
-        .combat-fx.blast { color: #fdba74; border-color: #fb923c; }
-
-        @keyframes combatPop {
-            0% { opacity: 0; transform: translate(-50%, 16px) scale(0.86); }
-            12% { opacity: 1; transform: translate(-50%, 0) scale(1.04); }
-            48% { opacity: 1; transform: translate(-50%, 0) scale(1); }
-            100% { opacity: 0; transform: translate(-50%, -10px) scale(0.98); }
+        @keyframes toastHold {
+            0%, 62% { opacity: 1; }
+            100% { opacity: 0; }
         }
 
         .score-pill.score-tick {
@@ -1428,7 +1403,6 @@
     </div>
 
     <div id="turn-banner" class="turn-banner" aria-live="polite"></div>
-    <div id="combat-fx" class="combat-fx" aria-live="polite"></div>
     <div id="coach-spotlight" class="coach-spotlight hidden"></div>
     <div id="coach-card" class="coach-card hidden">
         <p id="coach-text"></p>
@@ -1798,6 +1772,7 @@
         let lastMatch = null;
         let draftStarter = 'player', draftPickIndex = 0;
         let draftTimer = null;
+        let aiPlayTimer = null;
         let coach = { active: false, step: null, cellIndex: 4, pendingCapture: false, taughtHand: false };
         const SNAKE_SEQ = (starter) => {
             const other = starter === 'player' ? 'ai' : 'player';
@@ -1849,6 +1824,15 @@
             if (draftTimer) {clearTimeout(draftTimer); draftTimer = null;}
         }
 
+        function clearAiPlayTimer() {
+            if (aiPlayTimer) {clearTimeout(aiPlayTimer); aiPlayTimer = null;}
+        }
+
+        function hideTurnBanner() {
+            const banner = document.getElementById('turn-banner');
+            if (banner) banner.classList.remove('show');
+        }
+
         function onModalBackdrop(e, action) {
             if (e.target !== e.currentTarget) return;
             action();
@@ -1890,6 +1874,8 @@
         function showModeMenu() {
             sfx.click(); hideTooltip(); hideCoach();
             clearDraftTimer();
+            clearAiPlayTimer();
+            hideTurnBanner();
             document.body.classList.add('menu-open');
             ['draft-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal'].forEach(id => document.getElementById(id).classList.add('hidden'));
             document.getElementById('main-menu-modal').classList.remove('hidden');
@@ -1986,6 +1972,8 @@
 
         function startGame(mode) {
             sfx.click(); hideTooltip(); activeMode = mode;
+            clearAiPlayTimer();
+            hideTurnBanner();
             ['main-menu-modal', 'draft-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal'].forEach(id => document.getElementById(id).classList.add('hidden'));
 
             if (mode === 'random') {
@@ -2156,6 +2144,8 @@
 
         function beginMatch(first) {
             document.body.classList.remove('menu-open');
+            clearAiPlayTimer();
+            hideTurnBanner();
             const rematch = !!first;
             turn = first || (Math.random() < 0.5 ? 'player' : 'ai');
             snapshotMatch(turn);
@@ -2170,34 +2160,42 @@
             recalculateDynamicStats(); render();
             maybeStartCoach();
             if (!coach.active || coach.step === 'wait') showTurnBanner(turn);
-            if (turn === 'ai') setTimeout(aiTurn, 700);
+            if (turn === 'ai') scheduleAiTurn(700);
         }
 
-        function showTurnBanner(whose) {
-            const el = document.getElementById('turn-banner');
-            if (!el) return;
+        function positionBoardToast(el) {
             const grid = document.getElementById('board-grid');
-            if (grid) {
-                const rect = grid.getBoundingClientRect();
-                el.style.top = `${Math.round(rect.top + rect.height * 0.28)}px`;
-            }
-            el.textContent = whose === 'player' ? 'YOUR TURN' : 'AI TURN';
-            el.className = `turn-banner ${whose}`;
-            void el.offsetWidth;
-            el.classList.add('show');
+            if (!grid || !el) return;
+            const rect = grid.getBoundingClientRect();
+            el.style.top = `${Math.round(rect.top + rect.height * 0.38)}px`;
+        }
+
+        function pulseTurnIndicator() {
             const turnInd = document.getElementById('turn-indicator');
+            if (!turnInd) return;
             turnInd.classList.remove('pulse');
             void turnInd.offsetWidth;
             turnInd.classList.add('pulse');
         }
 
-        function announceFx(text, kind) {
-            const el = document.getElementById('combat-fx');
-            if (!el || !text) return;
-            el.textContent = text;
-            el.className = `combat-fx ${kind || ''}`;
+        function showTurnBanner(whose) {
+            const el = document.getElementById('turn-banner');
+            if (!el) return;
+            positionBoardToast(el);
+            el.textContent = whose === 'player' ? 'YOUR TURN' : 'AI TURN';
+            el.className = `turn-banner ${whose}`;
             void el.offsetWidth;
             el.classList.add('show');
+            pulseTurnIndicator();
+        }
+
+        function scheduleAiTurn(delay) {
+            clearAiPlayTimer();
+            statusMsg.textContent = "AI is thinking...";
+            aiPlayTimer = setTimeout(() => {
+                aiPlayTimer = null;
+                aiTurn();
+            }, delay);
         }
 
         function maybeStartCoach() {
@@ -2626,16 +2624,13 @@
             render();
             requestAnimationFrame(updateCoach);
 
-            if (fxParts.length) {
-                const kind = capLog ? 'capture' : ((abilityFx && abilityFx.kind) || (buffFx && buffFx.kind) || (psnFx && psnFx.kind));
-                announceFx(fxParts.join(' · '), kind);
-            }
-
             if (placedBy === 'player') onCoachPlaced(!!capLog, enemyNeighbor);
 
-            if (board.every(cell => cell !== null)) {endGame(); return;}
+            if (board.every(cell => cell !== null)) {hideTurnBanner(); endGame(); return;}
+
             if (!coach.active || coach.step === 'wait') showTurnBanner(turn);
-            if (turn === 'ai') {statusMsg.textContent = "AI is thinking..."; setTimeout(aiTurn, 700);}
+
+            if (turn === 'ai') scheduleAiTurn(700);
             else {
                 statusMsg.textContent = "Your turn - play a card from your hand.";
                 resumeCoachAfterAi();
@@ -2760,8 +2755,8 @@
 
         function endGame() {
             gameState = 'gameover'; hideTooltip(); hideCoach();
-            const banner = document.getElementById('turn-banner');
-            if (banner) banner.classList.remove('show');
+            clearAiPlayTimer();
+            hideTurnBanner();
             let blueCount = ownedCount('blue'), redCount = ownedCount('red');
             stats.played++;
             if (blueCount > redCount) {stats.wins++; stats.streak++; if (stats.streak > stats.bestStreak) stats.bestStreak = stats.streak; sfx.win(); logAction("Victory achieved!");}
