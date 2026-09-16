@@ -27,7 +27,7 @@
             --font-name: 0.48rem;
             --font-header: 1.1rem;
             --hand-min: 104px;
-
+            
             /* Draft screen variables */
             --draft-w: 60px;
             --draft-h: 76px;
@@ -226,18 +226,9 @@
         }
 
         @keyframes pulseFlip {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.15) rotate(3deg);
-                filter: brightness(1.3);
-            }
-
-            100% {
-                transform: scale(1);
-            }
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15) rotate(3deg); filter: brightness(1.3); }
+            100% { transform: scale(1); }
         }
 
         .card.flipped {
@@ -280,6 +271,14 @@
             line-height: 1;
         }
 
+        /* On mobile, show only the icon part of the label to prevent top stat overlap */
+        @media (max-width: 767px) {
+            .ability-badge {
+                font-size: 0.75rem;
+                padding: 1px 4px;
+            }
+        }
+
         /* Tooltip style */
         .card-tooltip {
             position: fixed;
@@ -292,7 +291,7 @@
             font-weight: normal;
             pointer-events: none;
             z-index: 200;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
             max-width: 160px;
             text-align: center;
             display: none;
@@ -321,6 +320,7 @@
             top: 46%;
             left: 50%;
             transform: translate(-50%, -50%);
+            font-size: 1.35ns;
             font-size: 1.35rem;
             z-index: 1;
         }
@@ -497,6 +497,13 @@
             padding: 0 2px;
         }
 
+        @media (max-width: 767px) {
+            .draft-card .ability-badge {
+                font-size: 0.65rem;
+                padding: 1px 3px;
+            }
+        }
+
         .draft-card .card-emoji {
             font-size: 0.95rem;
         }
@@ -576,13 +583,11 @@
     <!-- Main Menu Modal (Loads on startup) -->
     <div id="main-menu-modal" class="modal">
         <div class="modal-content">
-            <h2 style="margin-top: 0; color: var(--accent); font-size: 1.3rem; letter-spacing: 1px;">🔥 EMBER GRID 🔥
-            </h2>
+            <h2 style="margin-top: 0; color: var(--accent); font-size: 1.3rem; letter-spacing: 1px;">🔥 EMBER GRID 🔥</h2>
             <p style="font-size: 0.75rem; line-height: 1.35; opacity: 0.9; margin-bottom: 12px;">
-                A tactical card battle game! Place cards on the 3×3 grid, out-stat your opponent's adjacent sides to
-                flip cards, and control the board to win. Watch out for special card abilities!
+                A tactical card battle game! Place cards on the 3×3 grid, out-stat your opponent's adjacent sides to flip cards, and control the board to win. Watch out for special card abilities!
             </p>
-
+            
             <div class="settings-row" style="margin-bottom: 12px;">
                 <span>AI Difficulty:</span>
                 <select id="ai-difficulty-select" class="settings-select" onchange="updateDifficulty(this.value)">
@@ -604,14 +609,10 @@
         <div class="modal-content" style="text-align: left;">
             <h2 style="margin-top: 0; color: var(--accent); text-align: center;">HOW TO PLAY</h2>
             <p style="font-size: 0.8rem; line-height: 1.4; opacity: 0.9;">
-                <strong>1. Card Stats:</strong> Each card has 4 numbers (Top, Right, Bottom, Left) ranging from 1 to 10
-                (displayed as <strong>Aces/A</strong>).<br><br>
-                <strong>2. Placing & Deselecting:</strong> Click a card in your hand to select it, then click an empty
-                cell. Click your selected card again to deselect.<br><br>
-                <strong>3. Abilities:</strong> Hover/tap over cards with ability badges (⚡ Buff, 💀 Curse, 🔮 Hex) to
-                view their special effects upon placement!<br><br>
-                <strong>4. Winning:</strong> The player controlling the majority of the board when all 9 squares are
-                filled wins the match!
+                <strong>1. Card Stats:</strong> Each card has 4 numbers (Top, Right, Bottom, Left) ranging from 1 to 10 (displayed as <strong>Aces/A</strong>).<br><br>
+                <strong>2. Placing & Deselecting:</strong> Click a card in your hand to select it, then click an empty cell. Click your selected card again to deselect.<br><br>
+                <strong>3. Abilities:</strong> Tap over cards with ability icons (⚡, 💀, 🔮) to view their special effects in the tooltip!<br><br>
+                <strong>4. Winning:</strong> The player controlling the majority of the board when all 9 squares are filled wins the match!
             </p>
             <button class="btn" onclick="document.getElementById('help-modal').classList.add('hidden')">Got it!</button>
         </div>
@@ -658,8 +659,7 @@
             <h2 style="margin-top: 0; color: var(--blue-card); font-size: 1.1rem; margin-bottom: 4px;">SNAKE DRAFT</h2>
             <p id="draft-status" style="font-size: 0.75rem; opacity: 0.9; margin-bottom: 4px;"></p>
             <div class="draft-grid" id="draft-pool-grid"></div>
-            <div style="font-size: 0.7rem; opacity: 0.7; margin-top: 4px;" id="draft-rosters">Your Deck: 0/5 | AI Deck:
-                0/5</div>
+            <div style="font-size: 0.7rem; opacity: 0.7; margin-top: 4px;" id="draft-rosters">Your Deck: 0/5 | AI Deck: 0/5</div>
         </div>
     </div>
 
@@ -670,8 +670,7 @@
             <p id="gameover-desc" style="font-size: 0.85rem; opacity: 0.9; margin-bottom: 12px;"></p>
             <div style="display: flex; flex-direction: column; gap: 8px;">
                 <button class="btn btn-alt" onclick="startCurrentModeAgain()">Play Again 🔄</button>
-                <button class="btn" style="background-color: #475569; color: #fff;" onclick="showModeMenu()">Main Menu
-                    ⚙️</button>
+                <button class="btn" style="background-color: #475569; color: #fff;" onclick="showModeMenu()">Main Menu ⚙️</button>
             </div>
         </div>
     </div>
@@ -750,8 +749,8 @@
         };
 
         const masterCards = [
-            { name: "Alien", emoji: "👽", stats: [8, 3, 5, 2], ability: { type: 'aura_buff', val: 1, label: '⚡ Buff', desc: 'Boosts adjacent friendly cards by +1 stat.' } },
-            { name: "Ghost", emoji: "👻", stats: [4, 7, 2, 6], ability: { type: 'curse_adj', val: -1, label: '💀 Curse', desc: 'Reduces adjacent enemy cards by -1 stat.' } },
+            { name: "Alien", emoji: "👽", stats: [8, 3, 5, 2], ability: { type: 'aura_buff', val: 1, label: '⚡ Buff', icon: '⚡', desc: 'Boosts adjacent friendly cards by +1 stat.' } },
+            { name: "Ghost", emoji: "👻", stats: [4, 7, 2, 6], ability: { type: 'curse_adj', val: -1, label: '💀 Curse', icon: '💀', desc: 'Reduces adjacent enemy cards by -1 stat.' } },
             { name: "Robot", emoji: "🤖", stats: [6, 6, 6, 1] },
             { name: "Skull", emoji: "💀", stats: [9, 2, 4, 3] },
             { name: "Cat", emoji: "🐱", stats: [2, 5, 8, 4] },
@@ -761,10 +760,10 @@
             { name: "Lion", emoji: "🦁", stats: [8, 7, 5, 2] },
             { name: "Tiger", emoji: "🐯", stats: [7, 8, 2, 4] },
             { name: "Dragon", emoji: "🐲", stats: [9, 9, 3, 1] },
-            { name: "Unicorn", emoji: "🦄", stats: [4, 5, 6, 8], ability: { type: 'aura_buff', val: 1, label: '⚡ Buff', desc: 'Boosts adjacent friendly cards by +1 stat.' } },
-            { name: "Wizard", emoji: "🧙", stats: [6, 8, 4, 5], ability: { type: 'ranged_debuff', val: -1, label: '🔮 Hex', desc: 'Curses the strongest enemy card anywhere on the board by -1.' } },
-            { name: "Vampire", emoji: "🧛", stats: [8, 4, 3, 7], ability: { type: 'curse_adj', val: -1, label: '💀 Curse', desc: 'Reduces adjacent enemy cards by -1 stat.' } },
-            { name: "Genie", emoji: "🧞", stats: [7, 6, 6, 6], ability: { type: 'ranged_debuff', val: -1, label: '🔮 Hex', desc: 'Curses the strongest enemy card anywhere on the board by -1.' } },
+            { name: "Unicorn", emoji: "🦄", stats: [4, 5, 6, 8], ability: { type: 'aura_buff', val: 1, label: '⚡ Buff', icon: '⚡', desc: 'Boosts adjacent friendly cards by +1 stat.' } },
+            { name: "Wizard", emoji: "🧙", stats: [6, 8, 4, 5], ability: { type: 'ranged_debuff', val: -1, label: '🔮 Hex', icon: '🔮', desc: 'Curses the strongest enemy card anywhere on the board by -1.' } },
+            { name: "Vampire", emoji: "🧛", stats: [8, 4, 3, 7], ability: { type: 'curse_adj', val: -1, label: '💀 Curse', icon: '💀', desc: 'Reduces adjacent enemy cards by -1 stat.' } },
+            { name: "Genie", emoji: "🧞", stats: [7, 6, 6, 6], ability: { type: 'ranged_debuff', val: -1, label: '🔮 Hex', icon: '🔮', desc: 'Curses the strongest enemy card anywhere on the board by -1.' } },
             { name: "Monkey", emoji: "🐵", stats: [3, 6, 4, 7] },
             { name: "Frog", emoji: "🐸", stats: [2, 4, 5, 3] },
             { name: "Owl", emoji: "🦉", stats: [6, 3, 2, 7] },
@@ -883,7 +882,7 @@
             document.getElementById('help-modal').classList.add('hidden');
             document.getElementById('gameover-modal').classList.add('hidden');
             document.getElementById('main-menu-modal').classList.remove('hidden');
-
+            
             gameState = 'menu';
             board = Array(9).fill(null);
             playerHand = [];
@@ -998,7 +997,11 @@
                     el.style.cursor = 'pointer';
                 }
 
-                let badgeHtml = card.ability ? `<div class="ability-badge">${card.ability.label}</div>` : '';
+                let badgeHtml = '';
+                if (card.ability) {
+                    const labelContent = window.innerWidth >= 768 ? card.ability.label : card.ability.icon;
+                    badgeHtml = `<div class="ability-badge">${labelContent}</div>`;
+                }
 
                 el.innerHTML = `
                     ${badgeHtml}
@@ -1014,7 +1017,7 @@
                     el.addEventListener('mouseenter', (e) => showTooltip(card.ability.desc, e));
                     el.addEventListener('mousemove', updateTooltipPosition);
                     el.addEventListener('mouseleave', hideTooltip);
-                    el.addEventListener('touchstart', (e) => showTooltip(card.ability.desc, e), { passive: true });
+                    el.addEventListener('touchstart', (e) => showTooltip(card.ability.desc, e), {passive: true});
                 }
 
                 if (!card.draftedBy && draftTurn === 'player') {
@@ -1155,7 +1158,11 @@
                 div.classList.add('selected');
             }
 
-            let badgeHtml = card.ability ? `<div class="ability-badge">${card.ability.label}</div>` : '';
+            let badgeHtml = '';
+            if (card.ability) {
+                const labelContent = window.innerWidth >= 768 ? card.ability.label : card.ability.icon;
+                badgeHtml = `<div class="ability-badge">${labelContent}</div>`;
+            }
 
             div.innerHTML = `
                 ${badgeHtml}
@@ -1171,8 +1178,8 @@
                 div.addEventListener('mouseenter', (e) => showTooltip(card.ability.desc, e));
                 div.addEventListener('mousemove', updateTooltipPosition);
                 div.addEventListener('mouseleave', hideTooltip);
-                div.addEventListener('touchstart', (e) => showTooltip(card.ability.desc, e), { passive: true });
-                div.addEventListener('touchend', hideTooltip, { passive: true });
+                div.addEventListener('touchstart', (e) => showTooltip(card.ability.desc, e), {passive: true});
+                div.addEventListener('touchend', hideTooltip, {passive: true});
             }
 
             if (source === 'player' && turn === 'player' && gameState === 'playing') {
