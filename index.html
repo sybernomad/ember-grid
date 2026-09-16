@@ -7,9 +7,7 @@
     <title>Ember Grid</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Outfit:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             color-scheme: dark;
@@ -148,107 +146,42 @@
             height: 3px;
             border-radius: 50%;
             background: #fbbf24;
-            box-shadow: 0 0 8px 2px rgba(251, 191, 36, 0.55);
+            box-shadow: 0 0 10px 3px rgba(251, 191, 36, 0.6);
             animation: emberRise 9s linear infinite;
             opacity: 0;
         }
 
-        .embers i:nth-child(1) {
-            left: 8%;
-            animation-duration: 8s;
-            animation-delay: 0s;
-        }
-
-        .embers i:nth-child(2) {
-            left: 22%;
-            animation-duration: 11s;
-            animation-delay: 1.4s;
-            width: 2px;
-            height: 2px;
-        }
-
-        .embers i:nth-child(3) {
-            left: 37%;
-            animation-duration: 7.5s;
-            animation-delay: 2.1s;
-        }
-
-        .embers i:nth-child(4) {
-            left: 51%;
-            animation-duration: 10s;
-            animation-delay: 0.6s;
-            width: 4px;
-            height: 4px;
-        }
-
-        .embers i:nth-child(5) {
-            left: 64%;
-            animation-duration: 8.5s;
-            animation-delay: 3s;
-        }
-
-        .embers i:nth-child(6) {
-            left: 76%;
-            animation-duration: 12s;
-            animation-delay: 1s;
-            width: 2px;
-            height: 2px;
-        }
-
-        .embers i:nth-child(7) {
-            left: 88%;
-            animation-duration: 9.5s;
-            animation-delay: 2.6s;
-        }
-
-        .embers i:nth-child(8) {
-            left: 95%;
-            animation-duration: 7s;
-            animation-delay: 4s;
-        }
+        .embers i:nth-child(1) { left: 8%; animation-duration: 8s; animation-delay: 0s; }
+        .embers i:nth-child(2) { left: 22%; animation-duration: 11s; animation-delay: 1.4s; width: 2px; height: 2px; }
+        .embers i:nth-child(3) { left: 37%; animation-duration: 7.5s; animation-delay: 2.1s; }
+        .embers i:nth-child(4) { left: 51%; animation-duration: 10s; animation-delay: 0.6s; width: 4px; height: 4px; }
+        .embers i:nth-child(5) { left: 64%; animation-duration: 8.5s; animation-delay: 3s; }
+        .embers i:nth-child(6) { left: 76%; animation-duration: 12s; animation-delay: 1s; width: 2px; height: 2px; }
+        .embers i:nth-child(7) { left: 88%; animation-duration: 9.5s; animation-delay: 2.6s; }
+        .embers i:nth-child(8) { left: 95%; animation-duration: 7s; animation-delay: 4s; }
+        .embers i:nth-child(9) { left: 14%; animation-duration: 9.2s; animation-delay: 0.8s; width: 2px; height: 2px; }
+        .embers i:nth-child(10) { left: 29%; animation-duration: 10.5s; animation-delay: 3.4s; }
+        .embers i:nth-child(11) { left: 43%; animation-duration: 8.2s; animation-delay: 1.8s; width: 4px; height: 4px; }
+        .embers i:nth-child(12) { left: 58%; animation-duration: 11.4s; animation-delay: 4.2s; }
+        .embers i:nth-child(13) { left: 71%; animation-duration: 7.8s; animation-delay: 2.4s; width: 2px; height: 2px; }
+        .embers i:nth-child(14) { left: 83%; animation-duration: 9.8s; animation-delay: 0.3s; }
+        .embers i:nth-child(15) { left: 4%; animation-duration: 12.2s; animation-delay: 5s; }
+        .embers i:nth-child(16) { left: 91%; animation-duration: 8.8s; animation-delay: 3.8s; width: 4px; height: 4px; }
 
         @keyframes emberRise {
-            0% {
-                transform: translateY(0) scale(1);
-                opacity: 0;
-            }
-
-            12% {
-                opacity: 0.8;
-            }
-
-            100% {
-                transform: translateY(-105vh) scale(0.4);
-                opacity: 0;
-            }
+            0% { transform: translateY(0) scale(1); opacity: 0; }
+            12% { opacity: 0.8; }
+            100% { transform: translateY(-105vh) scale(0.4); opacity: 0; }
         }
 
-        [data-theme="light"] .embers {
-            opacity: 0.35;
-        }
+        [data-theme="light"] .embers { opacity: 0.35; }
 
         @media (prefers-reduced-motion: reduce) {
-            .embers i {
-                animation: none;
-                opacity: 0;
-            }
-
-            .card.flipped {
-                animation: none;
-            }
-
-            .card.selected {
-                animation: none;
-            }
-
-            .turn-banner,
-            .combat-fx,
-            .capture-pop,
-            .fx-ring,
-            .score-pill.score-tick,
-            .turn-indicator.pulse {
-                animation: none;
-            }
+            .embers i { animation: none; opacity: 0; }
+            .card.flipped { animation: none; }
+            .card.selected { animation: none; }
+            .turn-banner, .combat-fx, .capture-pop, .fx-ring,
+            .score-pill.score-tick, .turn-indicator.pulse { animation: none; }
         }
 
         .container {
@@ -301,7 +234,7 @@
         }
 
         .menu-btn {
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.18));
+            background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.18));
             background-color: var(--panel-bg);
             border: 1px solid var(--border-color);
             color: var(--text-color);
@@ -314,7 +247,7 @@
             align-items: center;
             justify-content: center;
             transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 4px 10px rgba(0, 0, 0, 0.25);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 4px 10px rgba(0,0,0,0.25);
         }
 
         .menu-btn:hover {
@@ -330,27 +263,6 @@
             outline-offset: 2px;
         }
 
-        .match-chips {
-            font-size: 0.65rem;
-            font-weight: 700;
-            letter-spacing: 0.04em;
-            opacity: 0.72;
-            min-height: 14px;
-            text-align: center;
-            width: 100%;
-            max-width: calc(var(--grid-w) * 3 + 18px);
-        }
-
-        .card.bolt-target {
-            box-shadow: 0 0 0 2px #60a5fa, 0 0 16px rgba(96, 165, 250, 0.45);
-            cursor: pointer;
-        }
-
-        .compendium-filter {
-            width: 100%;
-            margin: 0 0 8px;
-        }
-
         .score-board {
             display: flex;
             justify-content: space-between;
@@ -358,11 +270,11 @@
             width: 100%;
             max-width: calc(var(--grid-w) * 3 + 18px);
             padding: 5px 10px;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.18));
+            background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(0,0,0,0.18));
             background-color: var(--panel-bg);
             border: 1px solid rgba(232, 195, 106, 0.28);
             border-radius: 999px;
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 8px 18px rgba(0, 0, 0, 0.28);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 8px 18px rgba(0,0,0,0.28);
         }
 
         .score-pill {
@@ -445,7 +357,7 @@
 
         .cell {
             background:
-                linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(0, 0, 0, 0.18)),
+                linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.18)),
                 var(--cell-bg);
             border: 1px solid rgba(232, 195, 106, 0.16);
             border-radius: 10px;
@@ -497,7 +409,7 @@
             font-weight: 700;
             cursor: grab;
             position: relative;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.22);
             transition: transform 0.18s cubic-bezier(0.4, 0, 0.2, 1), filter 0.15s, box-shadow 0.18s;
             touch-action: none;
         }
@@ -517,7 +429,7 @@
             position: absolute;
             inset: 0;
             border-radius: inherit;
-            background: linear-gradient(125deg, rgba(255, 255, 255, 0.28) 0%, transparent 34%, transparent 62%, rgba(255, 255, 255, 0.08) 100%);
+            background: linear-gradient(125deg, rgba(255,255,255,0.28) 0%, transparent 34%, transparent 62%, rgba(255,255,255,0.08) 100%);
             pointer-events: none;
             mix-blend-mode: soft-light;
             z-index: 3;
@@ -532,18 +444,9 @@
         }
 
         @keyframes pulseFlip {
-            0% {
-                transform: scale(1) rotateY(0deg);
-            }
-
-            50% {
-                transform: scale(1.1) rotateY(90deg);
-                filter: brightness(1.45);
-            }
-
-            100% {
-                transform: scale(1) rotateY(0deg);
-            }
+            0% { transform: scale(1) rotateY(0deg); }
+            50% { transform: scale(1.1) rotateY(90deg); filter: brightness(1.45); }
+            100% { transform: scale(1) rotateY(0deg); }
         }
 
         .card.flipped {
@@ -568,7 +471,7 @@
 
         .card.card-back {
             background:
-                repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.05) 0 5px, transparent 5px 10px),
+                repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0 5px, transparent 5px 10px),
                 linear-gradient(160deg, #9f1239, #4c0519);
             border-color: #fda4af;
         }
@@ -591,7 +494,7 @@
             padding: 3px 5px;
             line-height: 1;
             border: 1px solid var(--gold);
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.45);
         }
 
         .card-name {
@@ -629,9 +532,9 @@
             justify-content: center;
             font-size: 1.35em;
             z-index: 1;
-            background: radial-gradient(circle at 50% 38%, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.28));
+            background: radial-gradient(circle at 50% 38%, rgba(255,255,255,0.2), rgba(0,0,0,0.28));
             border-radius: 50%;
-            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16), 0 4px 8px rgba(0, 0, 0, 0.35);
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.16), 0 4px 8px rgba(0,0,0,0.35);
             filter: none;
         }
 
@@ -649,8 +552,8 @@
             border: 1px solid rgba(232, 195, 106, 0.5);
             border-radius: 50%;
             font-variant-numeric: tabular-nums;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.5);
             position: absolute;
         }
 
@@ -733,9 +636,48 @@
             padding: 10px;
         }
 
+        .modal-ember {
+            background: rgba(8, 5, 3, 0.28);
+            backdrop-filter: blur(2px);
+        }
+
+        .modal-ember .modal-content {
+            z-index: 1;
+        }
+
+        .modal-ember .embers {
+            z-index: 0;
+        }
+
+        [data-theme="light"] .modal-ember {
+            background: rgba(239, 227, 207, 0.32);
+        }
+
+        #expanded-rules-modal,
+        #compendium-modal,
+        #options-modal,
+        #stats-modal,
+        #draft-modal,
+        #gameover-modal {
+            z-index: 110;
+        }
+
+        body.menu-open header,
+        body.menu-open .score-board,
+        body.menu-open .status-msg,
+        body.menu-open .action-log {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        body.menu-open .battlefield {
+            opacity: 0.38;
+        }
+
         .modal-content {
             background:
-                linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 28%),
+                linear-gradient(180deg, rgba(255,255,255,0.04), transparent 28%),
                 var(--panel-bg);
             color: var(--text-color);
             padding: 1.15rem 1.1rem 1rem;
@@ -767,9 +709,10 @@
         }
 
         .brand-tag {
-            margin: 0 0 10px;
-            font-size: 0.72rem;
-            letter-spacing: 0.12em;
+            margin: 0 0 14px;
+            font-family: var(--font-display);
+            font-size: 0.68rem;
+            letter-spacing: 0.16em;
             text-transform: uppercase;
             opacity: 0.7;
         }
@@ -787,7 +730,7 @@
             letter-spacing: 0.04em;
             cursor: pointer;
             transition: filter 0.15s, transform 0.1s, box-shadow 0.15s;
-            box-shadow: 0 3px 0 #92400e, 0 8px 16px rgba(0, 0, 0, 0.28);
+            box-shadow: 0 3px 0 #92400e, 0 8px 16px rgba(0,0,0,0.28);
         }
 
         .btn:hover {
@@ -816,7 +759,34 @@
         .btn-muted {
             background: linear-gradient(180deg, #57534e, #3f3a36);
             color: #f5f0e8;
-            box-shadow: 0 3px 0 #292524, 0 8px 16px rgba(0, 0, 0, 0.28);
+            box-shadow: 0 3px 0 #292524, 0 8px 16px rgba(0,0,0,0.28);
+        }
+
+        .menu-links {
+            display: flex;
+            gap: 6px;
+            margin: 0;
+        }
+
+        .menu-links .btn {
+            flex: 1;
+            width: auto;
+            padding: 8px 6px;
+            font-size: 0.58rem;
+            white-space: nowrap;
+        }
+
+        #main-menu-modal .btn {
+            font-family: var(--font-display);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            font-weight: 800;
+        }
+
+        .menu-rule {
+            height: 1px;
+            margin: 12px 4px;
+            background: linear-gradient(90deg, transparent, rgba(232, 195, 106, 0.55), transparent);
         }
 
         .menu-section-title {
@@ -832,13 +802,13 @@
 
         .rules-compact {
             background: rgba(0, 0, 0, 0.22);
-            padding: 9px 10px;
+            padding: 11px 12px;
             border-radius: 10px;
             font-size: 0.72rem;
-            line-height: 1.4;
+            line-height: 1.45;
             border: 1px solid var(--border-color);
             text-align: left;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
 
         .rules-compact strong {
@@ -852,9 +822,11 @@
             border-radius: 10px;
             font-size: 0.72rem;
             text-align: left;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             line-height: 1.35;
             color: #f0d59a;
+            position: relative;
+            z-index: 1;
         }
 
         [data-theme="light"] .ruleset-desc-box {
@@ -864,11 +836,26 @@
 
         .settings-row {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-start;
             align-items: center;
+            gap: 10px;
             font-size: 0.8rem;
+            margin-bottom: 6px;
+            padding: 0;
+            font-weight: 700;
+        }
+
+        .settings-stack {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 6px;
+            text-align: left;
             margin-bottom: 8px;
-            padding: 0 2px;
+        }
+
+        .settings-stack > span {
+            font-size: 0.8rem;
             font-weight: 700;
         }
 
@@ -882,6 +869,55 @@
             cursor: pointer;
             font-size: 0.75rem;
             font-family: var(--font-ui);
+        }
+
+        .settings-select-full {
+            width: 100%;
+        }
+
+        .settings-select:focus,
+        .settings-select:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 1px;
+            position: relative;
+            z-index: 3;
+        }
+
+        .settings-check {
+            width: 1.1rem;
+            height: 1.1rem;
+            margin: 0;
+            accent-color: var(--accent);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        label.settings-row {
+            cursor: pointer;
+        }
+
+        .menu-play-actions {
+            display: flex;
+            flex-direction: row;
+            gap: 6px;
+            width: 100%;
+            margin: 0;
+        }
+
+        .menu-play-actions .btn {
+            flex: 1;
+            width: auto;
+            padding: 10px 8px;
+            font-size: 0.68rem;
+        }
+
+        .btn.btn-dismiss {
+            width: auto;
+            min-width: 92px;
+            padding: 7px 18px;
+            font-size: 0.75rem;
+            margin: 10px auto 0;
+            display: inline-block;
         }
 
         .expanded-rules-list {
@@ -907,12 +943,37 @@
             margin-bottom: 2px;
         }
 
+        .compendium-filter {
+            width: 100%;
+            margin: 0 0 8px;
+        }
+
+        #compendium-modal .modal-content {
+            display: flex;
+            flex-direction: column;
+            height: min(94vh, 680px);
+            min-height: min(94vh, 680px);
+            overflow: hidden;
+        }
+
         .compendium-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 8px;
             margin: 8px 0 12px 0;
             justify-items: center;
+            align-content: start;
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: auto;
+            padding-bottom: 4px;
+        }
+
+        #compendium-modal .modal-title,
+        #compendium-modal .set-blurb,
+        #compendium-modal .compendium-filter,
+        #compendium-modal .modal-content > .btn {
+            flex-shrink: 0;
         }
 
         .set-blurb {
@@ -955,10 +1016,10 @@
             color: #fff;
             overflow: hidden;
             background:
-                radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.12), transparent 55%),
+                radial-gradient(circle at 50% 35%, rgba(255,255,255,0.12), transparent 55%),
                 linear-gradient(160deg, #57534e, #292524);
             border: 1px solid #e8c36a;
-            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255,255,255,0.16);
         }
 
         .compendium-card {
@@ -995,34 +1056,19 @@
             padding: 0 3px;
             line-height: 1.1;
         }
-
-        .compendium-card .card-name {
-            font-size: 0.42rem;
-        }
-
-        .draft-card .card-name {
-            font-size: var(--draft-font-name);
-        }
+        .compendium-card .card-name { font-size: 0.42rem; }
+        .draft-card .card-name { font-size: var(--draft-font-name); }
 
         .compendium-card .stat-top,
-        .draft-card .stat-top {
-            top: 2px;
-        }
-
+        .draft-card .stat-top { top: 2px; }
         .compendium-card .stat-bottom,
-        .draft-card .stat-bottom {
-            bottom: 13px;
-        }
-
+        .draft-card .stat-bottom { bottom: 13px; }
         .compendium-card .stat-left,
         .compendium-card .stat-right,
         .compendium-card .card-emoji,
         .draft-card .stat-left,
         .draft-card .stat-right,
-        .draft-card .card-emoji {
-            top: 44%;
-        }
-
+        .draft-card .card-emoji { top: 44%; }
         .compendium-card .card-emoji,
         .draft-card .card-emoji {
             width: 2.15em;
@@ -1040,7 +1086,7 @@
         }
 
         .stat-card {
-            background: rgba(0, 0, 0, 0.18);
+            background: rgba(0,0,0,0.18);
             padding: 8px 10px;
             border-radius: 10px;
             border: 1px solid var(--border-color);
@@ -1065,7 +1111,7 @@
 
         .turn-banner {
             position: fixed;
-            top: 22%;
+            top: 42%;
             left: 50%;
             transform: translate(-50%, -12px) scale(0.92);
             font-family: var(--font-display);
@@ -1080,43 +1126,21 @@
             border: 1px solid var(--gold);
             background: rgba(16, 12, 9, 0.88);
             color: var(--gold);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.4);
         }
 
         .turn-banner.show {
             animation: bannerIn 0.85s ease forwards;
         }
 
-        .turn-banner.player {
-            color: var(--blue-card);
-            border-color: rgba(110, 160, 255, 0.5);
-        }
-
-        .turn-banner.ai {
-            color: var(--red-card);
-            border-color: rgba(255, 107, 87, 0.5);
-        }
+        .turn-banner.player { color: var(--blue-card); border-color: rgba(110, 160, 255, 0.5); }
+        .turn-banner.ai { color: var(--red-card); border-color: rgba(255, 107, 87, 0.5); }
 
         @keyframes bannerIn {
-            0% {
-                opacity: 0;
-                transform: translate(-50%, -18px) scale(0.9);
-            }
-
-            18% {
-                opacity: 1;
-                transform: translate(-50%, 0) scale(1);
-            }
-
-            70% {
-                opacity: 1;
-                transform: translate(-50%, 0) scale(1);
-            }
-
-            100% {
-                opacity: 0;
-                transform: translate(-50%, -8px) scale(0.98);
-            }
+            0% { opacity: 0; transform: translate(-50%, -18px) scale(0.9); }
+            18% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+            70% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -8px) scale(0.98); }
         }
 
         .combat-fx {
@@ -1146,56 +1170,18 @@
             animation: combatPop 1.2s ease forwards;
         }
 
-        .combat-fx.capture {
-            color: #fff6df;
-            border-color: var(--gold);
-        }
-
-        .combat-fx.curse {
-            color: #e9d5ff;
-            border-color: #c084fc;
-        }
-
-        .combat-fx.bolt {
-            color: #bfdbfe;
-            border-color: #60a5fa;
-        }
-
-        .combat-fx.poison {
-            color: #bbf7d0;
-            border-color: #4ade80;
-        }
-
-        .combat-fx.buff {
-            color: #fde68a;
-            border-color: var(--gold);
-        }
-
-        .combat-fx.blast {
-            color: #fdba74;
-            border-color: #fb923c;
-        }
+        .combat-fx.capture { color: #fff6df; border-color: var(--gold); }
+        .combat-fx.curse { color: #e9d5ff; border-color: #c084fc; }
+        .combat-fx.bolt { color: #bfdbfe; border-color: #60a5fa; }
+        .combat-fx.poison { color: #bbf7d0; border-color: #4ade80; }
+        .combat-fx.buff { color: #fde68a; border-color: var(--gold); }
+        .combat-fx.blast { color: #fdba74; border-color: #fb923c; }
 
         @keyframes combatPop {
-            0% {
-                opacity: 0;
-                transform: translate(-50%, 16px) scale(0.86);
-            }
-
-            12% {
-                opacity: 1;
-                transform: translate(-50%, 0) scale(1.04);
-            }
-
-            48% {
-                opacity: 1;
-                transform: translate(-50%, 0) scale(1);
-            }
-
-            100% {
-                opacity: 0;
-                transform: translate(-50%, -10px) scale(0.98);
-            }
+            0% { opacity: 0; transform: translate(-50%, 16px) scale(0.86); }
+            12% { opacity: 1; transform: translate(-50%, 0) scale(1.04); }
+            48% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -10px) scale(0.98); }
         }
 
         .score-pill.score-tick {
@@ -1203,18 +1189,9 @@
         }
 
         @keyframes scoreTick {
-            0% {
-                transform: scale(1);
-            }
-
-            35% {
-                transform: scale(1.12);
-                filter: brightness(1.3);
-            }
-
-            100% {
-                transform: scale(1);
-            }
+            0% { transform: scale(1); }
+            35% { transform: scale(1.12); filter: brightness(1.3); }
+            100% { transform: scale(1); }
         }
 
         .turn-indicator.pulse {
@@ -1222,20 +1199,9 @@
         }
 
         @keyframes turnPulse {
-            0% {
-                transform: scale(1);
-                letter-spacing: 0.16em;
-            }
-
-            40% {
-                transform: scale(1.08);
-                letter-spacing: 0.22em;
-            }
-
-            100% {
-                transform: scale(1);
-                letter-spacing: 0.16em;
-            }
+            0% { transform: scale(1); letter-spacing: 0.16em; }
+            40% { transform: scale(1.08); letter-spacing: 0.22em; }
+            100% { transform: scale(1); letter-spacing: 0.16em; }
         }
 
         .capture-pop {
@@ -1258,25 +1224,10 @@
         }
 
         @keyframes captureFloat {
-            0% {
-                opacity: 0;
-                transform: translate(-50%, 8px) scale(0.8);
-            }
-
-            12% {
-                opacity: 1;
-                transform: translate(-50%, -6px) scale(1.05);
-            }
-
-            72% {
-                opacity: 1;
-                transform: translate(-50%, -10px) scale(1);
-            }
-
-            100% {
-                opacity: 0;
-                transform: translate(-50%, -22px) scale(0.95);
-            }
+            0% { opacity: 0; transform: translate(-50%, 8px) scale(0.8); }
+            12% { opacity: 1; transform: translate(-50%, -6px) scale(1.05); }
+            72% { opacity: 1; transform: translate(-50%, -10px) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -22px) scale(0.95); }
         }
 
         .fx-ring {
@@ -1288,41 +1239,16 @@
             animation: fxRing 0.7s ease-out forwards;
         }
 
-        .fx-ring.curse {
-            box-shadow: 0 0 0 2px #c084fc, 0 0 18px #a855f7;
-        }
-
-        .fx-ring.bolt {
-            box-shadow: 0 0 0 2px #60a5fa, 0 0 18px #3b82f6;
-        }
-
-        .fx-ring.poison {
-            box-shadow: 0 0 0 2px #4ade80, 0 0 16px #22c55e;
-        }
-
-        .fx-ring.buff {
-            box-shadow: 0 0 0 2px var(--gold), 0 0 16px #e8a317;
-        }
-
-        .fx-ring.blast {
-            box-shadow: 0 0 0 2px #fb923c, 0 0 18px #f97316;
-        }
+        .fx-ring.curse { box-shadow: 0 0 0 2px #c084fc, 0 0 18px #a855f7; }
+        .fx-ring.bolt { box-shadow: 0 0 0 2px #60a5fa, 0 0 18px #3b82f6; }
+        .fx-ring.poison { box-shadow: 0 0 0 2px #4ade80, 0 0 16px #22c55e; }
+        .fx-ring.buff { box-shadow: 0 0 0 2px var(--gold), 0 0 16px #e8a317; }
+        .fx-ring.blast { box-shadow: 0 0 0 2px #fb923c, 0 0 18px #f97316; }
 
         @keyframes fxRing {
-            0% {
-                opacity: 0;
-                transform: scale(0.92);
-            }
-
-            30% {
-                opacity: 1;
-                transform: scale(1.04);
-            }
-
-            100% {
-                opacity: 0;
-                transform: scale(1.08);
-            }
+            0% { opacity: 0; transform: scale(0.92); }
+            30% { opacity: 1; transform: scale(1.04); }
+            100% { opacity: 0; transform: scale(1.08); }
         }
 
         .cell.coach-target {
@@ -1353,7 +1279,7 @@
             border: 1px solid var(--gold);
             border-radius: 12px;
             padding: 10px 12px 8px;
-            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+            box-shadow: 0 16px 36px rgba(0,0,0,0.45);
             text-align: center;
         }
 
@@ -1415,33 +1341,70 @@
             gap: 6px;
         }
 
+        #gameover-desc {
+            font-family: var(--font-display);
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            opacity: 0.85;
+            margin: 0 0 14px;
+            line-height: 1.45;
+        }
+
+        #gameover-modal .btn {
+            font-family: var(--font-display);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 800;
+            font-size: 0.68rem;
+            padding: 10px 8px;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+
         .rematch-bar {
             display: flex;
-            gap: 8px;
-            width: 100%;
-            max-width: calc(var(--grid-w) * 3 + 18px);
+            gap: 6px;
+            width: calc(var(--grid-w) * 3 + 18px);
+            max-width: 100%;
             min-height: calc(var(--card-h) + 6px);
-            align-items: center;
+            align-items: stretch;
             justify-content: center;
         }
 
         .rematch-bar .btn {
-            width: auto;
-            flex: 1;
-            padding: 10px 12px;
+            flex: 1 1 0;
+            min-width: 0;
+            height: 52px;
+            padding: 8px 4px;
+            font-family: var(--font-display);
+            font-size: 0.58rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            box-shadow: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.2;
+            border: 1px solid rgba(232, 195, 106, 0.55);
         }
     </style>
 </head>
 
 <body data-theme="dark">
-    <div class="embers" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="embers" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
 
     <div class="container">
         <header>
             <h1>EMBER GRID</h1>
             <div class="nav-group">
                 <button class="menu-btn" onclick="showStatsModal()" title="Stats">📊</button>
-                <button class="menu-btn" onclick="showExpandedRulesModal()" title="Expanded Rules">📖</button>
+                <button class="menu-btn" onclick="showRulesModal()" title="Rules">📖</button>
                 <button class="menu-btn" id="audio-toggle-btn" onclick="toggleAudio()" title="Toggle Audio">🔊</button>
                 <button class="menu-btn" id="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Theme">☀️</button>
                 <button class="menu-btn" onclick="showModeMenu()" title="Main Menu">⚙️</button>
@@ -1453,15 +1416,15 @@
             <div class="turn-indicator" id="turn-indicator">BATTLE</div>
             <div class="score-pill score-red" id="score-red">Red: -</div>
         </div>
-        <div class="match-chips" id="match-chips"></div>
 
         <div class="battlefield">
+            <div id="top-area"></div>
             <div class="grid" id="board-grid"></div>
             <div id="bottom-area"></div>
         </div>
 
-        <div class="status-msg" id="status-msg">Welcome! Choose a mode to begin.</div>
-        <div class="action-log" id="action-log">Ready for battle.</div>
+        <div class="status-msg" id="status-msg">The Base Set is the deck. Each player is dealt a hand of five.</div>
+        <div class="action-log" id="action-log">Shuffle up.</div>
     </div>
 
     <div id="turn-banner" class="turn-banner" aria-live="polite"></div>
@@ -1476,74 +1439,54 @@
     <div id="card-tooltip" class="card-tooltip"></div>
 
     <!-- Main Menu Modal -->
-    <div id="main-menu-modal" class="modal">
+    <div id="main-menu-modal" class="modal modal-ember">
+        <div class="embers" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
         <div class="modal-content">
             <h2 class="modal-title">Ember Grid</h2>
-            <p class="brand-tag">Base Set</p>
+            <p class="brand-tag">The Base Set</p>
 
             <div class="menu-section-title">Core Rules</div>
             <div class="rules-compact">
-                <strong>⚔️ Capture:</strong> Play next to an enemy card. If your touching stat is higher than theirs,
+                <strong>🃏 The deck:</strong> Cards are dealt or drafted from a shared deck - the Base Set, 32 cards.<br>
+                <strong>⚔️ Capture:</strong> Play a card from your hand next to an enemy. If your touching stat is higher,
                 you capture it.<br>
-                <strong>🏆 Victory:</strong> Fill the 3x3 grid. Most cards wins — the leftover card in hand still
-                counts.
+                <strong>🏆 Victory:</strong> Fill the 3x3. Most cards wins - the leftover card in each hand still counts.
             </div>
 
-            <div style="margin-bottom: 6px;">
-                <button class="btn btn-alt" style="padding: 6px; font-size: 0.75rem;"
-                    onclick="showExpandedRulesModal()">📖 Read Full Rules & Browse Card Compendium</button>
-            </div>
-
-            <div class="menu-section-title">Ruleset Options</div>
-            <div class="settings-row" style="margin-bottom: 4px;">
-                <span>Game Mode:</span>
-                <select id="ruleset-select" class="settings-select" onchange="updateRuleset(this.value)">
-                    <option value="ember" selected>Ember Mode (Abilities)</option>
-                    <option value="classic">Classic Mode (Pure Stats)</option>
-                </select>
-            </div>
-
-            <div id="ruleset-desc" class="ruleset-desc-box">
-                <strong>Ember Mode:</strong> Cards possess special tactical abilities (Buffs, Curses, Bolts, Blasts,
-                etc.) that interact across the grid.
-            </div>
-
-            <div class="settings-row" style="margin-bottom: 10px;">
-                <span>AI Difficulty:</span>
-                <select id="ai-difficulty-select" class="settings-select" onchange="updateDifficulty(this.value)">
-                    <option value="easy">Easy</option>
-                    <option value="normal" selected>Normal</option>
-                    <option value="hard">Hard</option>
-                </select>
-            </div>
-
-            <div style="display: flex; flex-direction: column; gap: 6px;">
-                <button class="btn" onclick="startGame('random')">Play Random Deck 🔀</button>
-                <button class="btn btn-alt" onclick="startGame('draft')">Play Snake Draft 📋</button>
+            <nav class="menu-links">
+                <button type="button" class="btn btn-alt" onclick="showRulesModal()">Rules</button>
+                <button type="button" class="btn btn-alt" onclick="showCompendiumModal()">Compendium</button>
+                <button type="button" class="btn btn-alt" onclick="showOptionsModal()">Options</button>
+            </nav>
+            <div class="menu-rule" aria-hidden="true"></div>
+            <div class="menu-play-actions">
+                <button class="btn" onclick="startGame('random')">Deal Hands</button>
+                <button class="btn btn-alt" onclick="startGame('draft')">Draft Hands</button>
             </div>
         </div>
     </div>
 
-    <!-- Expanded Rules & Compendium Modal -->
-    <div id="expanded-rules-modal" class="modal hidden" onclick="onModalBackdrop(event, closeRulesModal)">
+    <!-- Rules Modal -->
+    <div id="expanded-rules-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, closeRulesModal)">
+        <div class="embers" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="closeRulesModal()"
-                aria-label="Close rules">&times;</button>
-            <h2 class="modal-title">Rules & Compendium</h2>
+            <button type="button" class="modal-close" onclick="closeRulesModal()" aria-label="Close rules">&times;</button>
+            <h2 class="modal-title">Rules</h2>
 
-            <div class="menu-section-title" style="margin-top: 0;">Basic Mechanics</div>
+            <div class="menu-section-title" style="margin-top: 0;">The table</div>
             <div class="expanded-rules-list">
                 <div class="rule-detail-item">
-                    <strong>Placement:</strong> Players take turns placing one card from their hand onto an empty slot
-                    on the 3x3 grid.
+                    <strong>The deck:</strong> Right now that is the Base Set - 32 cards. Shuffle it and deal two hands of five, or spread sixteen and draft until each hand is five.
+                </div>
+                <div class="rule-detail-item">
+                    <strong>Placement:</strong> On your turn, play one card from your hand onto an empty cell of the 3x3 grid.
                 </div>
                 <div class="rule-detail-item">
                     <strong>Capturing:</strong> When your card touches an enemy card, compare touching values (Top,
                     Right, Bottom, Left). If your attacking stat is strictly greater, you capture their card!
                 </div>
                 <div class="rule-detail-item">
-                    <strong>Victory:</strong> After the board fills, the leftover card in hand still counts. Totals are
-                    always 10 cards, so 6+ wins and 5–5 is a draw.
+                    <strong>Victory:</strong> Two hands of five is ten cards. After the board fills, the leftover card in each hand still counts, so 6+ wins and 5-5 is a draw.
                 </div>
                 <div class="rule-detail-item">
                     <strong>Stat Cap:</strong> Stats range from 1 to 10 (represented by A). Stat boosts cannot raise
@@ -1556,8 +1499,8 @@
                 <div class="rule-detail-item"><strong>⚡ Buff:</strong> Boosts adjacent friendly cards by +1 stat.</div>
                 <div class="rule-detail-item"><strong>💀 Curse:</strong> Reduces the strongest enemy card's stats by 1
                     on play.</div>
-                <div class="rule-detail-item"><strong>🔮 Bolt:</strong> Choose an enemy on the board (AI picks the
-                    strongest) and reduce its stats by 2 on play.</div>
+                <div class="rule-detail-item"><strong>🔮 Bolt:</strong> Zaps a random enemy card on the board, reducing
+                    its stats by 2 on play.</div>
                 <div class="rule-detail-item"><strong>⚖️ Equalizer:</strong> Captures if touching stats match exactly.
                     (Monk, Titan)</div>
                 <div class="rule-detail-item"><strong>💥 Blast:</strong> Temporarily grants +2 to all stats on the play
@@ -1566,9 +1509,17 @@
                     end.</div>
             </div>
 
-            <div class="menu-section-title">Base Set</div>
-            <p class="set-blurb">The first 32 cards. Beasts, spirits, constructs, and myths in one pile — the set that
-                taught the table.</p>
+            <button class="btn btn-alt btn-dismiss" onclick="closeRulesModal()">Close</button>
+        </div>
+    </div>
+
+    <!-- Compendium Modal -->
+    <div id="compendium-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, closeCompendiumModal)">
+        <div class="embers" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button type="button" class="modal-close" onclick="closeCompendiumModal()" aria-label="Close compendium">&times;</button>
+            <h2 class="modal-title">Compendium</h2>
+            <p class="set-blurb">The deck on the table. 32 cards - beasts, spirits, constructs, and myths. A bigger grid will deal a bigger hand. Expansions will add cards to this pile.</p>
             <select id="compendium-filter" class="settings-select compendium-filter" onchange="renderCompendium()">
                 <option value="all">All cards</option>
                 <option value="ability">Abilities only</option>
@@ -1581,16 +1532,51 @@
                 <option value="poison">Poison</option>
             </select>
             <div class="compendium-grid" id="compendium-grid"></div>
+            <button class="btn btn-alt btn-dismiss" onclick="closeCompendiumModal()">Close</button>
+        </div>
+    </div>
 
-            <button class="btn" onclick="closeRulesModal()">Close Guide</button>
+    <!-- Options Modal -->
+    <div id="options-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, closeOptionsModal)">
+        <div class="embers" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button type="button" class="modal-close" onclick="closeOptionsModal()" aria-label="Close options">&times;</button>
+            <h2 class="modal-title">Options</h2>
+
+            <div class="menu-section-title" style="margin-top: 0;">Match</div>
+            <div class="settings-stack">
+                <span>Game Mode</span>
+                <select id="ruleset-select" class="settings-select settings-select-full" onchange="updateRuleset(this.value)">
+                    <option value="ember" selected>Ember Mode (Abilities)</option>
+                    <option value="classic">Classic Mode (Pure Stats)</option>
+                </select>
+            </div>
+            <div id="ruleset-desc" class="ruleset-desc-box">
+                <strong>Ember Mode:</strong> Cards possess special tactical abilities (Buffs, Curses, Bolts, Blasts,
+                etc.) that interact across the grid.
+            </div>
+            <div class="settings-stack">
+                <span>AI Difficulty</span>
+                <select id="ai-difficulty-select" class="settings-select settings-select-full" onchange="updateDifficulty(this.value)">
+                    <option value="easy">Easy</option>
+                    <option value="normal" selected>Normal</option>
+                    <option value="hard">Hard</option>
+                </select>
+            </div>
+            <label class="settings-row" for="open-hands-check">
+                <span>Show Hands</span>
+                <input type="checkbox" id="open-hands-check" class="settings-check" onchange="updateOpenHands(this.checked)">
+            </label>
+
+            <button class="btn btn-alt btn-dismiss" onclick="closeOptionsModal()">Close</button>
         </div>
     </div>
 
     <!-- Stats Modal -->
-    <div id="stats-modal" class="modal hidden" onclick="onModalBackdrop(event, closeStatsModal)">
+    <div id="stats-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, closeStatsModal)">
+        <div class="embers" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="closeStatsModal()"
-                aria-label="Close stats">&times;</button>
+            <button type="button" class="modal-close" onclick="closeStatsModal()" aria-label="Close stats">&times;</button>
             <h2 class="modal-title">Career Stats</h2>
             <div class="stats-grid">
                 <div class="stat-card">
@@ -1616,34 +1602,35 @@
                 <div id="stat-top-cards" style="margin-top: 3px; opacity: 0.8; font-size: 0.7rem; line-height: 1.3;">
                     None yet.</div>
             </div>
-            <button class="btn" style="margin-top: 10px;" onclick="closeStatsModal()">Close</button>
+            <button class="btn btn-alt btn-dismiss" onclick="closeStatsModal()">Close</button>
         </div>
     </div>
 
     <!-- Draft Modal -->
-    <div id="draft-modal" class="modal hidden" onclick="onModalBackdrop(event, cancelDraft)">
+    <div id="draft-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, cancelDraft)">
+        <div class="embers" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
         <div class="modal-content" onclick="event.stopPropagation()">
             <button type="button" class="modal-close" onclick="cancelDraft()" aria-label="Cancel draft">&times;</button>
-            <h2 class="modal-title" style="color: var(--blue-card);">Snake Draft</h2>
-            <p class="draft-order">Snake order: 1 pick, then pairs of 2. Highest remaining cards go fast.</p>
+            <h2 class="modal-title" style="color: var(--blue-card);">Draft Hands</h2>
+            <p class="draft-order">Sixteen cards from the deck. Snake order: 1 pick, then pairs of 2, until each hand is five.</p>
             <p id="draft-status" style="font-size: 0.75rem; opacity: 0.9; margin-bottom: 2px; font-weight: bold;"></p>
             <div class="draft-grid" id="draft-pool-grid"></div>
             <div style="font-size: 0.7rem; opacity: 0.7; margin-top: 2px; font-weight: bold;" id="draft-rosters">Your
-                Deck: 0/5 | AI Deck: 0/5</div>
-            <button class="btn btn-muted" style="margin-top: 10px;" onclick="cancelDraft()">Cancel Draft</button>
+                Hand: 0/5 | AI Hand: 0/5</div>
+            <button class="btn btn-muted btn-dismiss" onclick="cancelDraft()">Cancel Draft</button>
         </div>
     </div>
 
     <!-- Game Over Modal -->
-    <div id="gameover-modal" class="modal hidden" onclick="onGameoverBackdrop(event)">
+    <div id="gameover-modal" class="modal modal-ember hidden" onclick="onGameoverBackdrop(event)">
+        <div class="embers" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
         <div class="modal-content" style="max-width: 300px;" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="viewFinalBoard()"
-                aria-label="View board">&times;</button>
+            <button type="button" class="modal-close" onclick="viewFinalBoard()" aria-label="View board">&times;</button>
             <h2 id="gameover-title" class="modal-title">Match Over</h2>
-            <p id="gameover-desc" style="font-size: 0.85rem; opacity: 0.9; margin: 0 0 12px; font-weight: 700;"></p>
+            <p id="gameover-desc"></p>
             <div class="gameover-actions">
-                <button class="btn" onclick="rematchSwapFirst()">Play Again (swap first)</button>
-                <button class="btn btn-alt" onclick="newHands()">New Hands</button>
+                <button class="btn" onclick="rematchSwapFirst()">Replay (swap first)</button>
+                <button class="btn btn-alt" onclick="startCurrentModeAgain()">New Hands</button>
                 <button class="btn btn-alt" onclick="viewFinalBoard()">View Board</button>
                 <button class="btn btn-muted" onclick="showModeMenu()">Main Menu</button>
             </div>
@@ -1752,11 +1739,11 @@
             {name: "Lion", emoji: "🦁", baseStats: [7, 6, 4, 2]},
             {name: "Dragon", emoji: "🐲", baseStats: [9, 7, 3, 2], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
             {name: "Unicorn", emoji: "🦄", baseStats: [4, 4, 5, 7], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'Boosts adjacent friendly cards by +1 stat.'}},
-            {name: "Wizard", emoji: "🧙", baseStats: [5, 7, 3, 5], ability: {type: 'ranged_debuff', icon: '🔮', desc: 'On play, choose an enemy and reduce all its stats by 2.'}},
+            {name: "Wizard", emoji: "🧙", baseStats: [5, 7, 3, 5], ability: {type: 'ranged_debuff', icon: '🔮', desc: 'Zaps a random enemy card on play, reducing all its stats by 2.'}},
             {name: "Vampire", emoji: "🧛", baseStats: [7, 3, 3, 6], ability: {type: 'curse_adj', icon: '💀', desc: 'Permanently reduces all stats of the strongest enemy by 1 when played.'}},
             {name: "Paladin", emoji: "🛡️", baseStats: [4, 8, 8, 2]},
             {name: "Monk", emoji: "☯️", baseStats: [5, 5, 5, 5], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
-            {name: "Genie", emoji: "🧞", baseStats: [6, 5, 5, 5], ability: {type: 'ranged_debuff', icon: '🔮', desc: 'On play, choose an enemy and reduce all its stats by 2.'}},
+            {name: "Genie", emoji: "🧞", baseStats: [6, 5, 5, 5], ability: {type: 'ranged_debuff', icon: '🔮', desc: 'Zaps a random enemy card on play, reducing all its stats by 2.'}},
             {name: "Monkey", emoji: "🐵", baseStats: [3, 5, 4, 6]},
             {name: "Frog", emoji: "🐸", baseStats: [2, 4, 5, 3]},
             {name: "Owl", emoji: "🦉", baseStats: [5, 3, 2, 6]},
@@ -1802,13 +1789,16 @@
 
         let board = Array(9).fill(null);
         let playerHand = [], aiHand = [], draftPool = [], draftedPlayerCards = [], draftedAICards = [];
-        let selectedCard = null, turn = 'player', gameState = 'menu', activeMode = 'random', aiDifficulty = 'normal', draftTurn = 'player';
+        let selectedCard = null, turn = 'player', gameState = 'menu', activeMode = 'random', draftTurn = 'player';
+        let aiDifficulty = localStorage.getItem('ember_grid_ai') || 'normal';
+        if (!['easy', 'normal', 'hard'].includes(aiDifficulty)) aiDifficulty = 'normal';
+        let showBothHands = localStorage.getItem('ember_grid_open_hands') === 'true';
         let currentRuleset = 'ember';
-        let pendingBolt = null, lastMatch = null, matchFirst = 'player';
         let lastBlueScore = null, lastRedScore = null;
+        let lastMatch = null;
         let draftStarter = 'player', draftPickIndex = 0;
         let draftTimer = null;
-        let coach = {active: false, step: null, cellIndex: 4, pendingCapture: false, taughtHand: false};
+        let coach = { active: false, step: null, cellIndex: 4, pendingCapture: false, taughtHand: false };
         const SNAKE_SEQ = (starter) => {
             const other = starter === 'player' ? 'ai' : 'player';
             return [starter, other, other, starter, starter, other, other, starter, starter, other];
@@ -1826,9 +1816,21 @@
             return `${unique.slice(0, -1).join(', ')}, and ${unique[unique.length - 1]}`;
         }
 
-        function updateDifficulty(val) {sfx.click(); aiDifficulty = val; updateMatchChips();}
+        function updateDifficulty(val) {
+            sfx.click();
+            aiDifficulty = val;
+            localStorage.setItem('ember_grid_ai', val);
+        }
+
+        function updateOpenHands(checked) {
+            sfx.click();
+            showBothHands = !!checked;
+            localStorage.setItem('ember_grid_open_hands', showBothHands);
+            if (gameState === 'playing' || gameState === 'gameover') render();
+        }
         function refreshRulesetDesc() {
             const descBox = document.getElementById('ruleset-desc');
+            if (!descBox) return;
             descBox.innerHTML = currentRuleset === 'classic'
                 ? "<strong>Classic Mode:</strong> Pure, tactical gameplay. All special abilities and card badges are disabled."
                 : "<strong>Ember Mode:</strong> Cards possess special tactical abilities (Buffs, Curses, Bolts, Blasts, etc.) that interact across the grid.";
@@ -1857,6 +1859,16 @@
             document.getElementById('expanded-rules-modal').classList.add('hidden');
         }
 
+        function closeCompendiumModal() {
+            sfx.click(); hideTooltip();
+            document.getElementById('compendium-modal').classList.add('hidden');
+        }
+
+        function closeOptionsModal() {
+            sfx.click(); hideTooltip();
+            document.getElementById('options-modal').classList.add('hidden');
+        }
+
         function closeStatsModal() {
             sfx.click(); hideTooltip();
             document.getElementById('stats-modal').classList.add('hidden');
@@ -1878,12 +1890,12 @@
         function showModeMenu() {
             sfx.click(); hideTooltip(); hideCoach();
             clearDraftTimer();
-            ['draft-modal', 'stats-modal', 'expanded-rules-modal', 'gameover-modal'].forEach(id => document.getElementById(id).classList.add('hidden'));
+            document.body.classList.add('menu-open');
+            ['draft-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal'].forEach(id => document.getElementById(id).classList.add('hidden'));
             document.getElementById('main-menu-modal').classList.remove('hidden');
             gameState = 'menu'; board = Array(9).fill(null); playerHand = []; aiHand = []; selectedCard = null;
-            lastBlueScore = null; lastRedScore = null;
-            pendingBolt = null; lastMatch = null;
-            logAction("Ready for battle."); render();
+            lastBlueScore = null; lastRedScore = null; lastMatch = null;
+            logAction("Shuffle up."); render();
         }
 
         function showStatsModal() {
@@ -1898,13 +1910,30 @@
             document.getElementById('stats-modal').classList.remove('hidden');
         }
 
-        function showExpandedRulesModal() {
+        function showRulesModal() {
             sfx.click(); hideTooltip();
-            renderCompendium();
             document.getElementById('expanded-rules-modal').classList.remove('hidden');
         }
 
+        function showCompendiumModal() {
+            sfx.click(); hideTooltip();
+            renderCompendium();
+            document.getElementById('compendium-modal').classList.remove('hidden');
+        }
+
+        function showOptionsModal() {
+            sfx.click(); hideTooltip();
+            document.getElementById('ruleset-select').value = currentRuleset;
+            document.getElementById('ai-difficulty-select').value = aiDifficulty;
+            document.getElementById('open-hands-check').checked = showBothHands;
+            refreshRulesetDesc();
+            document.getElementById('options-modal').classList.remove('hidden');
+        }
+
+        function showExpandedRulesModal() {showRulesModal();}
+
         function renderCompendium() {
+            hideTooltip();
             const grid = document.getElementById('compendium-grid');
             grid.innerHTML = '';
             const filter = (document.getElementById('compendium-filter') || {}).value || 'all';
@@ -1932,6 +1961,13 @@
                 addTooltipListeners(el, tip);
                 grid.appendChild(el);
             });
+            if (!grid.childElementCount) {
+                const empty = document.createElement('p');
+                empty.className = 'set-blurb';
+                empty.style.gridColumn = '1 / -1';
+                empty.textContent = 'No cards match that filter.';
+                grid.appendChild(empty);
+            }
         }
 
         function addTooltipListeners(el, descText) {
@@ -1949,14 +1985,25 @@
         }
 
         function startGame(mode) {
-            sfx.click(); hideTooltip(); pendingBolt = null; activeMode = mode;
-            ['main-menu-modal', 'draft-modal', 'expanded-rules-modal', 'gameover-modal'].forEach(id => document.getElementById(id).classList.add('hidden'));
+            sfx.click(); hideTooltip(); activeMode = mode;
+            ['main-menu-modal', 'draft-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal'].forEach(id => document.getElementById(id).classList.add('hidden'));
 
             if (mode === 'random') {
-                const dealt = dealBalancedHands();
                 board = Array(9).fill(null); selectedCard = null; gameState = 'playing';
-                playerHand = dealt.blue.map(c => cloneForOwner(c, 'blue'));
-                aiHand = dealt.red.map(c => cloneForOwner(c, 'red'));
+                const shuffled = [...masterCards].sort(() => Math.random() - 0.5);
+
+                playerHand = shuffled.slice(0, 5).map(c => {
+                    let copy = {...c, baseStats: [...c.baseStats], owner: 'blue'};
+                    if (currentRuleset === 'classic') delete copy.ability;
+                    return copy;
+                });
+
+                aiHand = shuffled.slice(5, 10).map(c => {
+                    let copy = {...c, baseStats: [...c.baseStats], owner: 'red'};
+                    if (currentRuleset === 'classic') delete copy.ability;
+                    return copy;
+                });
+
                 beginMatch();
             } else if (mode === 'draft') {
                 startDraftMode();
@@ -1980,35 +2027,13 @@
             if (draftTurn === 'ai') scheduleAiDraftPick(600);
         }
 
-        function startCurrentModeAgain() {rematchSwapFirst();}
+        function startCurrentModeAgain() {sfx.click(); hideTooltip(); startGame(activeMode);}
 
         function cloneForOwner(card, owner) {
             const copy = {...card, baseStats: [...card.baseStats], owner};
             if (card.ability) copy.ability = {...card.ability};
             if (currentRuleset === 'classic') delete copy.ability;
             return copy;
-        }
-
-        function cardDealScore(card) {
-            if (currentRuleset === 'classic') return card.baseStats.reduce((sum, val) => sum + val, 0);
-            return getCardDraftScore(card);
-        }
-
-        function dealBalancedHands() {
-            const pool = [...masterCards].sort(() => Math.random() - 0.5).slice(0, 10)
-                .sort((a, b) => cardDealScore(b) - cardDealScore(a));
-            const blue = [], red = [];
-            let b = 0, r = 0;
-            const bluePicksFirst = Math.random() < 0.5;
-            pool.forEach(card => {
-                const p = cardDealScore(card);
-                if (blue.length === 5) {red.push(card); r += p; return;}
-                if (red.length === 5) {blue.push(card); b += p; return;}
-                const giveBlue = b < r || (b === r && (blue.length < red.length || (blue.length === red.length && bluePicksFirst)));
-                if (giveBlue) {blue.push(card); b += p;}
-                else {red.push(card); r += p;}
-            });
-            return {blue, red};
         }
 
         function snapshotMatch(first) {
@@ -2027,7 +2052,7 @@
 
         function rematchSwapFirst() {
             if (!lastMatch) {startGame(activeMode); return;}
-            sfx.click(); hideTooltip(); pendingBolt = null;
+            sfx.click(); hideTooltip();
             document.getElementById('gameover-modal').classList.add('hidden');
             document.getElementById('main-menu-modal').classList.add('hidden');
             board = Array(9).fill(null); selectedCard = null; gameState = 'playing';
@@ -2035,16 +2060,10 @@
             beginMatch(lastMatch.first === 'player' ? 'ai' : 'player');
         }
 
-        function newHands() {
-            hideTooltip(); pendingBolt = null;
-            document.getElementById('gameover-modal').classList.add('hidden');
-            startGame(activeMode);
-        }
-
         function viewFinalBoard() {
             sfx.click();
             document.getElementById('gameover-modal').classList.add('hidden');
-            statusMsg.textContent = "Final board. Rematch whenever you're ready.";
+            statusMsg.textContent = "Final board. Replay the same hands, or deal new ones.";
         }
 
         function onGameoverBackdrop(e) {
@@ -2076,10 +2095,10 @@
                 grid.appendChild(el);
             });
             document.getElementById('draft-status').textContent = draftTurn === 'player'
-                ? (isSnakeDoublePick() ? "Your pick — you choose twice." : "Your pick.")
+                ? (isSnakeDoublePick() ? "Your pick - you choose twice." : "Your pick.")
                 : (isSnakeDoublePick() ? "AI is choosing twice..." : "AI is choosing...");
             document.getElementById('draft-rosters').textContent =
-                `Pick ${draftPickIndex + 1}/10 · Your Deck: ${draftedPlayerCards.length}/5 | AI Deck: ${draftedAICards.length}/5`;
+                `Pick ${draftPickIndex + 1}/10 · Your Hand: ${draftedPlayerCards.length}/5 | AI Hand: ${draftedAICards.length}/5`;
         }
 
         function isSnakeDoublePick() {
@@ -2136,36 +2155,32 @@
         }
 
         function beginMatch(first) {
-            pendingBolt = null;
+            document.body.classList.remove('menu-open');
+            const rematch = !!first;
             turn = first || (Math.random() < 0.5 ? 'player' : 'ai');
-            matchFirst = turn;
             snapshotMatch(turn);
             lastBlueScore = null; lastRedScore = null;
-            statusMsg.textContent = turn === 'player' ? "You go first. Select a card." : "AI goes first.";
-            logAction(turn === 'player' ? "You go first." : "AI goes first.");
+            if (rematch) {
+                statusMsg.textContent = turn === 'player' ? "Same hands. You go first." : "Same hands. AI plays first.";
+                logAction(turn === 'player' ? "Rematch - you go first." : "Rematch - AI goes first.");
+            } else {
+                statusMsg.textContent = turn === 'player' ? "Hands dealt. Your turn - play a card." : "Hands dealt. AI plays first.";
+                logAction("Hands of five.");
+            }
             recalculateDynamicStats(); render();
             maybeStartCoach();
             if (!coach.active || coach.step === 'wait') showTurnBanner(turn);
             if (turn === 'ai') setTimeout(aiTurn, 700);
         }
 
-        function updateMatchChips() {
-            const el = document.getElementById('match-chips');
-            if (!el) return;
-            if (gameState !== 'playing' && gameState !== 'gameover') {
-                el.textContent = '';
-                return;
-            }
-            const mode = currentRuleset === 'classic' ? 'Classic' : 'Ember';
-            const diff = aiDifficulty[0].toUpperCase() + aiDifficulty.slice(1);
-            const first = matchFirst === 'player' ? 'You first' : 'AI first';
-            const deck = activeMode === 'draft' ? 'Draft' : 'Random';
-            el.textContent = `${mode} · ${diff} · ${deck} · ${first}`;
-        }
-
         function showTurnBanner(whose) {
             const el = document.getElementById('turn-banner');
             if (!el) return;
+            const grid = document.getElementById('board-grid');
+            if (grid) {
+                const rect = grid.getBoundingClientRect();
+                el.style.top = `${Math.round(rect.top + rect.height * 0.28)}px`;
+            }
             el.textContent = whose === 'player' ? 'YOUR TURN' : 'AI TURN';
             el.className = `turn-banner ${whose}`;
             void el.offsetWidth;
@@ -2227,7 +2242,7 @@
                 ? "Play it next to an enemy. The touching number must be higher to capture."
                 : "Now play it onto an empty cell.";
             else if (coach.step === 'capture') text.textContent = "Play next to an enemy. If your touching stat is higher, you steal their card.";
-            else if (coach.step === 'captured') text.textContent = "That's a capture — the card is yours now.";
+            else if (coach.step === 'captured') text.textContent = "That's a capture - the card is yours now.";
             else if (coach.step === 'missed') text.textContent = "No capture that time. You need a strictly higher touching stat.";
         }
 
@@ -2242,7 +2257,7 @@
                 if (!c || c.owner !== 'red') return;
                 const row = Math.floor(i / 3), col = i % 3;
                 [{idx: i - 3, ok: row > 0}, {idx: i + 1, ok: col < 2}, {idx: i + 3, ok: row < 2}, {idx: i - 1, ok: col > 0}]
-                    .forEach(n => {if (n.ok && board[n.idx] === null) emptyAdj.push(n.idx);});
+                    .forEach(n => { if (n.ok && board[n.idx] === null) emptyAdj.push(n.idx); });
             });
             return emptyAdj[0] ?? firstEmptyCell();
         }
@@ -2263,7 +2278,10 @@
                 const hand = document.getElementById('bottom-area').getBoundingClientRect();
                 const cardH = 92;
                 let top;
-                if (coach.step === 'hand') {
+                const aiHandOpen = document.querySelector('#top-area .card');
+                if (aiHandOpen) {
+                    top = grid.top + Math.max(8, (grid.height - cardH) / 2);
+                } else if (coach.step === 'hand') {
                     top = grid.top - cardH - 8;
                     if (top < 8) top = Math.min(grid.bottom + 8, window.innerHeight - cardH - 8);
                 } else if (hand.top - grid.bottom > cardH + 6) {
@@ -2395,17 +2413,16 @@
                     let targetCard = enemies[0].c;
                     targetCard.baseStats = targetCard.baseStats.map(s => Math.max(1, s - 1));
                     targetCard.fxType = 'curse';
-                    return {text: `${placedCard.name} cursed ${targetCard.name} (−1)`, kind: 'curse'};
+                    return {text: `${placedCard.name} cursed ${targetCard.name} (-1)`, kind: 'curse'};
                 }
             } else if (abType === 'ranged_debuff') {
                 let enemies = board.map((c, i) => (c && c.owner !== placedCard.owner) ? {c, i} : null).filter(Boolean);
-                if (enemies.length === 0) return null;
-                if (placedCard.owner === 'blue' && enemies.length > 1) return {needTarget: true};
-                enemies.sort((a, b) => b.c.baseStats.reduce((x, y) => x + y, 0) - a.c.baseStats.reduce((x, y) => x + y, 0));
-                let targetCard = enemies[0].c;
-                targetCard.baseStats = targetCard.baseStats.map(s => Math.max(1, s - 2));
-                targetCard.fxType = 'bolt';
-                return {text: `${placedCard.name} bolted ${targetCard.name} (−2)`, kind: 'bolt'};
+                if (enemies.length > 0) {
+                    let randomEnemy = enemies[Math.floor(Math.random() * enemies.length)].c;
+                    randomEnemy.baseStats = randomEnemy.baseStats.map(s => Math.max(1, s - 2));
+                    randomEnemy.fxType = 'bolt';
+                    return {text: `${placedCard.name} bolted ${randomEnemy.name} (-2)`, kind: 'bolt'};
+                }
             } else if (abType === 'blast') {
                 placedCard.fxType = 'blast';
                 return {text: `${placedCard.name} blasted (+2 this turn)`, kind: 'blast'};
@@ -2448,7 +2465,7 @@
                                 }
                             }
                         });
-                    if (hit.length) parts.push(`${card.name} poisoned ${listNames(hit)} (−1)`);
+                    if (hit.length) parts.push(`${card.name} poisoned ${listNames(hit)} (-1)`);
                 }
             });
             return parts.length ? {text: parts.join(' · '), kind: 'poison'} : null;
@@ -2457,13 +2474,15 @@
         function hasEnemyNeighbor(placedIndex, placedCard) {
             const row = Math.floor(placedIndex / 3), col = placedIndex % 3;
             return [{idx: placedIndex - 3, c: row > 0}, {idx: placedIndex + 1, c: col < 2},
-            {idx: placedIndex + 3, c: row < 2}, {idx: placedIndex - 1, c: col > 0}]
+                {idx: placedIndex + 3, c: row < 2}, {idx: placedIndex - 1, c: col > 0}]
                 .some(n => n.c && board[n.idx] && board[n.idx].owner !== placedCard.owner);
         }
 
         function render() {
             hideTooltip();
+            const topArea = document.getElementById('top-area');
             const bottomArea = document.getElementById('bottom-area'), turnInd = document.getElementById('turn-indicator');
+            if (topArea) topArea.innerHTML = '';
             bottomArea.innerHTML = '';
 
             if (gameState === 'playing') {
@@ -2477,17 +2496,29 @@
             }
 
             if (gameState === 'playing') {
+                if (showBothHands && aiHand.length) {
+                    const opp = document.createElement('div');
+                    opp.className = `hand ${turn === 'ai' ? 'active-turn' : ''}`;
+                    aiHand.forEach((card, index) => opp.appendChild(createCardElement(card, index, 'ai')));
+                    topArea.appendChild(opp);
+                }
                 const handDiv = document.createElement('div');
                 handDiv.className = `hand ${turn === 'player' ? 'active-turn' : ''}`;
                 playerHand.forEach((card, index) => handDiv.appendChild(createCardElement(card, index, 'player')));
                 bottomArea.appendChild(handDiv);
             } else if (gameState === 'gameover') {
+                if (showBothHands && aiHand.length && topArea) {
+                    const opp = document.createElement('div');
+                    opp.className = 'hand';
+                    aiHand.forEach((card, index) => opp.appendChild(createCardElement(card, index, 'ai')));
+                    topArea.appendChild(opp);
+                }
                 const bar = document.createElement('div');
                 bar.className = 'rematch-bar';
                 bar.innerHTML = `
-                    <button class="btn" onclick="rematchSwapFirst()">Swap First</button>
-                    <button class="btn btn-alt" onclick="newHands()">New Hands</button>
-                    <button class="btn btn-muted" onclick="showModeMenu()">Menu</button>
+                    <button class="btn" onclick="rematchSwapFirst()">Replay</button>
+                    <button class="btn btn-alt" onclick="startCurrentModeAgain()">New Hands</button>
+                    <button class="btn btn-alt" onclick="showModeMenu()">Menu</button>
                 `;
                 bottomArea.appendChild(bar);
             }
@@ -2500,7 +2531,6 @@
                 cellEl.addEventListener('dragleave', () => cellEl.classList.remove('drag-over'));
                 cellEl.addEventListener('drop', (e) => {
                     e.preventDefault(); cellEl.classList.remove('drag-over');
-                    if (pendingBolt) return;
                     const handIndex = parseInt(e.dataTransfer.getData('text/plain'));
                     if (!isNaN(handIndex)) executeCardPlay(handIndex, index);
                 });
@@ -2513,7 +2543,6 @@
                 gridEl.appendChild(cellEl);
             });
             updateScores();
-            updateMatchChips();
             requestAnimationFrame(updateCoach);
         }
 
@@ -2524,7 +2553,6 @@
             if (card.justFlipped) card.justFlipped = false;
             if (source === 'player' && selectedCard === index && turn === 'player' && gameState === 'playing') div.classList.add('selected');
             if (coach.active && coach.step === 'hand' && source === 'player' && index === 0) div.classList.add('coach-target');
-            if (pendingBolt && source === 'board' && card.owner === 'red') div.classList.add('bolt-target');
 
             const activeStats = card.stats || card.baseStats;
             div.innerHTML = `
@@ -2544,7 +2572,7 @@
                 addTooltipListeners(div, card.ability.desc);
             }
 
-            if (source === 'player' && turn === 'player' && gameState === 'playing' && !pendingBolt) {
+            if (source === 'player' && turn === 'player' && gameState === 'playing') {
                 div.setAttribute('draggable', 'true');
                 div.addEventListener('dragstart', (e) => {
                     selectedCard = index;
@@ -2557,7 +2585,7 @@
                 div.addEventListener('click', (e) => {
                     e.stopPropagation(); sfx.click(); hideTooltip();
                     selectedCard = (selectedCard === index) ? null : index;
-                    statusMsg.textContent = selectedCard !== null ? `Selected: ${card.name}. Click or drag to an empty cell.` : "Your turn! Select a card.";
+                    statusMsg.textContent = selectedCard !== null ? `Selected: ${card.name}. Play it on an empty cell.` : "Your turn - play a card from your hand.";
                     if (selectedCard !== null) onCoachSelected();
                     render();
                 });
@@ -2566,18 +2594,11 @@
         }
 
         function handleCellClick(index) {
-            if (gameState !== 'playing' || turn !== 'player') return;
-            if (pendingBolt) {
-                const c = board[index];
-                if (c && c.owner === 'red') chooseBoltTarget(c);
-                return;
-            }
-            if (selectedCard === null || board[index] !== null) return;
+            if (gameState !== 'playing' || turn !== 'player' || selectedCard === null || board[index] !== null) return;
             executeCardPlay(selectedCard, index);
         }
 
         function executeCardPlay(handIndex, boardIndex) {
-            if (pendingBolt) return;
             if (board[boardIndex] !== null || handIndex >= playerHand.length) return;
             sfx.place(); hideTooltip();
             const cardToPlay = playerHand.splice(handIndex, 1)[0];
@@ -2590,32 +2611,6 @@
         function processCardPlacement(index, placedCard) {
             const enemyNeighbor = hasEnemyNeighbor(index, placedCard);
             const abilityFx = applyOnPlayAbilities(placedCard);
-            if (abilityFx && abilityFx.needTarget) {
-                pendingBolt = {index, placedCard, enemyNeighbor};
-                selectedCard = null;
-                statusMsg.textContent = "Choose an enemy to bolt.";
-                logAction(`${placedCard.name} ready to bolt.`);
-                render();
-                return;
-            }
-            resolvePlacement(index, placedCard, enemyNeighbor, abilityFx);
-        }
-
-        function applyBoltTo(placedCard, targetCard) {
-            targetCard.baseStats = targetCard.baseStats.map(s => Math.max(1, s - 2));
-            targetCard.fxType = 'bolt';
-            return {text: `${placedCard.name} bolted ${targetCard.name} (−2)`, kind: 'bolt'};
-        }
-
-        function chooseBoltTarget(targetCard) {
-            if (!pendingBolt) return;
-            const {index, placedCard, enemyNeighbor} = pendingBolt;
-            pendingBolt = null;
-            sfx.click();
-            resolvePlacement(index, placedCard, enemyNeighbor, applyBoltTo(placedCard, targetCard));
-        }
-
-        function resolvePlacement(index, placedCard, enemyNeighbor, abilityFx) {
             recalculateDynamicStats();
             const buffFx = tagAuraBuffs(placedCard, index);
             let capLog = checkCaptures(index, placedCard);
@@ -2642,7 +2637,7 @@
             if (!coach.active || coach.step === 'wait') showTurnBanner(turn);
             if (turn === 'ai') {statusMsg.textContent = "AI is thinking..."; setTimeout(aiTurn, 700);}
             else {
-                statusMsg.textContent = "Your turn! Select a card.";
+                statusMsg.textContent = "Your turn - play a card from your hand.";
                 resumeCoachAfterAi();
             }
         }
@@ -2786,12 +2781,14 @@
         window.addEventListener('pageshow', (e) => {
             if (!e.persisted) return;
             clearDraftTimer();
-            ['draft-modal', 'stats-modal', 'expanded-rules-modal'].forEach(id => document.getElementById(id).classList.add('hidden'));
+            ['draft-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal'].forEach(id => document.getElementById(id).classList.add('hidden'));
             if (gameState !== 'playing' && gameState !== 'gameover') showModeMenu();
         });
         window.addEventListener('keydown', (e) => {
             if (e.key !== 'Escape') return;
             if (!document.getElementById('expanded-rules-modal').classList.contains('hidden')) {closeRulesModal(); return;}
+            if (!document.getElementById('compendium-modal').classList.contains('hidden')) {closeCompendiumModal(); return;}
+            if (!document.getElementById('options-modal').classList.contains('hidden')) {closeOptionsModal(); return;}
             if (!document.getElementById('stats-modal').classList.contains('hidden')) {closeStatsModal(); return;}
             if (!document.getElementById('draft-modal').classList.contains('hidden')) {cancelDraft(); return;}
         });
