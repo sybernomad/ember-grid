@@ -17,7 +17,6 @@
             --grid-bg: #020617;
             --cell-bg: #1e293b;
 
-            /* Mobile rectangular card variables */
             --container-max: 420px;
             --grid-w: 84px;
             --grid-h: 104px;
@@ -27,15 +26,13 @@
             --font-name: 0.48rem;
             --font-header: 1.1rem;
             --hand-min: 104px;
-            
-            /* Draft screen variables */
-            --draft-w: 60px;
-            --draft-h: 76px;
+
+            --draft-w: 64px;
+            --draft-h: 82px;
             --draft-font-main: 0.6rem;
             --draft-font-name: 0.38rem;
         }
 
-        /* Desktop responsive scale up */
         @media (min-width: 768px) {
             :root {
                 --container-max: 560px;
@@ -48,7 +45,6 @@
                 --font-header: 1.4rem;
                 --hand-min: 130px;
 
-                /* Desktop draft screen variables */
                 --draft-w: 76px;
                 --draft-h: 96px;
                 --draft-font-main: 0.75rem;
@@ -68,8 +64,14 @@
             --cell-bg: #ffffff;
         }
 
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             display: flex;
@@ -80,9 +82,6 @@
             width: 100vw;
             margin: 0;
             overflow: hidden;
-            box-sizing: border-box;
-            user-select: none;
-            -webkit-user-select: none;
             transition: background-color 0.2s, color 0.2s;
         }
 
@@ -90,13 +89,12 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
             width: 100%;
             max-width: var(--container-max);
             height: 100%;
-            padding: 8px;
-            box-sizing: border-box;
-            gap: 6px;
+            padding: 8px 6px;
+            gap: 4px;
         }
 
         header {
@@ -112,53 +110,71 @@
             margin: 0;
             letter-spacing: 2px;
             color: var(--accent);
+            font-weight: 900;
         }
 
         .nav-group {
             display: flex;
-            gap: 4px;
+            gap: 5px;
         }
 
         .menu-btn {
-            background: none;
+            background: var(--panel-bg);
             border: 1px solid var(--border-color);
             color: var(--text-color);
             width: 32px;
             height: 32px;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 0.95rem;
-            background-color: var(--panel-bg);
+            font-size: 0.9rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: border-color 0.2s, color 0.2s;
+            transition: all 0.15s ease;
         }
 
         .menu-btn:hover {
             border-color: var(--accent);
             color: var(--accent);
+            transform: translateY(-2px);
         }
 
         .score-board {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             width: 100%;
             max-width: calc(var(--grid-w) * 3 + 18px);
-            font-weight: bold;
-            font-size: 0.95rem;
-            padding: 0 4px;
-            box-sizing: border-box;
+            padding: 4px 10px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        .score-pill {
+            font-weight: 800;
+            font-size: 0.85rem;
+            padding: 2px 8px;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
         }
 
         .score-blue {
             color: var(--blue-card);
-            text-shadow: 0 0 6px rgba(59, 130, 246, 0.3);
+            background: rgba(59, 130, 246, 0.15);
         }
 
         .score-red {
             color: var(--red-card);
-            text-shadow: 0 0 6px rgba(239, 68, 68, 0.3);
+            background: rgba(239, 68, 68, 0.15);
+        }
+
+        .turn-indicator {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .battlefield {
@@ -172,39 +188,47 @@
         .hand {
             display: flex;
             gap: 6px;
-            min-height: var(--hand-min);
+            min-height: calc(var(--card-h) + 6px);
             align-items: center;
             justify-content: center;
-            flex-wrap: wrap;
             width: 100%;
+            padding: 2px;
+            border-radius: 8px;
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+
+        .hand.active-turn {
+            background: rgba(245, 158, 11, 0.08);
+            box-shadow: inset 0 0 0 1px rgba(245, 158, 11, 0.2);
         }
 
         .grid {
             display: grid;
             grid-template-columns: repeat(3, var(--grid-w));
             grid-template-rows: repeat(3, var(--grid-h));
-            gap: 4px;
+            gap: 5px;
             background: var(--grid-bg);
-            padding: 5px;
-            border-radius: 10px;
+            padding: 6px;
+            border-radius: 12px;
             border: 2px solid var(--border-color);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
         }
 
         .cell {
             background-color: var(--cell-bg);
             border: 2px dashed var(--border-color);
-            border-radius: 6px;
+            border-radius: 8px;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
             position: relative;
-            transition: background 0.2s;
+            transition: border-color 0.15s, background-color 0.15s;
         }
 
         .cell:hover {
             border-color: var(--accent);
+            background-color: rgba(245, 158, 11, 0.05);
         }
 
         .card {
@@ -216,19 +240,27 @@
             justify-content: center;
             align-items: center;
             padding: 4px;
-            box-sizing: border-box;
             font-size: var(--font-main);
             font-weight: bold;
             cursor: pointer;
             position: relative;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
-            transition: transform 0.2s, filter 0.2s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), filter 0.15s;
         }
 
         @keyframes pulseFlip {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.15) rotate(3deg); filter: brightness(1.3); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1) rotateY(0deg);
+            }
+
+            50% {
+                transform: scale(1.12) rotateY(90deg);
+                filter: brightness(1.4);
+            }
+
+            100% {
+                transform: scale(1) rotateY(0deg);
+            }
         }
 
         .card.flipped {
@@ -247,58 +279,28 @@
             border: 2px solid #fca5a5;
         }
 
-        .card.neutral {
-            background: linear-gradient(135deg, #475569, #334155);
-            color: #fff;
-            border: 2px solid #cbd5e1;
-        }
-
         .card.selected {
-            transform: translateY(-5px) scale(1.04);
-            box-shadow: 0 5px 14px rgba(245, 158, 11, 0.6);
+            transform: translateY(-6px) scale(1.06);
+            box-shadow: 0 8px 18px rgba(245, 158, 11, 0.6);
             border-color: var(--accent);
         }
 
         .ability-badge {
             position: absolute;
-            top: 4px;
-            left: 4px;
-            font-size: 0.52rem;
+            top: 3px;
+            left: 3px;
+            font-size: 0.55rem;
             z-index: 3;
-            background: rgba(0, 0, 0, 0.65);
+            background: rgba(0, 0, 0, 0.8);
             border-radius: 4px;
-            padding: 1px 3px;
+            padding: 2px 4px;
             line-height: 1;
-        }
-
-        @media (max-width: 767px) {
-            .ability-badge {
-                font-size: 0.75rem;
-                padding: 1px 4px;
-            }
-        }
-
-        /* Tooltip style */
-        .card-tooltip {
-            position: fixed;
-            background: var(--panel-bg);
-            color: var(--text-color);
-            border: 1px solid var(--accent);
-            padding: 5px 8px;
-            border-radius: 6px;
-            font-size: 0.7rem;
-            font-weight: normal;
-            pointer-events: none;
-            z-index: 200;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-            max-width: 160px;
-            text-align: center;
-            display: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .card-name {
             position: absolute;
-            bottom: 4px;
+            bottom: 3px;
             left: 50%;
             transform: translateX(-50%);
             font-size: var(--font-name);
@@ -306,11 +308,11 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            width: 85%;
-            background: rgba(0, 0, 0, 0.4);
+            width: 88%;
+            background: rgba(0, 0, 0, 0.6);
             color: #fff;
             border-radius: 3px;
-            padding: 1px 2px;
+            padding: 2px;
             z-index: 2;
         }
 
@@ -319,13 +321,14 @@
             top: 46%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 1.35rem;
+            font-size: 1.4rem;
             z-index: 1;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
         }
 
         .stat-top {
             position: absolute;
-            top: 4px;
+            top: 3px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 2;
@@ -333,7 +336,7 @@
 
         .stat-right {
             position: absolute;
-            right: 6px;
+            right: 5px;
             top: 46%;
             transform: translateY(-50%);
             z-index: 2;
@@ -341,7 +344,7 @@
 
         .stat-bottom {
             position: absolute;
-            bottom: 18px;
+            bottom: 16px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 2;
@@ -349,7 +352,7 @@
 
         .stat-left {
             position: absolute;
-            left: 6px;
+            left: 5px;
             top: 46%;
             transform: translateY(-50%);
             z-index: 2;
@@ -357,7 +360,7 @@
 
         .status-msg {
             font-size: 0.8rem;
-            font-weight: bold;
+            font-weight: 700;
             color: var(--accent);
             min-height: 18px;
             text-align: center;
@@ -365,8 +368,8 @@
 
         .action-log {
             font-size: 0.7rem;
-            opacity: 0.8;
-            height: 16px;
+            opacity: 0.75;
+            height: 14px;
             text-align: center;
             white-space: nowrap;
             overflow: hidden;
@@ -375,17 +378,23 @@
             max-width: calc(var(--grid-w) * 3 + 18px);
         }
 
-        .action-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            width: 100%;
-            max-width: 260px;
+        /* Floating Tooltip */
+        .card-tooltip {
+            position: fixed;
             background: var(--panel-bg);
-            padding: 8px;
-            border-radius: 8px;
+            color: var(--text-color);
             border: 1px solid var(--accent);
-            box-sizing: border-box;
+            padding: 5px 8px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            pointer-events: none;
+            z-index: 200;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            max-width: 160px;
+            text-align: center;
+            display: none;
+            line-height: 1.3;
         }
 
         .modal {
@@ -394,23 +403,27 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(2, 6, 23, 0.88);
+            backdrop-filter: blur(4px);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 100;
+            padding: 10px;
         }
 
         .modal-content {
             background: var(--panel-bg);
             color: var(--text-color);
-            padding: 1.2rem;
+            padding: 1rem;
             border-radius: 12px;
-            max-width: 420px;
-            width: 90%;
+            max-width: 440px;
+            width: 100%;
             text-align: center;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
             border: 1px solid var(--border-color);
+            max-height: 94vh;
+            overflow-y: auto;
         }
 
         .btn {
@@ -418,16 +431,17 @@
             color: #0f172a;
             border: none;
             width: 100%;
-            padding: 9px;
+            padding: 10px;
             border-radius: 6px;
             font-weight: 900;
             font-size: 0.85rem;
             cursor: pointer;
-            transition: filter 0.2s;
+            transition: filter 0.15s, transform 0.1s;
         }
 
         .btn:hover {
             filter: brightness(1.1);
+            transform: translateY(-1px);
         }
 
         .btn-alt {
@@ -441,30 +455,138 @@
             color: #0f172a;
         }
 
+        .menu-section-title {
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent);
+            margin: 8px 0 4px 0;
+            text-align: left;
+        }
+
+        .rules-compact {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            line-height: 1.35;
+            border: 1px solid var(--border-color);
+            text-align: left;
+            margin-bottom: 6px;
+        }
+
+        .rules-compact strong {
+            color: var(--accent);
+        }
+
+        .ruleset-desc-box {
+            background: rgba(59, 130, 246, 0.08);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 7px 10px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            text-align: left;
+            margin-bottom: 8px;
+            line-height: 1.3;
+            color: #93c5fd;
+        }
+
+        [data-theme="light"] .ruleset-desc-box {
+            color: #1d4ed8;
+            background: rgba(37, 99, 235, 0.06);
+        }
+
         .settings-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-size: 0.8rem;
-            margin: 6px 0;
-            padding: 0 4px;
+            margin-bottom: 8px;
+            padding: 0 2px;
+            font-weight: bold;
         }
 
         .settings-select {
             background: var(--bg-color);
             color: var(--text-color);
             border: 1px solid var(--border-color);
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-weight: 700;
             cursor: pointer;
+            font-size: 0.75rem;
         }
 
+        /* Expanded Rules & Compendium Specs */
+        .expanded-rules-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            text-align: left;
+            margin: 6px 0 10px 0;
+            font-size: 0.75rem;
+        }
+
+        .rule-detail-item {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 6px 8px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            line-height: 1.3;
+        }
+
+        .rule-detail-item strong {
+            color: var(--accent);
+            display: inline-block;
+            margin-bottom: 2px;
+        }
+
+        .compendium-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin: 8px 0 12px 0;
+            justify-items: center;
+        }
+
+        .compendium-card {
+            width: 72px;
+            height: 90px;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 3px;
+            font-size: 0.65rem;
+            font-weight: bold;
+            position: relative;
+            background: linear-gradient(135deg, #475569, #334155);
+            color: #fff;
+            border: 2px solid #cbd5e1;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .compendium-card .card-emoji {
+            font-size: 1.1rem;
+        }
+
+        .compendium-card .stat-bottom {
+            bottom: 13px;
+        }
+
+        .compendium-card .card-name {
+            bottom: 2px;
+            font-size: 0.42rem;
+        }
+
+        /* Draft Mode Specs */
         .draft-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 6px;
-            margin: 10px 0;
+            gap: 5px;
+            margin: 8px 0;
             justify-items: center;
         }
 
@@ -477,7 +599,6 @@
             justify-content: center;
             align-items: center;
             padding: 2px;
-            box-sizing: border-box;
             font-size: var(--draft-font-main);
             font-weight: bold;
             cursor: pointer;
@@ -485,29 +606,27 @@
             background: linear-gradient(135deg, #475569, #334155);
             color: #fff;
             border: 2px solid #cbd5e1;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            transition: transform 0.15s;
         }
 
-        .draft-card .ability-badge {
-            top: 2px;
-            left: 2px;
-            font-size: 0.42rem;
-            padding: 0 2px;
+        .draft-card:hover:not(.drafted) {
+            transform: scale(1.06);
+            border-color: var(--accent);
         }
 
-        @media (max-width: 767px) {
-            .draft-card .ability-badge {
-                font-size: 0.65rem;
-                padding: 1px 3px;
-            }
+        .draft-card.drafted {
+            opacity: 0.25;
+            cursor: default;
+            filter: grayscale(1);
         }
 
         .draft-card .card-emoji {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
 
         .draft-card .stat-bottom {
-            bottom: 15px;
+            bottom: 12px;
         }
 
         .draft-card .card-name {
@@ -515,18 +634,19 @@
             font-size: var(--draft-font-name);
         }
 
+        /* Stat Grid Specs */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 6px;
-            margin: 10px 0;
+            margin: 8px 0;
             text-align: left;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
 
         .stat-card {
             background: var(--bg-color);
-            padding: 6px 10px;
+            padding: 6px 8px;
             border-radius: 6px;
             border: 1px solid var(--border-color);
         }
@@ -535,6 +655,7 @@
             font-size: 1rem;
             font-weight: bold;
             color: var(--accent);
+            margin-top: 2px;
         }
 
         .hidden {
@@ -549,8 +670,8 @@
         <header>
             <h1>EMBER GRID</h1>
             <div class="nav-group">
-                <button class="menu-btn" onclick="showHelpModal()" title="Help">❓</button>
                 <button class="menu-btn" onclick="showStatsModal()" title="Stats">📊</button>
+                <button class="menu-btn" onclick="showExpandedRulesModal()" title="Expanded Rules">📖</button>
                 <button class="menu-btn" id="audio-toggle-btn" onclick="toggleAudio()" title="Toggle Audio">🔊</button>
                 <button class="menu-btn" id="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Theme">☀️</button>
                 <button class="menu-btn" onclick="showModeMenu()" title="Main Menu">⚙️</button>
@@ -558,17 +679,15 @@
         </header>
 
         <div class="score-board">
-            <div class="score-blue" id="score-blue">Blue: -</div>
-            <div class="score-red" id="score-red">Red: -</div>
+            <div class="score-pill score-blue" id="score-blue">Blue: -</div>
+            <div class="turn-indicator" id="turn-indicator">BATTLE</div>
+            <div class="score-pill score-red" id="score-red">Red: -</div>
         </div>
 
         <div class="battlefield">
             <div class="hand" id="ai-hand"></div>
             <div class="grid" id="board-grid"></div>
-
-            <div id="bottom-area">
-                <!-- Dynamically rendered based on gameState -->
-            </div>
+            <div id="bottom-area"></div>
         </div>
 
         <div class="status-msg" id="status-msg">Welcome! Choose a mode to begin.</div>
@@ -578,82 +697,130 @@
     <!-- Floating Card Tooltip -->
     <div id="card-tooltip" class="card-tooltip"></div>
 
-    <!-- Main Menu Modal (Loads on startup) -->
+    <!-- Streamlined Main Menu Modal -->
     <div id="main-menu-modal" class="modal">
         <div class="modal-content">
-            <h2 style="margin-top: 0; color: var(--accent); font-size: 1.2rem; letter-spacing: 1px;">🔥 EMBER GRID 🔥</h2>
-            <p style="font-size: 0.72rem; line-height: 1.3; opacity: 0.9; margin-bottom: 8px;">
-                A tactical card battle game! Place cards on the 3×3 grid, out-stat adjacent sides to flip enemy cards, and control the majority of the board to win.
-            </p>
-            
-            <div style="background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 6px; padding: 6px; font-size: 0.7rem; text-align: left; margin-bottom: 10px; line-height: 1.3;">
-                <strong style="color: var(--accent);">Quick Rules:</strong>
-                <div>• <strong>Stats:</strong> Top, Right, Bottom, Left (1-10 / A).</div>
-                <div>• <strong>Capturing:</strong> Play next to an enemy; if your touching stat is higher, you flip their card!</div>
-                <div>• <strong>Abilities:</strong> Special icons (⚡ Buff, 💀 Curse) passively alter adjacent card stats while active on the board.</div>
+            <h2
+                style="margin-top: 0; color: var(--accent); font-size: 1.2rem; letter-spacing: 1px; margin-bottom: 6px;">
+                🔥 EMBER GRID 🔥</h2>
+
+            <div class="menu-section-title">Core Rules</div>
+            <div class="rules-compact">
+                <strong>⚔️ Capture:</strong> Play next to an enemy card. If your touching stat is higher than theirs,
+                you capture it.<br>
+                <strong>🏆 Victory:</strong> Fill the 3x3 grid. The player controlling the most cards at the end wins!
+            </div>
+
+            <div style="margin-bottom: 6px;">
+                <button class="btn btn-alt" style="padding: 6px; font-size: 0.75rem;"
+                    onclick="showExpandedRulesModal()">📖 Read Full Rules & Browse Card Compendium</button>
+            </div>
+
+            <div class="menu-section-title">Ruleset Options</div>
+            <div class="settings-row" style="margin-bottom: 4px;">
+                <span>Game Mode:</span>
+                <select id="ruleset-select" class="settings-select" onchange="updateRuleset(this.value)">
+                    <option value="ember" selected>Ember Mode (Abilities)</option>
+                    <option value="classic">Classic Mode (Pure Stats)</option>
+                </select>
+            </div>
+
+            <div id="ruleset-desc" class="ruleset-desc-box">
+                <strong>Ember Mode:</strong> Cards possess special tactical abilities (Buffs, Curses, Bolts, Blasts,
+                etc.) that interact across the grid.
             </div>
 
             <div class="settings-row" style="margin-bottom: 10px;">
                 <span>AI Difficulty:</span>
                 <select id="ai-difficulty-select" class="settings-select" onchange="updateDifficulty(this.value)">
-                    <option value="easy">Easy 🟢</option>
-                    <option value="normal" selected>Normal 🟡</option>
-                    <option value="hard">Hard 🔴</option>
+                    <option value="easy">Easy</option>
+                    <option value="normal" selected>Normal</option>
+                    <option value="hard">Hard</option>
                 </select>
             </div>
 
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-                <button class="btn" onclick="startGame('standard')">Standard Mode (Random) 🛡️</button>
-                <button class="btn btn-alt" onclick="startGame('draft')">Snake Draft Mode (Pick 5) 📋</button>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+                <button class="btn" onclick="startGame('random')">Play Random Deck 🔀</button>
+                <button class="btn btn-alt" onclick="startGame('draft')">Play Snake Draft 📋</button>
             </div>
         </div>
     </div>
 
-    <!-- Help Modal -->
-    <div id="help-modal" class="modal hidden">
-        <div class="modal-content" style="text-align: left;">
-            <h2 style="margin-top: 0; color: var(--accent); text-align: center;">HOW TO PLAY</h2>
-            <p style="font-size: 0.75rem; line-height: 1.35; opacity: 0.9;">
-                <strong>1. Card Stats:</strong> Each card has 4 numbers (Top, Right, Bottom, Left) ranging from 1 to 10 (displayed as <strong>Aces/A</strong>).<br><br>
-                <strong>2. Placing & Deselecting:</strong> Click a card in your hand to select it, then click an empty cell. Click your selected card again to deselect.<br><br>
-                <strong>3. Abilities & Auras:</strong> Cards with abilities (⚡ Buff, 💀 Curse, 🔮 Hex) passively boost or weaken adjacent/target cards as long as they stay on the board!<br><br>
-                <strong>4. Winning:</strong> The player controlling the majority of the board when all 9 squares are filled wins the match!
-            </p>
-            <button class="btn" style="margin-top: 8px;" onclick="document.getElementById('help-modal').classList.add('hidden')">Got it!</button>
+    <!-- Expanded Rules & Compendium Modal -->
+    <div id="expanded-rules-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2 style="margin-top: 0; color: var(--accent); font-size: 1.2rem;">RULES & COMPENDIUM</h2>
+
+            <div class="menu-section-title" style="margin-top: 0;">Basic Mechanics</div>
+            <div class="expanded-rules-list">
+                <div class="rule-detail-item">
+                    <strong>Placement:</strong> Players take turns placing one card from their hand onto an empty slot
+                    on the 3x3 grid.
+                </div>
+                <div class="rule-detail-item">
+                    <strong>Capturing:</strong> When your card touches an enemy card, compare touching values (Top,
+                    Right, Bottom, Left). If your attacking stat is strictly greater, you capture their card!
+                </div>
+                <div class="rule-detail-item">
+                    <strong>Stat Cap:</strong> Stats range from 1 to 10 (represented by **A**). Stat boosts cannot raise
+                    a value above 10.
+                </div>
+            </div>
+
+            <div class="menu-section-title">Ember Mode Abilities</div>
+            <div class="expanded-rules-list">
+                <div class="rule-detail-item"><strong>⚡ Buff:</strong> Boosts adjacent friendly cards by +1 stat.</div>
+                <div class="rule-detail-item"><strong>💀 Curse:</strong> Reduces the strongest enemy card's stats by 1
+                    on play.</div>
+                <div class="rule-detail-item"><strong>🔮 Bolt:</strong> Zaps a random enemy card on the board, reducing
+                    its stats by 2 on play.</div>
+                <div class="rule-detail-item"><strong>⚖️ Equalizer:</strong> Captures if touching stats match exactly.
+                </div>
+                <div class="rule-detail-item"><strong>💥 Blast:</strong> Temporarily grants +2 to all stats on the play
+                    turn.</div>
+                <div class="rule-detail-item"><strong>🦠 Poison:</strong> Reduces all adjacent cards' stats by 1 at turn
+                    end.</div>
+            </div>
+
+            <div class="menu-section-title">Card Compendium</div>
+            <div style="font-size: 0.7rem; opacity: 0.8; text-align: left; margin-bottom: 4px;">Browse all available
+                cards in the master deck:</div>
+            <div class="compendium-grid" id="compendium-grid"></div>
+
+            <button class="btn" onclick="document.getElementById('expanded-rules-modal').classList.add('hidden')">Close
+                Guide</button>
         </div>
     </div>
 
     <!-- Stats Modal -->
     <div id="stats-modal" class="modal hidden">
         <div class="modal-content">
-            <h2 style="margin-top: 0; color: var(--accent); font-size: 1.2rem;">CAREER STATS</h2>
-
+            <h2 style="margin-top: 0; color: var(--accent); font-size: 1.1rem;">CAREER STATS</h2>
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div style="font-size: 0.65rem; opacity: 0.7;">Record (W-L-D)</div>
+                    <div style="font-size: 0.6rem; opacity: 0.7;">Record (W-L-D)</div>
                     <div class="stat-value" id="stat-record">0-0-0</div>
                 </div>
                 <div class="stat-card">
-                    <div style="font-size: 0.65rem; opacity: 0.7;">Win Percentage</div>
+                    <div style="font-size: 0.6rem; opacity: 0.7;">Win Rate</div>
                     <div class="stat-value" id="stat-winrate">0.0%</div>
                 </div>
                 <div class="stat-card">
-                    <div style="font-size: 0.65rem; opacity: 0.7;">Streak / Best</div>
+                    <div style="font-size: 0.6rem; opacity: 0.7;">Streak / Best</div>
                     <div class="stat-value" id="stat-streaks">0 / 0</div>
                 </div>
                 <div class="stat-card">
-                    <div style="font-size: 0.65rem; opacity: 0.7;">Cards Flipped</div>
+                    <div style="font-size: 0.6rem; opacity: 0.7;">Total Captures</div>
                     <div class="stat-value" id="stat-flips">0</div>
                 </div>
             </div>
 
-            <div style="text-align: left; font-size: 0.75rem; margin-top: 6px;">
-                <strong>Top Played Cards:</strong>
-                <div id="stat-top-cards" style="margin-top: 3px; opacity: 0.8; font-size: 0.7rem; line-height: 1.2;">
+            <div style="text-align: left; font-size: 0.7rem; margin-top: 6px;">
+                <strong>Most Deployed Cards:</strong>
+                <div id="stat-top-cards" style="margin-top: 3px; opacity: 0.8; font-size: 0.7rem; line-height: 1.3;">
                     None yet.</div>
             </div>
-
-            <button class="btn" style="margin-top: 8px;"
+            <button class="btn" style="margin-top: 10px;"
                 onclick="document.getElementById('stats-modal').classList.add('hidden')">Close</button>
         </div>
     </div>
@@ -661,38 +828,36 @@
     <!-- Draft Modal -->
     <div id="draft-modal" class="modal hidden">
         <div class="modal-content">
-            <h2 style="margin-top: 0; color: var(--blue-card); font-size: 1.1rem; margin-bottom: 4px;">SNAKE DRAFT</h2>
-            <p id="draft-status" style="font-size: 0.75rem; opacity: 0.9; margin-bottom: 4px;"></p>
+            <h2 style="margin-top: 0; color: var(--blue-card); font-size: 1.1rem; margin-bottom: 2px;">SNAKE DRAFT</h2>
+            <p id="draft-status" style="font-size: 0.75rem; opacity: 0.9; margin-bottom: 2px; font-weight: bold;"></p>
             <div class="draft-grid" id="draft-pool-grid"></div>
-            <div style="font-size: 0.7rem; opacity: 0.7; margin-top: 4px;" id="draft-rosters">Your Deck: 0/5 | AI Deck: 0/5</div>
+            <div style="font-size: 0.7rem; opacity: 0.7; margin-top: 2px; font-weight: bold;" id="draft-rosters">Your
+                Deck: 0/5 | AI Deck: 0/5</div>
         </div>
     </div>
 
-    <!-- Game Over Modal Popup -->
+    <!-- Game Over Modal -->
     <div id="gameover-modal" class="modal hidden">
         <div class="modal-content" style="max-width: 300px;">
             <h2 id="gameover-title" style="margin-top: 0; color: var(--accent); font-size: 1.2rem;">MATCH OVER</h2>
-            <p id="gameover-desc" style="font-size: 0.85rem; opacity: 0.9; margin-bottom: 12px;"></p>
-            <div style="display: flex; flex-direction: column; gap: 8px;">
+            <p id="gameover-desc" style="font-size: 0.85rem; opacity: 0.9; margin-bottom: 12px; font-weight: bold;"></p>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
                 <button class="btn btn-alt" onclick="startCurrentModeAgain()">Play Again 🔄</button>
-                <button class="btn" style="background-color: #475569; color: #fff;" onclick="showModeMenu()">Main Menu ⚙️</button>
+                <button class="btn" style="background-color: #475569; color: #fff;" onclick="showModeMenu()">Main Menu
+                    ⚙️</button>
             </div>
         </div>
     </div>
 
     <script>
-        // --- Web Audio API Procedural Sound Engine ---
+        // --- Audio Engine ---
         let audioCtx = null;
         let isAudioMuted = localStorage.getItem('ember_grid_muted') === 'true';
         updateAudioButtonIcon();
 
         function initAudio() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
         }
 
         function toggleAudio() {
@@ -722,250 +887,20 @@
                 gain.connect(audioCtx.destination);
                 osc.start();
                 osc.stop(audioCtx.currentTime + duration);
-            } catch (e) {
-                // Ignore audio policy blocks before interaction
-            }
+            } catch (e) { }
         }
 
         const sfx = {
-            click: () => playTone(440, 'sine', 0.06, 0.04),
-            place: () => playTone(140, 'triangle', 0.1, 0.15),
-            ability: () => {
-                playTone(740, 'sine', 0.1, 0.05);
-                setTimeout(() => playTone(987.77, 'sine', 0.15, 0.05), 80);
-            },
-            flipBlue: () => {
-                playTone(587.33, 'sine', 0.08, 0.06);
-                setTimeout(() => playTone(880, 'sine', 0.12, 0.06), 60);
-            },
-            flipRed: () => {
-                playTone(320, 'sawtooth', 0.08, 0.06);
-                setTimeout(() => playTone(240, 'sawtooth', 0.12, 0.06), 60);
-            },
-            win: () => {
-                playTone(523.25, 'sine', 0.12, 0.08);
-                setTimeout(() => playTone(659.25, 'sine', 0.12, 0.08), 100);
-                setTimeout(() => playTone(783.99, 'sine', 0.25, 0.08), 200);
-            },
-            lose: () => {
-                playTone(300, 'sawtooth', 0.15, 0.08);
-                setTimeout(() => playTone(200, 'sawtooth', 0.25, 0.08), 120);
-            }
+            click: () => playTone(440, 'sine', 0.05, 0.04),
+            place: () => playTone(150, 'triangle', 0.08, 0.12),
+            flipBlue: () => {playTone(523, 'sine', 0.08, 0.06); setTimeout(() => playTone(659, 'sine', 0.1, 0.06), 50);},
+            flipRed: () => {playTone(280, 'sawtooth', 0.08, 0.05); setTimeout(() => playTone(200, 'sawtooth', 0.1, 0.05), 50);},
+            win: () => {playTone(523, 'sine', 0.1, 0.08); setTimeout(() => playTone(659, 'sine', 0.1, 0.08), 80); setTimeout(() => playTone(783, 'sine', 0.2, 0.08), 160);},
+            lose: () => {playTone(300, 'sawtooth', 0.12, 0.08); setTimeout(() => playTone(180, 'sawtooth', 0.2, 0.08), 100);}
         };
 
-        const masterCards = [
-            { name: "Alien", emoji: "👽", baseStats: [8, 3, 5, 2], ability: { type: 'aura_buff', val: 1, label: '⚡ Buff', icon: '⚡', desc: 'Boosts adjacent friendly cards by +1 stat.' } },
-            { name: "Ghost", emoji: "👻", baseStats: [4, 7, 2, 6], ability: { type: 'curse_adj', val: -1, label: '💀 Curse', icon: '💀', desc: 'Reduces adjacent enemy cards by -1 stat.' } },
-            { name: "Robot", emoji: "🤖", baseStats: [6, 6, 6, 1] },
-            { name: "Skull", emoji: "💀", baseStats: [9, 2, 4, 3] },
-            { name: "Cat", emoji: "🐱", baseStats: [2, 5, 8, 4] },
-            { name: "Dog", emoji: "🐶", baseStats: [5, 4, 3, 7] },
-            { name: "Fox", emoji: "🦊", baseStats: [7, 6, 2, 3] },
-            { name: "Panda", emoji: "🐼", baseStats: [3, 3, 7, 6] },
-            { name: "Lion", emoji: "🦁", baseStats: [8, 7, 5, 2] },
-            { name: "Tiger", emoji: "🐯", baseStats: [7, 8, 2, 4] },
-            { name: "Dragon", emoji: "🐲", baseStats: [9, 9, 3, 1] },
-            { name: "Unicorn", emoji: "🦄", baseStats: [4, 5, 6, 8], ability: { type: 'aura_buff', val: 1, label: '⚡ Buff', icon: '⚡', desc: 'Boosts adjacent friendly cards by +1 stat.' } },
-            { name: "Wizard", emoji: "🧙", baseStats: [6, 8, 4, 5], ability: { type: 'ranged_debuff', val: -1, label: '🔮 Hex', icon: '🔮', desc: 'Curses the strongest enemy card anywhere on the board by -1.' } },
-            { name: "Vampire", emoji: "🧛", baseStats: [8, 4, 3, 7], ability: { type: 'curse_adj', val: -1, label: '💀 Curse', icon: '💀', desc: 'Reduces adjacent enemy cards by -1 stat.' } },
-            { name: "Genie", emoji: "🧞", baseStats: [7, 6, 6, 6], ability: { type: 'ranged_debuff', val: -1, label: '🔮 Hex', icon: '🔮', desc: 'Curses the strongest enemy card anywhere on the board by -1.' } },
-            { name: "Monkey", emoji: "🐵", baseStats: [3, 6, 4, 7] },
-            { name: "Frog", emoji: "🐸", baseStats: [2, 4, 5, 3] },
-            { name: "Owl", emoji: "🦉", baseStats: [6, 3, 2, 7] },
-            { name: "Bee", emoji: "🐝", baseStats: [1, 8, 3, 4] },
-            { name: "Bug", emoji: "🐛", baseStats: [2, 2, 4, 1] },
-            { name: "Spider", emoji: "🕷️", baseStats: [5, 7, 6, 3] },
-            { name: "Scorpion", emoji: "🦂", baseStats: [7, 4, 8, 2] },
-            { name: "Turtle", emoji: "🐢", baseStats: [3, 2, 9, 4] },
-            { name: "Snake", emoji: "🐍", baseStats: [6, 5, 4, 6] },
-            { name: "Lizard", emoji: "🦎", baseStats: [4, 6, 3, 5] },
-            { name: "T-Rex", emoji: "🦖", baseStats: [9, 6, 7, 2] },
-            { name: "Sauropod", emoji: "🦕", baseStats: [5, 3, 8, 5] },
-            { name: "Shark", emoji: "🦈", baseStats: [8, 5, 6, 4] },
-            { name: "Dolphin", emoji: "🐬", baseStats: [4, 7, 5, 6] },
-            { name: "Whale", emoji: "🐳", baseStats: [6, 4, 9, 3] },
-            { name: "Fish", emoji: "🐠", baseStats: [2, 3, 3, 5] },
-            { name: "Octopus", emoji: "🐙", baseStats: [5, 6, 6, 5] },
-            { name: "Crab", emoji: "🦀", baseStats: [4, 5, 7, 2] },
-            { name: "Eagle", emoji: "🦅", baseStats: [7, 7, 3, 3] },
-            { name: "Duck", emoji: "🦆", baseStats: [3, 4, 4, 3] },
-            { name: "Bat", emoji: "🦇", baseStats: [5, 2, 2, 8] },
-            { name: "Rooster", emoji: "🐓", baseStats: [4, 5, 3, 2] },
-            { name: "Peacock", emoji: "🦚", baseStats: [3, 6, 5, 4] },
-            { name: "Parrot", emoji: "🦜", baseStats: [6, 4, 4, 5] },
-            { name: "Flamingo", emoji: "🦩", baseStats: [5, 3, 6, 4] },
-            { name: "Gorilla", emoji: "🦍", baseStats: [8, 6, 7, 4] },
-            { name: "Camel", emoji: "🐪", baseStats: [3, 4, 6, 5] },
-            { name: "Elephant", emoji: "🐘", baseStats: [7, 4, 9, 2] },
-            { name: "Kangaroo", emoji: "🦘", baseStats: [6, 5, 4, 5] },
-            { name: "Koala", emoji: "🐨", baseStats: [2, 3, 5, 4] },
-            { name: "Sloth", emoji: "🦥", baseStats: [1, 2, 8, 2] },
-            { name: "Otter", emoji: "🦦", baseStats: [4, 5, 4, 6] },
-            { name: "Skunk", emoji: "🦨", baseStats: [3, 4, 2, 5] },
-            { name: "Badger", emoji: "🦡", baseStats: [5, 5, 5, 5] },
-            { name: "Pig", emoji: "🐖", baseStats: [3, 3, 4, 3] },
-            { name: "Ram", emoji: "🐏", baseStats: [6, 7, 4, 2] },
-            { name: "Llama", emoji: "🦙", baseStats: [4, 4, 5, 4] },
-            { name: "Giraffe", emoji: "🦒", baseStats: [7, 3, 6, 3] },
-            { name: "Hedgehog", emoji: "🦔", baseStats: [2, 6, 3, 6] },
-            { name: "Zombie", emoji: "🧟", baseStats: [5, 2, 7, 4] },
-            { name: "Fairy", emoji: "🧚", baseStats: [4, 5, 3, 7] },
-            { name: "Mage", emoji: "🧝", baseStats: [5, 7, 5, 6] },
-            { name: "Cyclops", emoji: "👹", baseStats: [9, 5, 8, 1] },
-            { name: "Goblin", emoji: "👺", baseStats: [6, 3, 5, 6] },
-            { name: "Alien Monster", emoji: "👾", baseStats: [8, 7, 7, 3] }
-        ];
-
-        let stats = JSON.parse(localStorage.getItem('ember_grid_stats')) || {
-            played: 0, wins: 0, losses: 0, draws: 0, streak: 0, bestStreak: 0, flips: 0, cardPlays: {}
-        };
-
-        function saveStats() {
-            localStorage.setItem('ember_grid_stats', JSON.stringify(stats));
-        }
-
-        // Theme management
-        let currentTheme = localStorage.getItem('ember_grid_theme') || 'dark';
-        document.body.setAttribute('data-theme', currentTheme);
-        updateThemeButtonIcon();
-
-        function toggleTheme() {
-            sfx.click();
-            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            document.body.setAttribute('data-theme', currentTheme);
-            localStorage.setItem('ember_grid_theme', currentTheme);
-            updateThemeButtonIcon();
-        }
-
-        function updateThemeButtonIcon() {
-            const btn = document.getElementById('theme-toggle-btn');
-            if (btn) btn.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
-        }
-
-        let board = Array(9).fill(null);
-        let playerHand = [];
-        let aiHand = [];
-        let selectedCard = null;
-        let turn = 'player';
-        let gameState = 'menu';
-        let activeMode = 'standard';
-        let aiDifficulty = 'normal';
-
-        let draftPool = [];
-        let draftedPlayerCards = [];
-        let draftedAICards = [];
-        let draftTurn = 'player';
-
-        const statusMsg = document.getElementById('status-msg');
-        const actionLog = document.getElementById('action-log');
+        // --- Tooltip Engine ---
         const tooltipEl = document.getElementById('card-tooltip');
-
-        function logAction(msg) {
-            actionLog.textContent = msg;
-        }
-
-        function formatStat(val) {
-            let clamped = Math.max(1, Math.min(10, val));
-            return clamped === 10 ? 'A' : clamped;
-        }
-
-        function updateDifficulty(val) {
-            sfx.click();
-            aiDifficulty = val;
-        }
-
-        function showHelpModal() {
-            sfx.click();
-            document.getElementById('help-modal').classList.remove('hidden');
-        }
-
-        function showModeMenu() {
-            sfx.click();
-            hideTooltip();
-            document.getElementById('draft-modal').classList.add('hidden');
-            document.getElementById('stats-modal').classList.add('hidden');
-            document.getElementById('help-modal').classList.add('hidden');
-            document.getElementById('gameover-modal').classList.add('hidden');
-            document.getElementById('main-menu-modal').classList.remove('hidden');
-            
-            gameState = 'menu';
-            board = Array(9).fill(null);
-            playerHand = [];
-            aiHand = [];
-            selectedCard = null;
-            logAction("Ready for battle.");
-            render();
-        }
-
-        function showStatsModal() {
-            sfx.click();
-            hideTooltip();
-            document.getElementById('stat-record').textContent = `${stats.wins}-${stats.losses}-${stats.draws}`;
-            const total = stats.played;
-            const pct = total > 0 ? ((stats.wins / total) * 100).toFixed(1) : '0.0';
-            document.getElementById('stat-winrate').textContent = `${pct}%`;
-            document.getElementById('stat-streaks').textContent = `${stats.streak} / ${stats.bestStreak}`;
-            document.getElementById('stat-flips').textContent = stats.flips;
-
-            const sortedCards = Object.entries(stats.cardPlays).sort((a, b) => b[1] - a[1]);
-            const topCardsEl = document.getElementById('stat-top-cards');
-            if (sortedCards.length === 0) {
-                topCardsEl.textContent = "No cards played yet.";
-            } else {
-                topCardsEl.innerHTML = sortedCards.slice(0, 3).map(([name, count]) => `• ${name}: ${count} plays`).join('<br>');
-            }
-
-            document.getElementById('stats-modal').classList.remove('hidden');
-        }
-
-        function startGame(mode) {
-            sfx.click();
-            activeMode = mode;
-            hideTooltip();
-            document.getElementById('main-menu-modal').classList.add('hidden');
-            document.getElementById('draft-modal').classList.add('hidden');
-            document.getElementById('gameover-modal').classList.add('hidden');
-
-            if (mode === 'standard') {
-                board = Array(9).fill(null);
-                selectedCard = null;
-                gameState = 'playing';
-
-                const shuffled = [...masterCards].sort(() => Math.random() - 0.5);
-                playerHand = shuffled.slice(0, 5).map(c => ({ ...c, baseStats: [...c.baseStats], owner: 'blue' }));
-                aiHand = shuffled.slice(5, 10).map(c => ({ ...c, baseStats: [...c.baseStats], owner: 'red' }));
-
-                beginMatch();
-            } else if (mode === 'draft') {
-                startDraftMode();
-            }
-        }
-
-        function startDraftMode() {
-            draftedPlayerCards = [];
-            draftedAICards = [];
-
-            const poolSource = [...masterCards].sort(() => Math.random() - 0.5).slice(0, 16);
-            draftPool = poolSource.map(c => ({
-                ...c,
-                baseStats: [...c.baseStats],
-                id: Math.random(),
-                draftedBy: null
-            }));
-
-            draftTurn = Math.random() < 0.5 ? 'player' : 'ai';
-            renderDraftPool();
-            document.getElementById('draft-modal').classList.remove('hidden');
-
-            if (draftTurn === 'ai') {
-                setTimeout(aiDraftPick, 700);
-            }
-        }
-
-        function startCurrentModeAgain() {
-            sfx.click();
-            startGame(activeMode);
-        }
 
         function showTooltip(text, e) {
             if (!text) return;
@@ -983,33 +918,187 @@
             }
         }
 
-        function hideTooltip() {
-            tooltipEl.style.display = 'none';
+        function hideTooltip() {tooltipEl.style.display = 'none';}
+
+        // --- Card Database ---
+        const masterCards = [
+            {name: "Alien", emoji: "👽", baseStats: [7, 3, 5, 2], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'Boosts adjacent friendly cards by +1 stat.'}},
+            {name: "Ghost", emoji: "👻", baseStats: [3, 7, 2, 5], ability: {type: 'curse_adj', icon: '💀', desc: 'Permanently reduces all stats of the strongest enemy by 1 when played.'}},
+            {name: "Robot", emoji: "🤖", baseStats: [5, 5, 5, 2]},
+            {name: "Skull", emoji: "💀", baseStats: [8, 2, 4, 3]},
+            {name: "Cat", emoji: "🐱", baseStats: [2, 5, 7, 3]},
+            {name: "Dog", emoji: "🐶", baseStats: [4, 4, 3, 6]},
+            {name: "Fox", emoji: "🦊", baseStats: [6, 5, 2, 3]},
+            {name: "Lion", emoji: "🦁", baseStats: [7, 6, 4, 2]},
+            {name: "Dragon", emoji: "🐲", baseStats: [9, 7, 3, 2], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
+            {name: "Unicorn", emoji: "🦄", baseStats: [4, 4, 5, 7], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'Boosts adjacent friendly cards by +1 stat.'}},
+            {name: "Wizard", emoji: "🧙", baseStats: [5, 7, 3, 5], ability: {type: 'ranged_debuff', icon: '🔮', desc: 'Zaps a random enemy card on play, reducing all its stats by 2.'}},
+            {name: "Vampire", emoji: "🧛", baseStats: [7, 3, 3, 6], ability: {type: 'curse_adj', icon: '💀', desc: 'Permanently reduces all stats of the strongest enemy by 1 when played.'}},
+            {name: "Paladin", emoji: "🛡️", baseStats: [4, 8, 8, 2]},
+            {name: "Monk", emoji: "☯️", baseStats: [5, 5, 5, 5], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
+            {name: "Genie", emoji: "🧞", baseStats: [6, 5, 5, 5], ability: {type: 'ranged_debuff', icon: '🔮', desc: 'Zaps a random enemy card on play, reducing all its stats by 2.'}},
+            {name: "Monkey", emoji: "🐵", baseStats: [3, 5, 4, 6]},
+            {name: "Frog", emoji: "🐸", baseStats: [2, 4, 5, 3]},
+            {name: "Owl", emoji: "🦉", baseStats: [5, 3, 2, 6]},
+            {name: "Spider", emoji: "🕷️", baseStats: [4, 6, 5, 3], ability: {type: 'poison', icon: '🦠', desc: 'Reduces all adjacent cards\' stats by 1 at the end of every turn.'}},
+            {name: "Turtle", emoji: "🐢", baseStats: [3, 2, 8, 4]},
+            {name: "T-Rex", emoji: "🦖", baseStats: [8, 5, 6, 2], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
+            {name: "Shark", emoji: "🦈", baseStats: [7, 4, 5, 4]},
+            {name: "Eagle", emoji: "🦅", baseStats: [6, 6, 3, 3]},
+            {name: "Gorilla", emoji: "🦍", baseStats: [7, 5, 6, 3]},
+            {name: "Zombie", emoji: "🧟", baseStats: [4, 2, 6, 4]},
+            {name: "Fairy", emoji: "🧚", baseStats: [3, 4, 3, 6], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'Boosts adjacent friendly cards by +1 stat.'}},
+            {name: "Cyclops", emoji: "👹", baseStats: [8, 4, 7, 1]},
+            {name: "Alien Boss", emoji: "👾", baseStats: [7, 6, 6, 3]},
+            {name: "Snake", emoji: "🐍", baseStats: [5, 4, 4, 5], ability: {type: 'poison', icon: '🦠', desc: 'Reduces all adjacent cards\' stats by 1 at the end of every turn.'}},
+            {name: "Scorpion", emoji: "🦂", baseStats: [6, 4, 7, 2], ability: {type: 'poison', icon: '🦠', desc: 'Reduces all adjacent cards\' stats by 1 at the end of every turn.'}},
+            {name: "Titan", emoji: "🗿", baseStats: [10, 3, 4, 2]},
+            {name: "Celestial", emoji: "✨", baseStats: [3, 2, 10, 4], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'Boosts adjacent friendly cards by +1 stat.'}}
+        ];
+
+        let stats = JSON.parse(localStorage.getItem('ember_grid_stats')) || {played: 0, wins: 0, losses: 0, draws: 0, streak: 0, bestStreak: 0, flips: 0, cardPlays: {}};
+
+        function saveStats() {localStorage.setItem('ember_grid_stats', JSON.stringify(stats));}
+
+        let currentTheme = localStorage.getItem('ember_grid_theme') || 'dark';
+        document.body.setAttribute('data-theme', currentTheme);
+        updateThemeButtonIcon();
+
+        function toggleTheme() {
+            sfx.click(); currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.body.setAttribute('data-theme', currentTheme);
+            localStorage.setItem('ember_grid_theme', currentTheme); updateThemeButtonIcon();
         }
 
-        function renderDraftPool() {
-            const grid = document.getElementById('draft-pool-grid');
-            grid.innerHTML = '';
+        function updateThemeButtonIcon() {
+            const btn = document.getElementById('theme-toggle-btn');
+            if (btn) btn.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+        }
 
+        let board = Array(9).fill(null);
+        let playerHand = [], aiHand = [], draftPool = [], draftedPlayerCards = [], draftedAICards = [];
+        let selectedCard = null, turn = 'player', gameState = 'menu', activeMode = 'random', aiDifficulty = 'normal', draftTurn = 'player';
+        let currentRuleset = 'ember';
+
+        const statusMsg = document.getElementById('status-msg'), actionLog = document.getElementById('action-log');
+
+        function logAction(msg) {actionLog.textContent = msg;}
+        function formatStat(val) {let clamped = Math.max(1, Math.min(10, val)); return clamped === 10 ? 'A' : clamped;}
+
+        function updateDifficulty(val) {sfx.click(); aiDifficulty = val;}
+        function updateRuleset(val) {
+            sfx.click();
+            currentRuleset = val;
+            const descBox = document.getElementById('ruleset-desc');
+            if (val === 'classic') {
+                descBox.innerHTML = "<strong>Classic Mode:</strong> Pure, tactical gameplay. All special abilities and card badges are disabled.";
+            } else {
+                descBox.innerHTML = "<strong>Ember Mode:</strong> Cards possess special tactical abilities (Buffs, Curses, Bolts, Blasts, etc.) that interact across the grid.";
+            }
+        }
+
+        function showModeMenu() {
+            sfx.click(); hideTooltip();
+            ['draft-modal', 'stats-modal', 'expanded-rules-modal', 'gameover-modal'].forEach(id => document.getElementById(id).classList.add('hidden'));
+            document.getElementById('main-menu-modal').classList.remove('hidden');
+            gameState = 'menu'; board = Array(9).fill(null); playerHand = []; aiHand = []; selectedCard = null;
+            logAction("Ready for battle."); render();
+        }
+
+        function showStatsModal() {
+            sfx.click(); hideTooltip();
+            document.getElementById('stat-record').textContent = `${stats.wins}-${stats.losses}-${stats.draws}`;
+            document.getElementById('stat-winrate').textContent = `${stats.played > 0 ? ((stats.wins / stats.played) * 100).toFixed(1) : '0.0'}%`;
+            document.getElementById('stat-streaks').textContent = `${stats.streak} / ${stats.bestStreak}`;
+            document.getElementById('stat-flips').textContent = stats.flips;
+
+            const sortedCards = Object.entries(stats.cardPlays).sort((a, b) => b[1] - a[1]);
+            document.getElementById('stat-top-cards').innerHTML = sortedCards.length === 0 ? "No deployment data available." : sortedCards.slice(0, 3).map(([name, count]) => `• ${name}: ${count} plays`).join('<br>');
+            document.getElementById('stats-modal').classList.remove('hidden');
+        }
+
+        function showExpandedRulesModal() {
+            sfx.click(); hideTooltip();
+            renderCompendium();
+            document.getElementById('expanded-rules-modal').classList.remove('hidden');
+        }
+
+        function renderCompendium() {
+            const grid = document.getElementById('compendium-grid');
+            grid.innerHTML = '';
+            masterCards.forEach(card => {
+                const el = document.createElement('div');
+                el.className = 'compendium-card';
+                el.innerHTML = `
+                    ${card.ability ? `<div class="ability-badge">${card.ability.icon}</div>` : ''}
+                    <div class="stat-top">${formatStat(card.baseStats[0])}</div>
+                    <div class="stat-right">${formatStat(card.baseStats[1])}</div>
+                    <div class="stat-bottom">${formatStat(card.baseStats[2])}</div>
+                    <div class="stat-left">${formatStat(card.baseStats[3])}</div>
+                    <div class="card-emoji">${card.emoji}</div>
+                    <div class="card-name">${card.name}</div>
+                `;
+                if (card.ability && card.ability.desc) {
+                    el.addEventListener('mouseenter', (e) => showTooltip(`${card.name}: ${card.ability.desc}`, e));
+                    el.addEventListener('mousemove', updateTooltipPosition);
+                    el.addEventListener('mouseleave', hideTooltip);
+                    el.addEventListener('touchstart', (e) => showTooltip(`${card.name}: ${card.ability.desc}`, e), {passive: true});
+                    el.addEventListener('touchend', hideTooltip, {passive: true});
+                }
+                grid.appendChild(el);
+            });
+        }
+
+        function startGame(mode) {
+            sfx.click(); hideTooltip(); activeMode = mode;
+            ['main-menu-modal', 'draft-modal', 'expanded-rules-modal', 'gameover-modal'].forEach(id => document.getElementById(id).classList.add('hidden'));
+
+            if (mode === 'random') {
+                board = Array(9).fill(null); selectedCard = null; gameState = 'playing';
+                const shuffled = [...masterCards].sort(() => Math.random() - 0.5);
+
+                playerHand = shuffled.slice(0, 5).map(c => {
+                    let copy = {...c, baseStats: [...c.baseStats], owner: 'blue'};
+                    if (currentRuleset === 'classic') delete copy.ability;
+                    return copy;
+                });
+
+                aiHand = shuffled.slice(5, 10).map(c => {
+                    let copy = {...c, baseStats: [...c.baseStats], owner: 'red'};
+                    if (currentRuleset === 'classic') delete copy.ability;
+                    return copy;
+                });
+
+                beginMatch();
+            } else if (mode === 'draft') {
+                startDraftMode();
+            }
+        }
+
+        function startDraftMode() {
+            draftedPlayerCards = []; draftedAICards = [];
+
+            draftPool = [...masterCards].sort(() => Math.random() - 0.5).slice(0, 16).map(c => {
+                let copy = {...c, baseStats: [...c.baseStats], draftedBy: null};
+                if (currentRuleset === 'classic') delete copy.ability;
+                return copy;
+            });
+
+            draftTurn = Math.random() < 0.5 ? 'player' : 'ai';
+            renderDraftPool();
+            document.getElementById('draft-modal').classList.remove('hidden');
+            if (draftTurn === 'ai') setTimeout(aiDraftPick, 600);
+        }
+
+        function startCurrentModeAgain() {sfx.click(); hideTooltip(); startGame(activeMode);}
+
+        function renderDraftPool() {
+            const grid = document.getElementById('draft-pool-grid'); grid.innerHTML = '';
             draftPool.forEach(card => {
                 const el = document.createElement('div');
-                el.className = 'draft-card';
-
-                if (card.draftedBy) {
-                    el.style.opacity = '0.2';
-                    el.style.cursor = 'default';
-                } else if (draftTurn === 'player') {
-                    el.style.cursor = 'pointer';
-                }
-
-                let badgeHtml = '';
-                if (card.ability) {
-                    const labelContent = window.innerWidth >= 768 ? card.ability.label : card.ability.icon;
-                    badgeHtml = `<div class="ability-badge">${labelContent}</div>`;
-                }
-
+                el.className = `draft-card ${card.draftedBy ? 'drafted' : ''}`;
                 el.innerHTML = `
-                    ${badgeHtml}
+                    ${card.ability ? `<div class="ability-badge">${card.ability.icon}</div>` : ''}
                     <div class="stat-top">${formatStat(card.baseStats[0])}</div>
                     <div class="stat-right">${formatStat(card.baseStats[1])}</div>
                     <div class="stat-bottom">${formatStat(card.baseStats[2])}</div>
@@ -1018,209 +1107,195 @@
                     <div class="card-name">${card.name}</div>
                 `;
 
-                if (card.ability) {
+                if (card.ability && card.ability.desc) {
                     el.addEventListener('mouseenter', (e) => showTooltip(card.ability.desc, e));
                     el.addEventListener('mousemove', updateTooltipPosition);
                     el.addEventListener('mouseleave', hideTooltip);
                     el.addEventListener('touchstart', (e) => showTooltip(card.ability.desc, e), {passive: true});
+                    el.addEventListener('touchend', hideTooltip, {passive: true});
                 }
 
-                if (!card.draftedBy && draftTurn === 'player') {
-                    el.addEventListener('click', () => {
-                        sfx.click();
-                        hideTooltip();
-                        playerDraftPick(card);
-                    });
-                }
+                if (!card.draftedBy && draftTurn === 'player') el.addEventListener('click', () => {sfx.click(); hideTooltip(); playerDraftPick(card);});
                 grid.appendChild(el);
             });
-
-            document.getElementById('draft-status').textContent = draftTurn === 'player'
-                ? "Your turn to pick a card:"
-                : "AI is thinking about its pick...";
-
+            document.getElementById('draft-status').textContent = draftTurn === 'player' ? "Your turn! Select a card." : "AI is choosing...";
             document.getElementById('draft-rosters').textContent = `Your Deck: ${draftedPlayerCards.length}/5 | AI Deck: ${draftedAICards.length}/5`;
         }
 
         function playerDraftPick(card) {
             if (draftTurn !== 'player' || card.draftedBy) return;
-            card.draftedBy = 'player';
-            draftedPlayerCards.push(card);
-            checkDraftProgress();
+            card.draftedBy = 'player'; draftedPlayerCards.push(card); checkDraftProgress();
         }
 
         function aiDraftPick() {
             if (draftTurn !== 'ai' || draftedAICards.length >= 5) return;
+            const available = draftPool.filter(c => !c.draftedBy);
+            if (!available.length) return;
 
-            const availableCards = draftPool.filter(c => !c.draftedBy);
-            if (availableCards.length === 0) return;
-
-            availableCards.sort((a, b) => {
-                const sumA = a.baseStats.reduce((acc, val) => acc + val, 0);
-                const sumB = b.baseStats.reduce((acc, val) => acc + val, 0);
-                return sumB - sumA;
-            });
-
-            const chosen = availableCards[0];
-            chosen.draftedBy = 'ai';
-            draftedAICards.push(chosen);
+            available.sort((a, b) => getCardDraftScore(b) - getCardDraftScore(a));
+            available[0].draftedBy = 'ai';
+            draftedAICards.push(available[0]);
             checkDraftProgress();
+        }
+
+        function getCardDraftScore(card) {
+            let baseScore = card.baseStats.reduce((sum, val) => sum + val, 0);
+            if (card.ability) {
+                switch (card.ability.type) {
+                    case 'poison': baseScore += 5; break;
+                    case 'blast': baseScore += 4; break;
+                    case 'aura_buff': baseScore += 4; break;
+                    case 'ranged_debuff':
+                    case 'curse_adj': baseScore += 3; break;
+                    case 'equalizer': baseScore += 2; break;
+                    default: baseScore += 2;
+                }
+            }
+            return baseScore;
         }
 
         function checkDraftProgress() {
             if (draftedPlayerCards.length === 5 && draftedAICards.length === 5) {
                 document.getElementById('draft-modal').classList.add('hidden');
-                launchDraftedGame();
+                board = Array(9).fill(null); selectedCard = null; gameState = 'playing';
+                playerHand = draftedPlayerCards.map(c => ({...c, baseStats: [...c.baseStats], owner: 'blue'}));
+                aiHand = draftedAICards.map(c => ({...c, baseStats: [...c.baseStats], owner: 'red'}));
+                beginMatch();
             } else {
-                draftTurn = draftTurn === 'player' ? 'ai' : 'player';
-                renderDraftPool();
-
-                if (draftTurn === 'ai') {
-                    setTimeout(aiDraftPick, 800);
-                }
+                draftTurn = draftTurn === 'player' ? 'ai' : 'player'; renderDraftPool();
+                if (draftTurn === 'ai') setTimeout(aiDraftPick, 600);
             }
-        }
-
-        function launchDraftedGame() {
-            board = Array(9).fill(null);
-            selectedCard = null;
-            gameState = 'playing';
-
-            playerHand = draftedPlayerCards.map(c => ({ ...c, baseStats: [...c.baseStats], owner: 'blue' }));
-            aiHand = draftedAICards.map(c => ({ ...c, baseStats: [...c.baseStats], owner: 'red' }));
-
-            beginMatch();
         }
 
         function beginMatch() {
             turn = Math.random() < 0.5 ? 'player' : 'ai';
             statusMsg.textContent = turn === 'player' ? "Your turn! Select a card." : "AI is thinking...";
-            logAction("Match started. Good luck!");
+            logAction("Match initialized."); recalculateDynamicStats(); render();
+            if (turn === 'ai') setTimeout(aiTurn, 700);
+        }
 
-            recalculateDynamicStats();
-            render();
-            if (turn === 'ai') {
-                setTimeout(aiTurn, 700);
+        // --- Dynamic Stat Engine (Aura Buffs Only) ---
+        function recalculateDynamicStats() {
+            board.forEach(c => {if (c) c.stats = [...c.baseStats];});
+            board.forEach((card, index) => {
+                if (!card || !card.ability) return;
+                const row = Math.floor(index / 3), col = index % 3;
+
+                if (card.ability.type === 'aura_buff') {
+                    const val = card.ability.val;
+                    [{idx: index - 3, c: row > 0}, {idx: index + 1, c: col < 2}, {idx: index + 3, c: row < 2}, {idx: index - 1, c: col > 0}]
+                        .forEach(n => {
+                            if (n.c && board[n.idx] && board[n.idx].owner === card.owner) {
+                                board[n.idx].stats = board[n.idx].stats.map(s => Math.max(1, Math.min(10, s + val)));
+                            }
+                        });
+                }
+            });
+        }
+
+        // --- Helper for Stat Val (including Blast on placement turn) ---
+        function getEffectiveStat(card, statIndex, isPlacementTurn) {
+            let val = (card.stats || card.baseStats)[statIndex];
+            if (isPlacementTurn && card.ability && card.ability.type === 'blast') {
+                val += 2;
+            }
+            return val;
+        }
+
+        // --- One-Time On-Play Abilities (Curse/Bolt) ---
+        function applyOnPlayAbilities(placedCard) {
+            if (!placedCard.ability) return;
+            const abType = placedCard.ability.type;
+
+            if (abType === 'curse_adj') {
+                let enemies = board.map((c, i) => (c && c.owner !== placedCard.owner) ? {c, i} : null).filter(Boolean);
+                if (enemies.length > 0) {
+                    enemies.sort((a, b) => b.c.baseStats.reduce((x, y) => x + y, 0) - a.c.baseStats.reduce((x, y) => x + y, 0));
+                    let targetCard = enemies[0].c;
+                    targetCard.baseStats = targetCard.baseStats.map(s => Math.max(1, s - 1));
+                    logAction(`${placedCard.name} cursed strongest enemy ${targetCard.name} (-1)!`);
+                }
+            } else if (abType === 'ranged_debuff') {
+                let enemies = board.map((c, i) => (c && c.owner !== placedCard.owner) ? {c, i} : null).filter(Boolean);
+                if (enemies.length > 0) {
+                    let randomEnemy = enemies[Math.floor(Math.random() * enemies.length)].c;
+                    randomEnemy.baseStats = randomEnemy.baseStats.map(s => Math.max(1, s - 2));
+                    logAction(`${placedCard.name} bolted ${randomEnemy.name} with a -2 zap!`);
+                }
             }
         }
 
-        function recalculateDynamicStats() {
-            board.forEach(card => {
-                if (card) {
-                    card.stats = [...card.baseStats];
-                }
-            });
-
+        function applyEndOfTurnEffects() {
+            let poisonTriggered = false;
             board.forEach((card, index) => {
-                if (!card || !card.ability) return;
-
-                const row = Math.floor(index / 3);
-                const col = index % 3;
-
-                if (card.ability.type === 'aura_buff' || card.ability.type === 'curse_adj') {
-                    const val = card.ability.val;
-                    const targetOwner = card.ability.type === 'aura_buff' ? card.owner : (card.owner === 'blue' ? 'red' : 'blue');
-
-                    const neighbors = [
-                        { idx: index - 3, condition: row > 0 },
-                        { idx: index + 1, condition: col < 2 },
-                        { idx: index + 3, condition: row < 2 },
-                        { idx: index - 1, condition: col > 0 }
-                    ];
-
-                    neighbors.forEach(n => {
-                        if (n.condition && board[n.idx] !== null) {
-                            const neighborCard = board[n.idx];
-                            if (neighborCard.owner === targetOwner) {
-                                neighborCard.stats = neighborCard.stats.map(s => Math.max(1, Math.min(10, s + val)));
+                if (card && card.ability && card.ability.type === 'poison') {
+                    const row = Math.floor(index / 3), col = index % 3;
+                    [{idx: index - 3, c: row > 0}, {idx: index + 1, c: col < 2},
+                    {idx: index + 3, c: row < 2}, {idx: index - 1, c: col > 0}]
+                        .forEach(n => {
+                            if (n.c && board[n.idx]) {
+                                let reduced = false;
+                                board[n.idx].baseStats = board[n.idx].baseStats.map(s => {
+                                    if (s > 1) reduced = true;
+                                    return Math.max(1, s - 1);
+                                });
+                                if (reduced) poisonTriggered = true;
                             }
-                        }
-                    });
-                } else if (card.ability.type === 'ranged_debuff') {
-                    let enemyCards = board.map((c, i) => (c !== null && c.owner !== card.owner) ? { card: c, idx: i } : null).filter(Boolean);
-                    if (enemyCards.length > 0) {
-                        enemyCards.sort((a, b) => {
-                            const sumA = a.card.stats.reduce((x, y) => x + y, 0);
-                            const sumB = b.card.stats.reduce((x, y) => x + y, 0);
-                            return sumB - sumA;
                         });
-                        const target = enemyCards[0].card;
-                        target.stats = target.stats.map(s => Math.max(1, s - 1));
-                    }
                 }
             });
+            return poisonTriggered ? "Poison ticks." : "";
         }
 
         function render() {
-            const bottomArea = document.getElementById('bottom-area');
+            const bottomArea = document.getElementById('bottom-area'), turnInd = document.getElementById('turn-indicator');
             bottomArea.innerHTML = '';
 
-            if (gameState === 'menu') {
-                statusMsg.textContent = "Select a mode to begin.";
-            } else if (gameState === 'playing') {
+            if (gameState === 'playing') {
+                turnInd.textContent = turn === 'player' ? 'YOUR TURN' : 'AI TURN';
+                turnInd.style.color = turn === 'player' ? 'var(--blue-card)' : 'var(--red-card)';
+            } else {
+                turnInd.textContent = 'EMBER GRID'; turnInd.style.color = 'var(--accent)';
+            }
+
+            if (gameState === 'playing') {
                 const handDiv = document.createElement('div');
-                handDiv.className = 'hand';
-                handDiv.id = 'player-hand';
-                playerHand.forEach((card, index) => {
-                    const el = createCardElement(card, index, 'player');
-                    handDiv.appendChild(el);
-                });
+                handDiv.className = `hand ${turn === 'player' ? 'active-turn' : ''}`;
+                playerHand.forEach((card, index) => handDiv.appendChild(createCardElement(card, index, 'player')));
                 bottomArea.appendChild(handDiv);
             }
 
-            const aiHandEl = document.getElementById('ai-hand');
-            aiHandEl.innerHTML = '';
+            const aiHandEl = document.getElementById('ai-hand'); aiHandEl.innerHTML = '';
             if (gameState === 'playing') {
-                aiHand.forEach((card, index) => {
-                    const el = document.createElement('div');
-                    el.className = 'card red';
+                aiHandEl.className = `hand ${turn === 'ai' ? 'active-turn' : ''}`;
+                aiHand.forEach(() => {
+                    const el = document.createElement('div'); el.className = 'card red';
                     el.style.width = window.innerWidth >= 768 ? '36px' : '30px';
                     el.style.height = window.innerWidth >= 768 ? '48px' : '40px';
-                    el.style.fontSize = '0.5rem';
-                    el.innerHTML = `<div style="margin:auto;">🔒</div>`;
+                    el.innerHTML = `<div style="margin:auto; font-size: 0.7rem;">🔒</div>`;
                     aiHandEl.appendChild(el);
                 });
             }
 
-            const gridEl = document.getElementById('board-grid');
-            gridEl.innerHTML = '';
+            const gridEl = document.getElementById('board-grid'); gridEl.innerHTML = '';
             board.forEach((cell, index) => {
-                const cellEl = document.createElement('div');
-                cellEl.className = 'cell';
+                const cellEl = document.createElement('div'); cellEl.className = 'cell';
                 cellEl.addEventListener('click', () => handleCellClick(index));
-
-                if (cell) {
-                    const cardEl = createCardElement(cell, index, 'board');
-                    cellEl.appendChild(cardEl);
-                }
+                if (cell) cellEl.appendChild(createCardElement(cell, index, 'board'));
                 gridEl.appendChild(cellEl);
             });
-
             updateScores();
         }
 
         function createCardElement(card, index, source) {
             const div = document.createElement('div');
-            div.className = `card ${card.owner}`;
-            if (card.justFlipped) {
-                div.classList.add('flipped');
-                card.justFlipped = false;
-            }
-
-            if (source === 'player' && selectedCard === index && turn === 'player' && gameState === 'playing') {
-                div.classList.add('selected');
-            }
-
-            let badgeHtml = '';
-            if (card.ability) {
-                const labelContent = window.innerWidth >= 768 ? card.ability.label : card.ability.icon;
-                badgeHtml = `<div class="ability-badge">${labelContent}</div>`;
-            }
+            div.className = `card ${card.owner} ${card.justFlipped ? 'flipped' : ''}`;
+            if (card.justFlipped) card.justFlipped = false;
+            if (source === 'player' && selectedCard === index && turn === 'player' && gameState === 'playing') div.classList.add('selected');
 
             const activeStats = card.stats || card.baseStats;
-
             div.innerHTML = `
-                ${badgeHtml}
+                ${card.ability ? `<div class="ability-badge">${card.ability.icon}</div>` : ''}
                 <div class="stat-top">${formatStat(activeStats[0])}</div>
                 <div class="stat-right">${formatStat(activeStats[1])}</div>
                 <div class="stat-bottom">${formatStat(activeStats[2])}</div>
@@ -1229,7 +1304,7 @@
                 <div class="card-name">${card.name}</div>
             `;
 
-            if (card.ability) {
+            if (card.ability && card.ability.desc) {
                 div.addEventListener('mouseenter', (e) => showTooltip(card.ability.desc, e));
                 div.addEventListener('mousemove', updateTooltipPosition);
                 div.addEventListener('mouseleave', hideTooltip);
@@ -1239,260 +1314,155 @@
 
             if (source === 'player' && turn === 'player' && gameState === 'playing') {
                 div.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    sfx.click();
-                    hideTooltip();
-
-                    if (selectedCard === index) {
-                        selectedCard = null;
-                        statusMsg.textContent = "Your turn! Select a card.";
-                    } else {
-                        selectedCard = index;
-                        statusMsg.textContent = `Selected: ${card.name}. Click cell or click card again to cancel.`;
-                    }
+                    e.stopPropagation(); sfx.click(); hideTooltip();
+                    selectedCard = (selectedCard === index) ? null : index;
+                    statusMsg.textContent = selectedCard !== null ? `Selected: ${card.name}. Click an empty cell.` : "Your turn! Select a card.";
                     render();
                 });
             }
-
             return div;
         }
 
         function handleCellClick(index) {
-            if (gameState !== 'playing' || turn !== 'player' || selectedCard === null) return;
-            if (board[index] !== null) return;
-
-            sfx.place();
-            hideTooltip();
+            if (gameState !== 'playing' || turn !== 'player' || selectedCard === null || board[index] !== null) return;
+            sfx.place(); hideTooltip();
             const cardToPlay = playerHand.splice(selectedCard, 1)[0];
             cardToPlay.stats = [...cardToPlay.baseStats];
-            board[index] = cardToPlay;
-            selectedCard = null;
-
+            board[index] = cardToPlay; selectedCard = null;
             stats.cardPlays[cardToPlay.name] = (stats.cardPlays[cardToPlay.name] || 0) + 1;
-            logAction(`You played ${cardToPlay.name}.`);
-
             processCardPlacement(index, cardToPlay);
         }
 
         function processCardPlacement(index, placedCard) {
-            // 1. Recalculate dynamic stats FIRST so any curses/buffs apply immediately before capture checks
+            applyOnPlayAbilities(placedCard);
+            recalculateDynamicStats();
+            let capLog = checkCaptures(index, placedCard);
+            recalculateDynamicStats();
+            let psnLog = applyEndOfTurnEffects();
             recalculateDynamicStats();
 
-            // 2. Check and perform captures using the newly debuffed/buffed stats
-            checkCaptures(index, placedCard);
+            let logs = [];
+            if (capLog) logs.push(capLog);
+            if (psnLog) logs.push(psnLog);
+            if (logs.length === 0) logs.push(`${placedCard.name} played.`);
+            logAction(logs.join(" "));
 
-            // 3. Recalculate once more to account for any chain effects post-capture
-            recalculateDynamicStats();
-
-            turn = turn === 'player' ? 'ai' : 'player';
-            render();
-
-            if (board.every(cell => cell !== null)) {
-                endGame();
-                return;
-            }
-
-            if (turn === 'ai') {
-                statusMsg.textContent = "AI is thinking...";
-                setTimeout(aiTurn, 600);
-            } else {
-                statusMsg.textContent = "Your turn! Select a card.";
-            }
+            turn = turn === 'player' ? 'ai' : 'player'; render();
+            if (board.every(cell => cell !== null)) {endGame(); return;}
+            if (turn === 'ai') {statusMsg.textContent = "AI is thinking..."; setTimeout(aiTurn, 600);}
+            else {statusMsg.textContent = "Your turn! Select a card.";}
         }
 
         function checkCaptures(placedIndex, placedCard) {
-            const row = Math.floor(placedIndex / 3);
-            const col = placedIndex % 3;
+            const row = Math.floor(placedIndex / 3), col = placedIndex % 3;
+            let blueFlipped = false, redFlipped = false, flipCount = 0;
 
-            let blueFlipped = false;
-            let redFlipped = false;
-            let flipCount = 0;
+            [{idx: placedIndex - 3, p: 0, n: 2, c: row > 0}, {idx: placedIndex + 1, p: 1, n: 3, c: col < 2},
+            {idx: placedIndex + 3, p: 2, n: 0, c: row < 2}, {idx: placedIndex - 1, p: 3, n: 1, c: col > 0}]
+                .forEach(n => {
+                    if (n.c && board[n.idx] && board[n.idx].owner !== placedCard.owner) {
+                        const neighborCard = board[n.idx];
 
-            const neighbors = [
-                { idx: placedIndex - 3, pStat: 0, nStat: 2, condition: row > 0 },     // Top
-                { idx: placedIndex + 1, pStat: 1, nStat: 3, condition: col < 2 },     // Right
-                { idx: placedIndex + 3, pStat: 2, nStat: 0, condition: row < 2 },     // Bottom
-                { idx: placedIndex - 1, pStat: 3, nStat: 1, condition: col > 0 }      // Left
-            ];
+                        let myVal = getEffectiveStat(placedCard, n.p, true);
+                        let theirVal = getEffectiveStat(neighborCard, n.n, false);
 
-            neighbors.forEach(n => {
-                if (n.condition && board[n.idx] !== null) {
-                    const neighborCard = board[n.idx];
-                    if (neighborCard.owner !== placedCard.owner) {
-                        const myStats = placedCard.stats || placedCard.baseStats;
-                        const theirStats = neighborCard.stats || neighborCard.baseStats;
+                        let captures = myVal > theirVal;
+                        if (!captures && placedCard.ability && placedCard.ability.type === 'equalizer' && myVal === theirVal) captures = true;
 
-                        const myVal = myStats[n.pStat];
-                        const theirVal = theirStats[n.nStat];
-
-                        if (myVal > theirVal) {
-                            const originalOwner = neighborCard.owner;
-                            neighborCard.owner = placedCard.owner;
-                            neighborCard.justFlipped = true;
-                            flipCount++;
-
-                            if (placedCard.owner === 'blue') {
-                                blueFlipped = true;
-                            } else {
-                                redFlipped = true;
-                            }
-
-                            if (placedCard.owner === 'blue' && originalOwner === 'red') {
-                                stats.flips++;
-                            }
+                        if (captures) {
+                            const origOwner = neighborCard.owner;
+                            neighborCard.owner = placedCard.owner; neighborCard.justFlipped = true; flipCount++;
+                            if (placedCard.owner === 'blue') {blueFlipped = true; if (origOwner === 'red') stats.flips++;}
+                            else redFlipped = true;
                         }
                     }
-                }
-            });
-
-            if (flipCount > 0) {
-                logAction(`${placedCard.name} captured ${flipCount} card(s)!`);
-            }
-
-            if (blueFlipped) {
-                sfx.flipBlue();
-            } else if (redFlipped) {
-                sfx.flipRed();
-            }
+                });
+            if (blueFlipped) sfx.flipBlue(); else if (redFlipped) sfx.flipRed();
+            return flipCount > 0 ? `${placedCard.name} captured ${flipCount} card(s)!` : "";
         }
 
         function aiTurn() {
             if (gameState !== 'playing') return;
-
             const emptyCells = board.map((c, i) => c === null ? i : null).filter(i => i !== null);
-            if (emptyCells.length === 0 || aiHand.length === 0) return;
+            if (!emptyCells.length || !aiHand.length) return;
 
-            if (aiDifficulty === 'easy' && Math.random() < 0.4) {
-                const randomCardIdx = Math.floor(Math.random() * aiHand.length);
-                const randomCellIdx = emptyCells[Math.floor(Math.random() * emptyCells.length)];
-                executeAIMove(randomCardIdx, randomCellIdx);
+            if (aiDifficulty === 'easy' && Math.random() < 0.45) {
+                executeAIMove(Math.floor(Math.random() * aiHand.length), emptyCells[Math.floor(Math.random() * emptyCells.length)]);
                 return;
             }
 
-            let bestMove = null;
-            let maxScore = -999;
-
+            let bestMove = null, maxScore = -999;
             aiHand.forEach((card, cardIndex) => {
                 emptyCells.forEach(cellIdx => {
-                    let score = 0;
-                    const row = Math.floor(cellIdx / 3);
-                    const col = cellIdx % 3;
+                    let score = 0, flipsCount = 0, exposureRisk = 0;
+                    const row = Math.floor(cellIdx / 3), col = cellIdx % 3;
                     const neighbors = [
-                        { idx: cellIdx - 3, pStat: 0, nStat: 2, condition: row > 0 },
-                        { idx: cellIdx + 1, pStat: 1, nStat: 3, condition: col < 2 },
-                        { idx: cellIdx + 3, pStat: 2, nStat: 0, condition: row < 2 },
-                        { idx: cellIdx - 1, pStat: 3, nStat: 1, condition: col > 0 }
+                        {idx: cellIdx - 3, p: 0, n: 2, c: row > 0}, {idx: cellIdx + 1, p: 1, n: 3, c: col < 2},
+                        {idx: cellIdx + 3, p: 2, n: 0, c: row < 2}, {idx: cellIdx - 1, p: 3, n: 1, c: col > 0}
                     ];
 
-                    let flipsCount = 0;
-                    let exposureRisk = 0;
-
                     neighbors.forEach(n => {
-                        if (n.condition && board[n.idx] !== null) {
+                        if (n.c && board[n.idx]) {
                             const neighborCard = board[n.idx];
-                            if (neighborCard.owner === 'blue') {
-                                const cardStats = card.stats || card.baseStats;
-                                const neighborStats = neighborCard.stats || neighborCard.baseStats;
-                                if (cardStats[n.pStat] > neighborStats[n.nStat]) {
-                                    flipsCount++;
-                                }
+
+                            if (neighborCard.ability && neighborCard.ability.type === 'poison') exposureRisk += 2;
+                            if (card.ability && card.ability.type === 'poison') {
+                                if (neighborCard.owner === 'blue') score += 3;
+                                if (neighborCard.owner === 'red') exposureRisk += 3;
                             }
+
+                            if (neighborCard.owner === 'blue') {
+                                let myVal = getEffectiveStat(card, n.p, true);
+                                let theirVal = getEffectiveStat(neighborCard, n.n, false);
+
+                                let captures = myVal > theirVal;
+                                if (!captures && card.ability && card.ability.type === 'equalizer' && myVal === theirVal) captures = true;
+                                if (captures) flipsCount++;
+                            }
+                        } else if (n.c && board[n.idx] === null && aiDifficulty === 'hard') {
+                            const exposedStatVal = getEffectiveStat(card, n.p, true);
+                            if (exposedStatVal <= 4) exposureRisk += (5 - exposedStatVal);
                         }
                     });
 
-                    score += flipsCount * 12;
-                    const statSum = card.baseStats.reduce((a, b) => a + b, 0);
-                    score += statSum * 0.1;
-                    if (card.ability) score += 3;
-
-                    if (aiDifficulty === 'hard') {
-                        neighbors.forEach(n => {
-                            if (n.condition && board[n.idx] === null) {
-                                const cardStats = card.stats || card.baseStats;
-                                const exposedStatVal = cardStats[n.pStat];
-                                if (exposedStatVal <= 4) {
-                                    exposureRisk += (5 - exposedStatVal);
-                                }
-                            }
-                        });
-                        score -= exposureRisk * 3;
-                    }
-
-                    if (score > maxScore) {
-                        maxScore = score;
-                        bestMove = { cardIndex, cellIdx };
-                    }
+                    score += flipsCount * 14 + card.baseStats.reduce((a, b) => a + b, 0) * 0.1 + (card.ability ? 3 : 0) - exposureRisk * 2.5;
+                    if (score > maxScore) {maxScore = score; bestMove = {cardIndex, cellIdx};}
                 });
             });
 
-            if (!bestMove) {
-                bestMove = { cardIndex: 0, cellIdx: emptyCells[0] };
-            }
-
+            if (!bestMove) bestMove = {cardIndex: 0, cellIdx: emptyCells[0]};
             executeAIMove(bestMove.cardIndex, bestMove.cellIdx);
         }
 
         function executeAIMove(cardIdx, cellIdx) {
-            sfx.place();
+            sfx.place(); hideTooltip();
             const chosenCard = aiHand.splice(cardIdx, 1)[0];
             chosenCard.stats = [...chosenCard.baseStats];
             board[cellIdx] = chosenCard;
-            logAction(`AI played ${chosenCard.name}.`);
             processCardPlacement(cellIdx, chosenCard);
         }
 
         function updateScores() {
-            if (gameState === 'menu') {
-                document.getElementById('score-blue').textContent = `Blue: -`;
-                document.getElementById('score-red').textContent = `Red: -`;
-                return;
-            }
-
-            let blueCount = playerHand.length + board.filter(c => c && c.owner === 'blue').length;
-            let redCount = aiHand.length + board.filter(c => c && c.owner === 'red').length;
-
-            document.getElementById('score-blue').textContent = `Blue: ${blueCount}`;
-            document.getElementById('score-red').textContent = `Red: ${redCount}`;
+            if (gameState === 'menu') {document.getElementById('score-blue').textContent = `Blue: -`; document.getElementById('score-red').textContent = `Red: -`; return;}
+            document.getElementById('score-blue').textContent = `Blue: ${playerHand.length + board.filter(c => c && c.owner === 'blue').length}`;
+            document.getElementById('score-red').textContent = `Red: ${aiHand.length + board.filter(c => c && c.owner === 'red').length}`;
         }
 
         function endGame() {
-            gameState = 'gameover';
-
-            let blueCount = board.filter(c => c && c.owner === 'blue').length;
-            let redCount = board.filter(c => c && c.owner === 'red').length;
-
+            gameState = 'gameover'; hideTooltip();
+            let blueCount = board.filter(c => c && c.owner === 'blue').length, redCount = board.filter(c => c && c.owner === 'red').length;
             stats.played++;
-            if (blueCount > redCount) {
-                stats.wins++;
-                stats.streak++;
-                if (stats.streak > stats.bestStreak) stats.bestStreak = stats.streak;
-                sfx.win();
-                logAction("Victory achieved!");
-            } else if (redCount > blueCount) {
-                stats.losses++;
-                stats.streak = 0;
-                sfx.lose();
-                logAction("Defeat suffered.");
-            } else {
-                stats.draws++;
-                stats.streak = 0;
-                sfx.click();
-                logAction("Match ended in a draw.");
-            }
-            saveStats();
+            if (blueCount > redCount) {stats.wins++; stats.streak++; if (stats.streak > stats.bestStreak) stats.bestStreak = stats.streak; sfx.win(); logAction("Victory achieved!");}
+            else if (redCount > blueCount) {stats.losses++; stats.streak = 0; sfx.lose(); logAction("Defeat suffered.");}
+            else {stats.draws++; stats.streak = 0; sfx.click(); logAction("Match ended in a draw.");}
+            saveStats(); render();
 
-            render();
-
-            let title = "Match Drawn 🤝";
-            if (blueCount > redCount) title = "Victory! 🎉";
-            else if (redCount > blueCount) title = "Defeat 💀";
-
+            let title = blueCount > redCount ? "Victory! 🎉" : (redCount > blueCount ? "Defeat 💀" : "Match Drawn 🤝");
             document.getElementById('gameover-title').textContent = title;
             document.getElementById('gameover-desc').textContent = `Final Score: Blue (${blueCount}) - Red (${redCount})`;
             document.getElementById('gameover-modal').classList.remove('hidden');
         }
 
-        // Initialize state on load
         showModeMenu();
     </script>
 </body>
