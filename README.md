@@ -16,20 +16,18 @@ Play it live right now: **[https://sybernomad.github.io/ember-grid/](https://syb
 
 
 * **Two Game Modes:**
-* **Standard Mode:** Jump right into action with a random 5-card hand.
-* **Snake Draft Mode:** Take turns drafting your 5-card deck from a shared pool of 16 cards.
+  * **Standard Mode:** Jump right into action with a random 5-card hand.
+  * **Snake Draft Mode:** Take turns drafting your 5-card deck from a shared pool of 16 cards.
 
 
 * **AI Difficulty Tiers:** Choose between Easy, Normal, and Hard AI opponents with strategic placement logic.
 * **Interactive Tooltips & Live Log:** Hover over ability cards to read their effects, and track every play, aura, and capture in real-time via the action log feed.
 * **Quality-of-Life Perks:**
-* Select/Deselect cards in your hand freely.
-* Dark & Light theme toggles.
-* Audio mute/unmute switch.
-* Career stats tracker stored locally in your browser.
-* 100% Mobile & Desktop friendly layout.
-
-
+  * Select/Deselect cards in your hand freely.
+  * Dark & Light theme toggles.
+  * Audio mute/unmute switch.
+  * Career stats tracker stored locally in your browser.
+  * 100% Mobile & Desktop friendly layout.
 
 ---
 
