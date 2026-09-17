@@ -666,6 +666,12 @@
             line-height: 1.35;
         }
 
+        .card-tooltip.pinned {
+            max-width: min(280px, calc(100vw - 24px));
+            font-size: 0.82rem;
+            padding: 10px 12px;
+        }
+
         .modal {
             position: fixed;
             top: 0;
@@ -703,6 +709,7 @@
         #options-modal,
         #stats-modal,
         #draft-modal,
+        #deck-modal,
         #gameover-modal {
             z-index: 110;
         }
@@ -762,13 +769,27 @@
             opacity: 0.75;
         }
 
-        .build-stamp {
+        .menu-foot {
             margin: 14px 0 0;
+        }
+
+        .build-stamp {
+            margin: 0;
             font-family: var(--font-display);
             font-size: 0.62rem;
             font-weight: 600;
             letter-spacing: 0.18em;
             text-transform: uppercase;
+            opacity: 0.42;
+        }
+
+        .dev-note {
+            margin: 5px 0 0;
+            font-family: var(--font-ui);
+            font-size: 0.62rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            line-height: 1.35;
             opacity: 0.42;
         }
 
@@ -839,12 +860,14 @@
         }
 
         #main-menu-modal .modal-content,
-        #draft-modal .modal-content {
+        #draft-modal .modal-content,
+        #deck-modal .modal-content {
             display: flex;
             flex-direction: column;
         }
 
-        #draft-modal .modal-content {
+        #draft-modal .modal-content,
+        #deck-modal .modal-content {
             max-width: 560px;
         }
 
@@ -855,7 +878,8 @@
             }
 
             #main-menu-modal .modal-content,
-            #draft-modal .modal-content {
+            #draft-modal .modal-content,
+            #deck-modal .modal-content {
                 max-width: none;
                 width: 100%;
                 min-height: 100dvh;
@@ -866,12 +890,13 @@
 
             #main-menu-modal .modal-content {
                 justify-content: center;
+                padding-bottom: calc(72px + env(safe-area-inset-bottom));
             }
 
-            #main-menu-modal .build-stamp {
+            #main-menu-modal .menu-foot {
                 position: absolute;
-                left: 0;
-                right: 0;
+                left: 18px;
+                right: 18px;
                 bottom: calc(14px + env(safe-area-inset-bottom));
                 margin: 0;
             }
@@ -1030,6 +1055,41 @@
             width: auto;
             padding: 14px 10px;
             font-size: 0.82rem;
+        }
+
+        .menu-play-actions + .menu-play-actions {
+            margin-top: 8px;
+        }
+
+        .deck-picks {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+            margin: 0 0 12px;
+        }
+
+        .deck-chip {
+            background: var(--cell-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-family: var(--font-ui);
+            font-size: 0.72rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .deck-chip:hover {
+            border-color: var(--gold);
+        }
+
+        .deck-chip.selected {
+            border-color: var(--gold);
+            color: var(--accent);
+            background: rgba(232, 163, 23, 0.2);
+            box-shadow: 0 0 0 1px rgba(232, 195, 106, 0.45);
         }
 
         .btn.btn-dismiss {
@@ -1560,7 +1620,7 @@
 
             <div class="menu-section-title">Core Rules</div>
             <div class="rules-compact">
-                <strong>🃏 The deck:</strong> Cards are dealt or drafted from a shared deck - the Base Set, 45 cards. Every Ember card has an ability.<br>
+                <strong>🃏 The deck:</strong> Cards are dealt or drafted from a shared deck - the Base Set, 45 cards. Tribe Decks play one tribe of five. Every Ember card has an ability.<br>
                 <strong>⚔️ Capture:</strong> Play a card from your hand next to an enemy. If your touching stat is higher,
                 you capture it.<br>
                 <strong>🏆 Victory:</strong> Fill the 3x3. Most cards wins - the leftover card in each hand still counts.
@@ -1576,8 +1636,14 @@
                 <button class="btn" onclick="startGame('random')">Deal Hands</button>
                 <button class="btn btn-alt" onclick="startGame('draft')">Draft Hands</button>
             </div>
-            <!-- Bump BUILD on every PR. Still pre-1.0, so this stays Alpha until 1.0 ships. -->
-            <p class="build-stamp">0.12 Alpha</p>
+            <div class="menu-play-actions">
+                <button class="btn btn-alt" onclick="openDeckPicker()">Tribe Decks</button>
+            </div>
+            <div class="menu-foot">
+                <!-- Bump BUILD on every PR. Still pre-1.0, so this stays Alpha until 1.0 ships. -->
+                <p class="build-stamp">0.13 Alpha</p>
+                <p class="dev-note">Still in active development. Cards and rules may change.</p>
+            </div>
         </div>
     </div>
 
@@ -1592,6 +1658,9 @@
             <div class="expanded-rules-list">
                 <div class="rule-detail-item">
                     <strong>The deck:</strong> The Base Set is 45 cards in nine tribes. Every Ember card has an ability. Shuffle it and deal two hands of five, or spread sixteen and draft until each hand is five.
+                </div>
+                <div class="rule-detail-item">
+                    <strong>Tribe Decks:</strong> Each deck is one tribe of five. Pick yours and the opponent's, or leave either one random. Same tribe on both sides is a mirror match.
                 </div>
                 <div class="rule-detail-item">
                     <strong>Placement:</strong> On your turn, play one card from your hand onto an empty cell of the 3x3 grid.
@@ -1734,6 +1803,22 @@
         </div>
     </div>
 
+    <!-- Tribe Decks Modal -->
+    <div id="deck-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, cancelDeckPicker)">
+        <div class="embers" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button type="button" class="modal-close" onclick="cancelDeckPicker()" aria-label="Cancel deck pick">&times;</button>
+            <h2 class="modal-title">Tribe Decks</h2>
+            <p class="draft-order">Each deck is one tribe of five. Pick yours and the opponent's, or leave either one random.</p>
+            <div class="menu-section-title" style="margin-top: 8px;">Your deck</div>
+            <div id="deck-you-picks" class="deck-picks"></div>
+            <div class="menu-section-title">Opponent</div>
+            <div id="deck-ai-picks" class="deck-picks"></div>
+            <button class="btn" onclick="confirmDeckMatch()">Play</button>
+            <button class="btn btn-muted btn-dismiss" onclick="cancelDeckPicker()">Cancel</button>
+        </div>
+    </div>
+
     <!-- Game Over Modal -->
     <div id="gameover-modal" class="modal modal-ember hidden" onclick="onGameoverBackdrop(event)">
         <div class="embers" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
@@ -1803,21 +1888,62 @@
         // --- Clamped Mobile-Friendly Tooltip Engine ---
         const tooltipEl = document.getElementById('card-tooltip');
         let longPressTimer = null;
+        let tooltipPinned = false;
+        let tooltipAnchor = null;
+
+        function coarsePointer() {
+            return window.matchMedia('(pointer: coarse)').matches;
+        }
 
         function showTooltip(text, e) {
             if (!text) return;
+            tooltipPinned = false;
+            tooltipAnchor = null;
+            tooltipEl.classList.remove('pinned');
             tooltipEl.textContent = text;
             tooltipEl.style.display = 'block';
             updateTooltipPosition(e);
         }
 
+        function pinTooltip(text, el) {
+            if (!text || !el) return;
+            tooltipPinned = true;
+            tooltipAnchor = el;
+            tooltipEl.classList.add('pinned');
+            tooltipEl.textContent = text;
+            tooltipEl.style.display = 'block';
+            positionTooltipOnAnchor(el);
+        }
+
+        function positionTooltipOnAnchor(el) {
+            const r = el.getBoundingClientRect();
+            const pad = 10;
+            const gap = 8;
+            const tipW = tooltipEl.offsetWidth;
+            const tipH = tooltipEl.offsetHeight;
+            let left = r.left + (r.width - tipW) / 2;
+            left = Math.max(pad, Math.min(left, window.innerWidth - tipW - pad));
+            const above = r.top - tipH - gap;
+            const below = r.bottom + gap;
+            let top;
+            if (above >= pad) top = above;
+            else if (below + tipH <= window.innerHeight - pad) top = below;
+            else top = Math.max(pad, Math.min(above, window.innerHeight - tipH - pad));
+            tooltipEl.style.left = `${Math.round(left)}px`;
+            tooltipEl.style.top = `${Math.round(top)}px`;
+        }
+
         function updateTooltipPosition(e) {
+            if (tooltipPinned && tooltipAnchor) {
+                positionTooltipOnAnchor(tooltipAnchor);
+                return;
+            }
             const x = e.clientX || (e.touches && e.touches[0] && e.touches[0].clientX);
             const y = e.clientY || (e.touches && e.touches[0] && e.touches[0].clientY);
-            if (!x || !y) return;
+            if (x == null || y == null) return;
 
-            const tipWidth = 180;
-            const tipHeight = 60;
+            const tipWidth = tooltipEl.offsetWidth || 180;
+            const tipHeight = tooltipEl.offsetHeight || 60;
             let left = x + 14;
             let top = y - 35;
 
@@ -1827,6 +1953,9 @@
             if (top < 10) {
                 top = y + 20;
             }
+            if (top + tipHeight > window.innerHeight - 10) {
+                top = Math.max(10, window.innerHeight - tipHeight - 10);
+            }
 
             tooltipEl.style.left = left + 'px';
             tooltipEl.style.top = top + 'px';
@@ -1834,6 +1963,9 @@
 
         function hideTooltip() {
             tooltipEl.style.display = 'none';
+            tooltipEl.classList.remove('pinned');
+            tooltipPinned = false;
+            tooltipAnchor = null;
             if (longPressTimer) {
                 clearTimeout(longPressTimer);
                 longPressTimer = null;
@@ -1894,6 +2026,36 @@
             number: i + 1
         }));
 
+        const TRIBES = [
+            {id: 'aura_buff', name: 'Radiance', ability: 'Buff', icon: '⚡'},
+            {id: 'curse_adj', name: 'Grave', ability: 'Curse', icon: '💀'},
+            {id: 'blast', name: 'Beasts', ability: 'Blast', icon: '💥'},
+            {id: 'poison', name: 'Vermin', ability: 'Poison', icon: '🦠'},
+            {id: 'equalizer', name: 'Balance', ability: 'Equalizer', icon: '⚖️'},
+            {id: 'spite', name: 'Wrath', ability: 'Spite', icon: '💢'},
+            {id: 'silence', name: 'Hush', ability: 'Silence', icon: '🔇'},
+            {id: 'cinder', name: 'Ember', ability: 'Cinder', icon: '🔥'},
+            {id: 'chill', name: 'Frost', ability: 'Chill', icon: '❄️'}
+        ];
+
+        function isDeckPick(value) {
+            return value === 'random' || TRIBES.some(tribe => tribe.id === value);
+        }
+
+        function loadDeckPicks() {
+            try {
+                const raw = JSON.parse(localStorage.getItem('ember_grid_decks') || 'null');
+                if (raw && isDeckPick(raw.player) && isDeckPick(raw.ai)) {
+                    return {player: raw.player, ai: raw.ai};
+                }
+            } catch (e) {}
+            return {player: 'random', ai: 'random'};
+        }
+
+        function saveDeckPicks() {
+            localStorage.setItem('ember_grid_decks', JSON.stringify(deckPicks));
+        }
+
         let stats = JSON.parse(localStorage.getItem('ember_grid_stats')) || {played: 0, wins: 0, losses: 0, draws: 0, streak: 0, bestStreak: 0, flips: 0, cardPlays: {}};
 
         function saveStats() {localStorage.setItem('ember_grid_stats', JSON.stringify(stats));}
@@ -1921,6 +2083,8 @@
         if (!['easy', 'normal', 'hard'].includes(aiDifficulty)) aiDifficulty = 'normal';
         let showBothHands = localStorage.getItem('ember_grid_open_hands') === 'true';
         let currentRuleset = 'ember';
+        let deckPicks = loadDeckPicks();
+        let resolvedDecks = {player: null, ai: null};
         let lastBlueScore = null, lastRedScore = null;
         let lastMatch = null;
         let draftStarter = 'player', draftPickIndex = 0;
@@ -2062,7 +2226,7 @@
             resetFingerDrag();
             hideTurnBanner();
             document.body.classList.add('menu-open');
-            ['draft-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal'].forEach(id => document.getElementById(id).classList.add('hidden'));
+            ['draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal'].forEach(id => document.getElementById(id).classList.add('hidden'));
             document.getElementById('main-menu-modal').classList.remove('hidden');
             gameState = 'menu'; resetTable(); playerHand = []; aiHand = [];
             lastBlueScore = null; lastRedScore = null; lastMatch = null;
@@ -2137,25 +2301,85 @@
             }
         }
 
-        function addTooltipListeners(el, descText) {
-            el.addEventListener('mouseenter', (e) => showTooltip(descText, e));
-            el.addEventListener('mousemove', updateTooltipPosition);
-            el.addEventListener('mouseleave', hideTooltip);
+        function addTooltipListeners(el, descText, opts) {
+            const pinOnTap = !!(opts && opts.pinOnTap);
+            let pressStart = null;
+            let handledByPointer = false;
 
-            el.addEventListener('touchstart', (e) => {
+            el.addEventListener('mouseenter', (e) => {
+                if (coarsePointer() || tooltipPinned) return;
+                showTooltip(descText, e);
+            });
+            el.addEventListener('mousemove', (e) => {
+                if (coarsePointer() || tooltipPinned) return;
+                updateTooltipPosition(e);
+            });
+            el.addEventListener('mouseleave', () => {
+                if (!tooltipPinned) hideTooltip();
+            });
+
+            el.addEventListener('pointerdown', (e) => {
+                if (e.pointerType === 'mouse') return;
+                pressStart = {x: e.clientX, y: e.clientY};
+                handledByPointer = false;
+                if (longPressTimer) clearTimeout(longPressTimer);
                 longPressTimer = setTimeout(() => {
-                    showTooltip(descText, e);
+                    longPressTimer = null;
+                    handledByPointer = true;
+                    pinTooltip(descText, el);
                 }, 400);
-            }, {passive: true});
-            el.addEventListener('touchend', hideTooltip, {passive: true});
-            el.addEventListener('touchmove', hideTooltip, {passive: true});
+            });
+            el.addEventListener('pointermove', (e) => {
+                if (!pressStart || e.pointerType === 'mouse') return;
+                if (Math.hypot(e.clientX - pressStart.x, e.clientY - pressStart.y) <= 14) return;
+                pressStart = null;
+                if (longPressTimer) {
+                    clearTimeout(longPressTimer);
+                    longPressTimer = null;
+                }
+            });
+            el.addEventListener('pointerup', (e) => {
+                if (e.pointerType === 'mouse') return;
+                const start = pressStart;
+                pressStart = null;
+                if (longPressTimer) {
+                    clearTimeout(longPressTimer);
+                    longPressTimer = null;
+                }
+                if (!pinOnTap || !start) return;
+                if (Math.hypot(e.clientX - start.x, e.clientY - start.y) > 14) return;
+                if (handledByPointer) return;
+                handledByPointer = true;
+                if (tooltipPinned && tooltipAnchor === el) hideTooltip();
+                else pinTooltip(descText, el);
+            });
+            el.addEventListener('pointercancel', () => {
+                pressStart = null;
+                if (longPressTimer) {
+                    clearTimeout(longPressTimer);
+                    longPressTimer = null;
+                }
+            });
+            if (pinOnTap) {
+                el.addEventListener('click', (e) => {
+                    if (handledByPointer) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handledByPointer = false;
+                        return;
+                    }
+                    e.stopPropagation();
+                    if (tooltipPinned && tooltipAnchor === el) hideTooltip();
+                    else pinTooltip(descText, el);
+                });
+            }
         }
 
         function startGame(mode) {
             sfx.click(); hideTooltip(); activeMode = mode;
             clearAiPlayTimer();
             hideTurnBanner();
-            ['main-menu-modal', 'draft-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal'].forEach(id => document.getElementById(id).classList.add('hidden'));
+            ['main-menu-modal', 'draft-modal', 'deck-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal'].forEach(id => document.getElementById(id).classList.add('hidden'));
 
             if (mode === 'random') {
                 resetTable(); gameState = 'playing';
@@ -2176,7 +2400,94 @@
                 beginMatch();
             } else if (mode === 'draft') {
                 startDraftMode();
+            } else if (mode === 'decks') {
+                startDeckMatch();
             }
+        }
+
+        function tribeById(id) {
+            return TRIBES.find(tribe => tribe.id === id) || null;
+        }
+
+        function cardsForTribe(tribeId) {
+            return masterCards.filter(card => card.ability && card.ability.type === tribeId);
+        }
+
+        function resolveTribePick(pick) {
+            if (pick && pick !== 'random') return pick;
+            return TRIBES[Math.floor(Math.random() * TRIBES.length)].id;
+        }
+
+        function dealTribeHand(tribeId, owner) {
+            return [...cardsForTribe(tribeId)].sort(() => Math.random() - 0.5).map(card => cloneForOwner(card, owner));
+        }
+
+        function deckVsLine() {
+            const you = tribeById(resolvedDecks.player);
+            const them = tribeById(resolvedDecks.ai);
+            if (!you || !them) return '';
+            return `${you.icon} ${you.name} vs ${them.icon} ${them.name}`;
+        }
+
+        function withMatchup(msg) {
+            if (activeMode !== 'decks') return msg;
+            const vs = deckVsLine();
+            return vs ? `${vs}. ${msg}` : msg;
+        }
+
+        function paintDeckPicks(elId, who) {
+            const el = document.getElementById(elId);
+            if (!el) return;
+            el.innerHTML = '';
+            const choices = [{id: 'random', name: 'Random', icon: '🎲'}].concat(TRIBES);
+            choices.forEach(choice => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'deck-chip' + (deckPicks[who] === choice.id ? ' selected' : '');
+                btn.textContent = `${choice.icon} ${choice.name}`;
+                if (choice.ability) btn.title = `${choice.ability} - ${choice.name}`;
+                btn.addEventListener('click', () => {
+                    sfx.click();
+                    deckPicks[who] = choice.id;
+                    paintDeckPicks(elId, who);
+                });
+                el.appendChild(btn);
+            });
+        }
+
+        function openDeckPicker() {
+            sfx.click(); hideTooltip();
+            document.getElementById('main-menu-modal').classList.add('hidden');
+            paintDeckPicks('deck-you-picks', 'player');
+            paintDeckPicks('deck-ai-picks', 'ai');
+            document.getElementById('deck-modal').classList.remove('hidden');
+        }
+
+        function cancelDeckPicker() {
+            document.getElementById('deck-modal').classList.add('hidden');
+            showModeMenu();
+        }
+
+        function confirmDeckMatch() {
+            saveDeckPicks();
+            startGame('decks');
+        }
+
+        function startDeckMatch() {
+            resetTable();
+            gameState = 'playing';
+            resolvedDecks = {
+                player: resolveTribePick(deckPicks.player),
+                ai: resolveTribePick(deckPicks.ai)
+            };
+            playerHand = dealTribeHand(resolvedDecks.player, 'blue');
+            aiHand = dealTribeHand(resolvedDecks.ai, 'red');
+            if (playerHand.length !== 5 || aiHand.length !== 5) {
+                logAction('That tribe deck is missing cards.');
+                showModeMenu();
+                return;
+            }
+            beginMatch();
         }
 
         function startDraftMode() {
@@ -2335,11 +2646,14 @@
             snapshotMatch(turn);
             lastBlueScore = null; lastRedScore = null;
             if (rematch) {
-                statusMsg.textContent = turn === 'player' ? "Same hands. You go first." : "Same hands. AI plays first.";
+                statusMsg.textContent = withMatchup(turn === 'player' ? "Same hands. You go first." : "Same hands. AI plays first.");
                 logAction(turn === 'player' ? "Rematch - you go first." : "Rematch - AI goes first.");
             } else {
-                statusMsg.textContent = turn === 'player' ? "Hands dealt. Your turn - play a card." : "Hands dealt. AI plays first.";
-                logAction("Hands of five.");
+                const vs = activeMode === 'decks' ? deckVsLine() : '';
+                statusMsg.textContent = vs
+                    ? (turn === 'player' ? `${vs}. Your turn - play a card.` : `${vs}. AI plays first.`)
+                    : (turn === 'player' ? "Hands dealt. Your turn - play a card." : "Hands dealt. AI plays first.");
+                logAction(vs || "Hands of five.");
             }
             recalculateDynamicStats(); render();
             maybeStartCoach();
@@ -2375,7 +2689,7 @@
 
         function scheduleAiTurn(delay) {
             clearAiPlayTimer();
-            statusMsg.textContent = "AI is thinking...";
+            statusMsg.textContent = withMatchup("AI is thinking...");
             aiPlayTimer = setTimeout(() => {
                 aiPlayTimer = null;
                 aiTurn();
@@ -2784,7 +3098,10 @@
             if (card.fxType) card.fxType = null;
 
             if (card.ability && card.ability.desc) {
-                addTooltipListeners(div, silenced ? `${card.ability.desc} (silenced)` : card.ability.desc);
+                const tip = silenced
+                    ? `${card.name}: ${card.ability.desc} (silenced)`
+                    : `${card.name}: ${card.ability.desc}`;
+                addTooltipListeners(div, tip, {pinOnTap: source === 'board'});
             }
 
             if (source === 'player' && turn === 'player' && gameState === 'playing') {
@@ -2803,7 +3120,9 @@
                     if (swallowClick) {swallowClick = false; return;}
                     sfx.click(); hideTooltip();
                     selectedCard = (selectedCard === index) ? null : index;
-                    statusMsg.textContent = selectedCard !== null ? `Selected: ${card.name}. Play it on an empty cell.` : "Your turn - play a card from your hand.";
+                    statusMsg.textContent = selectedCard !== null
+                        ? withMatchup(`Selected: ${card.name}. Play it on an empty cell.`)
+                        : withMatchup("Your turn - play a card from your hand.");
                     if (selectedCard !== null) onCoachSelected();
                     render();
                 });
@@ -2855,6 +3174,7 @@
             hideTooltip();
             pointerDrag.active = true;
             selectedCard = pointerDrag.index;
+            hideTooltip();
             onCoachSelected();
             if (pointerDrag.sourceEl) pointerDrag.sourceEl.classList.add('dragging');
             const ghost = pointerDrag.sourceEl.cloneNode(true);
@@ -2983,7 +3303,7 @@
 
             if (turn === 'ai') scheduleAiTurn(700);
             else {
-                statusMsg.textContent = "Your turn - play a card from your hand.";
+                statusMsg.textContent = withMatchup("Your turn - play a card from your hand.");
                 resumeCoachAfterAi();
             }
         }
@@ -3152,20 +3472,30 @@
             e.preventDefault();
             swallowClick = false;
         }, true);
-        window.addEventListener('resize', () => requestAnimationFrame(updateCoach));
+        document.addEventListener('pointerdown', (e) => {
+            if (!tooltipPinned || !tooltipAnchor) return;
+            if (tooltipAnchor === e.target || tooltipAnchor.contains(e.target)) return;
+            hideTooltip();
+        }, true);
+        window.addEventListener('resize', () => {
+            requestAnimationFrame(updateCoach);
+            if (tooltipPinned && tooltipAnchor) positionTooltipOnAnchor(tooltipAnchor);
+        });
         window.addEventListener('pageshow', (e) => {
             if (!e.persisted) return;
             clearDraftTimer();
-            ['draft-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal'].forEach(id => document.getElementById(id).classList.add('hidden'));
+            ['draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal'].forEach(id => document.getElementById(id).classList.add('hidden'));
             if (gameState !== 'playing' && gameState !== 'gameover') showModeMenu();
         });
         window.addEventListener('keydown', (e) => {
             if (e.key !== 'Escape') return;
+            if (tooltipPinned) {hideTooltip(); return;}
             if (!document.getElementById('expanded-rules-modal').classList.contains('hidden')) {closeRulesModal(); return;}
             if (!document.getElementById('compendium-modal').classList.contains('hidden')) {closeCompendiumModal(); return;}
             if (!document.getElementById('options-modal').classList.contains('hidden')) {closeOptionsModal(); return;}
             if (!document.getElementById('stats-modal').classList.contains('hidden')) {closeStatsModal(); return;}
             if (!document.getElementById('draft-modal').classList.contains('hidden')) {cancelDraft(); return;}
+            if (!document.getElementById('deck-modal').classList.contains('hidden')) {cancelDeckPicker(); return;}
         });
     </script>
 </body>
