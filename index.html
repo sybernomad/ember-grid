@@ -446,6 +446,20 @@
             opacity: 0.4;
         }
 
+        .card-ghost {
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 220;
+            margin: 0;
+            pointer-events: none;
+            opacity: 0.95;
+            transform-origin: top left;
+            transition: none !important;
+            animation: none !important;
+            box-shadow: 0 18px 32px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255,255,255,0.22);
+        }
+
         @keyframes pulseFlip {
             0% { transform: scale(1) rotateY(0deg); }
             50% { transform: scale(1.1) rotateY(90deg); filter: brightness(1.45); }
@@ -1773,6 +1787,8 @@
         let draftStarter = 'player', draftPickIndex = 0;
         let draftTimer = null;
         let aiPlayTimer = null;
+        const pointerDrag = {pointerId: null, index: null, startX: 0, startY: 0, active: false, sourceEl: null, ghost: null};
+        let swallowClick = false;
         let coach = { active: false, step: null, cellIndex: 4, pendingCapture: false, taughtHand: false };
         const SNAKE_SEQ = (starter) => {
             const other = starter === 'player' ? 'ai' : 'player';
@@ -1875,6 +1891,7 @@
             sfx.click(); hideTooltip(); hideCoach();
             clearDraftTimer();
             clearAiPlayTimer();
+            resetFingerDrag();
             hideTurnBanner();
             document.body.classList.add('menu-open');
             ['draft-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal'].forEach(id => document.getElementById(id).classList.add('hidden'));
@@ -2579,9 +2596,12 @@
                     onCoachSelected();
                 });
                 div.addEventListener('dragend', () => div.classList.remove('dragging'));
+                div.addEventListener('pointerdown', (e) => onHandPointerDown(e, index, div));
 
                 div.addEventListener('click', (e) => {
-                    e.stopPropagation(); sfx.click(); hideTooltip();
+                    e.stopPropagation();
+                    if (swallowClick) {swallowClick = false; return;}
+                    sfx.click(); hideTooltip();
                     selectedCard = (selectedCard === index) ? null : index;
                     statusMsg.textContent = selectedCard !== null ? `Selected: ${card.name}. Play it on an empty cell.` : "Your turn - play a card from your hand.";
                     if (selectedCard !== null) onCoachSelected();
@@ -2592,12 +2612,141 @@
         }
 
         function handleCellClick(index) {
+            if (swallowClick) return;
             if (gameState !== 'playing' || turn !== 'player' || selectedCard === null || board[index] !== null) return;
             executeCardPlay(selectedCard, index);
         }
 
+        function isFingerPointer(e) {
+            return e.pointerType === 'touch' || e.pointerType === 'pen';
+        }
+
+        function cellIndexFromPoint(x, y) {
+            const hit = document.elementFromPoint(x, y);
+            if (!hit) return null;
+            const cell = hit.closest('#board-grid .cell');
+            if (!cell) return null;
+            const cells = document.getElementById('board-grid').children;
+            for (let i = 0; i < cells.length; i++) if (cells[i] === cell) return i;
+            return null;
+        }
+
+        function clearCellDragOver() {
+            document.querySelectorAll('#board-grid .cell.drag-over').forEach(el => el.classList.remove('drag-over'));
+        }
+
+        function highlightCellAt(x, y) {
+            clearCellDragOver();
+            const idx = cellIndexFromPoint(x, y);
+            if (idx === null || board[idx] !== null) return;
+            const cell = document.getElementById('board-grid').children[idx];
+            if (cell) cell.classList.add('drag-over');
+        }
+
+        function moveDragGhost(x, y) {
+            const g = pointerDrag.ghost;
+            if (!g) return;
+            const w = g.offsetWidth || 78;
+            const h = g.offsetHeight || 96;
+            g.style.transform = `translate(${Math.round(x - w / 2)}px, ${Math.round(y - h - 10)}px) scale(1.06)`;
+        }
+
+        function startFingerDrag(e) {
+            hideTooltip();
+            pointerDrag.active = true;
+            selectedCard = pointerDrag.index;
+            onCoachSelected();
+            if (pointerDrag.sourceEl) pointerDrag.sourceEl.classList.add('dragging');
+            const ghost = pointerDrag.sourceEl.cloneNode(true);
+            ghost.classList.add('card-ghost');
+            ghost.classList.remove('dragging', 'selected', 'coach-target');
+            ghost.removeAttribute('draggable');
+            const r = pointerDrag.sourceEl.getBoundingClientRect();
+            ghost.style.width = `${r.width}px`;
+            ghost.style.height = `${r.height}px`;
+            document.body.appendChild(ghost);
+            pointerDrag.ghost = ghost;
+            moveDragGhost(e.clientX, e.clientY);
+            try {pointerDrag.sourceEl.setPointerCapture(e.pointerId);} catch (err) {}
+            statusMsg.textContent = "Drop on an empty cell.";
+        }
+
+        function endFingerDrag() {
+            clearCellDragOver();
+            if (pointerDrag.ghost && pointerDrag.ghost.parentNode) pointerDrag.ghost.parentNode.removeChild(pointerDrag.ghost);
+            document.querySelectorAll('.card-ghost').forEach(el => el.remove());
+            if (pointerDrag.sourceEl) pointerDrag.sourceEl.classList.remove('dragging');
+            pointerDrag.active = false;
+            pointerDrag.ghost = null;
+        }
+
+        function resetFingerDrag() {
+            endFingerDrag();
+            pointerDrag.pointerId = null;
+            pointerDrag.index = null;
+            pointerDrag.sourceEl = null;
+        }
+
+        function onHandPointerDown(e, index, el) {
+            if (!isFingerPointer(e) || e.isPrimary === false) return;
+            if (gameState !== 'playing' || turn !== 'player') return;
+            pointerDrag.pointerId = e.pointerId;
+            pointerDrag.index = index;
+            pointerDrag.startX = e.clientX;
+            pointerDrag.startY = e.clientY;
+            pointerDrag.active = false;
+            pointerDrag.sourceEl = el;
+        }
+
+        function onFingerDragMove(e) {
+            if (pointerDrag.pointerId === null || e.pointerId !== pointerDrag.pointerId) return;
+            const dist = Math.hypot(e.clientX - pointerDrag.startX, e.clientY - pointerDrag.startY);
+            if (!pointerDrag.active) {
+                if (dist < 12) return;
+                if (e.cancelable) e.preventDefault();
+                startFingerDrag(e);
+            }
+            if (pointerDrag.active) {
+                if (e.cancelable) e.preventDefault();
+                moveDragGhost(e.clientX, e.clientY);
+                highlightCellAt(e.clientX, e.clientY);
+            }
+        }
+
+        function finishFingerDrag(clientX, clientY) {
+            if (pointerDrag.active) {
+                const cellIdx = cellIndexFromPoint(clientX, clientY);
+                const handIndex = pointerDrag.index;
+                swallowClick = true;
+                resetFingerDrag();
+                if (cellIdx !== null && board[cellIdx] === null && gameState === 'playing' && turn === 'player') {
+                    executeCardPlay(handIndex, cellIdx);
+                }
+                return;
+            }
+            if (pointerDrag.pointerId === null) return;
+            pointerDrag.pointerId = null;
+            pointerDrag.index = null;
+            pointerDrag.sourceEl = null;
+        }
+
+        function onFingerDragEnd(e) {
+            if (pointerDrag.pointerId === null || e.pointerId !== pointerDrag.pointerId) return;
+            if (e.cancelable) e.preventDefault();
+            finishFingerDrag(e.clientX, e.clientY);
+        }
+
+        function onFingerTouchEnd(e) {
+            if (!pointerDrag.active && pointerDrag.pointerId === null) return;
+            const t = e.changedTouches && e.changedTouches[0];
+            if (!t) {resetFingerDrag(); return;}
+            if (e.cancelable) e.preventDefault();
+            finishFingerDrag(t.clientX, t.clientY);
+        }
+
         function executeCardPlay(handIndex, boardIndex) {
             if (board[boardIndex] !== null || handIndex >= playerHand.length) return;
+            resetFingerDrag();
             sfx.place(); hideTooltip();
             const cardToPlay = playerHand.splice(handIndex, 1)[0];
             cardToPlay.stats = [...cardToPlay.baseStats];
@@ -2756,6 +2905,7 @@
         function endGame() {
             gameState = 'gameover'; hideTooltip(); hideCoach();
             clearAiPlayTimer();
+            resetFingerDrag();
             hideTurnBanner();
             let blueCount = ownedCount('blue'), redCount = ownedCount('red');
             stats.played++;
@@ -2772,6 +2922,17 @@
 
         refreshRulesetDesc();
         showModeMenu();
+        window.addEventListener('pointermove', onFingerDragMove, {passive: false});
+        window.addEventListener('pointerup', onFingerDragEnd);
+        window.addEventListener('pointercancel', onFingerDragEnd);
+        window.addEventListener('touchend', onFingerTouchEnd, {passive: false});
+        window.addEventListener('touchcancel', onFingerTouchEnd, {passive: false});
+        document.addEventListener('click', (e) => {
+            if (!swallowClick) return;
+            e.stopPropagation();
+            e.preventDefault();
+            swallowClick = false;
+        }, true);
         window.addEventListener('resize', () => requestAnimationFrame(updateCoach));
         window.addEventListener('pageshow', (e) => {
             if (!e.persisted) return;
