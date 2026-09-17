@@ -26,42 +26,39 @@
             --font-display: "Cinzel", Palatino, "Palatino Linotype", serif;
             --font-ui: "Outfit", "Segoe UI", system-ui, sans-serif;
 
-            --container-max: 420px;
-            --grid-w: 84px;
-            --grid-h: 104px;
-            --card-w: 78px;
-            --card-h: 96px;
-            --font-main: 0.75rem;
-            --font-name: 0.48rem;
-            --font-header: 1.1rem;
-            --hand-min: 104px;
+            --container-max: 100%;
+            --grid-w: 88px;
+            --grid-h: 108px;
+            --card-w: 80px;
+            --card-h: 100px;
+            --font-main: 0.82rem;
+            --font-name: 0.5rem;
+            --font-header: 1.18rem;
+            --hand-min: 108px;
+            --type-body: 0.95rem;
+            --ui-pad: 16px;
 
-            --draft-w: 64px;
-            --draft-h: 82px;
-            --draft-font-main: 0.6rem;
-            --draft-font-name: 0.38rem;
+            --draft-w: 78px;
+            --draft-h: 100px;
+            --draft-font-main: 0.72rem;
+            --draft-font-name: 0.44rem;
         }
 
-        @media (max-width: 420px) {
+        @media (max-width: 360px) {
             :root {
-                --grid-w: 78px;
-                --grid-h: 96px;
-                --card-w: 66px;
-                --card-h: 84px;
-                --font-main: 0.68rem;
-                --font-name: 0.42rem;
-                --font-header: 0.95rem;
-                --hand-min: 90px;
-
-                --draft-w: 56px;
-                --draft-h: 72px;
-                --draft-font-main: 0.52rem;
-                --draft-font-name: 0.34rem;
+                --grid-w: 80px;
+                --grid-h: 100px;
+                --card-w: 72px;
+                --card-h: 92px;
+                --draft-w: 70px;
+                --draft-h: 90px;
             }
+        }
 
-            .menu-btn {
-                width: 28px;
-                height: 28px;
+        @media (min-width: 520px) {
+            :root {
+                --container-max: 460px;
+                --ui-pad: 18px;
             }
         }
 
@@ -76,11 +73,11 @@
                 --font-name: 0.6rem;
                 --font-header: 1.4rem;
                 --hand-min: 130px;
-
-                --draft-w: 76px;
-                --draft-h: 96px;
-                --draft-font-main: 0.75rem;
-                --draft-font-name: 0.48rem;
+                --type-body: 1rem;
+                --draft-w: 84px;
+                --draft-h: 108px;
+                --draft-font-main: 0.78rem;
+                --draft-font-name: 0.5rem;
             }
         }
 
@@ -118,10 +115,11 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            height: 100dvh;
             width: 100vw;
             margin: 0;
             overflow: hidden;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
             transition: background-color 0.25s, color 0.25s;
         }
 
@@ -195,8 +193,8 @@
             width: 100%;
             max-width: var(--container-max);
             height: 100%;
-            padding: 8px 6px;
-            gap: 4px;
+            padding: 10px var(--ui-pad) 12px;
+            gap: 6px;
             position: relative;
             z-index: 1;
         }
@@ -302,7 +300,7 @@
 
         .turn-indicator {
             font-family: var(--font-display);
-            font-size: 0.68rem;
+            font-size: 0.78rem;
             font-weight: 800;
             color: var(--accent);
             text-transform: uppercase;
@@ -397,6 +395,31 @@
             border-color: var(--accent);
             background-color: rgba(232, 163, 23, 0.12);
             box-shadow: inset 0 0 16px rgba(232, 163, 23, 0.15), 0 0 12px rgba(232, 163, 23, 0.2);
+        }
+
+        .cell.cell-cinder {
+            border-color: #ff7a2a;
+            background:
+                linear-gradient(180deg, rgba(255, 120, 40, 0.22), rgba(160, 40, 0, 0.16)),
+                var(--cell-bg);
+            box-shadow: inset 0 0 14px rgba(255, 90, 20, 0.38), 0 0 16px rgba(255, 110, 30, 0.42);
+        }
+
+        .cell.cell-cinder::after {
+            border-color: rgba(255, 150, 60, 0.5);
+            border-style: solid;
+        }
+
+        .cell.cell-cinder:has(.card) {
+            border-color: #ff7a2a;
+            background: rgba(255, 90, 20, 0.14);
+            box-shadow: inset 0 0 12px rgba(255, 90, 20, 0.32), 0 0 14px rgba(255, 110, 30, 0.3);
+        }
+
+        [data-theme="light"] .cell.cell-cinder {
+            background:
+                linear-gradient(180deg, rgba(255, 140, 60, 0.32), rgba(255, 90, 20, 0.14)),
+                var(--cell-bg);
         }
 
         .card {
@@ -514,6 +537,11 @@
             box-shadow: 0 2px 6px rgba(0,0,0,0.45);
         }
 
+        .ability-badge.silenced {
+            opacity: 0.35;
+            filter: grayscale(1);
+        }
+
         .card-name {
             position: absolute;
             bottom: 3px;
@@ -600,18 +628,18 @@
 
         .status-msg {
             font-family: var(--font-display);
-            font-size: 0.78rem;
+            font-size: 0.88rem;
             font-weight: 700;
             letter-spacing: 0.04em;
             color: var(--accent);
-            min-height: 18px;
+            min-height: 20px;
             text-align: center;
         }
 
         .action-log {
-            font-size: 0.7rem;
-            opacity: 0.72;
-            height: 14px;
+            font-size: 0.78rem;
+            opacity: 0.78;
+            min-height: 16px;
             text-align: center;
             white-space: nowrap;
             overflow: hidden;
@@ -643,7 +671,7 @@
             top: 0;
             left: 0;
             width: 100vw;
-            height: 100vh;
+            height: 100dvh;
             background: rgba(8, 5, 3, 0.78);
             backdrop-filter: blur(8px);
             display: flex;
@@ -697,9 +725,9 @@
                 linear-gradient(180deg, rgba(255,255,255,0.04), transparent 28%),
                 var(--panel-bg);
             color: var(--text-color);
-            padding: 1.15rem 1.1rem 1rem;
+            padding: 1.25rem 1.15rem 1.1rem;
             border-radius: 16px;
-            max-width: 440px;
+            max-width: 480px;
             width: 100%;
             text-align: center;
             box-shadow:
@@ -707,7 +735,7 @@
                 0 24px 50px rgba(0, 0, 0, 0.55),
                 0 0 80px rgba(232, 163, 23, 0.08);
             border: 1px solid rgba(232, 195, 106, 0.38);
-            max-height: 94vh;
+            max-height: 94dvh;
             overflow-y: auto;
             position: relative;
             min-height: 0;
@@ -720,18 +748,28 @@
             letter-spacing: 0.12em;
             text-transform: uppercase;
             margin-top: 0;
-            margin-bottom: 6px;
-            font-size: 1.15rem;
+            margin-bottom: 8px;
+            font-size: 1.28rem;
             color: var(--accent);
         }
 
         .brand-tag {
-            margin: 0 0 14px;
+            margin: 0 0 16px;
             font-family: var(--font-display);
-            font-size: 0.68rem;
+            font-size: 0.78rem;
             letter-spacing: 0.16em;
             text-transform: uppercase;
-            opacity: 0.7;
+            opacity: 0.75;
+        }
+
+        .build-stamp {
+            margin: 14px 0 0;
+            font-family: var(--font-display);
+            font-size: 0.62rem;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            opacity: 0.42;
         }
 
         .btn {
@@ -781,15 +819,15 @@
 
         .menu-links {
             display: flex;
-            gap: 6px;
+            gap: 8px;
             margin: 0;
         }
 
         .menu-links .btn {
             flex: 1;
             width: auto;
-            padding: 8px 6px;
-            font-size: 0.58rem;
+            padding: 12px 8px;
+            font-size: 0.72rem;
             white-space: nowrap;
         }
 
@@ -800,6 +838,72 @@
             font-weight: 800;
         }
 
+        #main-menu-modal .modal-content,
+        #draft-modal .modal-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        #draft-modal .modal-content {
+            max-width: 560px;
+        }
+
+        @media (max-width: 640px) {
+            .modal {
+                padding: 0;
+                align-items: stretch;
+            }
+
+            #main-menu-modal .modal-content,
+            #draft-modal .modal-content {
+                max-width: none;
+                width: 100%;
+                min-height: 100dvh;
+                max-height: 100dvh;
+                border-radius: 0;
+                padding: calc(22px + env(safe-area-inset-top)) 18px calc(20px + env(safe-area-inset-bottom));
+            }
+
+            #main-menu-modal .modal-content {
+                justify-content: center;
+            }
+
+            #main-menu-modal .build-stamp {
+                position: absolute;
+                left: 0;
+                right: 0;
+                bottom: calc(14px + env(safe-area-inset-bottom));
+                margin: 0;
+            }
+
+            #draft-modal .draft-grid {
+                width: 100%;
+                gap: 10px;
+                grid-template-rows: repeat(4, minmax(0, 1fr));
+                align-content: stretch;
+                justify-items: center;
+            }
+
+            #draft-modal .draft-card {
+                width: auto;
+                height: 100%;
+                max-width: 100%;
+                aspect-ratio: 4 / 5;
+            }
+
+            .modal-content {
+                max-width: none;
+            }
+
+            #compendium-modal .modal-content,
+            #expanded-rules-modal .modal-content,
+            #options-modal .modal-content,
+            #stats-modal .modal-content {
+                max-height: 100dvh;
+                min-height: 0;
+            }
+        }
+
         .menu-rule {
             height: 1px;
             margin: 12px 4px;
@@ -808,24 +912,24 @@
 
         .menu-section-title {
             font-family: var(--font-display);
-            font-size: 0.68rem;
+            font-size: 0.78rem;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.14em;
             color: var(--accent);
-            margin: 10px 0 6px 0;
+            margin: 12px 0 8px 0;
             text-align: left;
         }
 
         .rules-compact {
             background: rgba(0, 0, 0, 0.22);
-            padding: 11px 12px;
-            border-radius: 10px;
-            font-size: 0.72rem;
-            line-height: 1.45;
+            padding: 14px 14px;
+            border-radius: 12px;
+            font-size: var(--type-body);
+            line-height: 1.5;
             border: 1px solid var(--border-color);
             text-align: left;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
         }
 
         .rules-compact strong {
@@ -916,7 +1020,7 @@
         .menu-play-actions {
             display: flex;
             flex-direction: row;
-            gap: 6px;
+            gap: 8px;
             width: 100%;
             margin: 0;
         }
@@ -924,8 +1028,8 @@
         .menu-play-actions .btn {
             flex: 1;
             width: auto;
-            padding: 10px 8px;
-            font-size: 0.68rem;
+            padding: 14px 10px;
+            font-size: 0.82rem;
         }
 
         .btn.btn-dismiss {
@@ -940,18 +1044,18 @@
         .expanded-rules-list {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 8px;
             text-align: left;
             margin: 6px 0 10px 0;
-            font-size: 0.75rem;
+            font-size: 0.88rem;
         }
 
         .rule-detail-item {
             background: rgba(0, 0, 0, 0.2);
-            padding: 7px 9px;
+            padding: 10px 12px;
             border-radius: 10px;
             border: 1px solid var(--border-color);
-            line-height: 1.35;
+            line-height: 1.45;
         }
 
         .rule-detail-item strong {
@@ -968,8 +1072,8 @@
         #compendium-modal .modal-content {
             display: flex;
             flex-direction: column;
-            height: min(94vh, 680px);
-            min-height: min(94vh, 680px);
+            height: min(94dvh, 720px);
+            min-height: min(94dvh, 720px);
             overflow: hidden;
         }
 
@@ -994,11 +1098,11 @@
         }
 
         .set-blurb {
-            font-size: 0.72rem;
-            line-height: 1.4;
+            font-size: 0.88rem;
+            line-height: 1.45;
             text-align: left;
-            opacity: 0.85;
-            margin: 0 0 8px;
+            opacity: 0.88;
+            margin: 0 0 10px;
         }
 
         .compendium-card .card-set-num {
@@ -1016,9 +1120,12 @@
         .draft-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 6px;
-            margin: 8px 0;
+            gap: 8px;
+            margin: 10px 0;
             justify-items: center;
+            align-content: center;
+            flex: 1 1 auto;
+            min-height: 0;
         }
 
         .compendium-card,
@@ -1040,10 +1147,10 @@
         }
 
         .compendium-card {
-            width: 72px;
-            height: 90px;
+            width: 88px;
+            height: 110px;
             padding: 3px;
-            font-size: 0.65rem;
+            font-size: 0.72rem;
         }
 
         .draft-card {
@@ -1073,7 +1180,7 @@
             padding: 0 3px;
             line-height: 1.1;
         }
-        .compendium-card .card-name { font-size: 0.42rem; }
+        .compendium-card .card-name { font-size: 0.48rem; }
         .draft-card .card-name { font-size: var(--draft-font-name); }
 
         .compendium-card .stat-top,
@@ -1233,6 +1340,10 @@
         .fx-ring.poison { box-shadow: 0 0 0 2px #4ade80, 0 0 16px #22c55e; }
         .fx-ring.buff { box-shadow: 0 0 0 2px var(--gold), 0 0 16px #e8a317; }
         .fx-ring.blast { box-shadow: 0 0 0 2px #fb923c, 0 0 18px #f97316; }
+        .fx-ring.spite { box-shadow: 0 0 0 2px #fb7185, 0 0 18px #e11d48; }
+        .fx-ring.silence { box-shadow: 0 0 0 2px #94a3b8, 0 0 16px #64748b; }
+        .fx-ring.chill { box-shadow: 0 0 0 2px #7dd3fc, 0 0 16px #38bdf8; }
+        .fx-ring.cinder { box-shadow: 0 0 0 2px #fb923c, 0 0 18px #ea580c; }
 
         @keyframes fxRing {
             0% { opacity: 0; transform: scale(0.92); }
@@ -1297,10 +1408,24 @@
         }
 
         .draft-order {
-            font-size: 0.68rem;
-            opacity: 0.75;
-            margin: 0 0 4px;
+            font-size: 0.88rem;
+            opacity: 0.82;
+            margin: 0 0 8px;
             font-weight: 650;
+            line-height: 1.4;
+        }
+
+        .draft-status,
+        .draft-rosters {
+            font-size: 0.92rem;
+            font-weight: 700;
+            margin: 0 0 6px;
+            opacity: 0.9;
+        }
+
+        .draft-rosters {
+            opacity: 0.78;
+            margin-top: 4px;
         }
 
         .modal-close {
@@ -1435,7 +1560,7 @@
 
             <div class="menu-section-title">Core Rules</div>
             <div class="rules-compact">
-                <strong>🃏 The deck:</strong> Cards are dealt or drafted from a shared deck - the Base Set, 32 cards.<br>
+                <strong>🃏 The deck:</strong> Cards are dealt or drafted from a shared deck - the Base Set, 45 cards. Every Ember card has an ability.<br>
                 <strong>⚔️ Capture:</strong> Play a card from your hand next to an enemy. If your touching stat is higher,
                 you capture it.<br>
                 <strong>🏆 Victory:</strong> Fill the 3x3. Most cards wins - the leftover card in each hand still counts.
@@ -1451,6 +1576,8 @@
                 <button class="btn" onclick="startGame('random')">Deal Hands</button>
                 <button class="btn btn-alt" onclick="startGame('draft')">Draft Hands</button>
             </div>
+            <!-- Bump BUILD on every PR. Still pre-1.0, so this stays Alpha until 1.0 ships. -->
+            <p class="build-stamp">0.12 Alpha</p>
         </div>
     </div>
 
@@ -1464,7 +1591,7 @@
             <div class="menu-section-title" style="margin-top: 0;">The table</div>
             <div class="expanded-rules-list">
                 <div class="rule-detail-item">
-                    <strong>The deck:</strong> Right now that is the Base Set - 32 cards. Shuffle it and deal two hands of five, or spread sixteen and draft until each hand is five.
+                    <strong>The deck:</strong> The Base Set is 45 cards in nine tribes. Every Ember card has an ability. Shuffle it and deal two hands of five, or spread sixteen and draft until each hand is five.
                 </div>
                 <div class="rule-detail-item">
                     <strong>Placement:</strong> On your turn, play one card from your hand onto an empty cell of the 3x3 grid.
@@ -1484,17 +1611,15 @@
 
             <div class="menu-section-title">Ember Mode Abilities</div>
             <div class="expanded-rules-list">
-                <div class="rule-detail-item"><strong>⚡ Buff:</strong> Boosts adjacent friendly cards by +1 stat.</div>
-                <div class="rule-detail-item"><strong>💀 Curse:</strong> Reduces the strongest enemy card's stats by 1
-                    on play.</div>
-                <div class="rule-detail-item"><strong>🔮 Bolt:</strong> Zaps a random enemy card on the board, reducing
-                    its stats by 2 on play.</div>
-                <div class="rule-detail-item"><strong>⚖️ Equalizer:</strong> Captures if touching stats match exactly.
-                    (Monk, Titan)</div>
-                <div class="rule-detail-item"><strong>💥 Blast:</strong> Temporarily grants +2 to all stats on the play
-                    turn.</div>
-                <div class="rule-detail-item"><strong>🦠 Poison:</strong> Reduces all adjacent cards' stats by 1 at turn
-                    end.</div>
+                <div class="rule-detail-item"><strong>⚡ Buff:</strong> Adjacent friendly cards get +1 to all stats. Radiance tribe - Celestial, Fairy, Unicorn, Paladin, Angel.</div>
+                <div class="rule-detail-item"><strong>💀 Curse:</strong> On play, the strongest enemy loses 1 from all stats. Grave tribe - Ghost, Vampire, Skull, Zombie, Bat.</div>
+                <div class="rule-detail-item"><strong>💥 Blast:</strong> +2 to all stats on the turn this card is played. Beasts tribe - Dragon, T-Rex, Lion, Shark, Eagle.</div>
+                <div class="rule-detail-item"><strong>🦠 Poison:</strong> Adjacent cards lose 1 from all stats at the end of every turn. Vermin tribe - Spider, Scorpion, Snake, Frog, Beetle.</div>
+                <div class="rule-detail-item"><strong>⚖️ Equalizer:</strong> Captures when touching stats match. Balance tribe - Monk, Titan, Robot, Owl, Alien.</div>
+                <div class="rule-detail-item"><strong>💢 Spite:</strong> When this card is captured, the captor loses 1 from all stats. Wrath tribe - Cyclops, Gorilla, Wrath, Vendetta, Oni.</div>
+                <div class="rule-detail-item"><strong>🔇 Silence:</strong> Adjacent enemies lose their abilities while this card sits there. Capture still works. Hush tribe - Dread, Hush, Wizard, Ninja, Cat.</div>
+                <div class="rule-detail-item"><strong>🔥 Cinder:</strong> On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange. Ember tribe - Scorch, Brand, Fox, Genie, Lizard.</div>
+                <div class="rule-detail-item"><strong>❄️ Chill:</strong> Adjacent enemies are -1 to all stats while this card sits there. Frost tribe - Frost, Wolf, Penguin, Polar, Seal.</div>
             </div>
 
             <button class="btn btn-alt btn-dismiss" onclick="closeRulesModal()">Close</button>
@@ -1507,17 +1632,18 @@
         <div class="modal-content" onclick="event.stopPropagation()">
             <button type="button" class="modal-close" onclick="closeCompendiumModal()" aria-label="Close compendium">&times;</button>
             <h2 class="modal-title">Compendium</h2>
-            <p class="set-blurb">The deck on the table. 32 cards - beasts, spirits, constructs, and myths. A bigger grid will deal a bigger hand. Expansions will add cards to this pile.</p>
+            <p class="set-blurb">The Base Set is 45 cards in nine tribes. Every Ember card has an ability. Classic Mode still strips abilities and plays as pure stats.</p>
             <select id="compendium-filter" class="settings-select compendium-filter" onchange="renderCompendium()">
                 <option value="all">All cards</option>
-                <option value="ability">Abilities only</option>
-                <option value="vanilla">No ability</option>
                 <option value="aura_buff">Buff</option>
                 <option value="curse_adj">Curse</option>
-                <option value="ranged_debuff">Bolt</option>
-                <option value="equalizer">Equalizer</option>
                 <option value="blast">Blast</option>
                 <option value="poison">Poison</option>
+                <option value="equalizer">Equalizer</option>
+                <option value="spite">Spite</option>
+                <option value="silence">Silence</option>
+                <option value="cinder">Cinder</option>
+                <option value="chill">Chill</option>
             </select>
             <div class="compendium-grid" id="compendium-grid"></div>
             <button class="btn btn-alt btn-dismiss" onclick="closeCompendiumModal()">Close</button>
@@ -1540,8 +1666,8 @@
                 </select>
             </div>
             <div id="ruleset-desc" class="ruleset-desc-box">
-                <strong>Ember Mode:</strong> Cards possess special tactical abilities (Buffs, Curses, Bolts, Blasts,
-                etc.) that interact across the grid.
+                <strong>Ember Mode:</strong> Every card has an ability. Nine tribes share the pile: Buff, Curse, Blast,
+                Poison, Equalizer, Spite, Silence, Cinder, and Chill.
             </div>
             <div class="settings-stack">
                 <span>AI Difficulty</span>
@@ -1601,10 +1727,9 @@
             <button type="button" class="modal-close" onclick="cancelDraft()" aria-label="Cancel draft">&times;</button>
             <h2 class="modal-title" style="color: var(--blue-card);">Draft Hands</h2>
             <p class="draft-order">Sixteen cards from the deck. Snake order: 1 pick, then pairs of 2, until each hand is five.</p>
-            <p id="draft-status" style="font-size: 0.75rem; opacity: 0.9; margin-bottom: 2px; font-weight: bold;"></p>
+            <p id="draft-status" class="draft-status"></p>
             <div class="draft-grid" id="draft-pool-grid"></div>
-            <div style="font-size: 0.7rem; opacity: 0.7; margin-top: 2px; font-weight: bold;" id="draft-rosters">Your
-                Hand: 0/5 | AI Hand: 0/5</div>
+            <div class="draft-rosters" id="draft-rosters">Your Hand: 0/5 | AI Hand: 0/5</div>
             <button class="btn btn-muted btn-dismiss" onclick="cancelDraft()">Cancel Draft</button>
         </div>
     </div>
@@ -1717,38 +1842,51 @@
 
         // --- Card Database ---
         const masterCards = [
-            {name: "Alien", emoji: "👽", baseStats: [7, 3, 5, 2], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'Boosts adjacent friendly cards by +1 stat.'}},
-            {name: "Ghost", emoji: "👻", baseStats: [3, 7, 2, 5], ability: {type: 'curse_adj', icon: '💀', desc: 'Permanently reduces all stats of the strongest enemy by 1 when played.'}},
-            {name: "Robot", emoji: "🤖", baseStats: [5, 5, 5, 2]},
-            {name: "Skull", emoji: "💀", baseStats: [8, 2, 4, 3]},
-            {name: "Cat", emoji: "🐱", baseStats: [2, 5, 7, 3]},
-            {name: "Dog", emoji: "🐶", baseStats: [4, 4, 3, 6]},
-            {name: "Fox", emoji: "🦊", baseStats: [6, 5, 2, 3]},
-            {name: "Lion", emoji: "🦁", baseStats: [7, 6, 4, 2]},
-            {name: "Dragon", emoji: "🐲", baseStats: [9, 7, 3, 2], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
-            {name: "Unicorn", emoji: "🦄", baseStats: [4, 4, 5, 7], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'Boosts adjacent friendly cards by +1 stat.'}},
-            {name: "Wizard", emoji: "🧙", baseStats: [5, 7, 3, 5], ability: {type: 'ranged_debuff', icon: '🔮', desc: 'Zaps a random enemy card on play, reducing all its stats by 2.'}},
-            {name: "Vampire", emoji: "🧛", baseStats: [7, 3, 3, 6], ability: {type: 'curse_adj', icon: '💀', desc: 'Permanently reduces all stats of the strongest enemy by 1 when played.'}},
-            {name: "Paladin", emoji: "🛡️", baseStats: [4, 8, 8, 2]},
-            {name: "Monk", emoji: "☯️", baseStats: [5, 5, 5, 5], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
-            {name: "Genie", emoji: "🧞", baseStats: [6, 5, 5, 5], ability: {type: 'ranged_debuff', icon: '🔮', desc: 'Zaps a random enemy card on play, reducing all its stats by 2.'}},
-            {name: "Monkey", emoji: "🐵", baseStats: [3, 5, 4, 6]},
-            {name: "Frog", emoji: "🐸", baseStats: [2, 4, 5, 3]},
-            {name: "Owl", emoji: "🦉", baseStats: [5, 3, 2, 6]},
-            {name: "Spider", emoji: "🕷️", baseStats: [4, 6, 5, 3], ability: {type: 'poison', icon: '🦠', desc: 'Reduces all adjacent cards\' stats by 1 at the end of every turn.'}},
-            {name: "Turtle", emoji: "🐢", baseStats: [3, 2, 8, 4]},
-            {name: "T-Rex", emoji: "🦖", baseStats: [8, 5, 6, 2], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
-            {name: "Shark", emoji: "🦈", baseStats: [7, 4, 5, 4]},
-            {name: "Eagle", emoji: "🦅", baseStats: [6, 6, 3, 3]},
-            {name: "Gorilla", emoji: "🦍", baseStats: [7, 5, 6, 3]},
-            {name: "Zombie", emoji: "🧟", baseStats: [4, 2, 6, 4]},
+            {name: "Celestial", emoji: "✨", baseStats: [3, 2, 10, 4], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'Boosts adjacent friendly cards by +1 stat.'}},
             {name: "Fairy", emoji: "🧚", baseStats: [3, 4, 3, 6], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'Boosts adjacent friendly cards by +1 stat.'}},
-            {name: "Cyclops", emoji: "👹", baseStats: [8, 4, 7, 1]},
-            {name: "Alien Boss", emoji: "👾", baseStats: [7, 6, 6, 3]},
-            {name: "Snake", emoji: "🐍", baseStats: [5, 4, 4, 5], ability: {type: 'poison', icon: '🦠', desc: 'Reduces all adjacent cards\' stats by 1 at the end of every turn.'}},
+            {name: "Unicorn", emoji: "🦄", baseStats: [4, 4, 5, 7], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'Boosts adjacent friendly cards by +1 stat.'}},
+            {name: "Paladin", emoji: "🛡️", baseStats: [4, 8, 8, 2], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'Boosts adjacent friendly cards by +1 stat.'}},
+            {name: "Angel", emoji: "👼", baseStats: [4, 5, 4, 6], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'Boosts adjacent friendly cards by +1 stat.'}},
+            {name: "Ghost", emoji: "👻", baseStats: [3, 7, 2, 5], ability: {type: 'curse_adj', icon: '💀', desc: 'Permanently reduces all stats of the strongest enemy by 1 when played.'}},
+            {name: "Vampire", emoji: "🧛", baseStats: [7, 3, 3, 6], ability: {type: 'curse_adj', icon: '💀', desc: 'Permanently reduces all stats of the strongest enemy by 1 when played.'}},
+            {name: "Skull", emoji: "💀", baseStats: [8, 2, 4, 3], ability: {type: 'curse_adj', icon: '💀', desc: 'Permanently reduces all stats of the strongest enemy by 1 when played.'}},
+            {name: "Zombie", emoji: "🧟", baseStats: [4, 2, 6, 4], ability: {type: 'curse_adj', icon: '💀', desc: 'Permanently reduces all stats of the strongest enemy by 1 when played.'}},
+            {name: "Bat", emoji: "🦇", baseStats: [5, 6, 3, 4], ability: {type: 'curse_adj', icon: '💀', desc: 'Permanently reduces all stats of the strongest enemy by 1 when played.'}},
+            {name: "Dragon", emoji: "🐲", baseStats: [9, 7, 3, 2], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
+            {name: "T-Rex", emoji: "🦖", baseStats: [8, 5, 6, 2], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
+            {name: "Lion", emoji: "🦁", baseStats: [7, 6, 4, 2], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
+            {name: "Shark", emoji: "🦈", baseStats: [7, 4, 5, 4], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
+            {name: "Eagle", emoji: "🦅", baseStats: [6, 6, 3, 3], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
+            {name: "Spider", emoji: "🕷️", baseStats: [4, 6, 5, 3], ability: {type: 'poison', icon: '🦠', desc: 'Reduces all adjacent cards\' stats by 1 at the end of every turn.'}},
             {name: "Scorpion", emoji: "🦂", baseStats: [6, 4, 7, 2], ability: {type: 'poison', icon: '🦠', desc: 'Reduces all adjacent cards\' stats by 1 at the end of every turn.'}},
+            {name: "Snake", emoji: "🐍", baseStats: [5, 4, 4, 5], ability: {type: 'poison', icon: '🦠', desc: 'Reduces all adjacent cards\' stats by 1 at the end of every turn.'}},
+            {name: "Frog", emoji: "🐸", baseStats: [2, 4, 5, 3], ability: {type: 'poison', icon: '🦠', desc: 'Reduces all adjacent cards\' stats by 1 at the end of every turn.'}},
+            {name: "Beetle", emoji: "🪲", baseStats: [4, 5, 5, 3], ability: {type: 'poison', icon: '🦠', desc: 'Reduces all adjacent cards\' stats by 1 at the end of every turn.'}},
+            {name: "Monk", emoji: "☯️", baseStats: [5, 5, 5, 5], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
             {name: "Titan", emoji: "🗿", baseStats: [10, 3, 4, 2], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
-            {name: "Celestial", emoji: "✨", baseStats: [3, 2, 10, 4], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'Boosts adjacent friendly cards by +1 stat.'}}
+            {name: "Robot", emoji: "🤖", baseStats: [5, 5, 5, 2], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
+            {name: "Owl", emoji: "🦉", baseStats: [5, 3, 2, 6], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
+            {name: "Alien", emoji: "👽", baseStats: [7, 3, 5, 2], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
+            {name: "Cyclops", emoji: "👹", baseStats: [8, 4, 7, 1], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
+            {name: "Gorilla", emoji: "🦍", baseStats: [7, 5, 6, 3], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
+            {name: "Wrath", emoji: "😡", baseStats: [6, 4, 3, 5], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
+            {name: "Vendetta", emoji: "😤", baseStats: [4, 6, 5, 3], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
+            {name: "Oni", emoji: "👺", baseStats: [6, 5, 4, 4], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
+            {name: "Dread", emoji: "😱", baseStats: [3, 6, 5, 4], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works.'}},
+            {name: "Hush", emoji: "🤫", baseStats: [5, 4, 5, 4], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works.'}},
+            {name: "Wizard", emoji: "🧙", baseStats: [5, 7, 3, 5], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works.'}},
+            {name: "Ninja", emoji: "🥷", baseStats: [5, 6, 3, 5], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works.'}},
+            {name: "Cat", emoji: "🐱", baseStats: [2, 5, 7, 3], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works.'}},
+            {name: "Scorch", emoji: "🥵", baseStats: [5, 5, 3, 5], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
+            {name: "Brand", emoji: "🫠", baseStats: [4, 5, 6, 3], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
+            {name: "Fox", emoji: "🦊", baseStats: [6, 5, 2, 3], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
+            {name: "Genie", emoji: "🧞", baseStats: [6, 5, 5, 5], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
+            {name: "Lizard", emoji: "🦎", baseStats: [5, 4, 5, 4], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
+            {name: "Frost", emoji: "🥶", baseStats: [4, 5, 4, 6], ability: {type: 'chill', icon: '❄️', desc: 'Adjacent enemies are -1 to all stats while this card sits there.'}},
+            {name: "Wolf", emoji: "🐺", baseStats: [6, 5, 4, 3], ability: {type: 'chill', icon: '❄️', desc: 'Adjacent enemies are -1 to all stats while this card sits there.'}},
+            {name: "Penguin", emoji: "🐧", baseStats: [3, 4, 6, 5], ability: {type: 'chill', icon: '❄️', desc: 'Adjacent enemies are -1 to all stats while this card sits there.'}},
+            {name: "Polar", emoji: "🐻‍❄️", baseStats: [6, 3, 7, 3], ability: {type: 'chill', icon: '❄️', desc: 'Adjacent enemies are -1 to all stats while this card sits there.'}},
+            {name: "Seal", emoji: "🦭", baseStats: [3, 5, 5, 5], ability: {type: 'chill', icon: '❄️', desc: 'Adjacent enemies are -1 to all stats while this card sits there.'}}
         ].map((card, i) => ({
             ...card,
             id: `BS-${String(i + 1).padStart(2, '0')}`,
@@ -1776,6 +1914,7 @@
         }
 
         let board = Array(9).fill(null);
+        let cellEffects = Array(9).fill(null);
         let playerHand = [], aiHand = [], draftPool = [], draftedPlayerCards = [], draftedAICards = [];
         let selectedCard = null, turn = 'player', gameState = 'menu', activeMode = 'random', draftTurn = 'player';
         let aiDifficulty = localStorage.getItem('ember_grid_ai') || 'normal';
@@ -1824,7 +1963,7 @@
             if (!descBox) return;
             descBox.innerHTML = currentRuleset === 'classic'
                 ? "<strong>Classic Mode:</strong> Pure, tactical gameplay. All special abilities and card badges are disabled."
-                : "<strong>Ember Mode:</strong> Cards possess special tactical abilities (Buffs, Curses, Bolts, Blasts, etc.) that interact across the grid.";
+                : "<strong>Ember Mode:</strong> Every card has an ability. Nine tribes share the pile: Buff, Curse, Blast, Poison, Equalizer, Spite, Silence, Cinder, and Chill.";
         }
         function updateRuleset(val) {
             sfx.click();
@@ -1834,6 +1973,35 @@
         function ownedCount(color) {
             const hand = color === 'blue' ? playerHand : aiHand;
             return hand.length + board.filter(c => c && c.owner === color).length;
+        }
+
+        function resetTable() {
+            board = Array(9).fill(null);
+            cellEffects = Array(9).fill(null);
+            selectedCard = null;
+        }
+
+        function neighborIndexes(index) {
+            const row = Math.floor(index / 3), col = index % 3;
+            const out = [];
+            if (row > 0) out.push(index - 3);
+            if (col < 2) out.push(index + 1);
+            if (row < 2) out.push(index + 3);
+            if (col > 0) out.push(index - 1);
+            return out;
+        }
+
+        function wouldBeSilenced(owner, index) {
+            return neighborIndexes(index).some(i => {
+                const n = board[i];
+                return n && n.owner !== owner && n.ability && n.ability.type === 'silence';
+            });
+        }
+
+        function isSilenced(index) {
+            const card = board[index];
+            if (!card) return false;
+            return wouldBeSilenced(card.owner, index);
         }
 
         function clearDraftTimer() {
@@ -1896,7 +2064,7 @@
             document.body.classList.add('menu-open');
             ['draft-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal'].forEach(id => document.getElementById(id).classList.add('hidden'));
             document.getElementById('main-menu-modal').classList.remove('hidden');
-            gameState = 'menu'; board = Array(9).fill(null); playerHand = []; aiHand = []; selectedCard = null;
+            gameState = 'menu'; resetTable(); playerHand = []; aiHand = [];
             lastBlueScore = null; lastRedScore = null; lastMatch = null;
             logAction("Shuffle up."); render();
         }
@@ -1941,11 +2109,7 @@
             grid.innerHTML = '';
             const filter = (document.getElementById('compendium-filter') || {}).value || 'all';
             masterCards.forEach(card => {
-                if (filter === 'ability' && !card.ability) return;
-                if (filter === 'vanilla' && card.ability) return;
-                if (filter !== 'all' && filter !== 'ability' && filter !== 'vanilla') {
-                    if (!card.ability || card.ability.type !== filter) return;
-                }
+                if (filter !== 'all' && (!card.ability || card.ability.type !== filter)) return;
                 const el = document.createElement('div');
                 el.className = 'compendium-card';
                 el.innerHTML = `
@@ -1994,7 +2158,7 @@
             ['main-menu-modal', 'draft-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal'].forEach(id => document.getElementById(id).classList.add('hidden'));
 
             if (mode === 'random') {
-                board = Array(9).fill(null); selectedCard = null; gameState = 'playing';
+                resetTable(); gameState = 'playing';
                 const shuffled = [...masterCards].sort(() => Math.random() - 0.5);
 
                 playerHand = shuffled.slice(0, 5).map(c => {
@@ -2060,7 +2224,7 @@
             sfx.click(); hideTooltip();
             document.getElementById('gameover-modal').classList.add('hidden');
             document.getElementById('main-menu-modal').classList.add('hidden');
-            board = Array(9).fill(null); selectedCard = null; gameState = 'playing';
+            resetTable(); gameState = 'playing';
             handsFromIds(lastMatch.playerIds, lastMatch.aiIds);
             beginMatch(lastMatch.first === 'player' ? 'ai' : 'player');
         }
@@ -2133,10 +2297,13 @@
             if (card.ability) {
                 switch (card.ability.type) {
                     case 'poison': baseScore += 5; break;
+                    case 'silence': baseScore += 5; break;
+                    case 'chill': baseScore += 5; break;
                     case 'blast': baseScore += 4; break;
                     case 'aura_buff': baseScore += 4; break;
                     case 'equalizer': baseScore += 4; break;
-                    case 'ranged_debuff':
+                    case 'spite':
+                    case 'cinder': baseScore += 4; break;
                     case 'curse_adj': baseScore += 3; break;
                     default: baseScore += 2;
                 }
@@ -2147,7 +2314,7 @@
         function checkDraftProgress() {
             if (draftedPlayerCards.length === 5 && draftedAICards.length === 5) {
                 document.getElementById('draft-modal').classList.add('hidden');
-                board = Array(9).fill(null); selectedCard = null; gameState = 'playing';
+                resetTable(); gameState = 'playing';
                 playerHand = draftedPlayerCards.map(c => ({...c, baseStats: [...c.baseStats], owner: 'blue'}));
                 aiHand = draftedAICards.map(c => ({...c, baseStats: [...c.baseStats], owner: 'red'}));
                 beginMatch();
@@ -2394,31 +2561,42 @@
         function recalculateDynamicStats() {
             board.forEach(c => {if (c) c.stats = [...c.baseStats];});
             board.forEach((card, index) => {
-                if (!card || !card.ability) return;
-                const row = Math.floor(index / 3), col = index % 3;
-
+                if (!card || !card.ability || isSilenced(index)) return;
                 if (card.ability.type === 'aura_buff') {
                     const val = card.ability.val;
-                    [{idx: index - 3, c: row > 0}, {idx: index + 1, c: col < 2}, {idx: index + 3, c: row < 2}, {idx: index - 1, c: col > 0}]
-                        .forEach(n => {
-                            if (n.c && board[n.idx] && board[n.idx].owner === card.owner) {
-                                board[n.idx].stats = board[n.idx].stats.map(s => Math.max(1, Math.min(10, s + val)));
-                            }
-                        });
+                    neighborIndexes(index).forEach(idx => {
+                        if (board[idx] && board[idx].owner === card.owner) {
+                            board[idx].stats = board[idx].stats.map(s => Math.max(1, Math.min(10, s + val)));
+                        }
+                    });
                 }
+            });
+            board.forEach((card, index) => {
+                if (!card || !card.ability || isSilenced(index)) return;
+                if (card.ability.type === 'chill') {
+                    neighborIndexes(index).forEach(idx => {
+                        if (board[idx] && board[idx].owner !== card.owner) {
+                            board[idx].stats = board[idx].stats.map(s => Math.max(1, Math.min(10, s - 1)));
+                        }
+                    });
+                }
+            });
+            board.forEach((card, index) => {
+                if (!card || cellEffects[index] !== 'cinder') return;
+                card.stats = card.stats.map(s => Math.max(1, Math.min(10, s - 1)));
             });
         }
 
-        function getEffectiveStat(card, statIndex, isPlacementTurn) {
+        function getEffectiveStat(card, statIndex, isPlacementTurn, silenced) {
             let val = (card.stats || card.baseStats)[statIndex];
-            if (isPlacementTurn && card.ability && card.ability.type === 'blast') {
+            if (isPlacementTurn && !silenced && card.ability && card.ability.type === 'blast') {
                 val += 2;
             }
             return val;
         }
 
-        function applyOnPlayAbilities(placedCard) {
-            if (!placedCard.ability) return null;
+        function applyOnPlayAbilities(placedCard, index) {
+            if (!placedCard.ability || isSilenced(index)) return null;
             const abType = placedCard.ability.type;
 
             if (abType === 'curse_adj') {
@@ -2430,56 +2608,76 @@
                     targetCard.fxType = 'curse';
                     return {text: `${placedCard.name} cursed ${targetCard.name} (-1)`, kind: 'curse'};
                 }
-            } else if (abType === 'ranged_debuff') {
-                let enemies = board.map((c, i) => (c && c.owner !== placedCard.owner) ? {c, i} : null).filter(Boolean);
-                if (enemies.length > 0) {
-                    let randomEnemy = enemies[Math.floor(Math.random() * enemies.length)].c;
-                    randomEnemy.baseStats = randomEnemy.baseStats.map(s => Math.max(1, s - 2));
-                    randomEnemy.fxType = 'bolt';
-                    return {text: `${placedCard.name} bolted ${randomEnemy.name} (-2)`, kind: 'bolt'};
-                }
             } else if (abType === 'blast') {
                 placedCard.fxType = 'blast';
                 return {text: `${placedCard.name} blasted (+2 this turn)`, kind: 'blast'};
+            } else if (abType === 'cinder') {
+                const fresh = board.map((c, i) => (c === null && cellEffects[i] !== 'cinder') ? i : null).filter(i => i !== null);
+                const empties = fresh.length ? fresh : board.map((c, i) => c === null ? i : null).filter(i => i !== null);
+                const target = empties.length ? empties[Math.floor(Math.random() * empties.length)] : index;
+                cellEffects[target] = 'cinder';
+                placedCard.fxType = 'cinder';
+                return {text: `${placedCard.name} cindered a cell`, kind: 'cinder'};
             }
             return null;
         }
 
         function tagAuraBuffs(placedCard, index) {
-            if (!placedCard.ability || placedCard.ability.type !== 'aura_buff') return null;
-            const row = Math.floor(index / 3), col = index % 3;
+            if (!placedCard.ability || placedCard.ability.type !== 'aura_buff' || isSilenced(index)) return null;
             const names = [];
-            [{idx: index - 3, c: row > 0}, {idx: index + 1, c: col < 2}, {idx: index + 3, c: row < 2}, {idx: index - 1, c: col > 0}]
-                .forEach(n => {
-                    if (n.c && board[n.idx] && board[n.idx].owner === placedCard.owner) {
-                        board[n.idx].fxType = 'buff';
-                        names.push(board[n.idx].name);
-                    }
-                });
+            neighborIndexes(index).forEach(idx => {
+                if (board[idx] && board[idx].owner === placedCard.owner) {
+                    board[idx].fxType = 'buff';
+                    names.push(board[idx].name);
+                }
+            });
             return names.length ? {text: `${placedCard.name} buffed ${listNames(names)} (+1)`, kind: 'buff'} : null;
+        }
+
+        function tagSilence(placedCard, index) {
+            if (!placedCard.ability || placedCard.ability.type !== 'silence') return null;
+            const names = [];
+            neighborIndexes(index).forEach(idx => {
+                const n = board[idx];
+                if (n && n.owner !== placedCard.owner && n.ability) {
+                    n.fxType = 'silence';
+                    names.push(n.name);
+                }
+            });
+            return names.length ? {text: `${placedCard.name} silenced ${listNames(names)}`, kind: 'silence'} : null;
+        }
+
+        function tagChill(placedCard, index) {
+            if (!placedCard.ability || placedCard.ability.type !== 'chill' || isSilenced(index)) return null;
+            const names = [];
+            neighborIndexes(index).forEach(idx => {
+                const n = board[idx];
+                if (n && n.owner !== placedCard.owner) {
+                    n.fxType = 'chill';
+                    names.push(n.name);
+                }
+            });
+            return names.length ? {text: `${placedCard.name} chilled ${listNames(names)} (-1)`, kind: 'chill'} : null;
         }
 
         function applyEndOfTurnEffects() {
             const parts = [];
             board.forEach((card, index) => {
-                if (card && card.ability && card.ability.type === 'poison') {
-                    const row = Math.floor(index / 3), col = index % 3;
+                if (card && card.ability && card.ability.type === 'poison' && !isSilenced(index)) {
                     const hit = [];
-                    [{idx: index - 3, c: row > 0}, {idx: index + 1, c: col < 2},
-                    {idx: index + 3, c: row < 2}, {idx: index - 1, c: col > 0}]
-                        .forEach(n => {
-                            if (n.c && board[n.idx]) {
-                                let reduced = false;
-                                board[n.idx].baseStats = board[n.idx].baseStats.map(s => {
-                                    if (s > 1) reduced = true;
-                                    return Math.max(1, s - 1);
-                                });
-                                if (reduced) {
-                                    board[n.idx].fxType = board[n.idx].fxType || 'poison';
-                                    hit.push(board[n.idx].name);
-                                }
+                    neighborIndexes(index).forEach(idx => {
+                        if (board[idx]) {
+                            let reduced = false;
+                            board[idx].baseStats = board[idx].baseStats.map(s => {
+                                if (s > 1) reduced = true;
+                                return Math.max(1, s - 1);
+                            });
+                            if (reduced) {
+                                board[idx].fxType = board[idx].fxType || 'poison';
+                                hit.push(board[idx].name);
                             }
-                        });
+                        }
+                    });
                     if (hit.length) parts.push(`${card.name} poisoned ${listNames(hit)} (-1)`);
                 }
             });
@@ -2487,10 +2685,7 @@
         }
 
         function hasEnemyNeighbor(placedIndex, placedCard) {
-            const row = Math.floor(placedIndex / 3), col = placedIndex % 3;
-            return [{idx: placedIndex - 3, c: row > 0}, {idx: placedIndex + 1, c: col < 2},
-                {idx: placedIndex + 3, c: row < 2}, {idx: placedIndex - 1, c: col > 0}]
-                .some(n => n.c && board[n.idx] && board[n.idx].owner !== placedCard.owner);
+            return neighborIndexes(placedIndex).some(idx => board[idx] && board[idx].owner !== placedCard.owner);
         }
 
         function render() {
@@ -2541,6 +2736,10 @@
             const gridEl = document.getElementById('board-grid'); gridEl.innerHTML = '';
             board.forEach((cell, index) => {
                 const cellEl = document.createElement('div'); cellEl.className = 'cell';
+                if (cellEffects[index] === 'cinder') {
+                    cellEl.classList.add('cell-cinder');
+                    cellEl.title = 'Cindered: -1 to all stats';
+                }
 
                 cellEl.addEventListener('dragover', (e) => {e.preventDefault(); cellEl.classList.add('drag-over');});
                 cellEl.addEventListener('dragleave', () => cellEl.classList.remove('drag-over'));
@@ -2570,8 +2769,9 @@
             if (coach.active && coach.step === 'hand' && source === 'player' && index === 0) div.classList.add('coach-target');
 
             const activeStats = card.stats || card.baseStats;
+            const silenced = source === 'board' && isSilenced(index);
             div.innerHTML = `
-                ${card.ability ? `<div class="ability-badge">${card.ability.icon}</div>` : ''}
+                ${card.ability ? `<div class="ability-badge${silenced ? ' silenced' : ''}">${card.ability.icon}</div>` : ''}
                 <div class="stat-top">${formatStat(activeStats[0])}</div>
                 <div class="stat-right">${formatStat(activeStats[1])}</div>
                 <div class="stat-bottom">${formatStat(activeStats[2])}</div>
@@ -2584,7 +2784,7 @@
             if (card.fxType) card.fxType = null;
 
             if (card.ability && card.ability.desc) {
-                addTooltipListeners(div, card.ability.desc);
+                addTooltipListeners(div, silenced ? `${card.ability.desc} (silenced)` : card.ability.desc);
             }
 
             if (source === 'player' && turn === 'player' && gameState === 'playing') {
@@ -2757,15 +2957,17 @@
 
         function processCardPlacement(index, placedCard) {
             const enemyNeighbor = hasEnemyNeighbor(index, placedCard);
-            const abilityFx = applyOnPlayAbilities(placedCard);
+            const abilityFx = applyOnPlayAbilities(placedCard, index);
             recalculateDynamicStats();
             const buffFx = tagAuraBuffs(placedCard, index);
+            const silenceFx = tagSilence(placedCard, index);
+            const chillFx = tagChill(placedCard, index);
             let capLog = checkCaptures(index, placedCard);
             recalculateDynamicStats();
             let psnFx = applyEndOfTurnEffects();
             recalculateDynamicStats();
 
-            const fxParts = [capLog, abilityFx && abilityFx.text, buffFx && buffFx.text, psnFx && psnFx.text].filter(Boolean);
+            const fxParts = [capLog, abilityFx && abilityFx.text, buffFx && buffFx.text, silenceFx && silenceFx.text, chillFx && chillFx.text, psnFx && psnFx.text].filter(Boolean);
             logAction(fxParts.length ? fxParts.join(' · ') : `${placedCard.name} played.`);
 
             const placedBy = placedCard.owner === 'blue' ? 'player' : 'ai';
@@ -2795,8 +2997,10 @@
 
             let blueFlipped = false, redFlipped = false;
             const captured = [];
+            const spiteHits = [];
+            const placedSilenced = isSilenced(placedIndex);
 
-            const flipEnemy = (neighborCard) => {
+            const flipEnemy = (neighborCard, silencedWhenHit) => {
                 if (neighborCard.owner === placedCard.owner) return;
                 const origOwner = neighborCard.owner;
                 neighborCard.owner = placedCard.owner;
@@ -2804,21 +3008,30 @@
                 captured.push(neighborCard.name);
                 if (placedCard.owner === 'blue') {blueFlipped = true; if (origOwner === 'red') stats.flips++;}
                 else redFlipped = true;
+                if (neighborCard.ability && neighborCard.ability.type === 'spite' && !silencedWhenHit) {
+                    placedCard.baseStats = placedCard.baseStats.map(s => Math.max(1, s - 1));
+                    placedCard.stats = (placedCard.stats || placedCard.baseStats).map(s => Math.max(1, s - 1));
+                    placedCard.fxType = 'spite';
+                    spiteHits.push(neighborCard.name);
+                }
             };
 
             neighbors.forEach(n => {
                 const neighborCard = board[n.idx];
                 if (neighborCard.owner === placedCard.owner) return;
-                const myVal = getEffectiveStat(placedCard, n.p, true);
-                const theirVal = getEffectiveStat(neighborCard, n.n, false);
+                const silencedWhenHit = isSilenced(n.idx);
+                const myVal = getEffectiveStat(placedCard, n.p, true, placedSilenced);
+                const theirVal = getEffectiveStat(neighborCard, n.n, false, silencedWhenHit);
                 let captures = myVal > theirVal;
-                if (!captures && placedCard.ability && placedCard.ability.type === 'equalizer' && myVal === theirVal) captures = true;
-                if (captures) flipEnemy(neighborCard);
+                if (!captures && !placedSilenced && placedCard.ability && placedCard.ability.type === 'equalizer' && myVal === theirVal) captures = true;
+                if (captures) flipEnemy(neighborCard, silencedWhenHit);
             });
 
             if (blueFlipped) sfx.flipBlue(); else if (redFlipped) sfx.flipRed();
-            if (!captured.length) return "";
-            return `${placedCard.name} captured ${listNames(captured)}`;
+            const parts = [];
+            if (captured.length) parts.push(`${placedCard.name} captured ${listNames(captured)}`);
+            if (spiteHits.length) parts.push(`Spite from ${listNames(spiteHits)} hit ${placedCard.name} (-1)`);
+            return parts.join(' · ');
         }
 
         function aiTurn() {
@@ -2836,6 +3049,7 @@
                 emptyCells.forEach(cellIdx => {
                     let score = 0, flipsCount = 0, exposureRisk = 0;
                     const row = Math.floor(cellIdx / 3), col = cellIdx % 3;
+                    const silencedHere = wouldBeSilenced('red', cellIdx);
                     const neighbors = [
                         {idx: cellIdx - 3, p: 0, n: 2, c: row > 0}, {idx: cellIdx + 1, p: 1, n: 3, c: col < 2},
                         {idx: cellIdx + 3, p: 2, n: 0, c: row < 2}, {idx: cellIdx - 1, p: 3, n: 1, c: col > 0}
@@ -2844,27 +3058,32 @@
                     neighbors.forEach(n => {
                         if (n.c && board[n.idx]) {
                             const neighborCard = board[n.idx];
-                            const myVal = getEffectiveStat(card, n.p, true);
-                            const theirVal = getEffectiveStat(neighborCard, n.n, false);
+                            const myVal = getEffectiveStat(card, n.p, true, silencedHere);
+                            const theirVal = getEffectiveStat(neighborCard, n.n, false, isSilenced(n.idx));
 
-                            if (neighborCard.ability && neighborCard.ability.type === 'poison') exposureRisk += 2;
-                            if (card.ability && card.ability.type === 'poison') {
+                            if (neighborCard.ability && neighborCard.ability.type === 'poison' && !isSilenced(n.idx)) exposureRisk += 2;
+                            if (card.ability && card.ability.type === 'poison' && !silencedHere) {
                                 if (neighborCard.owner === 'blue') score += 3;
                                 if (neighborCard.owner === 'red') exposureRisk += 3;
                             }
+                            if (card.ability && card.ability.type === 'silence' && neighborCard.owner === 'blue' && neighborCard.ability) score += 4;
+                            if (card.ability && card.ability.type === 'chill' && neighborCard.owner === 'blue') score += 3;
+                            if (neighborCard.ability && neighborCard.ability.type === 'spite' && neighborCard.owner === 'blue') exposureRisk += 2;
 
                             if (neighborCard.owner === 'blue') {
                                 let captures = myVal > theirVal;
-                                if (!captures && card.ability && card.ability.type === 'equalizer' && myVal === theirVal) captures = true;
+                                if (!captures && !silencedHere && card.ability && card.ability.type === 'equalizer' && myVal === theirVal) captures = true;
                                 if (captures) flipsCount++;
                             }
                         } else if (n.c && board[n.idx] === null && aiDifficulty === 'hard') {
-                            const exposedStatVal = getEffectiveStat(card, n.p, true);
+                            const exposedStatVal = getEffectiveStat(card, n.p, true, silencedHere);
                             if (exposedStatVal <= 4) exposureRisk += (5 - exposedStatVal);
                         }
                     });
 
                     score += flipsCount * 14 + card.baseStats.reduce((a, b) => a + b, 0) * 0.1 + (card.ability ? 3 : 0) - exposureRisk * 2.5;
+                    if (cellEffects[cellIdx] === 'cinder') score -= 5;
+                    if (silencedHere && card.ability && card.ability.type !== 'silence') score -= 3;
                     if (score > maxScore) {maxScore = score; bestMove = {cardIndex, cellIdx};}
                 });
             });
