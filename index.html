@@ -101,6 +101,7 @@
             box-sizing: border-box;
             user-select: none;
             -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -291,6 +292,10 @@
             pointer-events: none;
         }
 
+        .ui-icon use {
+            pointer-events: none;
+        }
+
         .menu-btn .ui-icon {
             width: 16px;
             height: 16px;
@@ -315,6 +320,11 @@
 
         [data-theme="light"] #theme-toggle-btn .icon-moon {
             display: block;
+        }
+
+        button:focus,
+        select:focus {
+            outline: none;
         }
 
         button:focus-visible,
@@ -793,8 +803,15 @@
 
         .modal.hidden,
         .modal.hidden .modal-content,
-        .modal.hidden .btn {
+        .modal.hidden .btn,
+        .modal.hidden .modal-close {
             pointer-events: none !important;
+        }
+
+        .modal.hidden .modal-close,
+        .modal.hidden .btn {
+            outline: none !important;
+            box-shadow: none;
         }
 
         .modal .modal-content {
@@ -1695,6 +1712,11 @@
             align-items: center;
             justify-content: center;
             padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            touch-action: manipulation;
+            appearance: none;
+            -webkit-appearance: none;
         }
 
         .modal-close .ui-icon {
@@ -1702,9 +1724,27 @@
             height: 18px;
         }
 
-        .modal-close:hover {
-            opacity: 1;
-            color: var(--accent);
+        .modal-close:focus,
+        .modal-close:focus-visible,
+        .modal-close:active {
+            outline: none;
+            background: transparent;
+            color: var(--text-color);
+            opacity: 0.65;
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            .modal-close:hover {
+                opacity: 1;
+                color: var(--accent);
+            }
+
+            .modal-close:focus-visible {
+                outline: 2px solid var(--accent);
+                outline-offset: 2px;
+                color: var(--accent);
+                opacity: 1;
+            }
         }
 
         .gameover-actions {
@@ -1780,7 +1820,6 @@
         <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></symbol>
         <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></symbol>
         <symbol id="i-house" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
-        <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
     </svg>
 
     <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
@@ -1874,7 +1913,7 @@
             </div>
             <div class="menu-foot">
                 <!-- Bump BUILD on every PR. Still pre-1.0, so this stays Alpha until 1.0 ships. -->
-                <p class="build-stamp">0.18 Alpha</p>
+                <p class="build-stamp">0.19 Alpha</p>
                 <p class="dev-note">Still in active development. Cards and rules may change.</p>
             </div>
         </div>
@@ -1884,7 +1923,7 @@
     <div id="expanded-rules-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, closeRulesModal)">
         <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="closeRulesModal()" aria-label="Close rules"><svg class="ui-icon" aria-hidden="true"><use href="#i-x"></use></svg></button>
+            <button type="button" class="modal-close" onclick="closeRulesModal()" aria-label="Close rules"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
             <h2 class="modal-title">Rules</h2>
 
             <div class="menu-section-title" style="margin-top: 0;">The table</div>
@@ -1933,7 +1972,7 @@
     <div id="compendium-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, closeCompendiumModal)">
         <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="closeCompendiumModal()" aria-label="Close compendium"><svg class="ui-icon" aria-hidden="true"><use href="#i-x"></use></svg></button>
+            <button type="button" class="modal-close" onclick="closeCompendiumModal()" aria-label="Close compendium"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
             <h2 class="modal-title">Compendium</h2>
             <p class="set-blurb">The Base Set is 50 cards in ten tribes. Every Ember card has an ability. Classic Mode still strips abilities and plays as pure stats.</p>
             <select id="compendium-filter" class="settings-select compendium-filter" onchange="renderCompendium()">
@@ -1958,7 +1997,7 @@
     <div id="options-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, closeOptionsModal)">
         <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="closeOptionsModal()" aria-label="Close options"><svg class="ui-icon" aria-hidden="true"><use href="#i-x"></use></svg></button>
+            <button type="button" class="modal-close" onclick="closeOptionsModal()" aria-label="Close options"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
             <h2 class="modal-title">Options</h2>
 
             <div class="menu-section-title" style="margin-top: 0;">Match</div>
@@ -1994,7 +2033,7 @@
     <div id="stats-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, closeStatsModal)">
         <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="closeStatsModal()" aria-label="Close stats"><svg class="ui-icon" aria-hidden="true"><use href="#i-x"></use></svg></button>
+            <button type="button" class="modal-close" onclick="closeStatsModal()" aria-label="Close stats"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
             <h2 class="modal-title">Career Stats</h2>
             <div class="stats-grid">
                 <div class="stat-card">
@@ -2028,7 +2067,7 @@
     <div id="draft-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, cancelDraft)">
         <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="cancelDraft()" aria-label="Cancel draft"><svg class="ui-icon" aria-hidden="true"><use href="#i-x"></use></svg></button>
+            <button type="button" class="modal-close" onclick="cancelDraft()" aria-label="Cancel draft"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
             <h2 class="modal-title" style="color: var(--blue-card);">Draft Hands</h2>
             <p class="draft-order">Sixteen cards from the deck. Snake order: 1 pick, then pairs of 2, until each hand is five.</p>
             <p id="draft-status" class="draft-status"></p>
@@ -2042,7 +2081,7 @@
     <div id="deck-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, cancelDeckPicker)">
         <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="cancelDeckPicker()" aria-label="Cancel deck pick"><svg class="ui-icon" aria-hidden="true"><use href="#i-x"></use></svg></button>
+            <button type="button" class="modal-close" onclick="cancelDeckPicker()" aria-label="Cancel deck pick"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
             <h2 class="modal-title">Tribe Decks</h2>
             <p class="draft-order">Each deck is one tribe of five. Pick yours and the opponent's, or leave either one random.</p>
             <div class="menu-section-title" style="margin-top: 8px;">Your deck</div>
@@ -2058,7 +2097,7 @@
     <div id="gameover-modal" class="modal modal-ember hidden" onclick="onGameoverBackdrop(event)">
         <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="viewFinalBoard()" aria-label="View board"><svg class="ui-icon" aria-hidden="true"><use href="#i-x"></use></svg></button>
+            <button type="button" class="modal-close" onclick="viewFinalBoard()" aria-label="View board"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
             <h2 id="gameover-title" class="modal-title">Match Over</h2>
             <p id="gameover-desc"></p>
             <div class="gameover-actions">
@@ -2484,24 +2523,43 @@
             action();
         }
 
+        function releaseUiFocus(root) {
+            const active = document.activeElement;
+            if (!active || typeof active.blur !== 'function') return;
+            if (active === document.body || active === document.documentElement) return;
+            if (root && !root.contains(active)) return;
+            active.blur();
+        }
+
+        function hideModal(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            releaseUiFocus(el);
+            el.classList.add('hidden');
+        }
+
+        function hideModals(ids) {
+            ids.forEach(hideModal);
+        }
+
         function closeRulesModal() {
             sfx.click(); hideTooltip();
-            document.getElementById('expanded-rules-modal').classList.add('hidden');
+            hideModal('expanded-rules-modal');
         }
 
         function closeCompendiumModal() {
             sfx.click(); hideTooltip();
-            document.getElementById('compendium-modal').classList.add('hidden');
+            hideModal('compendium-modal');
         }
 
         function closeOptionsModal() {
             sfx.click(); hideTooltip();
-            document.getElementById('options-modal').classList.add('hidden');
+            hideModal('options-modal');
         }
 
         function closeStatsModal() {
             sfx.click(); hideTooltip();
-            document.getElementById('stats-modal').classList.add('hidden');
+            hideModal('stats-modal');
         }
 
         function cancelDraft() {
@@ -2524,7 +2582,7 @@
             resetFingerDrag();
             hideTurnBanner();
             document.body.classList.add('menu-open');
-            ['draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal'].forEach(id => document.getElementById(id).classList.add('hidden'));
+            hideModals(['draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal']);
             document.getElementById('main-menu-modal').classList.remove('hidden');
             gameState = 'menu'; resetTable(); playerHand = []; aiHand = [];
             lastBlueScore = null; lastRedScore = null; lastMatch = null;
@@ -2676,7 +2734,7 @@
             sfx.click(); hideTooltip(); activeMode = mode;
             clearAiPlayTimer();
             hideTurnBanner();
-            ['main-menu-modal', 'draft-modal', 'deck-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal'].forEach(id => document.getElementById(id).classList.add('hidden'));
+            hideModals(['main-menu-modal', 'draft-modal', 'deck-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal']);
 
             if (mode === 'random') {
                 resetTable(); gameState = 'playing';
@@ -2754,14 +2812,14 @@
 
         function openDeckPicker() {
             sfx.click(); hideTooltip();
-            document.getElementById('main-menu-modal').classList.add('hidden');
+            hideModal('main-menu-modal');
             paintDeckPicks('deck-you-picks', 'player');
             paintDeckPicks('deck-ai-picks', 'ai');
             document.getElementById('deck-modal').classList.remove('hidden');
         }
 
         function cancelDeckPicker() {
-            document.getElementById('deck-modal').classList.add('hidden');
+            hideModal('deck-modal');
             showModeMenu();
         }
 
@@ -2836,8 +2894,8 @@
             if (!lastMatch) {startGame(activeMode); return;}
             unlockGameoverClicks();
             sfx.click(); hideTooltip();
-            document.getElementById('gameover-modal').classList.add('hidden');
-            document.getElementById('main-menu-modal').classList.add('hidden');
+            hideModal('gameover-modal');
+            hideModal('main-menu-modal');
             resetTable(); gameState = 'playing';
             handsFromIds(lastMatch.playerIds, lastMatch.aiIds);
             beginMatch(lastMatch.first === 'player' ? 'ai' : 'player');
@@ -2847,7 +2905,7 @@
             if (gameoverClickLock) return;
             unlockGameoverClicks();
             sfx.click();
-            document.getElementById('gameover-modal').classList.add('hidden');
+            hideModal('gameover-modal');
             statusMsg.textContent = "Final board. Replay the same hands, or deal new ones.";
         }
 
@@ -2951,7 +3009,7 @@
 
         function checkDraftProgress() {
             if (draftedPlayerCards.length === 5 && draftedAICards.length === 5) {
-                document.getElementById('draft-modal').classList.add('hidden');
+                hideModal('draft-modal');
                 resetTable(); gameState = 'playing';
                 playerHand = draftedPlayerCards.map(c => ({...c, baseStats: [...c.baseStats], owner: 'blue'}));
                 aiHand = draftedAICards.map(c => ({...c, baseStats: [...c.baseStats], owner: 'red'}));
@@ -3819,7 +3877,7 @@
         window.addEventListener('pageshow', (e) => {
             if (!e.persisted) return;
             clearDraftTimer();
-            ['draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal'].forEach(id => document.getElementById(id).classList.add('hidden'));
+            hideModals(['draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal']);
             if (gameState !== 'playing' && gameState !== 'gameover') showModeMenu();
         });
         window.addEventListener('keydown', (e) => {
