@@ -1619,7 +1619,7 @@
             transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
         }
 
-        .draft-card:hover:not(.drafted) {
+        .draft-card:hover:not(.drafted):not(.taken) {
             transform: scale(1.06);
             border-color: var(--accent);
             box-shadow: 0 0 16px rgba(232, 163, 23, 0.3);
@@ -2369,44 +2369,82 @@
         .draft-seat .seat-picks {
             opacity: 0.7;
             font-size: 0.62rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .draft-card.taken {
-            opacity: 0.72;
+            opacity: 1;
             cursor: default;
-            filter: none;
+            pointer-events: none;
+            filter: grayscale(0.75) brightness(0.42);
+            transform: none;
         }
 
-        .draft-card.taken-you { box-shadow: inset 0 0 0 2px var(--blue-card); }
-        .draft-card.taken-ash { box-shadow: inset 0 0 0 2px #f59e0b; }
-        .draft-card.taken-vesper { box-shadow: inset 0 0 0 2px #a78bfa; }
-        .draft-card.taken-rook { box-shadow: inset 0 0 0 2px #94a3b8; }
+        .draft-card.taken::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(8, 5, 3, 0.38);
+            pointer-events: none;
+            z-index: 4;
+        }
+
+        .draft-card.taken-you { box-shadow: inset 0 0 0 3px var(--blue-card); }
+        .draft-card.taken-ash { box-shadow: inset 0 0 0 3px #f59e0b; }
+        .draft-card.taken-vesper { box-shadow: inset 0 0 0 3px #a78bfa; }
+        .draft-card.taken-rook { box-shadow: inset 0 0 0 3px #94a3b8; }
 
         #draft-modal.league-draft .modal-content {
             max-width: 620px;
+            height: min(86dvh, calc(100dvh - 24px));
+            max-height: min(86dvh, calc(100dvh - 24px));
+            overflow: hidden;
         }
 
         #draft-modal.league-draft .draft-grid {
             flex: 1 1 auto;
             min-height: 0;
+            overflow-x: hidden;
             overflow-y: auto;
+            scrollbar-gutter: stable;
             grid-template-columns: repeat(5, 1fr);
             gap: 6px;
+            align-content: start;
+            margin: 8px 0 6px;
         }
 
         #draft-modal.league-draft .draft-card {
-            width: min(var(--draft-w), 100%);
+            width: 100%;
+            max-width: none;
             height: auto;
             aspect-ratio: 4 / 5;
+        }
+
+        #draft-modal.league-draft .draft-card:hover {
+            transform: none;
         }
 
         #draft-modal.league-draft .draft-status {
             position: relative;
             z-index: 2;
-            min-height: 1.35em;
+            min-height: 2.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #draft-modal.league-draft .draft-order {
+            min-height: 2.6em;
+            flex: 0 0 auto;
         }
 
         #draft-modal.league-draft .draft-seats {
+            flex: 0 0 auto;
+        }
+
+        #draft-modal.league-draft .btn-dismiss {
             flex: 0 0 auto;
         }
 
@@ -2419,10 +2457,19 @@
 
             #draft-modal.league-draft .modal-content {
                 max-width: min(620px, 100%);
+                height: min(86dvh, calc(100dvh - 24px));
+                max-height: min(86dvh, calc(100dvh - 24px));
             }
 
             #draft-modal.league-draft .draft-grid {
                 grid-template-columns: repeat(4, 1fr);
+            }
+
+            #draft-modal.league-draft .draft-card {
+                width: 100%;
+                max-width: none;
+                height: auto;
+                aspect-ratio: 4 / 5;
             }
         }
     </style>
@@ -3212,6 +3259,15 @@
                 };
             }).filter(Boolean);
             if (raw.phase !== 'draft' && fixtures.length !== 6) return null;
+            if (raw.phase === 'season') {
+                const userWeeks = new Set(
+                    fixtures.filter(fx => fx.result && (fx.home === 'you' || fx.away === 'you')).map(fx => fx.week)
+                );
+                fixtures.forEach(fx => {
+                    if (fx.home === 'you' || fx.away === 'you') return;
+                    if (fx.result && !userWeeks.has(fx.week)) fx.result = null;
+                });
+            }
             return {
                 version: 1,
                 phase: raw.phase,
@@ -3618,14 +3674,26 @@
             return fx;
         }
 
+        function userWeeksPlayed() {
+            if (!league) return new Set();
+            return new Set(
+                league.fixtures.filter(fx => fx.result && (fx.home === 'you' || fx.away === 'you')).map(fx => fx.week)
+            );
+        }
+
         function resolvePendingAutoMatches() {
             if (!league || league.phase === 'draft') return;
-            const weekCap = currentLeagueWeek();
+            const playedWeeks = userWeeksPlayed();
+            const seasonOver = !nextUserFixture();
             league.fixtures.forEach(fx => {
-                if (fx.result) return;
                 const involvesYou = fx.home === 'you' || fx.away === 'you';
                 if (involvesYou) return;
-                if (fx.week <= weekCap) playAutoFixture(fx);
+                if (fx.result && !playedWeeks.has(fx.week) && !seasonOver) {
+                    fx.result = null;
+                    return;
+                }
+                if (fx.result) return;
+                if (playedWeeks.has(fx.week) || seasonOver) playAutoFixture(fx);
             });
             maybeCompleteLeague();
             saveLeague();
@@ -4731,15 +4799,38 @@
             gameoverUnlockTimer = null;
         }
 
+        function draftCardClass(card) {
+            if (!card.draftedBy) return 'draft-card';
+            return leagueDrafting ? `draft-card taken taken-${card.draftedBy}` : 'draft-card drafted';
+        }
+
+        function bindDraftGridClicks() {
+            const grid = document.getElementById('draft-pool-grid');
+            if (!grid || grid.dataset.bound) return;
+            grid.dataset.bound = '1';
+            grid.addEventListener('click', (e) => {
+                const el = e.target.closest('.draft-card');
+                if (!el || !grid.contains(el)) return;
+                if (el.classList.contains('taken') || el.classList.contains('drafted')) return;
+                const idx = [...grid.children].indexOf(el);
+                const card = draftPool[idx];
+                if (!card || card.draftedBy) return;
+                const humanTurn = leagueDrafting ? draftTurn === 'you' : draftTurn === 'player';
+                if (!humanTurn) return;
+                sfx.click(); hideTooltip();
+                playerDraftPick(card);
+            });
+        }
+
         function renderDraftPool() {
-            const grid = document.getElementById('draft-pool-grid'); grid.innerHTML = '';
-            const humanTurn = leagueDrafting ? draftTurn === 'you' : draftTurn === 'player';
-            draftPool.forEach(card => {
-                const el = document.createElement('div');
-                const taken = card.draftedBy
-                    ? (leagueDrafting ? `taken taken-${card.draftedBy}` : 'drafted')
-                    : '';
-                el.className = `draft-card ${taken}`.trim();
+            const grid = document.getElementById('draft-pool-grid');
+            bindDraftGridClicks();
+            const reuse = grid.childElementCount === draftPool.length;
+            if (!reuse) grid.innerHTML = '';
+            draftPool.forEach((card, i) => {
+                let el = reuse ? grid.children[i] : document.createElement('div');
+                el.className = draftCardClass(card);
+                if (reuse) return;
                 el.innerHTML = `
                     ${card.ability ? `<div class="ability-badge">${card.ability.icon}</div>` : ''}
                     <div class="stat-top">${formatStat(card.baseStats[0])}</div>
@@ -4749,13 +4840,8 @@
                     <div class="card-emoji">${card.emoji}</div>
                     ${nameplateHTML(card)}
                 `;
-
                 addTooltipListeners(el, abilityTip(card));
                 paintCardFaces(el);
-
-                if (!card.draftedBy && humanTurn) {
-                    el.addEventListener('click', () => {sfx.click(); hideTooltip(); playerDraftPick(card);});
-                }
                 grid.appendChild(el);
             });
             if (leagueDrafting) {
