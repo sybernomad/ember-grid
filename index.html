@@ -7,9 +7,7 @@
     <title>Ember Grid</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Outfit:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             color-scheme: dark;
@@ -127,9 +125,7 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        input,
-        textarea,
-        code {
+        input, textarea, code {
             user-select: text;
             -webkit-user-select: text;
         }
@@ -182,178 +178,49 @@
             --drift: 10px;
         }
 
-        .embers span:nth-child(odd) {
-            --drift: 14px;
-        }
-
-        .embers span:nth-child(even) {
-            --drift: -12px;
-        }
-
-        .embers span:nth-child(1) {
-            left: 8%;
-            animation-duration: 8s;
-            animation-delay: 0s;
-        }
-
-        .embers span:nth-child(2) {
-            left: 22%;
-            animation-duration: 11s;
-            animation-delay: 1.4s;
-            width: 2px;
-            height: 2px;
-        }
-
-        .embers span:nth-child(3) {
-            left: 37%;
-            animation-duration: 7.5s;
-            animation-delay: 2.1s;
-        }
-
-        .embers span:nth-child(4) {
-            left: 51%;
-            animation-duration: 10s;
-            animation-delay: 0.6s;
-            width: 4px;
-            height: 4px;
-        }
-
-        .embers span:nth-child(5) {
-            left: 64%;
-            animation-duration: 8.5s;
-            animation-delay: 3s;
-        }
-
-        .embers span:nth-child(6) {
-            left: 76%;
-            animation-duration: 12s;
-            animation-delay: 1s;
-            width: 2px;
-            height: 2px;
-        }
-
-        .embers span:nth-child(7) {
-            left: 88%;
-            animation-duration: 9.5s;
-            animation-delay: 2.6s;
-        }
-
-        .embers span:nth-child(8) {
-            left: 95%;
-            animation-duration: 7s;
-            animation-delay: 4s;
-        }
-
-        .embers span:nth-child(9) {
-            left: 14%;
-            animation-duration: 9.2s;
-            animation-delay: 0.8s;
-            width: 2px;
-            height: 2px;
-        }
-
-        .embers span:nth-child(10) {
-            left: 29%;
-            animation-duration: 10.5s;
-            animation-delay: 3.4s;
-        }
-
-        .embers span:nth-child(11) {
-            left: 43%;
-            animation-duration: 8.2s;
-            animation-delay: 1.8s;
-            width: 4px;
-            height: 4px;
-        }
-
-        .embers span:nth-child(12) {
-            left: 58%;
-            animation-duration: 11.4s;
-            animation-delay: 4.2s;
-        }
-
-        .embers span:nth-child(13) {
-            left: 71%;
-            animation-duration: 7.8s;
-            animation-delay: 2.4s;
-            width: 2px;
-            height: 2px;
-        }
-
-        .embers span:nth-child(14) {
-            left: 83%;
-            animation-duration: 9.8s;
-            animation-delay: 0.3s;
-        }
-
-        .embers span:nth-child(15) {
-            left: 4%;
-            animation-duration: 12.2s;
-            animation-delay: 5s;
-        }
-
-        .embers span:nth-child(16) {
-            left: 91%;
-            animation-duration: 8.8s;
-            animation-delay: 3.8s;
-            width: 4px;
-            height: 4px;
-        }
+        .embers span:nth-child(odd) { --drift: 14px; }
+        .embers span:nth-child(even) { --drift: -12px; }
+        .embers span:nth-child(1) { left: 8%; animation-duration: 8s; animation-delay: 0s; }
+        .embers span:nth-child(2) { left: 22%; animation-duration: 11s; animation-delay: 1.4s; width: 2px; height: 2px; }
+        .embers span:nth-child(3) { left: 37%; animation-duration: 7.5s; animation-delay: 2.1s; }
+        .embers span:nth-child(4) { left: 51%; animation-duration: 10s; animation-delay: 0.6s; width: 4px; height: 4px; }
+        .embers span:nth-child(5) { left: 64%; animation-duration: 8.5s; animation-delay: 3s; }
+        .embers span:nth-child(6) { left: 76%; animation-duration: 12s; animation-delay: 1s; width: 2px; height: 2px; }
+        .embers span:nth-child(7) { left: 88%; animation-duration: 9.5s; animation-delay: 2.6s; }
+        .embers span:nth-child(8) { left: 95%; animation-duration: 7s; animation-delay: 4s; }
+        .embers span:nth-child(9) { left: 14%; animation-duration: 9.2s; animation-delay: 0.8s; width: 2px; height: 2px; }
+        .embers span:nth-child(10) { left: 29%; animation-duration: 10.5s; animation-delay: 3.4s; }
+        .embers span:nth-child(11) { left: 43%; animation-duration: 8.2s; animation-delay: 1.8s; width: 4px; height: 4px; }
+        .embers span:nth-child(12) { left: 58%; animation-duration: 11.4s; animation-delay: 4.2s; }
+        .embers span:nth-child(13) { left: 71%; animation-duration: 7.8s; animation-delay: 2.4s; width: 2px; height: 2px; }
+        .embers span:nth-child(14) { left: 83%; animation-duration: 9.8s; animation-delay: 0.3s; }
+        .embers span:nth-child(15) { left: 4%; animation-duration: 12.2s; animation-delay: 5s; }
+        .embers span:nth-child(16) { left: 91%; animation-duration: 8.8s; animation-delay: 3.8s; width: 4px; height: 4px; }
 
         @keyframes emberRise {
-            0% {
-                transform: translate3d(0, 0, 0) scale(1);
-                opacity: 0;
-            }
-
-            12% {
-                opacity: 0.85;
-            }
-
-            100% {
-                transform: translate3d(var(--drift, 8px), -105vh, 0) scale(0.4);
-                opacity: 0;
-            }
+            0% { transform: translate3d(0, 0, 0) scale(1); opacity: 0; }
+            12% { opacity: 0.85; }
+            100% { transform: translate3d(var(--drift, 8px), -105vh, 0) scale(0.4); opacity: 0; }
         }
 
-        [data-theme="light"] .embers {
-            opacity: 0.45;
-        }
+        [data-theme="light"] .embers { opacity: 0.45; }
 
         @media (prefers-reduced-motion: reduce) {
-            .embers span {
-                animation: none;
-                opacity: 0;
-            }
-
-            .card.flipped {
-                animation: none;
-            }
-
-            .card.selected {
-                animation: none;
-            }
-
-            .turn-banner,
-            .capture-pop,
-            .fx-ring,
-            .score-pill.score-tick,
-            .turn-indicator.pulse,
-            .stat-flash {
-                animation: none;
-            }
-
+            .embers span { animation: none; opacity: 0; }
+            .card.flipped { animation: none; }
+            .card.selected { animation: none; }
+            .turn-banner, .capture-pop, .fx-ring,
+            .score-pill.score-tick, .turn-indicator.pulse,
+            .stat-flash { animation: none; }
             .turn-banner.show {
                 animation: toastHold 1.15s ease forwards;
             }
-
             .modal,
             .modal .modal-content {
                 animation: none !important;
                 transition: none !important;
                 transform: none !important;
             }
-
             .modal:not(.hidden) .modal-content {
                 opacity: 1;
             }
@@ -409,7 +276,7 @@
         }
 
         .menu-btn {
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.18));
+            background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.18));
             background-color: var(--panel-bg);
             border: 1px solid var(--border-color);
             color: var(--text-color);
@@ -422,7 +289,7 @@
             align-items: center;
             justify-content: center;
             transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 4px 10px rgba(0, 0, 0, 0.25);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 4px 10px rgba(0,0,0,0.25);
         }
 
         .menu-btn:hover {
@@ -500,11 +367,11 @@
             width: 100%;
             max-width: calc(var(--grid-w) * 3 + 18px);
             padding: 5px 10px;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.18));
+            background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(0,0,0,0.18));
             background-color: var(--panel-bg);
             border: 1px solid rgba(232, 195, 106, 0.28);
             border-radius: 999px;
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 8px 18px rgba(0, 0, 0, 0.28);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 8px 18px rgba(0,0,0,0.28);
         }
 
         .score-pill {
@@ -587,7 +454,7 @@
 
         .cell {
             background:
-                linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(0, 0, 0, 0.18)),
+                linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.18)),
                 var(--cell-bg);
             border: 1px solid rgba(232, 195, 106, 0.16);
             border-radius: 10px;
@@ -664,7 +531,7 @@
             font-weight: 700;
             cursor: grab;
             position: relative;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.22);
             transition: transform 0.18s cubic-bezier(0.4, 0, 0.2, 1), filter 0.15s, box-shadow 0.18s;
             touch-action: none;
         }
@@ -684,7 +551,7 @@
             position: absolute;
             inset: 0;
             border-radius: inherit;
-            background: linear-gradient(125deg, rgba(255, 255, 255, 0.28) 0%, transparent 34%, transparent 62%, rgba(255, 255, 255, 0.08) 100%);
+            background: linear-gradient(125deg, rgba(255,255,255,0.28) 0%, transparent 34%, transparent 62%, rgba(255,255,255,0.08) 100%);
             pointer-events: none;
             mix-blend-mode: soft-light;
             z-index: 3;
@@ -709,22 +576,13 @@
             transform-origin: top left;
             transition: none !important;
             animation: none !important;
-            box-shadow: 0 18px 32px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+            box-shadow: 0 18px 32px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255,255,255,0.22);
         }
 
         @keyframes pulseFlip {
-            0% {
-                transform: scale(1) rotateY(0deg);
-            }
-
-            50% {
-                transform: scale(1.1) rotateY(90deg);
-                filter: brightness(1.45);
-            }
-
-            100% {
-                transform: scale(1) rotateY(0deg);
-            }
+            0% { transform: scale(1) rotateY(0deg); }
+            50% { transform: scale(1.1) rotateY(90deg); filter: brightness(1.45); }
+            100% { transform: scale(1) rotateY(0deg); }
         }
 
         .card.flipped {
@@ -749,7 +607,7 @@
 
         .card.card-back {
             background:
-                repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.05) 0 5px, transparent 5px 10px),
+                repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0 5px, transparent 5px 10px),
                 linear-gradient(160deg, #9f1239, #4c0519);
             border-color: #fda4af;
         }
@@ -772,7 +630,7 @@
             padding: 3px 5px;
             line-height: 1;
             border: 1px solid var(--gold);
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.45);
         }
 
         .ability-badge.silenced {
@@ -840,9 +698,9 @@
             justify-content: center;
             font-size: 1.15em;
             z-index: 1;
-            background: radial-gradient(circle at 50% 38%, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.28));
+            background: radial-gradient(circle at 50% 38%, rgba(255,255,255,0.2), rgba(0,0,0,0.28));
             border-radius: 50%;
-            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16), 0 4px 8px rgba(0, 0, 0, 0.35);
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.16), 0 4px 8px rgba(0,0,0,0.35);
             filter: none;
         }
 
@@ -867,8 +725,8 @@
             border: 1px solid rgba(232, 195, 106, 0.5);
             border-radius: 50%;
             font-variant-numeric: tabular-nums;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.5);
             position: absolute;
         }
 
@@ -900,14 +758,14 @@
             color: var(--stat-up-fg);
             background: var(--stat-up-bg);
             border-color: var(--stat-up-border);
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.9);
         }
 
         .stat-down {
             color: var(--stat-down-fg);
             background: var(--stat-down-bg);
             border-color: var(--stat-down-border);
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.95);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.95);
         }
 
         .stat-flash {
@@ -915,20 +773,9 @@
         }
 
         @keyframes statFlash {
-            0% {
-                filter: brightness(1.75);
-                box-shadow: 0 0 0 2px currentColor, 0 0 12px currentColor;
-            }
-
-            55% {
-                filter: brightness(1.2);
-                box-shadow: 0 0 8px currentColor;
-            }
-
-            100% {
-                filter: none;
-                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-            }
+            0% { filter: brightness(1.75); box-shadow: 0 0 0 2px currentColor, 0 0 12px currentColor; }
+            55% { filter: brightness(1.2); box-shadow: 0 0 8px currentColor; }
+            100% { filter: none; box-shadow: 0 1px 3px rgba(0,0,0,0.5); }
         }
 
         .status-msg {
@@ -1035,11 +882,9 @@
                 opacity: 0;
                 transform: translate3d(0, 22px, 0) scale(0.94);
             }
-
             60% {
                 opacity: 1;
             }
-
             100% {
                 opacity: 1;
                 transform: translate3d(0, 0, 0) scale(1);
@@ -1090,7 +935,7 @@
 
         .modal-content {
             background:
-                linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 28%),
+                linear-gradient(180deg, rgba(255,255,255,0.04), transparent 28%),
                 var(--panel-bg);
             color: var(--text-color);
             padding: 1.25rem 1.15rem 1.1rem;
@@ -1186,7 +1031,7 @@
             letter-spacing: 0.04em;
             cursor: pointer;
             transition: filter 0.15s, transform 0.1s, box-shadow 0.15s;
-            box-shadow: 0 3px 0 #92400e, 0 8px 16px rgba(0, 0, 0, 0.28);
+            box-shadow: 0 3px 0 #92400e, 0 8px 16px rgba(0,0,0,0.28);
         }
 
         .btn:hover {
@@ -1215,7 +1060,7 @@
         .btn-muted {
             background: linear-gradient(180deg, #57534e, #3f3a36);
             color: #f5f0e8;
-            box-shadow: 0 3px 0 #292524, 0 8px 16px rgba(0, 0, 0, 0.28);
+            box-shadow: 0 3px 0 #292524, 0 8px 16px rgba(0,0,0,0.28);
         }
 
         .menu-links {
@@ -1420,7 +1265,7 @@
             margin-bottom: 8px;
         }
 
-        .settings-stack>span {
+        .settings-stack > span {
             font-size: 0.8rem;
             font-weight: 700;
         }
@@ -1477,7 +1322,7 @@
             font-size: 0.82rem;
         }
 
-        .menu-play-actions+.menu-play-actions {
+        .menu-play-actions + .menu-play-actions {
             margin-top: 8px;
         }
 
@@ -1636,7 +1481,7 @@
         #compendium-modal .modal-title,
         #compendium-modal .set-blurb,
         #compendium-modal .compendium-filter,
-        #compendium-modal .modal-content>.btn {
+        #compendium-modal .modal-content > .btn {
             flex-shrink: 0;
         }
 
@@ -1683,10 +1528,10 @@
             color: #fff;
             overflow: hidden;
             background:
-                radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.12), transparent 55%),
+                radial-gradient(circle at 50% 35%, rgba(255,255,255,0.12), transparent 55%),
                 linear-gradient(160deg, #57534e, #292524);
             border: 1px solid #e8c36a;
-            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255,255,255,0.16);
         }
 
         .compendium-card {
@@ -1728,20 +1573,11 @@
             padding: 0 3px;
             line-height: 1.1;
         }
-
-        .compendium-card .card-name {
-            font-size: 0.48rem;
-        }
-
-        .draft-card .card-name {
-            font-size: var(--draft-font-name);
-        }
+        .compendium-card .card-name { font-size: 0.48rem; }
+        .draft-card .card-name { font-size: var(--draft-font-name); }
 
         .compendium-card .stat-top,
-        .draft-card .stat-top {
-            top: 2px;
-        }
-
+        .draft-card .stat-top { top: 2px; }
         .compendium-card .card-emoji,
         .draft-card .card-emoji {
             width: 1.85em;
@@ -1759,7 +1595,7 @@
         }
 
         .stat-card {
-            background: rgba(0, 0, 0, 0.18);
+            background: rgba(0,0,0,0.18);
             padding: 8px 10px;
             border-radius: 10px;
             border: 1px solid var(--border-color);
@@ -1799,43 +1635,21 @@
             border: 1px solid var(--gold);
             background: rgba(16, 12, 9, 0.88);
             color: var(--gold);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.4);
         }
 
         .turn-banner.show {
             animation: bannerIn 0.85s ease forwards;
         }
 
-        .turn-banner.player {
-            color: var(--blue-card);
-            border-color: rgba(110, 160, 255, 0.5);
-        }
-
-        .turn-banner.ai {
-            color: var(--red-card);
-            border-color: rgba(255, 107, 87, 0.5);
-        }
+        .turn-banner.player { color: var(--blue-card); border-color: rgba(110, 160, 255, 0.5); }
+        .turn-banner.ai { color: var(--red-card); border-color: rgba(255, 107, 87, 0.5); }
 
         @keyframes bannerIn {
-            0% {
-                opacity: 0;
-                transform: translate(-50%, -18px) scale(0.9);
-            }
-
-            18% {
-                opacity: 1;
-                transform: translate(-50%, 0) scale(1);
-            }
-
-            62% {
-                opacity: 1;
-                transform: translate(-50%, 0) scale(1);
-            }
-
-            100% {
-                opacity: 0;
-                transform: translate(-50%, -8px) scale(0.98);
-            }
+            0% { opacity: 0; transform: translate(-50%, -18px) scale(0.9); }
+            18% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+            62% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -8px) scale(0.98); }
         }
 
         @media (max-width: 480px) {
@@ -1847,15 +1661,8 @@
         }
 
         @keyframes toastHold {
-
-            0%,
-            62% {
-                opacity: 1;
-            }
-
-            100% {
-                opacity: 0;
-            }
+            0%, 62% { opacity: 1; }
+            100% { opacity: 0; }
         }
 
         .score-pill.score-tick {
@@ -1863,18 +1670,9 @@
         }
 
         @keyframes scoreTick {
-            0% {
-                transform: scale(1);
-            }
-
-            35% {
-                transform: scale(1.12);
-                filter: brightness(1.3);
-            }
-
-            100% {
-                transform: scale(1);
-            }
+            0% { transform: scale(1); }
+            35% { transform: scale(1.12); filter: brightness(1.3); }
+            100% { transform: scale(1); }
         }
 
         .turn-indicator.pulse {
@@ -1882,20 +1680,9 @@
         }
 
         @keyframes turnPulse {
-            0% {
-                transform: scale(1);
-                letter-spacing: 0.16em;
-            }
-
-            40% {
-                transform: scale(1.08);
-                letter-spacing: 0.22em;
-            }
-
-            100% {
-                transform: scale(1);
-                letter-spacing: 0.16em;
-            }
+            0% { transform: scale(1); letter-spacing: 0.16em; }
+            40% { transform: scale(1.08); letter-spacing: 0.22em; }
+            100% { transform: scale(1); letter-spacing: 0.16em; }
         }
 
         .capture-pop {
@@ -1918,25 +1705,10 @@
         }
 
         @keyframes captureFloat {
-            0% {
-                opacity: 0;
-                transform: translate(-50%, 8px) scale(0.8);
-            }
-
-            12% {
-                opacity: 1;
-                transform: translate(-50%, -6px) scale(1.05);
-            }
-
-            72% {
-                opacity: 1;
-                transform: translate(-50%, -10px) scale(1);
-            }
-
-            100% {
-                opacity: 0;
-                transform: translate(-50%, -22px) scale(0.95);
-            }
+            0% { opacity: 0; transform: translate(-50%, 8px) scale(0.8); }
+            12% { opacity: 1; transform: translate(-50%, -6px) scale(1.05); }
+            72% { opacity: 1; transform: translate(-50%, -10px) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -22px) scale(0.95); }
         }
 
         .fx-ring {
@@ -1948,57 +1720,20 @@
             animation: fxRing 0.7s ease-out forwards;
         }
 
-        .fx-ring.curse {
-            box-shadow: 0 0 0 2px #c084fc, 0 0 18px #a855f7;
-        }
-
-        .fx-ring.bolt {
-            box-shadow: 0 0 0 2px #60a5fa, 0 0 18px #3b82f6;
-        }
-
-        .fx-ring.poison {
-            box-shadow: 0 0 0 2px #4ade80, 0 0 16px #22c55e;
-        }
-
-        .fx-ring.buff {
-            box-shadow: 0 0 0 2px var(--gold), 0 0 16px #e8a317;
-        }
-
-        .fx-ring.blast {
-            box-shadow: 0 0 0 2px #fb923c, 0 0 18px #f97316;
-        }
-
-        .fx-ring.spite {
-            box-shadow: 0 0 0 2px #fb7185, 0 0 18px #e11d48;
-        }
-
-        .fx-ring.silence {
-            box-shadow: 0 0 0 2px #94a3b8, 0 0 16px #64748b;
-        }
-
-        .fx-ring.chill {
-            box-shadow: 0 0 0 2px #7dd3fc, 0 0 16px #38bdf8;
-        }
-
-        .fx-ring.cinder {
-            box-shadow: 0 0 0 2px #fb923c, 0 0 18px #ea580c;
-        }
+        .fx-ring.curse { box-shadow: 0 0 0 2px #c084fc, 0 0 18px #a855f7; }
+        .fx-ring.bolt { box-shadow: 0 0 0 2px #60a5fa, 0 0 18px #3b82f6; }
+        .fx-ring.poison { box-shadow: 0 0 0 2px #4ade80, 0 0 16px #22c55e; }
+        .fx-ring.buff { box-shadow: 0 0 0 2px var(--gold), 0 0 16px #e8a317; }
+        .fx-ring.blast { box-shadow: 0 0 0 2px #fb923c, 0 0 18px #f97316; }
+        .fx-ring.spite { box-shadow: 0 0 0 2px #fb7185, 0 0 18px #e11d48; }
+        .fx-ring.silence { box-shadow: 0 0 0 2px #94a3b8, 0 0 16px #64748b; }
+        .fx-ring.chill { box-shadow: 0 0 0 2px #7dd3fc, 0 0 16px #38bdf8; }
+        .fx-ring.cinder { box-shadow: 0 0 0 2px #fb923c, 0 0 18px #ea580c; }
 
         @keyframes fxRing {
-            0% {
-                opacity: 0;
-                transform: scale(0.92);
-            }
-
-            30% {
-                opacity: 1;
-                transform: scale(1.04);
-            }
-
-            100% {
-                opacity: 0;
-                transform: scale(1.08);
-            }
+            0% { opacity: 0; transform: scale(0.92); }
+            30% { opacity: 1; transform: scale(1.04); }
+            100% { opacity: 0; transform: scale(1.08); }
         }
 
         .cell.coach-target {
@@ -2029,7 +1764,7 @@
             border: 1px solid var(--gold);
             border-radius: 12px;
             padding: 10px 12px 8px;
-            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+            box-shadow: 0 16px 36px rgba(0,0,0,0.45);
             text-align: center;
         }
 
@@ -2290,116 +2025,39 @@
 <body data-theme="dark">
     <!-- Lucide-style SVG icons (ISC license, https://lucide.dev) -->
     <svg class="icon-sprite" aria-hidden="true" focusable="false">
-        <symbol id="i-stats" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 20V10" />
-            <path d="M12 20V4" />
-            <path d="M6 20v-6" />
-        </symbol>
-        <symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 7v14" />
-            <path
-                d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z" />
-        </symbol>
-        <symbol id="i-library" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="m16 6 4 14" />
-            <path d="M12 6v14" />
-            <path d="M8 8v12" />
-            <path d="M4 4v16" />
-        </symbol>
-        <symbol id="i-sliders" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M10 5H3" />
-            <path d="M21 5h-7" />
-            <path d="M21 12h-9" />
-            <path d="M8 12H3" />
-            <path d="M21 19h-5" />
-            <path d="M12 19H3" />
-            <circle cx="12" cy="5" r="2" />
-            <circle cx="8" cy="12" r="2" />
-            <circle cx="16" cy="19" r="2" />
-        </symbol>
-        <symbol id="i-volume" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path
-                d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z" />
-            <path d="M16 9a5 5 0 0 1 0 6" />
-            <path d="M19.364 18.364a9 9 0 0 0 0-12.728" />
-        </symbol>
-        <symbol id="i-volume-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path
-                d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z" />
-            <line x1="22" x2="16" y1="9" y2="15" />
-            <line x1="16" x2="22" y1="9" y2="15" />
-        </symbol>
-        <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round">
-            <circle cx="12" cy="12" r="4" />
-            <path d="M12 2v2" />
-            <path d="M12 20v2" />
-            <path d="m4.93 4.93 1.41 1.41" />
-            <path d="m17.66 17.66 1.41 1.41" />
-            <path d="M2 12h2" />
-            <path d="M20 12h2" />
-            <path d="m6.34 17.66-1.41 1.41" />
-            <path d="m19.07 4.93-1.41 1.41" />
-        </symbol>
-        <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
-        </symbol>
-        <symbol id="i-house" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
-            <path
-                d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-        </symbol>
+        <symbol id="i-stats" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></symbol>
+        <symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></symbol>
+        <symbol id="i-library" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 6 4 14"/><path d="M12 6v14"/><path d="M8 8v12"/><path d="M4 4v16"/></symbol>
+        <symbol id="i-sliders" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5H3"/><path d="M21 5h-7"/><path d="M21 12h-9"/><path d="M8 12H3"/><path d="M21 19h-5"/><path d="M12 19H3"/><circle cx="12" cy="5" r="2"/><circle cx="8" cy="12" r="2"/><circle cx="16" cy="19" r="2"/></symbol>
+        <symbol id="i-volume" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z"/><path d="M16 9a5 5 0 0 1 0 6"/><path d="M19.364 18.364a9 9 0 0 0 0-12.728"/></symbol>
+        <symbol id="i-volume-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/></symbol>
+        <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></symbol>
+        <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></symbol>
+        <symbol id="i-house" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
     </svg>
 
-    <div class="embers" aria-hidden="true">
-        <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    </div>
+    <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
 
     <div class="container">
         <header>
             <h1>EMBER GRID</h1>
             <div class="nav-group">
                 <button type="button" class="menu-btn" onclick="showStatsModal()" title="Stats" aria-label="Stats">
-                    <svg class="ui-icon" aria-hidden="true">
-                        <use href="#i-stats"></use>
-                    </svg>
+                    <svg class="ui-icon" aria-hidden="true"><use href="#i-stats"></use></svg>
                 </button>
                 <button type="button" class="menu-btn" onclick="showRulesModal()" title="Rules" aria-label="Rules">
-                    <svg class="ui-icon" aria-hidden="true">
-                        <use href="#i-book"></use>
-                    </svg>
+                    <svg class="ui-icon" aria-hidden="true"><use href="#i-book"></use></svg>
                 </button>
-                <button type="button" class="menu-btn" id="audio-toggle-btn" onclick="toggleAudio()" title="Mute audio"
-                    aria-label="Mute audio">
-                    <svg class="ui-icon icon-audio-on" aria-hidden="true">
-                        <use href="#i-volume"></use>
-                    </svg>
-                    <svg class="ui-icon icon-audio-off" aria-hidden="true">
-                        <use href="#i-volume-off"></use>
-                    </svg>
+                <button type="button" class="menu-btn" id="audio-toggle-btn" onclick="toggleAudio()" title="Mute audio" aria-label="Mute audio">
+                    <svg class="ui-icon icon-audio-on" aria-hidden="true"><use href="#i-volume"></use></svg>
+                    <svg class="ui-icon icon-audio-off" aria-hidden="true"><use href="#i-volume-off"></use></svg>
                 </button>
-                <button type="button" class="menu-btn" id="theme-toggle-btn" onclick="toggleTheme()"
-                    title="Switch to light theme" aria-label="Switch to light theme">
-                    <svg class="ui-icon icon-sun" aria-hidden="true">
-                        <use href="#i-sun"></use>
-                    </svg>
-                    <svg class="ui-icon icon-moon" aria-hidden="true">
-                        <use href="#i-moon"></use>
-                    </svg>
+                <button type="button" class="menu-btn" id="theme-toggle-btn" onclick="toggleTheme()" title="Switch to light theme" aria-label="Switch to light theme">
+                    <svg class="ui-icon icon-sun" aria-hidden="true"><use href="#i-sun"></use></svg>
+                    <svg class="ui-icon icon-moon" aria-hidden="true"><use href="#i-moon"></use></svg>
                 </button>
-                <button type="button" class="menu-btn" onclick="showModeMenu()" title="Main Menu"
-                    aria-label="Main Menu">
-                    <svg class="ui-icon" aria-hidden="true">
-                        <use href="#i-house"></use>
-                    </svg>
+                <button type="button" class="menu-btn" onclick="showModeMenu()" title="Main Menu" aria-label="Main Menu">
+                    <svg class="ui-icon" aria-hidden="true"><use href="#i-house"></use></svg>
                 </button>
             </div>
         </header>
@@ -2432,41 +2090,30 @@
 
     <!-- Main Menu Modal -->
     <div id="main-menu-modal" class="modal modal-ember">
-        <div class="embers" aria-hidden="true">
-            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-        </div>
+        <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="modal-content">
             <h2 class="modal-title">Ember Grid</h2>
             <p class="brand-tag">The Base Set</p>
 
             <div class="menu-section-title">Core Rules</div>
             <div class="rules-compact">
-                <strong>🃏 The deck:</strong> Cards are dealt or drafted from a shared deck - the Base Set, 50 cards.
-                Tribe Decks play one tribe of five. Every Ember card has an ability.<br>
-                <strong>⚔️ Capture:</strong> Play a card from your hand next to an enemy. If your touching stat is
-                higher,
+                <strong>🃏 The deck:</strong> Cards are dealt or drafted from a shared deck - the Base Set, 50 cards. Tribe Decks play one tribe of five. Every Ember card has an ability.<br>
+                <strong>⚔️ Capture:</strong> Play a card from your hand next to an enemy. If your touching stat is higher,
                 you capture it.<br>
-                <strong>🏆 Victory:</strong> Fill the 3x3. Most cards wins - the leftover card in each hand still
-                counts.
+                <strong>🏆 Victory:</strong> Fill the 3x3. Most cards wins - the leftover card in each hand still counts.
             </div>
 
             <nav class="menu-links">
                 <button type="button" class="btn btn-alt" onclick="showRulesModal()">
-                    <svg class="ui-icon" aria-hidden="true">
-                        <use href="#i-book"></use>
-                    </svg>
+                    <svg class="ui-icon" aria-hidden="true"><use href="#i-book"></use></svg>
                     Rules
                 </button>
                 <button type="button" class="btn btn-alt" onclick="showCompendiumModal()">
-                    <svg class="ui-icon" aria-hidden="true">
-                        <use href="#i-library"></use>
-                    </svg>
+                    <svg class="ui-icon" aria-hidden="true"><use href="#i-library"></use></svg>
                     Compendium
                 </button>
                 <button type="button" class="btn btn-alt" onclick="showOptionsModal()">
-                    <svg class="ui-icon" aria-hidden="true">
-                        <use href="#i-sliders"></use>
-                    </svg>
+                    <svg class="ui-icon" aria-hidden="true"><use href="#i-sliders"></use></svg>
                     Options
                 </button>
             </nav>
@@ -2481,15 +2128,14 @@
             <details class="match-code-box" id="match-code-box">
                 <summary>Have a match code?</summary>
                 <form onsubmit="submitMatchCode(event)">
-                    <input id="match-code-input" type="text" inputmode="text" autocomplete="off" autocapitalize="off"
-                        spellcheck="false" placeholder="Paste code or link" aria-label="Match code">
+                    <input id="match-code-input" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Paste code or link" aria-label="Match code">
                     <button type="submit" class="btn btn-alt">Play</button>
                 </form>
                 <p id="match-code-error" class="match-code-error" hidden></p>
             </details>
             <div class="menu-foot">
                 <!-- Bump BUILD on every PR. Still pre-1.0, so this stays Alpha until 1.0 ships. -->
-                <p class="build-stamp">0.25 Alpha</p>
+                <p class="build-stamp">0.26 Alpha</p>
                 <p class="dev-note">Still in active development. Cards and rules may change.</p>
             </div>
         </div>
@@ -2497,38 +2143,28 @@
 
     <!-- Rules Modal -->
     <div id="expanded-rules-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, closeRulesModal)">
-        <div class="embers" aria-hidden="true">
-            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-        </div>
+        <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="closeRulesModal()" aria-label="Close rules"><svg
-                    class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
-                    <path d="M18 6 6 18" />
-                    <path d="m6 6 12 12" />
-                </svg></button>
+            <button type="button" class="modal-close" onclick="closeRulesModal()" aria-label="Close rules"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
             <h2 class="modal-title">Rules</h2>
 
             <div class="menu-section-title" style="margin-top: 0;">The table</div>
             <div class="expanded-rules-list">
                 <div class="rule-detail-item">
-                    <strong>The deck:</strong> The Base Set is 50 cards in ten tribes. Every Ember card has an ability.
-                    Shuffle it and deal two hands of five, or spread sixteen and draft until each hand is five.
+                    <strong>The deck:</strong> The Base Set is 50 cards in ten tribes. Every Ember card has an ability. Shuffle it and deal two hands of five, or spread sixteen and draft until each hand is five.
                 </div>
                 <div class="rule-detail-item">
-                    <strong>Tribe Decks:</strong> Each deck is one tribe of five. Pick yours and the opponent's, or
-                    leave either one random. Same tribe on both sides is a mirror match.
+                    <strong>Tribe Decks:</strong> Each deck is one tribe of five. Pick yours and the opponent's, or leave either one random. Same tribe on both sides is a mirror match.
                 </div>
                 <div class="rule-detail-item">
-                    <strong>Placement:</strong> On your turn, play one card from your hand onto an empty cell of the 3x3
-                    grid.
+                    <strong>Placement:</strong> On your turn, play one card from your hand onto an empty cell of the 3x3 grid.
                 </div>
                 <div class="rule-detail-item">
                     <strong>Capturing:</strong> When your card touches an enemy card, compare touching values (Top,
                     Right, Bottom, Left). If your attacking stat is strictly greater, you capture their card!
                 </div>
                 <div class="rule-detail-item">
-                    <strong>Victory:</strong> Two hands of five is ten cards. After the board fills, the leftover card
-                    in each hand still counts, so 6+ wins and 5-5 is a draw.
+                    <strong>Victory:</strong> Two hands of five is ten cards. After the board fills, the leftover card in each hand still counts, so 6+ wins and 5-5 is a draw.
                 </div>
                 <div class="rule-detail-item">
                     <strong>Stat Cap:</strong> Stats range from 1 to 10 (represented by A). Stat boosts cannot raise
@@ -2538,29 +2174,16 @@
 
             <div class="menu-section-title">Ember Mode Abilities</div>
             <div class="expanded-rules-list">
-                <div class="rule-detail-item"><strong>⚡ Buff:</strong> While this card sits there, adjacent friendly
-                    cards get +1 to all stats. Radiance tribe - Celestial, Fairy, Unicorn, Paladin, Angel.</div>
-                <div class="rule-detail-item"><strong>💀 Curse:</strong> On play, the strongest enemy loses 1 from all
-                    stats, then this card captures. Grave tribe - Ghost, Vampire, Skull, Zombie, Bat.</div>
-                <div class="rule-detail-item"><strong>💥 Blast:</strong> +2 to all stats on the turn this card is
-                    played. Beasts tribe - Dragon, T-Rex, Lion, Shark, Eagle.</div>
-                <div class="rule-detail-item"><strong>🦠 Poison:</strong> At the end of every turn, adjacent enemies
-                    lose 1 from all stats. Does not capture on the tick - later plays use the lower stats. Vermin tribe
-                    - Spider, Scorpion, Snake, Frog, Beetle.</div>
-                <div class="rule-detail-item"><strong>⚖️ Equalizer:</strong> Captures when touching stats match. Balance
-                    tribe - Monk, Titan, Robot, Owl, Alien.</div>
-                <div class="rule-detail-item"><strong>💢 Spite:</strong> When this card is captured, the captor loses 1
-                    from all stats. Wrath tribe - Cyclops, Gorilla, Wrath, Vendetta, Oni.</div>
-                <div class="rule-detail-item"><strong>🔇 Silence:</strong> Adjacent enemies lose their abilities while
-                    this card sits there. Capture still works. Hush tribe - Dread, Hush, Raven, Ninja, Cat.</div>
-                <div class="rule-detail-item"><strong>🔥 Cinder:</strong> On play, a random empty cell becomes Cindered.
-                    Whoever sits there is -1 to all stats. The cell glows orange. Ember tribe - Scorch, Brand, Fox,
-                    Phoenix, Lizard.</div>
-                <div class="rule-detail-item"><strong>🔮 Bolt:</strong> On play, zaps a random enemy by -2 to all stats
-                    before this card captures. The zap can help this play steal that card. Arcane tribe - Wizard, Genie,
-                    Witch, Mage, Imp.</div>
-                <div class="rule-detail-item"><strong>❄️ Chill:</strong> While this card sits there, adjacent enemies
-                    are -1 to all stats. Counts for captures. Frost tribe - Frost, Wolf, Penguin, Polar, Seal.</div>
+                <div class="rule-detail-item"><strong>⚡ Buff:</strong> While this card sits there, adjacent friendly cards get +1 to all stats. Radiance tribe - Celestial, Fairy, Unicorn, Paladin, Angel.</div>
+                <div class="rule-detail-item"><strong>💀 Curse:</strong> On play, the strongest enemy loses 1 from all stats, then this card captures. Grave tribe - Ghost, Vampire, Skull, Zombie, Bat.</div>
+                <div class="rule-detail-item"><strong>💥 Blast:</strong> +2 to all stats on the turn this card is played. Beasts tribe - Dragon, T-Rex, Lion, Shark, Eagle.</div>
+                <div class="rule-detail-item"><strong>🦠 Poison:</strong> At the end of every turn, adjacent enemies lose 1 from all stats. Does not capture on the tick - later plays use the lower stats. Vermin tribe - Spider, Scorpion, Snake, Frog, Beetle.</div>
+                <div class="rule-detail-item"><strong>⚖️ Equalizer:</strong> Captures when touching stats match. Balance tribe - Monk, Titan, Robot, Owl, Alien.</div>
+                <div class="rule-detail-item"><strong>💢 Spite:</strong> When this card is captured, the captor loses 1 from all stats. Wrath tribe - Cyclops, Gorilla, Wrath, Vendetta, Oni.</div>
+                <div class="rule-detail-item"><strong>🔇 Silence:</strong> Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel - neither silences anyone else. Hush tribe - Dread, Hush, Raven, Ninja, Cat.</div>
+                <div class="rule-detail-item"><strong>🔥 Cinder:</strong> On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange. Ember tribe - Scorch, Brand, Fox, Phoenix, Lizard.</div>
+                <div class="rule-detail-item"><strong>🔮 Bolt:</strong> On play, zaps a random enemy by -2 to all stats before this card captures. The zap can help this play steal that card. Arcane tribe - Wizard, Genie, Witch, Mage, Imp.</div>
+                <div class="rule-detail-item"><strong>❄️ Chill:</strong> While this card sits there, adjacent enemies are -1 to all stats. Counts for captures. Frost tribe - Frost, Wolf, Penguin, Polar, Seal.</div>
             </div>
 
             <button class="btn btn-alt btn-dismiss" onclick="closeRulesModal()">Close</button>
@@ -2569,19 +2192,11 @@
 
     <!-- Compendium Modal -->
     <div id="compendium-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, closeCompendiumModal)">
-        <div class="embers" aria-hidden="true">
-            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-        </div>
+        <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="closeCompendiumModal()"
-                aria-label="Close compendium"><svg class="ui-icon" aria-hidden="true" focusable="false"
-                    viewBox="0 0 24 24">
-                    <path d="M18 6 6 18" />
-                    <path d="m6 6 12 12" />
-                </svg></button>
+            <button type="button" class="modal-close" onclick="closeCompendiumModal()" aria-label="Close compendium"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
             <h2 class="modal-title">Compendium</h2>
-            <p class="set-blurb">The Base Set is 50 cards in ten tribes. Every Ember card has an ability. Classic Mode
-                still strips abilities and plays as pure stats.</p>
+            <p class="set-blurb">The Base Set is 50 cards in ten tribes. Every Ember card has an ability. Classic Mode still strips abilities and plays as pure stats.</p>
             <select id="compendium-filter" class="settings-select compendium-filter" onchange="renderCompendium()">
                 <option value="all">All cards</option>
                 <option value="aura_buff">Buff</option>
@@ -2602,22 +2217,15 @@
 
     <!-- Options Modal -->
     <div id="options-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, closeOptionsModal)">
-        <div class="embers" aria-hidden="true">
-            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-        </div>
+        <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="closeOptionsModal()" aria-label="Close options"><svg
-                    class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
-                    <path d="M18 6 6 18" />
-                    <path d="m6 6 12 12" />
-                </svg></button>
+            <button type="button" class="modal-close" onclick="closeOptionsModal()" aria-label="Close options"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
             <h2 class="modal-title">Options</h2>
 
             <div class="menu-section-title" style="margin-top: 0;">Match</div>
             <div class="settings-stack">
                 <span>Game Mode</span>
-                <select id="ruleset-select" class="settings-select settings-select-full"
-                    onchange="updateRuleset(this.value)">
+                <select id="ruleset-select" class="settings-select settings-select-full" onchange="updateRuleset(this.value)">
                     <option value="ember" selected>Ember Mode (Abilities)</option>
                     <option value="classic">Classic Mode (Pure Stats)</option>
                 </select>
@@ -2628,8 +2236,7 @@
             </div>
             <div class="settings-stack">
                 <span>AI Difficulty</span>
-                <select id="ai-difficulty-select" class="settings-select settings-select-full"
-                    onchange="updateDifficulty(this.value)">
+                <select id="ai-difficulty-select" class="settings-select settings-select-full" onchange="updateDifficulty(this.value)">
                     <option value="easy">Easy</option>
                     <option value="normal" selected>Normal</option>
                     <option value="hard">Hard</option>
@@ -2637,8 +2244,7 @@
             </div>
             <label class="settings-row" for="open-hands-check">
                 <span>Show Hands</span>
-                <input type="checkbox" id="open-hands-check" class="settings-check"
-                    onchange="updateOpenHands(this.checked)">
+                <input type="checkbox" id="open-hands-check" class="settings-check" onchange="updateOpenHands(this.checked)">
             </label>
 
             <button class="btn btn-alt btn-dismiss" onclick="closeOptionsModal()">Close</button>
@@ -2647,15 +2253,9 @@
 
     <!-- Stats Modal -->
     <div id="stats-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, closeStatsModal)">
-        <div class="embers" aria-hidden="true">
-            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-        </div>
+        <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="closeStatsModal()" aria-label="Close stats"><svg
-                    class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
-                    <path d="M18 6 6 18" />
-                    <path d="m6 6 12 12" />
-                </svg></button>
+            <button type="button" class="modal-close" onclick="closeStatsModal()" aria-label="Close stats"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
             <h2 class="modal-title">Career Stats</h2>
             <div class="stats-grid">
                 <div class="stat-card">
@@ -2687,18 +2287,11 @@
 
     <!-- Draft Modal -->
     <div id="draft-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, cancelDraft)">
-        <div class="embers" aria-hidden="true">
-            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-        </div>
+        <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="cancelDraft()" aria-label="Cancel draft"><svg
-                    class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
-                    <path d="M18 6 6 18" />
-                    <path d="m6 6 12 12" />
-                </svg></button>
+            <button type="button" class="modal-close" onclick="cancelDraft()" aria-label="Cancel draft"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
             <h2 class="modal-title" style="color: var(--blue-card);">Draft Hands</h2>
-            <p class="draft-order">Sixteen cards from the deck. Snake order: 1 pick, then pairs of 2, until each hand is
-                five.</p>
+            <p class="draft-order">Sixteen cards from the deck. Snake order: 1 pick, then pairs of 2, until each hand is five.</p>
             <p id="draft-status" class="draft-status"></p>
             <div class="draft-grid" id="draft-pool-grid"></div>
             <div class="draft-rosters" id="draft-rosters">Your Hand: 0/5 | AI Hand: 0/5</div>
@@ -2708,18 +2301,11 @@
 
     <!-- Tribe Decks Modal -->
     <div id="deck-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, cancelDeckPicker)">
-        <div class="embers" aria-hidden="true">
-            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-        </div>
+        <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="cancelDeckPicker()" aria-label="Cancel deck pick"><svg
-                    class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
-                    <path d="M18 6 6 18" />
-                    <path d="m6 6 12 12" />
-                </svg></button>
+            <button type="button" class="modal-close" onclick="cancelDeckPicker()" aria-label="Cancel deck pick"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
             <h2 class="modal-title">Tribe Decks</h2>
-            <p class="draft-order">Each deck is one tribe of five. Pick yours and the opponent's, or leave either one
-                random.</p>
+            <p class="draft-order">Each deck is one tribe of five. Pick yours and the opponent's, or leave either one random.</p>
             <div class="menu-section-title" style="margin-top: 8px;">Your deck</div>
             <div id="deck-you-picks" class="deck-picks"></div>
             <div class="menu-section-title">Opponent</div>
@@ -2731,15 +2317,9 @@
 
     <!-- Game Over Modal -->
     <div id="gameover-modal" class="modal modal-ember hidden" onclick="onGameoverBackdrop(event)">
-        <div class="embers" aria-hidden="true">
-            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-        </div>
+        <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="viewFinalBoard()" aria-label="View board"><svg
-                    class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
-                    <path d="M18 6 6 18" />
-                    <path d="m6 6 12 12" />
-                </svg></button>
+            <button type="button" class="modal-close" onclick="viewFinalBoard()" aria-label="View board"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
             <h2 id="gameover-title" class="modal-title">Match Over</h2>
             <div class="gameover-score" aria-live="polite">
                 <div class="score-pill score-blue">Blue <strong id="gameover-blue">-</strong></div>
@@ -2750,8 +2330,7 @@
                 <button class="btn" onclick="rematchSwapFirst()" title="Same hands, swap who goes first">Replay</button>
                 <div class="gameover-secondary">
                     <button class="btn btn-alt" onclick="startCurrentModeAgain()">New Hands</button>
-                    <button type="button" class="btn btn-alt" id="match-share-btn"
-                        onclick="shareCurrentMatch()">Share</button>
+                    <button type="button" class="btn btn-alt" id="match-share-btn" onclick="shareCurrentMatch()">Share</button>
                 </div>
                 <div class="gameover-links">
                     <button type="button" class="gameover-link" onclick="viewFinalBoard()">View board</button>
@@ -2934,11 +2513,11 @@
             {name: "Wrath", emoji: "😡", baseStats: [6, 4, 3, 5], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
             {name: "Vendetta", emoji: "😤", baseStats: [4, 6, 5, 3], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
             {name: "Oni", emoji: "👺", baseStats: [6, 5, 4, 4], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
-            {name: "Dread", emoji: "😱", baseStats: [3, 6, 5, 4], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works.'}},
-            {name: "Hush", emoji: "🤫", baseStats: [5, 4, 5, 4], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works.'}},
-            {name: "Raven", emoji: "🐦‍⬛", baseStats: [4, 6, 4, 5], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works.'}},
-            {name: "Ninja", emoji: "🥷", baseStats: [5, 6, 3, 5], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works.'}},
-            {name: "Cat", emoji: "🐱", baseStats: [2, 5, 7, 3], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works.'}},
+            {name: "Dread", emoji: "😱", baseStats: [3, 6, 5, 4], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel.'}},
+            {name: "Hush", emoji: "🤫", baseStats: [5, 4, 5, 4], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel.'}},
+            {name: "Raven", emoji: "🐦‍⬛", baseStats: [4, 6, 4, 5], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel.'}},
+            {name: "Ninja", emoji: "🥷", baseStats: [5, 6, 3, 5], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel.'}},
+            {name: "Cat", emoji: "🐱", baseStats: [2, 5, 7, 3], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel.'}},
             {name: "Scorch", emoji: "🥵", baseStats: [5, 5, 3, 5], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
             {name: "Brand", emoji: "🫠", baseStats: [4, 5, 6, 3], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
             {name: "Fox", emoji: "🦊", baseStats: [6, 5, 2, 3], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
@@ -3016,7 +2595,7 @@
                 img.draggable = false;
                 img.alt = emoji;
                 img.src = twemojiFile(emoji);
-                img.onerror = () => {el.textContent = emoji;};
+                img.onerror = () => { el.textContent = emoji; };
                 el.textContent = '';
                 el.appendChild(img);
             });
@@ -3032,7 +2611,7 @@
                 if (raw && isDeckPick(raw.player) && isDeckPick(raw.ai)) {
                     return {player: raw.player, ai: raw.ai};
                 }
-            } catch (e) { }
+            } catch (e) {}
             return {player: 'random', ai: 'random'};
         }
 
@@ -3084,7 +2663,7 @@
         let swallowClick = false;
         let gameoverClickLock = false;
         let gameoverUnlockTimer = null;
-        let coach = {active: false, step: null, cellIndex: 4, pendingCapture: false, taughtHand: false};
+        let coach = { active: false, step: null, cellIndex: 4, pendingCapture: false, taughtHand: false };
         const SNAKE_SEQ = (starter) => {
             const other = starter === 'player' ? 'ai' : 'player';
             return [starter, other, other, starter, starter, other, other, starter, starter, other];
@@ -3178,16 +2757,34 @@
             return out;
         }
 
+        function isSilenceCard(card) {
+            return !!(card && card.ability && card.ability.type === 'silence');
+        }
+
+        function silenceCancelled(index) {
+            const card = board[index];
+            if (!isSilenceCard(card)) return false;
+            return neighborIndexes(index).some(i => {
+                const n = board[i];
+                return n && n.owner !== card.owner && isSilenceCard(n);
+            });
+        }
+
+        function activeSilencerAt(index) {
+            return isSilenceCard(board[index]) && !silenceCancelled(index);
+        }
+
         function wouldBeSilenced(owner, index) {
             return neighborIndexes(index).some(i => {
                 const n = board[i];
-                return n && n.owner !== owner && n.ability && n.ability.type === 'silence';
+                return n && n.owner !== owner && activeSilencerAt(i);
             });
         }
 
         function isSilenced(index) {
             const card = board[index];
             if (!card) return false;
+            if (silenceCancelled(index)) return true;
             return wouldBeSilenced(card.owner, index);
         }
 
@@ -3610,7 +3207,7 @@
                 if (q) return q.trim();
                 const hm = (u.hash || '').match(/m=([^&]+)/i);
                 if (hm) return decodeURIComponent(hm[1]).trim();
-            } catch (e) { }
+            } catch (e) {}
             const found = text.match(/EG1[RDTrdt][ECec][PApa]\d{20}/);
             if (found) return found[0];
             return text;
@@ -3663,7 +3260,7 @@
             try {
                 const q = new URLSearchParams(location.search).get('m');
                 if (q) return q;
-            } catch (e) { }
+            } catch (e) {}
             const hm = (location.hash || '').match(/[#&]m=([^&]+)/i);
             return hm ? decodeURIComponent(hm[1]) : '';
         }
@@ -3761,7 +3358,7 @@
             try {
                 await navigator.clipboard.writeText(text);
                 return true;
-            } catch (e) { }
+            } catch (e) {}
             const ta = document.createElement('textarea');
             ta.value = text;
             ta.setAttribute('readonly', '');
@@ -3770,7 +3367,7 @@
             document.body.appendChild(ta);
             ta.select();
             let ok = false;
-            try {ok = document.execCommand('copy');} catch (e) { }
+            try { ok = document.execCommand('copy'); } catch (e) {}
             document.body.removeChild(ta);
             return ok;
         }
@@ -3785,7 +3382,7 @@
             const ok = await copyText(code);
             shareButtons().forEach(btn => {
                 btn.textContent = ok ? 'Copied' : 'Copy failed';
-                setTimeout(() => {btn.textContent = 'Share';}, 1400);
+                setTimeout(() => { btn.textContent = 'Share'; }, 1400);
             });
         }
 
@@ -3988,7 +3585,7 @@
         }
 
         function maybeStartCoach() {
-            if (skipCoachOnce) {skipCoachOnce = false; return;}
+            if (skipCoachOnce) { skipCoachOnce = false; return; }
             if (localStorage.getItem('ember_grid_coached') === 'true') return;
             if (gameState !== 'playing') return;
             coach.active = true;
@@ -4045,7 +3642,7 @@
                 if (!c || c.owner !== 'red') return;
                 const row = Math.floor(i / 3), col = i % 3;
                 [{idx: i - 3, ok: row > 0}, {idx: i + 1, ok: col < 2}, {idx: i + 3, ok: row < 2}, {idx: i - 1, ok: col > 0}]
-                    .forEach(n => {if (n.ok && board[n.idx] === null) emptyAdj.push(n.idx);});
+                    .forEach(n => { if (n.ok && board[n.idx] === null) emptyAdj.push(n.idx); });
             });
             return emptyAdj[0] ?? firstEmptyCell();
         }
@@ -4251,14 +3848,15 @@
         }
 
         function tagSilence(placedCard, index) {
-            if (!placedCard.ability || placedCard.ability.type !== 'silence') return null;
+            if (!isSilenceCard(placedCard)) return null;
+            const cancelled = silenceCancelled(index);
             const names = [];
             neighborIndexes(index).forEach(idx => {
                 const n = board[idx];
-                if (n && n.owner !== placedCard.owner && n.ability) {
-                    n.fxType = 'silence';
-                    names.push(n.name);
-                }
+                if (!n || n.owner === placedCard.owner || !n.ability) return;
+                if (cancelled && !isSilenceCard(n)) return;
+                n.fxType = 'silence';
+                names.push(n.name);
             });
             return names.length ? {text: `${placedCard.name} silenced ${listNames(names)}`, kind: 'silence'} : null;
         }
@@ -4499,7 +4097,7 @@
             document.body.appendChild(ghost);
             pointerDrag.ghost = ghost;
             moveDragGhost(e.clientX, e.clientY);
-            try {pointerDrag.sourceEl.setPointerCapture(e.pointerId);} catch (err) { }
+            try {pointerDrag.sourceEl.setPointerCapture(e.pointerId);} catch (err) {}
             statusMsg.textContent = "Drop on an empty cell.";
         }
 
@@ -4588,7 +4186,7 @@
         }
 
         function processCardPlacement(index, placedCard) {
-            board.forEach(c => {if (c && c !== placedCard) c.blastPreview = false;});
+            board.forEach(c => { if (c && c !== placedCard) c.blastPreview = false; });
             const enemyNeighbor = hasEnemyNeighbor(index, placedCard);
             const abilityFx = applyOnPlayAbilities(placedCard, index);
             recalculateDynamicStats();
@@ -4693,6 +4291,7 @@
                     let score = 0, flipsCount = 0, exposureRisk = 0;
                     const row = Math.floor(cellIdx / 3), col = cellIdx % 3;
                     const silencedHere = wouldBeSilenced('red', cellIdx);
+                    const hushCancels = card.ability && card.ability.type === 'silence' && neighborIndexes(cellIdx).some(i => isSilenceCard(board[i]) && board[i].owner === 'blue');
                     const neighbors = [
                         {idx: cellIdx - 3, p: 0, n: 2, c: row > 0}, {idx: cellIdx + 1, p: 1, n: 3, c: col < 2},
                         {idx: cellIdx + 3, p: 2, n: 0, c: row < 2}, {idx: cellIdx - 1, p: 3, n: 1, c: col > 0}
@@ -4708,7 +4307,9 @@
                             if (card.ability && card.ability.type === 'poison' && !silencedHere) {
                                 if (neighborCard.owner === 'blue') score += 3;
                             }
-                            if (card.ability && card.ability.type === 'silence' && neighborCard.owner === 'blue' && neighborCard.ability) score += 4;
+                            if (card.ability && card.ability.type === 'silence' && neighborCard.owner === 'blue' && neighborCard.ability) {
+                                if (!hushCancels || neighborCard.ability.type === 'silence') score += 4;
+                            }
                             if (card.ability && card.ability.type === 'chill' && neighborCard.owner === 'blue') score += 3;
                             if (neighborCard.ability && neighborCard.ability.type === 'spite' && neighborCard.owner === 'blue') exposureRisk += 2;
 
@@ -4770,7 +4371,7 @@
             resetFingerDrag();
             hideTurnBanner();
             if (blastPreviewTimer) {clearTimeout(blastPreviewTimer); blastPreviewTimer = null;}
-            board.forEach(c => {if (c) c.blastPreview = false;});
+            board.forEach(c => { if (c) c.blastPreview = false; });
             let blueCount = ownedCount('blue'), redCount = ownedCount('red');
             stats.played++;
             if (blueCount > redCount) {stats.wins++; stats.streak++; if (stats.streak > stats.bestStreak) stats.bestStreak = stats.streak; sfx.win(); logAction("Victory achieved!");}
