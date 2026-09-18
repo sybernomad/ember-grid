@@ -755,6 +755,7 @@
             max-width: 300px;
             width: min(300px, calc(100vw - 32px));
             max-height: none;
+            pointer-events: auto;
         }
 
         .modal-content h2,
@@ -1661,7 +1662,7 @@
             </div>
             <div class="menu-foot">
                 <!-- Bump BUILD on every PR. Still pre-1.0, so this stays Alpha until 1.0 ships. -->
-                <p class="build-stamp">0.15 Alpha</p>
+                <p class="build-stamp">0.16 Alpha</p>
                 <p class="dev-note">Still in active development. Cards and rules may change.</p>
             </div>
         </div>
@@ -1852,7 +1853,7 @@
                 <button class="btn" onclick="rematchSwapFirst()">Replay (swap first)</button>
                 <button class="btn btn-alt" onclick="startCurrentModeAgain()">New Hands</button>
                 <button class="btn btn-alt" onclick="viewFinalBoard()">View Board</button>
-                <button class="btn btn-muted" onclick="showModeMenu()">Main Menu</button>
+                <button class="btn btn-muted" onclick="closeGameoverToMenu()">Main Menu</button>
             </div>
         </div>
     </div>
@@ -2120,6 +2121,8 @@
         let aiPlayTimer = null;
         const pointerDrag = {pointerId: null, index: null, startX: 0, startY: 0, active: false, sourceEl: null, ghost: null};
         let swallowClick = false;
+        let gameoverClickLock = false;
+        let gameoverUnlockTimer = null;
         let coach = { active: false, step: null, cellIndex: 4, pendingCapture: false, taughtHand: false };
         const SNAKE_SEQ = (starter) => {
             const other = starter === 'player' ? 'ai' : 'player';
@@ -2535,7 +2538,11 @@
             if (draftTurn === 'ai') scheduleAiDraftPick(600);
         }
 
-        function startCurrentModeAgain() {sfx.click(); hideTooltip(); startGame(activeMode);}
+        function startCurrentModeAgain() {
+            if (gameoverClickLock) return;
+            unlockGameoverClicks();
+            sfx.click(); hideTooltip(); startGame(activeMode);
+        }
 
         function cloneForOwner(card, owner) {
             const copy = {...card, baseStats: [...card.baseStats], owner};
@@ -2559,7 +2566,9 @@
         }
 
         function rematchSwapFirst() {
+            if (gameoverClickLock) return;
             if (!lastMatch) {startGame(activeMode); return;}
+            unlockGameoverClicks();
             sfx.click(); hideTooltip();
             document.getElementById('gameover-modal').classList.add('hidden');
             document.getElementById('main-menu-modal').classList.add('hidden');
@@ -2569,6 +2578,8 @@
         }
 
         function viewFinalBoard() {
+            if (gameoverClickLock) return;
+            unlockGameoverClicks();
             sfx.click();
             document.getElementById('gameover-modal').classList.add('hidden');
             statusMsg.textContent = "Final board. Replay the same hands, or deal new ones.";
@@ -2576,6 +2587,28 @@
 
         function onGameoverBackdrop(e) {
             if (e.target.id === 'gameover-modal') viewFinalBoard();
+        }
+
+        function closeGameoverToMenu() {
+            if (gameoverClickLock) return;
+            unlockGameoverClicks();
+            showModeMenu();
+        }
+
+        function lockGameoverClicks() {
+            gameoverClickLock = true;
+            swallowClick = false;
+            window.removeEventListener('pointerdown', unlockGameoverClicks, true);
+            window.addEventListener('pointerdown', unlockGameoverClicks, true);
+            clearTimeout(gameoverUnlockTimer);
+            gameoverUnlockTimer = setTimeout(unlockGameoverClicks, 400);
+        }
+
+        function unlockGameoverClicks() {
+            gameoverClickLock = false;
+            window.removeEventListener('pointerdown', unlockGameoverClicks, true);
+            clearTimeout(gameoverUnlockTimer);
+            gameoverUnlockTimer = null;
         }
 
         function renderDraftPool() {
@@ -3494,6 +3527,7 @@
             let title = blueCount > redCount ? "Victory! 🎉" : (redCount > blueCount ? "Defeat 💀" : "Match Drawn 🤝");
             document.getElementById('gameover-title').textContent = title;
             document.getElementById('gameover-desc').textContent = `Final Score: Blue (${blueCount}) - Red (${redCount})`;
+            lockGameoverClicks();
             document.getElementById('gameover-modal').classList.remove('hidden');
         }
 
