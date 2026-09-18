@@ -7,7 +7,9 @@
     <title>Ember Grid</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             color-scheme: dark;
@@ -149,37 +151,158 @@
             opacity: 0;
         }
 
-        .embers i:nth-child(1) { left: 8%; animation-duration: 8s; animation-delay: 0s; }
-        .embers i:nth-child(2) { left: 22%; animation-duration: 11s; animation-delay: 1.4s; width: 2px; height: 2px; }
-        .embers i:nth-child(3) { left: 37%; animation-duration: 7.5s; animation-delay: 2.1s; }
-        .embers i:nth-child(4) { left: 51%; animation-duration: 10s; animation-delay: 0.6s; width: 4px; height: 4px; }
-        .embers i:nth-child(5) { left: 64%; animation-duration: 8.5s; animation-delay: 3s; }
-        .embers i:nth-child(6) { left: 76%; animation-duration: 12s; animation-delay: 1s; width: 2px; height: 2px; }
-        .embers i:nth-child(7) { left: 88%; animation-duration: 9.5s; animation-delay: 2.6s; }
-        .embers i:nth-child(8) { left: 95%; animation-duration: 7s; animation-delay: 4s; }
-        .embers i:nth-child(9) { left: 14%; animation-duration: 9.2s; animation-delay: 0.8s; width: 2px; height: 2px; }
-        .embers i:nth-child(10) { left: 29%; animation-duration: 10.5s; animation-delay: 3.4s; }
-        .embers i:nth-child(11) { left: 43%; animation-duration: 8.2s; animation-delay: 1.8s; width: 4px; height: 4px; }
-        .embers i:nth-child(12) { left: 58%; animation-duration: 11.4s; animation-delay: 4.2s; }
-        .embers i:nth-child(13) { left: 71%; animation-duration: 7.8s; animation-delay: 2.4s; width: 2px; height: 2px; }
-        .embers i:nth-child(14) { left: 83%; animation-duration: 9.8s; animation-delay: 0.3s; }
-        .embers i:nth-child(15) { left: 4%; animation-duration: 12.2s; animation-delay: 5s; }
-        .embers i:nth-child(16) { left: 91%; animation-duration: 8.8s; animation-delay: 3.8s; width: 4px; height: 4px; }
-
-        @keyframes emberRise {
-            0% { transform: translateY(0) scale(1); opacity: 0; }
-            12% { opacity: 0.8; }
-            100% { transform: translateY(-105vh) scale(0.4); opacity: 0; }
+        .embers i:nth-child(1) {
+            left: 8%;
+            animation-duration: 8s;
+            animation-delay: 0s;
         }
 
-        [data-theme="light"] .embers { opacity: 0.35; }
+        .embers i:nth-child(2) {
+            left: 22%;
+            animation-duration: 11s;
+            animation-delay: 1.4s;
+            width: 2px;
+            height: 2px;
+        }
+
+        .embers i:nth-child(3) {
+            left: 37%;
+            animation-duration: 7.5s;
+            animation-delay: 2.1s;
+        }
+
+        .embers i:nth-child(4) {
+            left: 51%;
+            animation-duration: 10s;
+            animation-delay: 0.6s;
+            width: 4px;
+            height: 4px;
+        }
+
+        .embers i:nth-child(5) {
+            left: 64%;
+            animation-duration: 8.5s;
+            animation-delay: 3s;
+        }
+
+        .embers i:nth-child(6) {
+            left: 76%;
+            animation-duration: 12s;
+            animation-delay: 1s;
+            width: 2px;
+            height: 2px;
+        }
+
+        .embers i:nth-child(7) {
+            left: 88%;
+            animation-duration: 9.5s;
+            animation-delay: 2.6s;
+        }
+
+        .embers i:nth-child(8) {
+            left: 95%;
+            animation-duration: 7s;
+            animation-delay: 4s;
+        }
+
+        .embers i:nth-child(9) {
+            left: 14%;
+            animation-duration: 9.2s;
+            animation-delay: 0.8s;
+            width: 2px;
+            height: 2px;
+        }
+
+        .embers i:nth-child(10) {
+            left: 29%;
+            animation-duration: 10.5s;
+            animation-delay: 3.4s;
+        }
+
+        .embers i:nth-child(11) {
+            left: 43%;
+            animation-duration: 8.2s;
+            animation-delay: 1.8s;
+            width: 4px;
+            height: 4px;
+        }
+
+        .embers i:nth-child(12) {
+            left: 58%;
+            animation-duration: 11.4s;
+            animation-delay: 4.2s;
+        }
+
+        .embers i:nth-child(13) {
+            left: 71%;
+            animation-duration: 7.8s;
+            animation-delay: 2.4s;
+            width: 2px;
+            height: 2px;
+        }
+
+        .embers i:nth-child(14) {
+            left: 83%;
+            animation-duration: 9.8s;
+            animation-delay: 0.3s;
+        }
+
+        .embers i:nth-child(15) {
+            left: 4%;
+            animation-duration: 12.2s;
+            animation-delay: 5s;
+        }
+
+        .embers i:nth-child(16) {
+            left: 91%;
+            animation-duration: 8.8s;
+            animation-delay: 3.8s;
+            width: 4px;
+            height: 4px;
+        }
+
+        @keyframes emberRise {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 0;
+            }
+
+            12% {
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translateY(-105vh) scale(0.4);
+                opacity: 0;
+            }
+        }
+
+        [data-theme="light"] .embers {
+            opacity: 0.35;
+        }
 
         @media (prefers-reduced-motion: reduce) {
-            .embers i { animation: none; opacity: 0; }
-            .card.flipped { animation: none; }
-            .card.selected { animation: none; }
-            .turn-banner, .capture-pop, .fx-ring,
-            .score-pill.score-tick, .turn-indicator.pulse { animation: none; }
+            .embers i {
+                animation: none;
+                opacity: 0;
+            }
+
+            .card.flipped {
+                animation: none;
+            }
+
+            .card.selected {
+                animation: none;
+            }
+
+            .turn-banner,
+            .capture-pop,
+            .fx-ring,
+            .score-pill.score-tick,
+            .turn-indicator.pulse {
+                animation: none;
+            }
+
             .turn-banner.show {
                 animation: toastHold 1.15s ease forwards;
             }
@@ -235,7 +358,7 @@
         }
 
         .menu-btn {
-            background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.18));
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.18));
             background-color: var(--panel-bg);
             border: 1px solid var(--border-color);
             color: var(--text-color);
@@ -248,7 +371,7 @@
             align-items: center;
             justify-content: center;
             transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 4px 10px rgba(0,0,0,0.25);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 4px 10px rgba(0, 0, 0, 0.25);
         }
 
         .menu-btn:hover {
@@ -271,11 +394,11 @@
             width: 100%;
             max-width: calc(var(--grid-w) * 3 + 18px);
             padding: 5px 10px;
-            background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(0,0,0,0.18));
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.18));
             background-color: var(--panel-bg);
             border: 1px solid rgba(232, 195, 106, 0.28);
             border-radius: 999px;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 8px 18px rgba(0,0,0,0.28);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 8px 18px rgba(0, 0, 0, 0.28);
         }
 
         .score-pill {
@@ -358,7 +481,7 @@
 
         .cell {
             background:
-                linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.18)),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(0, 0, 0, 0.18)),
                 var(--cell-bg);
             border: 1px solid rgba(232, 195, 106, 0.16);
             border-radius: 10px;
@@ -435,7 +558,7 @@
             font-weight: 700;
             cursor: grab;
             position: relative;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.22);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.22);
             transition: transform 0.18s cubic-bezier(0.4, 0, 0.2, 1), filter 0.15s, box-shadow 0.18s;
             touch-action: none;
         }
@@ -455,7 +578,7 @@
             position: absolute;
             inset: 0;
             border-radius: inherit;
-            background: linear-gradient(125deg, rgba(255,255,255,0.28) 0%, transparent 34%, transparent 62%, rgba(255,255,255,0.08) 100%);
+            background: linear-gradient(125deg, rgba(255, 255, 255, 0.28) 0%, transparent 34%, transparent 62%, rgba(255, 255, 255, 0.08) 100%);
             pointer-events: none;
             mix-blend-mode: soft-light;
             z-index: 3;
@@ -480,13 +603,22 @@
             transform-origin: top left;
             transition: none !important;
             animation: none !important;
-            box-shadow: 0 18px 32px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255,255,255,0.22);
+            box-shadow: 0 18px 32px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.22);
         }
 
         @keyframes pulseFlip {
-            0% { transform: scale(1) rotateY(0deg); }
-            50% { transform: scale(1.1) rotateY(90deg); filter: brightness(1.45); }
-            100% { transform: scale(1) rotateY(0deg); }
+            0% {
+                transform: scale(1) rotateY(0deg);
+            }
+
+            50% {
+                transform: scale(1.1) rotateY(90deg);
+                filter: brightness(1.45);
+            }
+
+            100% {
+                transform: scale(1) rotateY(0deg);
+            }
         }
 
         .card.flipped {
@@ -511,7 +643,7 @@
 
         .card.card-back {
             background:
-                repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0 5px, transparent 5px 10px),
+                repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.05) 0 5px, transparent 5px 10px),
                 linear-gradient(160deg, #9f1239, #4c0519);
             border-color: #fda4af;
         }
@@ -534,7 +666,7 @@
             padding: 3px 5px;
             line-height: 1;
             border: 1px solid var(--gold);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.45);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
         }
 
         .ability-badge.silenced {
@@ -577,9 +709,9 @@
             justify-content: center;
             font-size: 1.35em;
             z-index: 1;
-            background: radial-gradient(circle at 50% 38%, rgba(255,255,255,0.2), rgba(0,0,0,0.28));
+            background: radial-gradient(circle at 50% 38%, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.28));
             border-radius: 50%;
-            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.16), 0 4px 8px rgba(0,0,0,0.35);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16), 0 4px 8px rgba(0, 0, 0, 0.35);
             filter: none;
         }
 
@@ -597,8 +729,8 @@
             border: 1px solid rgba(232, 195, 106, 0.5);
             border-radius: 50%;
             font-variant-numeric: tabular-nums;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
             position: absolute;
         }
 
@@ -729,23 +861,32 @@
 
         .modal-content {
             background:
-                linear-gradient(180deg, rgba(255,255,255,0.04), transparent 28%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 28%),
                 var(--panel-bg);
             color: var(--text-color);
             padding: 1.25rem 1.15rem 1.1rem;
             border-radius: 16px;
             max-width: 480px;
-            width: 100%;
+            width: min(480px, 100%);
             text-align: center;
             box-shadow:
                 0 0 0 1px rgba(232, 195, 106, 0.22),
                 0 24px 50px rgba(0, 0, 0, 0.55),
                 0 0 80px rgba(232, 163, 23, 0.08);
             border: 1px solid rgba(232, 195, 106, 0.38);
-            max-height: 94dvh;
+            max-height: min(86dvh, calc(100dvh - 24px));
             overflow-y: auto;
             position: relative;
             min-height: 0;
+            height: auto;
+            align-self: center;
+            flex: 0 1 auto;
+        }
+
+        #gameover-modal .modal-content {
+            max-width: 300px;
+            width: min(300px, calc(100vw - 32px));
+            max-height: none;
         }
 
         .modal-content h2,
@@ -806,7 +947,7 @@
             letter-spacing: 0.04em;
             cursor: pointer;
             transition: filter 0.15s, transform 0.1s, box-shadow 0.15s;
-            box-shadow: 0 3px 0 #92400e, 0 8px 16px rgba(0,0,0,0.28);
+            box-shadow: 0 3px 0 #92400e, 0 8px 16px rgba(0, 0, 0, 0.28);
         }
 
         .btn:hover {
@@ -835,7 +976,7 @@
         .btn-muted {
             background: linear-gradient(180deg, #57534e, #3f3a36);
             color: #f5f0e8;
-            box-shadow: 0 3px 0 #292524, 0 8px 16px rgba(0,0,0,0.28);
+            box-shadow: 0 3px 0 #292524, 0 8px 16px rgba(0, 0, 0, 0.28);
         }
 
         .menu-links {
@@ -873,24 +1014,25 @@
 
         @media (max-width: 640px) {
             .modal {
+                padding: 16px 12px;
+                align-items: center;
+                justify-content: center;
+            }
+
+            #main-menu-modal {
                 padding: 0;
                 align-items: stretch;
             }
 
-            #main-menu-modal .modal-content,
-            #draft-modal .modal-content,
-            #deck-modal .modal-content {
+            #main-menu-modal .modal-content {
                 max-width: none;
                 width: 100%;
                 min-height: 100dvh;
                 max-height: 100dvh;
                 border-radius: 0;
-                padding: calc(22px + env(safe-area-inset-top)) 18px calc(20px + env(safe-area-inset-bottom));
-            }
-
-            #main-menu-modal .modal-content {
                 justify-content: center;
-                padding-bottom: calc(72px + env(safe-area-inset-bottom));
+                padding: calc(22px + env(safe-area-inset-top)) 18px calc(72px + env(safe-area-inset-bottom));
+                align-self: stretch;
             }
 
             #main-menu-modal .menu-foot {
@@ -901,30 +1043,39 @@
                 margin: 0;
             }
 
+            #draft-modal .modal-content,
+            #deck-modal .modal-content {
+                max-width: min(560px, 100%);
+                width: 100%;
+                max-height: min(86dvh, calc(100dvh - 24px));
+                min-height: 0;
+                border-radius: 16px;
+            }
+
             #draft-modal .draft-grid {
                 width: 100%;
                 gap: 10px;
-                grid-template-rows: repeat(4, minmax(0, 1fr));
-                align-content: stretch;
                 justify-items: center;
             }
 
             #draft-modal .draft-card {
                 width: auto;
-                height: 100%;
                 max-width: 100%;
                 aspect-ratio: 4 / 5;
             }
 
-            .modal-content {
-                max-width: none;
+            #gameover-modal .modal-content {
+                max-width: 300px;
+                width: min(300px, calc(100vw - 24px));
+                min-height: 0;
+                height: auto;
             }
 
             #compendium-modal .modal-content,
             #expanded-rules-modal .modal-content,
             #options-modal .modal-content,
             #stats-modal .modal-content {
-                max-height: 100dvh;
+                max-height: min(80dvh, calc(100dvh - 24px));
                 min-height: 0;
             }
         }
@@ -1000,7 +1151,7 @@
             margin-bottom: 8px;
         }
 
-        .settings-stack > span {
+        .settings-stack>span {
             font-size: 0.8rem;
             font-weight: 700;
         }
@@ -1057,7 +1208,7 @@
             font-size: 0.82rem;
         }
 
-        .menu-play-actions + .menu-play-actions {
+        .menu-play-actions+.menu-play-actions {
             margin-top: 8px;
         }
 
@@ -1132,8 +1283,9 @@
         #compendium-modal .modal-content {
             display: flex;
             flex-direction: column;
-            height: min(94dvh, 720px);
-            min-height: min(94dvh, 720px);
+            max-height: min(80dvh, 640px);
+            height: auto;
+            min-height: 0;
             overflow: hidden;
         }
 
@@ -1153,7 +1305,7 @@
         #compendium-modal .modal-title,
         #compendium-modal .set-blurb,
         #compendium-modal .compendium-filter,
-        #compendium-modal .modal-content > .btn {
+        #compendium-modal .modal-content>.btn {
             flex-shrink: 0;
         }
 
@@ -1200,10 +1352,10 @@
             color: #fff;
             overflow: hidden;
             background:
-                radial-gradient(circle at 50% 35%, rgba(255,255,255,0.12), transparent 55%),
+                radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.12), transparent 55%),
                 linear-gradient(160deg, #57534e, #292524);
             border: 1px solid #e8c36a;
-            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255,255,255,0.16);
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.16);
         }
 
         .compendium-card {
@@ -1240,19 +1392,34 @@
             padding: 0 3px;
             line-height: 1.1;
         }
-        .compendium-card .card-name { font-size: 0.48rem; }
-        .draft-card .card-name { font-size: var(--draft-font-name); }
+
+        .compendium-card .card-name {
+            font-size: 0.48rem;
+        }
+
+        .draft-card .card-name {
+            font-size: var(--draft-font-name);
+        }
 
         .compendium-card .stat-top,
-        .draft-card .stat-top { top: 2px; }
+        .draft-card .stat-top {
+            top: 2px;
+        }
+
         .compendium-card .stat-bottom,
-        .draft-card .stat-bottom { bottom: 13px; }
+        .draft-card .stat-bottom {
+            bottom: 13px;
+        }
+
         .compendium-card .stat-left,
         .compendium-card .stat-right,
         .compendium-card .card-emoji,
         .draft-card .stat-left,
         .draft-card .stat-right,
-        .draft-card .card-emoji { top: 44%; }
+        .draft-card .card-emoji {
+            top: 44%;
+        }
+
         .compendium-card .card-emoji,
         .draft-card .card-emoji {
             width: 2.15em;
@@ -1270,7 +1437,7 @@
         }
 
         .stat-card {
-            background: rgba(0,0,0,0.18);
+            background: rgba(0, 0, 0, 0.18);
             padding: 8px 10px;
             border-radius: 10px;
             border: 1px solid var(--border-color);
@@ -1310,21 +1477,43 @@
             border: 1px solid var(--gold);
             background: rgba(16, 12, 9, 0.88);
             color: var(--gold);
-            box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
         }
 
         .turn-banner.show {
             animation: bannerIn 0.85s ease forwards;
         }
 
-        .turn-banner.player { color: var(--blue-card); border-color: rgba(110, 160, 255, 0.5); }
-        .turn-banner.ai { color: var(--red-card); border-color: rgba(255, 107, 87, 0.5); }
+        .turn-banner.player {
+            color: var(--blue-card);
+            border-color: rgba(110, 160, 255, 0.5);
+        }
+
+        .turn-banner.ai {
+            color: var(--red-card);
+            border-color: rgba(255, 107, 87, 0.5);
+        }
 
         @keyframes bannerIn {
-            0% { opacity: 0; transform: translate(-50%, -18px) scale(0.9); }
-            18% { opacity: 1; transform: translate(-50%, 0) scale(1); }
-            62% { opacity: 1; transform: translate(-50%, 0) scale(1); }
-            100% { opacity: 0; transform: translate(-50%, -8px) scale(0.98); }
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -18px) scale(0.9);
+            }
+
+            18% {
+                opacity: 1;
+                transform: translate(-50%, 0) scale(1);
+            }
+
+            62% {
+                opacity: 1;
+                transform: translate(-50%, 0) scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -8px) scale(0.98);
+            }
         }
 
         @media (max-width: 480px) {
@@ -1336,8 +1525,15 @@
         }
 
         @keyframes toastHold {
-            0%, 62% { opacity: 1; }
-            100% { opacity: 0; }
+
+            0%,
+            62% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
         }
 
         .score-pill.score-tick {
@@ -1345,9 +1541,18 @@
         }
 
         @keyframes scoreTick {
-            0% { transform: scale(1); }
-            35% { transform: scale(1.12); filter: brightness(1.3); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            35% {
+                transform: scale(1.12);
+                filter: brightness(1.3);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
 
         .turn-indicator.pulse {
@@ -1355,9 +1560,20 @@
         }
 
         @keyframes turnPulse {
-            0% { transform: scale(1); letter-spacing: 0.16em; }
-            40% { transform: scale(1.08); letter-spacing: 0.22em; }
-            100% { transform: scale(1); letter-spacing: 0.16em; }
+            0% {
+                transform: scale(1);
+                letter-spacing: 0.16em;
+            }
+
+            40% {
+                transform: scale(1.08);
+                letter-spacing: 0.22em;
+            }
+
+            100% {
+                transform: scale(1);
+                letter-spacing: 0.16em;
+            }
         }
 
         .capture-pop {
@@ -1380,10 +1596,25 @@
         }
 
         @keyframes captureFloat {
-            0% { opacity: 0; transform: translate(-50%, 8px) scale(0.8); }
-            12% { opacity: 1; transform: translate(-50%, -6px) scale(1.05); }
-            72% { opacity: 1; transform: translate(-50%, -10px) scale(1); }
-            100% { opacity: 0; transform: translate(-50%, -22px) scale(0.95); }
+            0% {
+                opacity: 0;
+                transform: translate(-50%, 8px) scale(0.8);
+            }
+
+            12% {
+                opacity: 1;
+                transform: translate(-50%, -6px) scale(1.05);
+            }
+
+            72% {
+                opacity: 1;
+                transform: translate(-50%, -10px) scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -22px) scale(0.95);
+            }
         }
 
         .fx-ring {
@@ -1395,20 +1626,57 @@
             animation: fxRing 0.7s ease-out forwards;
         }
 
-        .fx-ring.curse { box-shadow: 0 0 0 2px #c084fc, 0 0 18px #a855f7; }
-        .fx-ring.bolt { box-shadow: 0 0 0 2px #60a5fa, 0 0 18px #3b82f6; }
-        .fx-ring.poison { box-shadow: 0 0 0 2px #4ade80, 0 0 16px #22c55e; }
-        .fx-ring.buff { box-shadow: 0 0 0 2px var(--gold), 0 0 16px #e8a317; }
-        .fx-ring.blast { box-shadow: 0 0 0 2px #fb923c, 0 0 18px #f97316; }
-        .fx-ring.spite { box-shadow: 0 0 0 2px #fb7185, 0 0 18px #e11d48; }
-        .fx-ring.silence { box-shadow: 0 0 0 2px #94a3b8, 0 0 16px #64748b; }
-        .fx-ring.chill { box-shadow: 0 0 0 2px #7dd3fc, 0 0 16px #38bdf8; }
-        .fx-ring.cinder { box-shadow: 0 0 0 2px #fb923c, 0 0 18px #ea580c; }
+        .fx-ring.curse {
+            box-shadow: 0 0 0 2px #c084fc, 0 0 18px #a855f7;
+        }
+
+        .fx-ring.bolt {
+            box-shadow: 0 0 0 2px #60a5fa, 0 0 18px #3b82f6;
+        }
+
+        .fx-ring.poison {
+            box-shadow: 0 0 0 2px #4ade80, 0 0 16px #22c55e;
+        }
+
+        .fx-ring.buff {
+            box-shadow: 0 0 0 2px var(--gold), 0 0 16px #e8a317;
+        }
+
+        .fx-ring.blast {
+            box-shadow: 0 0 0 2px #fb923c, 0 0 18px #f97316;
+        }
+
+        .fx-ring.spite {
+            box-shadow: 0 0 0 2px #fb7185, 0 0 18px #e11d48;
+        }
+
+        .fx-ring.silence {
+            box-shadow: 0 0 0 2px #94a3b8, 0 0 16px #64748b;
+        }
+
+        .fx-ring.chill {
+            box-shadow: 0 0 0 2px #7dd3fc, 0 0 16px #38bdf8;
+        }
+
+        .fx-ring.cinder {
+            box-shadow: 0 0 0 2px #fb923c, 0 0 18px #ea580c;
+        }
 
         @keyframes fxRing {
-            0% { opacity: 0; transform: scale(0.92); }
-            30% { opacity: 1; transform: scale(1.04); }
-            100% { opacity: 0; transform: scale(1.08); }
+            0% {
+                opacity: 0;
+                transform: scale(0.92);
+            }
+
+            30% {
+                opacity: 1;
+                transform: scale(1.04);
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(1.08);
+            }
         }
 
         .cell.coach-target {
@@ -1439,7 +1707,7 @@
             border: 1px solid var(--gold);
             border-radius: 12px;
             padding: 10px 12px 8px;
-            box-shadow: 0 16px 36px rgba(0,0,0,0.45);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
             text-align: center;
         }
 
@@ -1571,7 +1839,9 @@
 </head>
 
 <body data-theme="dark">
-    <div class="embers" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="embers" aria-hidden="true">
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    </div>
 
     <div class="container">
         <header>
@@ -1613,17 +1883,22 @@
 
     <!-- Main Menu Modal -->
     <div id="main-menu-modal" class="modal modal-ember">
-        <div class="embers" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="embers" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
         <div class="modal-content">
             <h2 class="modal-title">Ember Grid</h2>
             <p class="brand-tag">The Base Set</p>
 
             <div class="menu-section-title">Core Rules</div>
             <div class="rules-compact">
-                <strong>🃏 The deck:</strong> Cards are dealt or drafted from a shared deck - the Base Set, 45 cards. Tribe Decks play one tribe of five. Every Ember card has an ability.<br>
-                <strong>⚔️ Capture:</strong> Play a card from your hand next to an enemy. If your touching stat is higher,
+                <strong>🃏 The deck:</strong> Cards are dealt or drafted from a shared deck - the Base Set, 50 cards.
+                Tribe Decks play one tribe of five. Every Ember card has an ability.<br>
+                <strong>⚔️ Capture:</strong> Play a card from your hand next to an enemy. If your touching stat is
+                higher,
                 you capture it.<br>
-                <strong>🏆 Victory:</strong> Fill the 3x3. Most cards wins - the leftover card in each hand still counts.
+                <strong>🏆 Victory:</strong> Fill the 3x3. Most cards wins - the leftover card in each hand still
+                counts.
             </div>
 
             <nav class="menu-links">
@@ -1641,7 +1916,7 @@
             </div>
             <div class="menu-foot">
                 <!-- Bump BUILD on every PR. Still pre-1.0, so this stays Alpha until 1.0 ships. -->
-                <p class="build-stamp">0.13 Alpha</p>
+                <p class="build-stamp">0.14 Alpha</p>
                 <p class="dev-note">Still in active development. Cards and rules may change.</p>
             </div>
         </div>
@@ -1649,28 +1924,35 @@
 
     <!-- Rules Modal -->
     <div id="expanded-rules-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, closeRulesModal)">
-        <div class="embers" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="embers" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="closeRulesModal()" aria-label="Close rules">&times;</button>
+            <button type="button" class="modal-close" onclick="closeRulesModal()"
+                aria-label="Close rules">&times;</button>
             <h2 class="modal-title">Rules</h2>
 
             <div class="menu-section-title" style="margin-top: 0;">The table</div>
             <div class="expanded-rules-list">
                 <div class="rule-detail-item">
-                    <strong>The deck:</strong> The Base Set is 45 cards in nine tribes. Every Ember card has an ability. Shuffle it and deal two hands of five, or spread sixteen and draft until each hand is five.
+                    <strong>The deck:</strong> The Base Set is 50 cards in ten tribes. Every Ember card has an ability.
+                    Shuffle it and deal two hands of five, or spread sixteen and draft until each hand is five.
                 </div>
                 <div class="rule-detail-item">
-                    <strong>Tribe Decks:</strong> Each deck is one tribe of five. Pick yours and the opponent's, or leave either one random. Same tribe on both sides is a mirror match.
+                    <strong>Tribe Decks:</strong> Each deck is one tribe of five. Pick yours and the opponent's, or
+                    leave either one random. Same tribe on both sides is a mirror match.
                 </div>
                 <div class="rule-detail-item">
-                    <strong>Placement:</strong> On your turn, play one card from your hand onto an empty cell of the 3x3 grid.
+                    <strong>Placement:</strong> On your turn, play one card from your hand onto an empty cell of the 3x3
+                    grid.
                 </div>
                 <div class="rule-detail-item">
                     <strong>Capturing:</strong> When your card touches an enemy card, compare touching values (Top,
                     Right, Bottom, Left). If your attacking stat is strictly greater, you capture their card!
                 </div>
                 <div class="rule-detail-item">
-                    <strong>Victory:</strong> Two hands of five is ten cards. After the board fills, the leftover card in each hand still counts, so 6+ wins and 5-5 is a draw.
+                    <strong>Victory:</strong> Two hands of five is ten cards. After the board fills, the leftover card
+                    in each hand still counts, so 6+ wins and 5-5 is a draw.
                 </div>
                 <div class="rule-detail-item">
                     <strong>Stat Cap:</strong> Stats range from 1 to 10 (represented by A). Stat boosts cannot raise
@@ -1680,15 +1962,27 @@
 
             <div class="menu-section-title">Ember Mode Abilities</div>
             <div class="expanded-rules-list">
-                <div class="rule-detail-item"><strong>⚡ Buff:</strong> Adjacent friendly cards get +1 to all stats. Radiance tribe - Celestial, Fairy, Unicorn, Paladin, Angel.</div>
-                <div class="rule-detail-item"><strong>💀 Curse:</strong> On play, the strongest enemy loses 1 from all stats. Grave tribe - Ghost, Vampire, Skull, Zombie, Bat.</div>
-                <div class="rule-detail-item"><strong>💥 Blast:</strong> +2 to all stats on the turn this card is played. Beasts tribe - Dragon, T-Rex, Lion, Shark, Eagle.</div>
-                <div class="rule-detail-item"><strong>🦠 Poison:</strong> Adjacent cards lose 1 from all stats at the end of every turn. Vermin tribe - Spider, Scorpion, Snake, Frog, Beetle.</div>
-                <div class="rule-detail-item"><strong>⚖️ Equalizer:</strong> Captures when touching stats match. Balance tribe - Monk, Titan, Robot, Owl, Alien.</div>
-                <div class="rule-detail-item"><strong>💢 Spite:</strong> When this card is captured, the captor loses 1 from all stats. Wrath tribe - Cyclops, Gorilla, Wrath, Vendetta, Oni.</div>
-                <div class="rule-detail-item"><strong>🔇 Silence:</strong> Adjacent enemies lose their abilities while this card sits there. Capture still works. Hush tribe - Dread, Hush, Wizard, Ninja, Cat.</div>
-                <div class="rule-detail-item"><strong>🔥 Cinder:</strong> On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange. Ember tribe - Scorch, Brand, Fox, Genie, Lizard.</div>
-                <div class="rule-detail-item"><strong>❄️ Chill:</strong> Adjacent enemies are -1 to all stats while this card sits there. Frost tribe - Frost, Wolf, Penguin, Polar, Seal.</div>
+                <div class="rule-detail-item"><strong>⚡ Buff:</strong> Adjacent friendly cards get +1 to all stats.
+                    Radiance tribe - Celestial, Fairy, Unicorn, Paladin, Angel.</div>
+                <div class="rule-detail-item"><strong>💀 Curse:</strong> On play, the strongest enemy loses 1 from all
+                    stats. Grave tribe - Ghost, Vampire, Skull, Zombie, Bat.</div>
+                <div class="rule-detail-item"><strong>💥 Blast:</strong> +2 to all stats on the turn this card is
+                    played. Beasts tribe - Dragon, T-Rex, Lion, Shark, Eagle.</div>
+                <div class="rule-detail-item"><strong>🦠 Poison:</strong> Adjacent cards lose 1 from all stats at the
+                    end of every turn. Vermin tribe - Spider, Scorpion, Snake, Frog, Beetle.</div>
+                <div class="rule-detail-item"><strong>⚖️ Equalizer:</strong> Captures when touching stats match. Balance
+                    tribe - Monk, Titan, Robot, Owl, Alien.</div>
+                <div class="rule-detail-item"><strong>💢 Spite:</strong> When this card is captured, the captor loses 1
+                    from all stats. Wrath tribe - Cyclops, Gorilla, Wrath, Vendetta, Oni.</div>
+                <div class="rule-detail-item"><strong>🔇 Silence:</strong> Adjacent enemies lose their abilities while
+                    this card sits there. Capture still works. Hush tribe - Dread, Hush, Raven, Ninja, Cat.</div>
+                <div class="rule-detail-item"><strong>🔥 Cinder:</strong> On play, a random empty cell becomes Cindered.
+                    Whoever sits there is -1 to all stats. The cell glows orange. Ember tribe - Scorch, Brand, Fox,
+                    Phoenix, Lizard.</div>
+                <div class="rule-detail-item"><strong>🔮 Bolt:</strong> On play, zaps a random enemy card, reducing all
+                    its stats by 2. Arcane tribe - Wizard, Genie, Witch, Mage, Imp.</div>
+                <div class="rule-detail-item"><strong>❄️ Chill:</strong> Adjacent enemies are -1 to all stats while this
+                    card sits there. Frost tribe - Frost, Wolf, Penguin, Polar, Seal.</div>
             </div>
 
             <button class="btn btn-alt btn-dismiss" onclick="closeRulesModal()">Close</button>
@@ -1697,11 +1991,15 @@
 
     <!-- Compendium Modal -->
     <div id="compendium-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, closeCompendiumModal)">
-        <div class="embers" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="embers" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="closeCompendiumModal()" aria-label="Close compendium">&times;</button>
+            <button type="button" class="modal-close" onclick="closeCompendiumModal()"
+                aria-label="Close compendium">&times;</button>
             <h2 class="modal-title">Compendium</h2>
-            <p class="set-blurb">The Base Set is 45 cards in nine tribes. Every Ember card has an ability. Classic Mode still strips abilities and plays as pure stats.</p>
+            <p class="set-blurb">The Base Set is 50 cards in ten tribes. Every Ember card has an ability. Classic Mode
+                still strips abilities and plays as pure stats.</p>
             <select id="compendium-filter" class="settings-select compendium-filter" onchange="renderCompendium()">
                 <option value="all">All cards</option>
                 <option value="aura_buff">Buff</option>
@@ -1712,6 +2010,7 @@
                 <option value="spite">Spite</option>
                 <option value="silence">Silence</option>
                 <option value="cinder">Cinder</option>
+                <option value="bolt">Bolt</option>
                 <option value="chill">Chill</option>
             </select>
             <div class="compendium-grid" id="compendium-grid"></div>
@@ -1721,26 +2020,31 @@
 
     <!-- Options Modal -->
     <div id="options-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, closeOptionsModal)">
-        <div class="embers" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="embers" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="closeOptionsModal()" aria-label="Close options">&times;</button>
+            <button type="button" class="modal-close" onclick="closeOptionsModal()"
+                aria-label="Close options">&times;</button>
             <h2 class="modal-title">Options</h2>
 
             <div class="menu-section-title" style="margin-top: 0;">Match</div>
             <div class="settings-stack">
                 <span>Game Mode</span>
-                <select id="ruleset-select" class="settings-select settings-select-full" onchange="updateRuleset(this.value)">
+                <select id="ruleset-select" class="settings-select settings-select-full"
+                    onchange="updateRuleset(this.value)">
                     <option value="ember" selected>Ember Mode (Abilities)</option>
                     <option value="classic">Classic Mode (Pure Stats)</option>
                 </select>
             </div>
             <div id="ruleset-desc" class="ruleset-desc-box">
-                <strong>Ember Mode:</strong> Every card has an ability. Nine tribes share the pile: Buff, Curse, Blast,
-                Poison, Equalizer, Spite, Silence, Cinder, and Chill.
+                <strong>Ember Mode:</strong> Every card has an ability. Ten tribes share the pile: Buff, Curse, Blast,
+                Poison, Equalizer, Spite, Silence, Cinder, Bolt, and Chill.
             </div>
             <div class="settings-stack">
                 <span>AI Difficulty</span>
-                <select id="ai-difficulty-select" class="settings-select settings-select-full" onchange="updateDifficulty(this.value)">
+                <select id="ai-difficulty-select" class="settings-select settings-select-full"
+                    onchange="updateDifficulty(this.value)">
                     <option value="easy">Easy</option>
                     <option value="normal" selected>Normal</option>
                     <option value="hard">Hard</option>
@@ -1748,7 +2052,8 @@
             </div>
             <label class="settings-row" for="open-hands-check">
                 <span>Show Hands</span>
-                <input type="checkbox" id="open-hands-check" class="settings-check" onchange="updateOpenHands(this.checked)">
+                <input type="checkbox" id="open-hands-check" class="settings-check"
+                    onchange="updateOpenHands(this.checked)">
             </label>
 
             <button class="btn btn-alt btn-dismiss" onclick="closeOptionsModal()">Close</button>
@@ -1757,9 +2062,12 @@
 
     <!-- Stats Modal -->
     <div id="stats-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, closeStatsModal)">
-        <div class="embers" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="embers" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="closeStatsModal()" aria-label="Close stats">&times;</button>
+            <button type="button" class="modal-close" onclick="closeStatsModal()"
+                aria-label="Close stats">&times;</button>
             <h2 class="modal-title">Career Stats</h2>
             <div class="stats-grid">
                 <div class="stat-card">
@@ -1791,11 +2099,14 @@
 
     <!-- Draft Modal -->
     <div id="draft-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, cancelDraft)">
-        <div class="embers" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="embers" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
         <div class="modal-content" onclick="event.stopPropagation()">
             <button type="button" class="modal-close" onclick="cancelDraft()" aria-label="Cancel draft">&times;</button>
             <h2 class="modal-title" style="color: var(--blue-card);">Draft Hands</h2>
-            <p class="draft-order">Sixteen cards from the deck. Snake order: 1 pick, then pairs of 2, until each hand is five.</p>
+            <p class="draft-order">Sixteen cards from the deck. Snake order: 1 pick, then pairs of 2, until each hand is
+                five.</p>
             <p id="draft-status" class="draft-status"></p>
             <div class="draft-grid" id="draft-pool-grid"></div>
             <div class="draft-rosters" id="draft-rosters">Your Hand: 0/5 | AI Hand: 0/5</div>
@@ -1805,11 +2116,15 @@
 
     <!-- Tribe Decks Modal -->
     <div id="deck-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, cancelDeckPicker)">
-        <div class="embers" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="embers" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="cancelDeckPicker()" aria-label="Cancel deck pick">&times;</button>
+            <button type="button" class="modal-close" onclick="cancelDeckPicker()"
+                aria-label="Cancel deck pick">&times;</button>
             <h2 class="modal-title">Tribe Decks</h2>
-            <p class="draft-order">Each deck is one tribe of five. Pick yours and the opponent's, or leave either one random.</p>
+            <p class="draft-order">Each deck is one tribe of five. Pick yours and the opponent's, or leave either one
+                random.</p>
             <div class="menu-section-title" style="margin-top: 8px;">Your deck</div>
             <div id="deck-you-picks" class="deck-picks"></div>
             <div class="menu-section-title">Opponent</div>
@@ -1821,9 +2136,12 @@
 
     <!-- Game Over Modal -->
     <div id="gameover-modal" class="modal modal-ember hidden" onclick="onGameoverBackdrop(event)">
-        <div class="embers" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-        <div class="modal-content" style="max-width: 300px;" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="viewFinalBoard()" aria-label="View board">&times;</button>
+        <div class="embers" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button type="button" class="modal-close" onclick="viewFinalBoard()"
+                aria-label="View board">&times;</button>
             <h2 id="gameover-title" class="modal-title">Match Over</h2>
             <p id="gameover-desc"></p>
             <div class="gameover-actions">
@@ -2006,14 +2324,19 @@
             {name: "Oni", emoji: "👺", baseStats: [6, 5, 4, 4], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
             {name: "Dread", emoji: "😱", baseStats: [3, 6, 5, 4], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works.'}},
             {name: "Hush", emoji: "🤫", baseStats: [5, 4, 5, 4], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works.'}},
-            {name: "Wizard", emoji: "🧙", baseStats: [5, 7, 3, 5], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works.'}},
+            {name: "Raven", emoji: "🐦‍⬛", baseStats: [4, 6, 4, 5], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works.'}},
             {name: "Ninja", emoji: "🥷", baseStats: [5, 6, 3, 5], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works.'}},
             {name: "Cat", emoji: "🐱", baseStats: [2, 5, 7, 3], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works.'}},
             {name: "Scorch", emoji: "🥵", baseStats: [5, 5, 3, 5], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
             {name: "Brand", emoji: "🫠", baseStats: [4, 5, 6, 3], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
             {name: "Fox", emoji: "🦊", baseStats: [6, 5, 2, 3], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
-            {name: "Genie", emoji: "🧞", baseStats: [6, 5, 5, 5], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
+            {name: "Phoenix", emoji: "🐦‍🔥", baseStats: [5, 4, 6, 4], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
             {name: "Lizard", emoji: "🦎", baseStats: [5, 4, 5, 4], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
+            {name: "Wizard", emoji: "🧙", baseStats: [5, 7, 3, 5], ability: {type: 'bolt', icon: '🔮', desc: 'On play, zaps a random enemy card, reducing all its stats by 2.'}},
+            {name: "Genie", emoji: "🧞", baseStats: [6, 5, 5, 5], ability: {type: 'bolt', icon: '🔮', desc: 'On play, zaps a random enemy card, reducing all its stats by 2.'}},
+            {name: "Witch", emoji: "🧙‍♀️", baseStats: [4, 6, 5, 4], ability: {type: 'bolt', icon: '🔮', desc: 'On play, zaps a random enemy card, reducing all its stats by 2.'}},
+            {name: "Mage", emoji: "🪄", baseStats: [6, 3, 6, 4], ability: {type: 'bolt', icon: '🔮', desc: 'On play, zaps a random enemy card, reducing all its stats by 2.'}},
+            {name: "Imp", emoji: "👿", baseStats: [3, 6, 4, 5], ability: {type: 'bolt', icon: '🔮', desc: 'On play, zaps a random enemy card, reducing all its stats by 2.'}},
             {name: "Frost", emoji: "🥶", baseStats: [4, 5, 4, 6], ability: {type: 'chill', icon: '❄️', desc: 'Adjacent enemies are -1 to all stats while this card sits there.'}},
             {name: "Wolf", emoji: "🐺", baseStats: [6, 5, 4, 3], ability: {type: 'chill', icon: '❄️', desc: 'Adjacent enemies are -1 to all stats while this card sits there.'}},
             {name: "Penguin", emoji: "🐧", baseStats: [3, 4, 6, 5], ability: {type: 'chill', icon: '❄️', desc: 'Adjacent enemies are -1 to all stats while this card sits there.'}},
@@ -2035,6 +2358,7 @@
             {id: 'spite', name: 'Wrath', ability: 'Spite', icon: '💢'},
             {id: 'silence', name: 'Hush', ability: 'Silence', icon: '🔇'},
             {id: 'cinder', name: 'Ember', ability: 'Cinder', icon: '🔥'},
+            {id: 'bolt', name: 'Arcane', ability: 'Bolt', icon: '🔮'},
             {id: 'chill', name: 'Frost', ability: 'Chill', icon: '❄️'}
         ];
 
@@ -2048,7 +2372,7 @@
                 if (raw && isDeckPick(raw.player) && isDeckPick(raw.ai)) {
                     return {player: raw.player, ai: raw.ai};
                 }
-            } catch (e) {}
+            } catch (e) { }
             return {player: 'random', ai: 'random'};
         }
 
@@ -2092,7 +2416,7 @@
         let aiPlayTimer = null;
         const pointerDrag = {pointerId: null, index: null, startX: 0, startY: 0, active: false, sourceEl: null, ghost: null};
         let swallowClick = false;
-        let coach = { active: false, step: null, cellIndex: 4, pendingCapture: false, taughtHand: false };
+        let coach = {active: false, step: null, cellIndex: 4, pendingCapture: false, taughtHand: false};
         const SNAKE_SEQ = (starter) => {
             const other = starter === 'player' ? 'ai' : 'player';
             return [starter, other, other, starter, starter, other, other, starter, starter, other];
@@ -2127,7 +2451,7 @@
             if (!descBox) return;
             descBox.innerHTML = currentRuleset === 'classic'
                 ? "<strong>Classic Mode:</strong> Pure, tactical gameplay. All special abilities and card badges are disabled."
-                : "<strong>Ember Mode:</strong> Every card has an ability. Nine tribes share the pile: Buff, Curse, Blast, Poison, Equalizer, Spite, Silence, Cinder, and Chill.";
+                : "<strong>Ember Mode:</strong> Every card has an ability. Ten tribes share the pile: Buff, Curse, Blast, Poison, Equalizer, Spite, Silence, Cinder, Bolt, and Chill.";
         }
         function updateRuleset(val) {
             sfx.click();
@@ -2614,7 +2938,8 @@
                     case 'aura_buff': baseScore += 4; break;
                     case 'equalizer': baseScore += 4; break;
                     case 'spite':
-                    case 'cinder': baseScore += 4; break;
+                    case 'cinder':
+                    case 'bolt': baseScore += 4; break;
                     case 'curse_adj': baseScore += 3; break;
                     default: baseScore += 2;
                 }
@@ -2753,7 +3078,7 @@
                 if (!c || c.owner !== 'red') return;
                 const row = Math.floor(i / 3), col = i % 3;
                 [{idx: i - 3, ok: row > 0}, {idx: i + 1, ok: col < 2}, {idx: i + 3, ok: row < 2}, {idx: i - 1, ok: col > 0}]
-                    .forEach(n => { if (n.ok && board[n.idx] === null) emptyAdj.push(n.idx); });
+                    .forEach(n => {if (n.ok && board[n.idx] === null) emptyAdj.push(n.idx);});
             });
             return emptyAdj[0] ?? firstEmptyCell();
         }
@@ -2932,6 +3257,15 @@
                 cellEffects[target] = 'cinder';
                 placedCard.fxType = 'cinder';
                 return {text: `${placedCard.name} cindered a cell`, kind: 'cinder'};
+            } else if (abType === 'bolt') {
+                const enemies = board.map((c, i) => (c && c.owner !== placedCard.owner) ? {c, i} : null).filter(Boolean);
+                if (enemies.length > 0) {
+                    const targetCard = enemies[Math.floor(Math.random() * enemies.length)].c;
+                    targetCard.baseStats = targetCard.baseStats.map(s => Math.max(1, s - 2));
+                    targetCard.fxType = 'bolt';
+                    placedCard.fxType = 'bolt';
+                    return {text: `${placedCard.name} bolted ${targetCard.name} (-2)`, kind: 'bolt'};
+                }
             }
             return null;
         }
@@ -3187,7 +3521,7 @@
             document.body.appendChild(ghost);
             pointerDrag.ghost = ghost;
             moveDragGhost(e.clientX, e.clientY);
-            try {pointerDrag.sourceEl.setPointerCapture(e.pointerId);} catch (err) {}
+            try {pointerDrag.sourceEl.setPointerCapture(e.pointerId);} catch (err) { }
             statusMsg.textContent = "Drop on an empty cell.";
         }
 
@@ -3404,6 +3738,7 @@
                     score += flipsCount * 14 + card.baseStats.reduce((a, b) => a + b, 0) * 0.1 + (card.ability ? 3 : 0) - exposureRisk * 2.5;
                     if (cellEffects[cellIdx] === 'cinder') score -= 5;
                     if (silencedHere && card.ability && card.ability.type !== 'silence') score -= 3;
+                    if (card.ability && card.ability.type === 'bolt' && !silencedHere && board.some(c => c && c.owner === 'blue')) score += 3;
                     if (score > maxScore) {maxScore = score; bestMove = {cardIndex, cellIdx};}
                 });
             });
