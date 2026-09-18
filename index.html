@@ -788,16 +788,78 @@
             text-align: center;
         }
 
-        .action-log {
-            font-size: 0.78rem;
+        .battle-log-link {
+            background: none;
+            border: 0;
+            color: var(--accent);
             opacity: 0.78;
-            min-height: 16px;
+            font-family: var(--font-display);
+            font-size: 0.62rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            cursor: pointer;
+            padding: 2px 0 0;
+            min-height: 28px;
+        }
+
+        .battle-log-link:hover,
+        .battle-log-link:focus-visible {
+            opacity: 1;
+        }
+
+        #battle-log-modal .modal-content {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            max-height: min(80dvh, 640px);
+        }
+
+        #battle-log-modal .modal-title,
+        #battle-log-modal .btn-dismiss {
             text-align: center;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            width: 100%;
-            max-width: calc(var(--grid-w) * 3 + 18px);
+        }
+
+        .battle-log-blurb {
+            margin: 0 0 10px;
+            font-size: 0.82rem;
+            line-height: 1.4;
+            opacity: 0.82;
+        }
+
+        .battle-log-list {
+            list-style: none;
+            margin: 0 0 12px;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1 1 auto;
+            min-height: 8rem;
+            overflow-y: auto;
+        }
+
+        .battle-log-entry {
+            padding: 8px 10px 8px 12px;
+            border-left: 2px solid rgba(232, 195, 106, 0.45);
+            background: rgba(0, 0, 0, 0.22);
+            border-radius: 0 10px 10px 0;
+            font-size: 0.82rem;
+            font-weight: 600;
+            line-height: 1.4;
+            overflow-wrap: anywhere;
+        }
+
+        .battle-log-entry .log-part + .log-part {
+            margin-top: 4px;
+            opacity: 0.88;
+        }
+
+        .battle-log-empty {
+            opacity: 0.55;
+            text-align: center;
+            font-size: 0.82rem;
+            padding: 18px 8px;
         }
 
         .card-tooltip {
@@ -920,10 +982,14 @@
             z-index: 110;
         }
 
+        #battle-log-modal {
+            z-index: 120;
+        }
+
         body.menu-open header,
         body.menu-open .score-board,
         body.menu-open .status-msg,
-        body.menu-open .action-log {
+        body.menu-open .battle-log-link {
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
@@ -1188,7 +1254,8 @@
             #compendium-modal .modal-content,
             #expanded-rules-modal .modal-content,
             #options-modal .modal-content,
-            #stats-modal .modal-content {
+            #stats-modal .modal-content,
+            #battle-log-modal .modal-content {
                 max-height: min(80dvh, calc(100dvh - 24px));
                 min-height: 0;
             }
@@ -1910,7 +1977,8 @@
         .gameover-links {
             display: flex;
             justify-content: space-between;
-            gap: 12px;
+            flex-wrap: wrap;
+            gap: 8px 12px;
             padding: 2px 4px 0;
         }
 
@@ -2008,6 +2076,11 @@
             box-sizing: border-box;
         }
 
+        .rematch-bar .gameover-links {
+            justify-content: space-between;
+            padding: 0 2px;
+        }
+
         .rematch-bar .btn-alt {
             min-height: 36px;
             font-size: 0.62rem;
@@ -2075,7 +2148,7 @@
         </div>
 
         <div class="status-msg" id="status-msg">The Base Set is the deck. Each player is dealt a hand of five.</div>
-        <div class="action-log" id="action-log">Shuffle up.</div>
+        <button type="button" class="battle-log-link" id="battle-log-link" onclick="showBattleLogModal()">Battle log</button>
     </div>
 
     <div id="turn-banner" class="turn-banner" aria-live="polite"></div>
@@ -2100,7 +2173,7 @@
                 <strong>🃏 The deck:</strong> Cards are dealt or drafted from a shared deck - the Base Set, 50 cards. Tribe Decks play one tribe of five. Every Ember card has an ability.<br>
                 <strong>⚔️ Capture:</strong> Play a card from your hand next to an enemy. If your touching stat is higher,
                 you capture it.<br>
-                <strong>🏆 Victory:</strong> Fill the 3x3. Most cards wins - the leftover card in each hand still counts.
+                <strong>🏆 Victory:</strong> <span id="victory-compact">Fill the 3x3. Most cards on the board wins. Leftover in hand does not count.</span>
             </div>
 
             <nav class="menu-links">
@@ -2135,7 +2208,7 @@
             </details>
             <div class="menu-foot">
                 <!-- Bump BUILD on every PR. Still pre-1.0, so this stays Alpha until 1.0 ships. -->
-                <p class="build-stamp">0.26 Alpha</p>
+                <p class="build-stamp">0.28 Alpha</p>
                 <p class="dev-note">Still in active development. Cards and rules may change.</p>
             </div>
         </div>
@@ -2164,7 +2237,7 @@
                     Right, Bottom, Left). If your attacking stat is strictly greater, you capture their card!
                 </div>
                 <div class="rule-detail-item">
-                    <strong>Victory:</strong> Two hands of five is ten cards. After the board fills, the leftover card in each hand still counts, so 6+ wins and 5-5 is a draw.
+                    <strong>Victory:</strong> <span id="victory-rules">Two hands of five. After the board fills, most cards on the board wins. Leftover in hand does not count. Options can turn leftover scores on, which makes a 5-4 board a 5-5 draw.</span>
                 </div>
                 <div class="rule-detail-item">
                     <strong>Stat Cap:</strong> Stats range from 1 to 10 (represented by A). Stat boosts cannot raise
@@ -2246,6 +2319,13 @@
                 <span>Show Hands</span>
                 <input type="checkbox" id="open-hands-check" class="settings-check" onchange="updateOpenHands(this.checked)">
             </label>
+            <label class="settings-row" for="leftover-check">
+                <span>Leftover scores</span>
+                <input type="checkbox" id="leftover-check" class="settings-check" onchange="updateLeftoverScores(this.checked)">
+            </label>
+            <div id="leftover-desc" class="ruleset-desc-box">
+                <strong>Off (default):</strong> Only the board counts. Unplayed cards are choices, not points.
+            </div>
 
             <button class="btn btn-alt btn-dismiss" onclick="closeOptionsModal()">Close</button>
         </div>
@@ -2334,9 +2414,22 @@
                 </div>
                 <div class="gameover-links">
                     <button type="button" class="gameover-link" onclick="viewFinalBoard()">View board</button>
+                    <button type="button" class="gameover-link" onclick="showBattleLogModal()">Battle log</button>
                     <button type="button" class="gameover-link" onclick="closeGameoverToMenu()">Menu</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Battle Log Modal -->
+    <div id="battle-log-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, closeBattleLogModal)">
+        <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button type="button" class="modal-close" onclick="closeBattleLogModal()" aria-label="Close battle log"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+            <h2 class="modal-title">Battle log</h2>
+            <p class="battle-log-blurb">This match, in order. Captures still flash on the cards.</p>
+            <ol class="battle-log-list" id="battle-log-list"></ol>
+            <button class="btn btn-alt btn-dismiss" onclick="closeBattleLogModal()">Close</button>
         </div>
     </div>
 
@@ -2483,17 +2576,17 @@
 
         // --- Card Database ---
         const masterCards = [
-            {name: "Celestial", emoji: "✨", baseStats: [3, 2, 10, 4], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.'}},
+            {name: "Celestial", emoji: "✨", baseStats: [10, 2, 3, 4], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.'}},
             {name: "Fairy", emoji: "🧚", baseStats: [3, 4, 3, 6], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.'}},
             {name: "Unicorn", emoji: "🦄", baseStats: [4, 4, 5, 7], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.'}},
-            {name: "Paladin", emoji: "🛡️", baseStats: [4, 8, 8, 2], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.'}},
+            {name: "Paladin", emoji: "🛡️", baseStats: [4, 8, 7, 2], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.'}},
             {name: "Angel", emoji: "👼", baseStats: [4, 5, 4, 6], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.'}},
             {name: "Ghost", emoji: "👻", baseStats: [3, 7, 2, 5], ability: {type: 'curse_adj', icon: '💀', desc: 'On play, the strongest enemy loses 1 from all stats, then this card captures.'}},
             {name: "Vampire", emoji: "🧛", baseStats: [7, 3, 3, 6], ability: {type: 'curse_adj', icon: '💀', desc: 'On play, the strongest enemy loses 1 from all stats, then this card captures.'}},
             {name: "Skull", emoji: "💀", baseStats: [8, 2, 4, 3], ability: {type: 'curse_adj', icon: '💀', desc: 'On play, the strongest enemy loses 1 from all stats, then this card captures.'}},
             {name: "Zombie", emoji: "🧟", baseStats: [4, 2, 6, 4], ability: {type: 'curse_adj', icon: '💀', desc: 'On play, the strongest enemy loses 1 from all stats, then this card captures.'}},
             {name: "Bat", emoji: "🦇", baseStats: [5, 6, 3, 4], ability: {type: 'curse_adj', icon: '💀', desc: 'On play, the strongest enemy loses 1 from all stats, then this card captures.'}},
-            {name: "Dragon", emoji: "🐲", baseStats: [9, 7, 3, 2], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
+            {name: "Dragon", emoji: "🐲", baseStats: [9, 7, 4, 2], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
             {name: "T-Rex", emoji: "🦖", baseStats: [8, 5, 6, 2], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
             {name: "Lion", emoji: "🦁", baseStats: [7, 6, 4, 2], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
             {name: "Shark", emoji: "🦈", baseStats: [7, 4, 5, 4], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
@@ -2648,6 +2741,8 @@
         let aiDifficulty = localStorage.getItem('ember_grid_ai') || 'normal';
         if (!['easy', 'normal', 'hard'].includes(aiDifficulty)) aiDifficulty = 'normal';
         let showBothHands = localStorage.getItem('ember_grid_open_hands') === 'true';
+        let leftoverScores = localStorage.getItem('ember_grid_leftover') === 'true';
+        let leftoverThisMatch = leftoverScores;
         let currentRuleset = 'ember';
         let deckPicks = loadDeckPicks();
         let resolvedDecks = {player: null, ai: null};
@@ -2669,9 +2764,59 @@
             return [starter, other, other, starter, starter, other, other, starter, starter, other];
         };
 
-        const statusMsg = document.getElementById('status-msg'), actionLog = document.getElementById('action-log');
+        const statusMsg = document.getElementById('status-msg');
+        let battleLog = [];
 
-        function logAction(msg) {actionLog.textContent = msg;}
+        function logAction(msg) {
+            if (!msg) return;
+            battleLog.push(msg);
+            renderBattleLog();
+        }
+
+        function resetActionLog(msg) {
+            battleLog = [];
+            if (msg) logAction(msg);
+            else renderBattleLog();
+        }
+
+        function renderBattleLog() {
+            const list = document.getElementById('battle-log-list');
+            if (!list) return;
+            list.innerHTML = '';
+            if (!battleLog.length) {
+                const empty = document.createElement('li');
+                empty.className = 'battle-log-empty';
+                empty.textContent = 'No plays yet.';
+                list.appendChild(empty);
+                return;
+            }
+            battleLog.forEach(msg => {
+                const li = document.createElement('li');
+                li.className = 'battle-log-entry';
+                String(msg).split(' · ').forEach(part => {
+                    const row = document.createElement('div');
+                    row.className = 'log-part';
+                    row.textContent = part;
+                    li.appendChild(row);
+                });
+                list.appendChild(li);
+            });
+            list.scrollTop = list.scrollHeight;
+        }
+
+        function showBattleLogModal() {
+            sfx.click(); hideTooltip();
+            renderBattleLog();
+            document.getElementById('battle-log-modal').classList.remove('hidden');
+            const list = document.getElementById('battle-log-list');
+            if (list) list.scrollTop = list.scrollHeight;
+        }
+
+        function closeBattleLogModal() {
+            sfx.click(); hideTooltip();
+            hideModal('battle-log-modal');
+        }
+
         function formatStat(val) {let clamped = Math.max(1, Math.min(10, val)); return clamped === 10 ? 'A' : clamped;}
         function clampStat(val) {return Math.max(1, Math.min(10, val));}
         function printedStatsOf(card) {
@@ -2722,6 +2867,35 @@
             localStorage.setItem('ember_grid_open_hands', showBothHands);
             if (gameState === 'playing' || gameState === 'gameover') render();
         }
+        function leftoverVictoryCopy() {
+            if (leftoverScores) {
+                return {
+                    compact: "Fill the 3x3. Most cards wins - leftover in hand still counts.",
+                    rules: "Two hands of five is ten cards. After the board fills, leftover in hand still counts, so 6+ wins and 5-5 is a draw.",
+                    option: "<strong>On:</strong> Unplayed cards count. A 5-4 board is a 5-5 draw."
+                };
+            }
+            return {
+                compact: "Fill the 3x3. Most cards on the board wins. Leftover in hand does not count.",
+                rules: "Two hands of five. After the board fills, most cards on the board wins. Leftover in hand does not count. Options can turn leftover scores on, which makes a 5-4 board a 5-5 draw.",
+                option: "<strong>Off (default):</strong> Only the board counts. Unplayed cards are choices, not points."
+            };
+        }
+        function refreshVictoryCopy() {
+            const copy = leftoverVictoryCopy();
+            const compact = document.getElementById('victory-compact');
+            const rules = document.getElementById('victory-rules');
+            const desc = document.getElementById('leftover-desc');
+            if (compact) compact.textContent = copy.compact;
+            if (rules) rules.textContent = copy.rules;
+            if (desc) desc.innerHTML = copy.option;
+        }
+        function updateLeftoverScores(checked) {
+            sfx.click();
+            leftoverScores = !!checked;
+            localStorage.setItem('ember_grid_leftover', leftoverScores ? 'true' : 'false');
+            refreshVictoryCopy();
+        }
         function refreshRulesetDesc() {
             const descBox = document.getElementById('ruleset-desc');
             if (!descBox) return;
@@ -2735,8 +2909,10 @@
             refreshRulesetDesc();
         }
         function ownedCount(color) {
+            const onBoard = board.filter(c => c && c.owner === color).length;
+            if (!leftoverThisMatch) return onBoard;
             const hand = color === 'blue' ? playerHand : aiHand;
-            return hand.length + board.filter(c => c && c.owner === color).length;
+            return onBoard + hand.length;
         }
 
         function resetTable() {
@@ -2865,7 +3041,7 @@
             resetFingerDrag();
             hideTurnBanner();
             document.body.classList.add('menu-open');
-            hideModals(['draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal']);
+            hideModals(['draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal', 'battle-log-modal']);
             document.getElementById('main-menu-modal').classList.remove('hidden');
             gameState = 'menu'; resetTable(); playerHand = []; aiHand = [];
             lastBlueScore = null; lastRedScore = null; lastMatch = null;
@@ -2873,7 +3049,7 @@
             setMatchCodeError('');
             const codeBox = document.getElementById('match-code-box');
             if (codeBox && !pendingShareCode()) codeBox.open = false;
-            logAction("Shuffle up."); render();
+            resetActionLog(); render();
         }
 
         function showStatsModal() {
@@ -2904,7 +3080,9 @@
             document.getElementById('ruleset-select').value = currentRuleset;
             document.getElementById('ai-difficulty-select').value = aiDifficulty;
             document.getElementById('open-hands-check').checked = showBothHands;
+            document.getElementById('leftover-check').checked = leftoverScores;
             refreshRulesetDesc();
+            refreshVictoryCopy();
             document.getElementById('options-modal').classList.remove('hidden');
         }
 
@@ -3022,7 +3200,7 @@
             clearAiPlayTimer();
             hideTurnBanner();
             clearShareHash();
-            hideModals(['main-menu-modal', 'draft-modal', 'deck-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal']);
+            hideModals(['main-menu-modal', 'draft-modal', 'deck-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal', 'battle-log-modal']);
 
             if (mode === 'random') {
                 resetTable(); gameState = 'playing';
@@ -3165,6 +3343,7 @@
             lastMatch = {
                 mode: activeMode,
                 ruleset: currentRuleset,
+                leftover: leftoverThisMatch,
                 playerIds: playerHand.map(c => c.id),
                 aiIds: aiHand.map(c => c.id),
                 first
@@ -3290,7 +3469,7 @@
             hideTooltip();
             clearAiPlayTimer();
             hideTurnBanner();
-            hideModals(['main-menu-modal', 'draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal']);
+            hideModals(['main-menu-modal', 'draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal', 'battle-log-modal']);
             currentRuleset = decoded.ruleset;
             const sel = document.getElementById('ruleset-select');
             if (sel) sel.value = currentRuleset;
@@ -3529,9 +3708,13 @@
             document.body.classList.remove('menu-open');
             clearAiPlayTimer();
             hideTurnBanner();
+            leftoverThisMatch = (origin === 'rematch' && lastMatch && typeof lastMatch.leftover === 'boolean')
+                ? lastMatch.leftover
+                : leftoverScores;
             turn = first || (Math.random() < 0.5 ? 'player' : 'ai');
             snapshotMatch(turn);
             lastBlueScore = null; lastRedScore = null;
+            resetActionLog();
             if (origin === 'rematch') {
                 statusMsg.textContent = withMatchup(turn === 'player' ? "Same hands. You go first." : "Same hands. AI plays first.");
                 logAction(turn === 'player' ? "Rematch - you go first." : "Rematch - AI goes first.");
@@ -3947,7 +4130,10 @@
                             <button class="btn btn-alt" onclick="startCurrentModeAgain()">New Hands</button>
                             <button type="button" class="btn btn-alt" id="board-share-btn" onclick="shareCurrentMatch()">Share</button>
                         </div>
-                        <button type="button" class="gameover-link" onclick="showModeMenu()">Menu</button>
+                        <div class="gameover-links">
+                            <button type="button" class="gameover-link" onclick="showBattleLogModal()">Battle log</button>
+                            <button type="button" class="gameover-link" onclick="showModeMenu()">Menu</button>
+                        </div>
                     `;
                     bottomArea.appendChild(bar);
                     syncShareButton();
@@ -4395,6 +4581,7 @@
         }
 
         refreshRulesetDesc();
+        refreshVictoryCopy();
         if (!bootSharedMatch()) showModeMenu();
         window.addEventListener('pointermove', onFingerDragMove, {passive: false});
         window.addEventListener('pointerup', onFingerDragEnd);
@@ -4419,12 +4606,13 @@
         window.addEventListener('pageshow', (e) => {
             if (!e.persisted) return;
             clearDraftTimer();
-            hideModals(['draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal']);
+            hideModals(['draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'battle-log-modal']);
             if (gameState !== 'playing' && gameState !== 'gameover') showModeMenu();
         });
         window.addEventListener('keydown', (e) => {
             if (e.key !== 'Escape') return;
             if (tooltipPinned) {hideTooltip(); return;}
+            if (!document.getElementById('battle-log-modal').classList.contains('hidden')) {closeBattleLogModal(); return;}
             if (!document.getElementById('expanded-rules-modal').classList.contains('hidden')) {closeRulesModal(); return;}
             if (!document.getElementById('compendium-modal').classList.contains('hidden')) {closeCompendiumModal(); return;}
             if (!document.getElementById('options-modal').classList.contains('hidden')) {closeOptionsModal(); return;}
