@@ -4266,55 +4266,7 @@
         }
 
         function playTone(freq, type, duration, gainVal = 0.1) {
-            oscVoice({freq, type, dur: duration, gain: gainVal, pan: 0, table: false, attack: 0.008});
-        }
-
-        function sfxPlace(index) {
-            if (isAudioMuted || silentSim) return;
-            const s = spaceForIndex(index);
-            noiseVoice({dur: 0.09, gain: 0.07 * s.gain, pan: s.pan, filterFreq: 420, filterSlide: 110, attack: 0.004});
-            oscVoice({freq: 92, slide: 62, type: 'sine', dur: 0.2, gain: 0.09 * s.gain, pan: s.pan, attack: 0.01, table: false});
-            oscVoice({freq: 210, slide: 140, type: 'triangle', dur: 0.11, gain: 0.03 * s.gain, pan: s.pan, filterFreq: 500, table: false});
-        }
-
-        function sfxFlip(owner, indexes) {
-            if (isAudioMuted || silentSim) return;
-            const list = (indexes && indexes.length) ? indexes : [null];
-            list.forEach((idx, i) => {
-                const s = spaceForIndex(idx);
-                setTimeout(() => {
-                    noiseVoice({dur: 0.16, gain: 0.055 * s.gain, pan: s.pan, filterFreq: 700, filterType: 'bandpass', filterSlide: 1800, attack: 0.012});
-                    if (owner === 'blue') {
-                        oscVoice({freq: 392, type: 'sine', dur: 0.28, gain: 0.045 * s.gain, pan: s.pan, attack: 0.02, table: false});
-                        oscVoice({freq: 523, type: 'sine', dur: 0.32, gain: 0.035 * s.gain, pan: s.pan * 0.6, attack: 0.03, table: false});
-                    } else {
-                        oscVoice({freq: 196, type: 'sine', dur: 0.28, gain: 0.05 * s.gain, pan: s.pan, attack: 0.02, table: false});
-                        oscVoice({freq: 147, type: 'triangle', dur: 0.34, gain: 0.035 * s.gain, pan: s.pan * 0.6, attack: 0.03, filterFreq: 420, table: false});
-                    }
-                }, i * 55);
-            });
-        }
-
-        function sfxWin() {
-            if (isAudioMuted || silentSim) return;
-            [
-                {freq: 220, dur: 0.72, gain: 0.055, pan: -0.28, attack: 0.05, delay: 0},
-                {freq: 277, dur: 0.74, gain: 0.042, pan: -0.08, attack: 0.05, delay: 90},
-                {freq: 330, dur: 0.8, gain: 0.038, pan: 0.16, attack: 0.06, delay: 180},
-                {freq: 440, dur: 0.88, gain: 0.03, pan: 0.3, attack: 0.08, delay: 270}
-            ].forEach(n => {
-                setTimeout(() => oscVoice({freq: n.freq, type: 'sine', dur: n.dur, gain: n.gain, pan: n.pan, attack: n.attack, table: false}), n.delay);
-            });
-        }
-
-        function sfxLose() {
-            if (isAudioMuted || silentSim) return;
-            noiseVoice({dur: 0.32, gain: 0.03, pan: 0, filterFreq: 340, filterSlide: 90, attack: 0.03});
-            oscVoice({freq: 196, slide: 147, type: 'sine', dur: 0.42, gain: 0.055, pan: -0.18, attack: 0.04, table: false});
-            setTimeout(() => {
-                oscVoice({freq: 147, slide: 98, type: 'sine', dur: 0.55, gain: 0.05, pan: 0.12, attack: 0.05, table: false});
-                oscVoice({freq: 98, slide: 73, type: 'triangle', dur: 0.62, gain: 0.03, pan: 0.2, attack: 0.06, filterFreq: 320, table: false});
-            }, 160);
+            oscVoice({freq, type, dur: duration, gain: gainVal, pan: 0, table: false});
         }
 
         function sfxAbility(kind, fromIdx, toIdxs) {
@@ -4364,15 +4316,12 @@
         }
 
         const sfx = {
-            click: () => {
-                noiseVoice({dur: 0.03, gain: 0.025, pan: 0, filterFreq: 1800, filterSlide: 700, attack: 0.002});
-                oscVoice({freq: 620, type: 'sine', dur: 0.045, gain: 0.03, pan: 0, attack: 0.004, table: false});
-            },
-            place: (index) => sfxPlace(index),
-            flipBlue: (indexes) => sfxFlip('blue', indexes),
-            flipRed: (indexes) => sfxFlip('red', indexes),
-            win: () => sfxWin(),
-            lose: () => sfxLose(),
+            click: () => playTone(440, 'sine', 0.05, 0.04),
+            place: () => playTone(150, 'triangle', 0.08, 0.12),
+            flipBlue: () => {playTone(523, 'sine', 0.08, 0.06); setTimeout(() => playTone(659, 'sine', 0.1, 0.06), 50);},
+            flipRed: () => {playTone(280, 'sawtooth', 0.08, 0.05); setTimeout(() => playTone(200, 'sawtooth', 0.1, 0.05), 50);},
+            win: () => {playTone(523, 'sine', 0.1, 0.08); setTimeout(() => playTone(659, 'sine', 0.1, 0.08), 80); setTimeout(() => playTone(783, 'sine', 0.2, 0.08), 160);},
+            lose: () => {playTone(300, 'sawtooth', 0.12, 0.08); setTimeout(() => playTone(180, 'sawtooth', 0.2, 0.08), 100);},
             ability: sfxAbility
         };
 
@@ -7615,7 +7564,7 @@
         function executeCardPlay(handIndex, boardIndex) {
             if (board[boardIndex] !== null || handIndex >= playerHand.length) return;
             resetFingerDrag();
-            sfx.place(boardIndex); hideTooltip();
+            hideTooltip();
             const cardToPlay = playerHand.splice(handIndex, 1)[0];
             cardToPlay.stats = [...cardToPlay.baseStats];
             board[boardIndex] = cardToPlay; selectedCard = null;
@@ -7631,16 +7580,22 @@
             const buffFx = tagAuraBuffs(placedCard, index);
             const silenceFx = tagSilence(placedCard, index);
             const chillFx = tagChill(placedCard, index);
-            const capLog = checkCaptures(index, placedCard);
+            const cap = checkCaptures(index, placedCard);
             recalculateDynamicStats();
             const psnFx = applyEndOfTurnEffects();
             recalculateDynamicStats();
-            return {enemyNeighbor, abilityFx, buffFx, silenceFx, chillFx, capLog, psnFx};
+            return {enemyNeighbor, abilityFx, buffFx, silenceFx, chillFx, capLog: cap.text, flip: cap.flip, psnFx};
         }
 
         function processCardPlacement(index, placedCard) {
             const fx = applyPlacementCore(index, placedCard);
             if (silentSim) return;
+
+            if (!pendingMechFx.length) {
+                sfx.place();
+                if (fx.flip === 'blue') sfx.flipBlue();
+                else if (fx.flip === 'red') sfx.flipRed();
+            }
 
             const fxParts = [fx.abilityFx && fx.abilityFx.text, fx.buffFx && fx.buffFx.text, fx.silenceFx && fx.silenceFx.text, fx.chillFx && fx.chillFx.text, fx.capLog, fx.psnFx && fx.psnFx.text].filter(Boolean);
             logAction(fxParts.length ? fxParts.join(' · ') : `${placedCard.name} played.`);
@@ -7684,7 +7639,6 @@
 
             let blueFlipped = false, redFlipped = false;
             const captured = [];
-            const flipIdxs = [];
             const spiteHits = [];
             const placedSilenced = isSilenced(placedIndex);
 
@@ -7694,7 +7648,6 @@
                 neighborCard.owner = placedCard.owner;
                 neighborCard.justFlipped = true;
                 captured.push(neighborCard.name);
-                flipIdxs.push(neighborIdx);
                 if (placedCard.owner === 'blue') {blueFlipped = true; if (!silentSim && origOwner === 'red') stats.flips++;}
                 else redFlipped = true;
                 if (neighborCard.ability && neighborCard.ability.type === 'spite' && !silencedWhenHit) {
@@ -7727,13 +7680,13 @@
                 }
             });
 
-            if (!silentSim) {
-                if (blueFlipped) sfx.flipBlue(flipIdxs); else if (redFlipped) sfx.flipRed(flipIdxs);
-            }
             const parts = [];
             if (captured.length) parts.push(`${placedCard.name} captured ${listNames(captured)}`);
             if (spiteHits.length) parts.push(`Spite from ${listNames(spiteHits)} hit ${placedCard.name} (-1)`);
-            return parts.join(' · ');
+            return {
+                text: parts.join(' · '),
+                flip: blueFlipped ? 'blue' : (redFlipped ? 'red' : null)
+            };
         }
 
         function currentMatchAiDifficulty() {
@@ -7814,7 +7767,7 @@
         }
 
         function executeAIMove(cardIdx, cellIdx) {
-            if (!silentSim) {sfx.place(cellIdx); hideTooltip();}
+            if (!silentSim) hideTooltip();
             const chosenCard = aiHand.splice(cardIdx, 1)[0];
             chosenCard.stats = [...chosenCard.baseStats];
             board[cellIdx] = chosenCard;
