@@ -452,6 +452,10 @@
                 linear-gradient(180deg, #f3e6d0, #e0cba8);
         }
 
+        .match-chrome {
+            display: contents;
+        }
+
         body.grid-4,
         body.grid-5 {
             --grid-gap: 4px;
@@ -459,7 +463,7 @@
             --hand-min: 0;
             --fan-w: 74px;
             --fan-h: 92px;
-            --fan-overlap: 26px;
+            --fan-gap: 6px;
         }
 
         body.grid-4 {
@@ -475,7 +479,7 @@
             --grid-gap: 3px;
             --fan-w: 64px;
             --fan-h: 80px;
-            --fan-overlap: 36px;
+            --fan-gap: 5px;
         }
 
         @media (min-width: 768px) {
@@ -492,27 +496,32 @@
             padding-bottom: 6px;
         }
 
+        body.grid-4 .match-chrome,
+        body.grid-5 .match-chrome {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-shrink: 0;
+            width: 100%;
+            gap: 6px;
+            position: relative;
+            z-index: 12;
+            background: var(--bg-color);
+            padding: 0 0 2px;
+        }
+
         body.grid-4 header,
         body.grid-5 header {
             position: relative;
-            z-index: 12;
+            z-index: auto;
             flex-shrink: 0;
-            isolation: isolate;
-        }
-
-        body.grid-4 header::before,
-        body.grid-5 header::before {
-            content: "";
-            position: absolute;
-            inset: -6px -10px;
-            background: var(--bg-color);
-            z-index: -1;
+            width: 100%;
         }
 
         body.grid-4 .score-board,
         body.grid-5 .score-board {
             position: relative;
-            z-index: 10;
+            z-index: auto;
             flex-shrink: 0;
             max-width: 100%;
         }
@@ -621,33 +630,21 @@
             max-width: none;
         }
 
-        body.grid-4.board-min .board-stage,
-        body.grid-5.board-min .board-stage {
-            flex: 0 0 0;
-            min-height: 0;
-            overflow: hidden;
-        }
-
-        body.grid-4.board-min .grid,
-        body.grid-5.board-min .grid {
-            display: none;
-        }
-
         body.grid-4 .hand,
         body.grid-5 .hand {
             display: flex;
             flex-wrap: nowrap;
             justify-content: safe center;
             align-items: flex-end;
-            gap: 0;
+            gap: var(--fan-gap);
             overflow-x: auto;
             overflow-y: hidden;
             scrollbar-width: none;
             -ms-overflow-style: none;
             touch-action: pan-x;
             overscroll-behavior-x: contain;
-            padding: 12px 18px 6px;
-            min-height: calc(var(--fan-h) + 16px);
+            padding: 28px 12px 8px;
+            min-height: calc(var(--fan-h) + 36px);
         }
 
         body.grid-4 .hand::-webkit-scrollbar,
@@ -662,41 +659,65 @@
             flex: 0 0 var(--fan-w);
             width: var(--fan-w);
             height: var(--fan-h);
-            margin-right: calc(var(--fan-overlap) * -1);
+            margin-right: 0;
             aspect-ratio: auto;
             z-index: 1;
-            transition: transform 0.16s ease, margin 0.16s ease, z-index 0s;
-        }
-
-        body.grid-4 .hand .card:last-child,
-        body.grid-5 .hand .card:last-child {
-            margin-right: 0;
+            transform: translateY(0) scale(1);
+            transform-origin: center bottom;
+            transition:
+                transform 0.42s cubic-bezier(0.22, 1.45, 0.36, 1),
+                box-shadow 0.28s ease,
+                border-color 0.22s ease,
+                filter 0.22s ease;
         }
 
         body.grid-4 .hand .card.selected,
-        body.grid-4 .hand .card:hover,
-        body.grid-5 .hand .card.selected,
-        body.grid-5 .hand .card:hover {
-            transform: translateY(-16px);
-            z-index: 6;
-            margin-right: 6px;
+        body.grid-5 .hand .card.selected {
+            transform: translateY(-20px) scale(1.08);
+            z-index: 8;
+            box-shadow: 0 18px 30px rgba(232, 163, 23, 0.42), 0 0 0 2px var(--gold);
+            border-color: var(--gold);
+            filter: brightness(1.06);
         }
 
         body.grid-4 #top-area .hand,
         body.grid-5 #top-area .hand {
             align-items: flex-start;
-            padding-top: 6px;
-            padding-bottom: 10px;
+            padding: 8px 12px 18px;
+            min-height: calc(var(--fan-h) + 20px);
             --fan-w: 56px;
             --fan-h: 70px;
-            --fan-overlap: 32px;
+            --fan-gap: 5px;
         }
 
-        body.grid-4 #top-area .hand .card:hover,
+        body.grid-4 #top-area .hand .card,
+        body.grid-5 #top-area .hand .card {
+            transform-origin: center top;
+        }
+
         body.grid-4 #top-area .hand .card.selected,
-        body.grid-5 #top-area .hand .card:hover,
         body.grid-5 #top-area .hand .card.selected {
-            transform: translateY(10px);
+            transform: translateY(10px) scale(1.05);
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            body.grid-4 .hand .card:hover:not(.selected),
+            body.grid-5 .hand .card:hover:not(.selected) {
+                transform: translateY(-8px) scale(1.03);
+                z-index: 5;
+            }
+
+            body.grid-4 #top-area .hand .card:hover:not(.selected),
+            body.grid-5 #top-area .hand .card:hover:not(.selected) {
+                transform: translateY(6px) scale(1.03);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            body.grid-4 .hand .card,
+            body.grid-5 .hand .card {
+                transition: transform 0.15s ease, box-shadow 0.15s ease;
+            }
         }
 
         body.grid-4 .ability-badge {
@@ -716,10 +737,6 @@
             height: 1.35em;
             font-size: 0.9em;
         }
-
-        .icon-board-max { display: none; }
-        body.board-min .icon-board-min { display: none; }
-        body.board-min .icon-board-max { display: block; }
 
         .cell {
             background:
@@ -2912,44 +2929,40 @@
         <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></symbol>
         <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></symbol>
         <symbol id="i-house" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
-        <symbol id="i-board-min" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 12h8"/></symbol>
-        <symbol id="i-board-max" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8v8"/><path d="M8 12h8"/></symbol>
     </svg>
 
     <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
 
     <div class="container">
-        <header>
-            <h1>EMBER GRID</h1>
-            <div class="nav-group">
-                <button type="button" class="menu-btn" onclick="showStatsModal()" title="Stats" aria-label="Stats">
-                    <svg class="ui-icon" aria-hidden="true"><use href="#i-stats"></use></svg>
-                </button>
-                <button type="button" class="menu-btn" onclick="showRulesModal()" title="Rules" aria-label="Rules">
-                    <svg class="ui-icon" aria-hidden="true"><use href="#i-book"></use></svg>
-                </button>
-                <button type="button" class="menu-btn" id="audio-toggle-btn" onclick="toggleAudio()" title="Mute audio" aria-label="Mute audio">
-                    <svg class="ui-icon icon-audio-on" aria-hidden="true"><use href="#i-volume"></use></svg>
-                    <svg class="ui-icon icon-audio-off" aria-hidden="true"><use href="#i-volume-off"></use></svg>
-                </button>
-                <button type="button" class="menu-btn" id="theme-toggle-btn" onclick="toggleTheme()" title="Switch to light theme" aria-label="Switch to light theme">
-                    <svg class="ui-icon icon-sun" aria-hidden="true"><use href="#i-sun"></use></svg>
-                    <svg class="ui-icon icon-moon" aria-hidden="true"><use href="#i-moon"></use></svg>
-                </button>
-                <button type="button" class="menu-btn" onclick="showModeMenu()" title="Main Menu" aria-label="Main Menu">
-                    <svg class="ui-icon" aria-hidden="true"><use href="#i-house"></use></svg>
-                </button>
-                <button type="button" class="menu-btn" id="board-min-btn" hidden onclick="toggleWideBoard()" title="Hide table" aria-label="Hide table">
-                    <svg class="ui-icon icon-board-min" aria-hidden="true"><use href="#i-board-min"></use></svg>
-                    <svg class="ui-icon icon-board-max" aria-hidden="true"><use href="#i-board-max"></use></svg>
-                </button>
-            </div>
-        </header>
+        <div class="match-chrome">
+            <header>
+                <h1>EMBER GRID</h1>
+                <div class="nav-group">
+                    <button type="button" class="menu-btn" onclick="showStatsModal()" title="Stats" aria-label="Stats">
+                        <svg class="ui-icon" aria-hidden="true"><use href="#i-stats"></use></svg>
+                    </button>
+                    <button type="button" class="menu-btn" onclick="showRulesModal()" title="Rules" aria-label="Rules">
+                        <svg class="ui-icon" aria-hidden="true"><use href="#i-book"></use></svg>
+                    </button>
+                    <button type="button" class="menu-btn" id="audio-toggle-btn" onclick="toggleAudio()" title="Mute audio" aria-label="Mute audio">
+                        <svg class="ui-icon icon-audio-on" aria-hidden="true"><use href="#i-volume"></use></svg>
+                        <svg class="ui-icon icon-audio-off" aria-hidden="true"><use href="#i-volume-off"></use></svg>
+                    </button>
+                    <button type="button" class="menu-btn" id="theme-toggle-btn" onclick="toggleTheme()" title="Switch to light theme" aria-label="Switch to light theme">
+                        <svg class="ui-icon icon-sun" aria-hidden="true"><use href="#i-sun"></use></svg>
+                        <svg class="ui-icon icon-moon" aria-hidden="true"><use href="#i-moon"></use></svg>
+                    </button>
+                    <button type="button" class="menu-btn" onclick="showModeMenu()" title="Main Menu" aria-label="Main Menu">
+                        <svg class="ui-icon" aria-hidden="true"><use href="#i-house"></use></svg>
+                    </button>
+                </div>
+            </header>
 
-        <div class="score-board">
-            <div class="score-pill score-blue" id="score-blue">Blue: -</div>
-            <div class="turn-indicator" id="turn-indicator">BATTLE</div>
-            <div class="score-pill score-red" id="score-red">Red: -</div>
+            <div class="score-board">
+                <div class="score-pill score-blue" id="score-blue">Blue: -</div>
+                <div class="turn-indicator" id="turn-indicator">BATTLE</div>
+                <div class="score-pill score-red" id="score-red">Red: -</div>
+            </div>
         </div>
 
         <div class="battlefield">
@@ -3624,26 +3637,6 @@
             gridSize = GRID_PRESETS[n] ? n : 3;
             document.body.classList.toggle('grid-4', gridSize === 4);
             document.body.classList.toggle('grid-5', gridSize === 5);
-            if (!isWideGrid()) document.body.classList.remove('board-min');
-            syncWideBoardChrome();
-        }
-
-        function syncWideBoardChrome() {
-            const btn = document.getElementById('board-min-btn');
-            if (!btn) return;
-            const show = isWideGrid() && (gameState === 'playing' || gameState === 'gameover');
-            btn.hidden = !show;
-            const hidden = document.body.classList.contains('board-min');
-            const label = hidden ? 'Show table' : 'Hide table';
-            btn.title = label;
-            btn.setAttribute('aria-label', label);
-        }
-
-        function toggleWideBoard() {
-            if (!isWideGrid()) return;
-            sfx.click();
-            document.body.classList.toggle('board-min');
-            syncWideBoardChrome();
         }
         function snakeSeq2(starter, n) {
             const other = starter === 'player' ? 'ai' : 'player';
@@ -3674,6 +3667,7 @@
         const shownStatValues = new Map();
         const pointerDrag = {pointerId: null, index: null, startX: 0, startY: 0, lastX: 0, active: false, scrolling: false, sourceEl: null, ghost: null};
         let swallowClick = false;
+        let swallowForIndex = null;
         let gameoverClickLock = false;
         let gameoverUnlockTimer = null;
         let coach = { active: false, step: null, cellIndex: 4, pendingCapture: false, taughtHand: false };
@@ -5603,6 +5597,7 @@
         function lockGameoverClicks() {
             gameoverClickLock = true;
             swallowClick = false;
+            swallowForIndex = null;
             window.removeEventListener('pointerdown', unlockGameoverClicks, true);
             window.addEventListener('pointerdown', unlockGameoverClicks, true);
             clearTimeout(gameoverUnlockTimer);
@@ -6255,8 +6250,24 @@
                 gridEl.appendChild(cellEl);
             });
             updateScores();
-            syncWideBoardChrome();
             requestAnimationFrame(updateCoach);
+        }
+
+        function paintHandSelection() {
+            const on = turn === 'player' && gameState === 'playing';
+            document.querySelectorAll('#bottom-area .hand .card').forEach(el => {
+                const idx = Number(el.dataset.handIndex);
+                el.classList.toggle('selected', on && selectedCard === idx);
+            });
+        }
+
+        function selectHandCard(index, card) {
+            selectedCard = (selectedCard === index) ? null : index;
+            statusMsg.textContent = selectedCard !== null
+                ? withMatchup(`Selected: ${card.name}${abilityNameOf(card) ? ` (${abilityNameOf(card)})` : ''}. Play it on an empty cell.`)
+                : withMatchup("Your turn - play a card from your hand.");
+            paintHandSelection();
+            if (selectedCard !== null) onCoachSelected();
         }
 
         function createCardElement(card, index, source) {
@@ -6264,6 +6275,7 @@
             const didFlip = !!card.justFlipped;
             div.className = `card ${card.owner} ${didFlip ? 'flipped' : ''}`;
             if (card.justFlipped) card.justFlipped = false;
+            if (source === 'player') div.dataset.handIndex = String(index);
             if (source === 'player' && selectedCard === index && turn === 'player' && gameState === 'playing') div.classList.add('selected');
             if (coach.active && coach.step === 'hand' && source === 'player' && index === 0) div.classList.add('coach-target');
 
@@ -6294,23 +6306,28 @@
                 div.setAttribute('draggable', 'true');
                 div.addEventListener('dragstart', (e) => {
                     selectedCard = index;
+                    paintHandSelection();
                     e.dataTransfer.setData('text/plain', index);
                     div.classList.add('dragging');
                     onCoachSelected();
                 });
-                div.addEventListener('dragend', () => div.classList.remove('dragging'));
+                div.addEventListener('dragend', () => {
+                    div.classList.remove('dragging');
+                    paintHandSelection();
+                });
                 div.addEventListener('pointerdown', (e) => onHandPointerDown(e, index, div));
 
                 div.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    if (swallowClick) {swallowClick = false; return;}
+                    if (swallowClick && swallowForIndex === index) {
+                        swallowClick = false;
+                        swallowForIndex = null;
+                        return;
+                    }
+                    swallowClick = false;
+                    swallowForIndex = null;
                     sfx.click(); hideTooltip();
-                    selectedCard = (selectedCard === index) ? null : index;
-                    statusMsg.textContent = selectedCard !== null
-                        ? withMatchup(`Selected: ${card.name}${abilityNameOf(card) ? ` (${abilityNameOf(card)})` : ''}. Play it on an empty cell.`)
-                        : withMatchup("Your turn - play a card from your hand.");
-                    if (selectedCard !== null) onCoachSelected();
-                    render();
+                    selectHandCard(index, card);
                 });
             }
             return div;
@@ -6360,6 +6377,7 @@
             hideTooltip();
             pointerDrag.active = true;
             selectedCard = pointerDrag.index;
+            paintHandSelection();
             hideTooltip();
             onCoachSelected();
             if (pointerDrag.sourceEl) pointerDrag.sourceEl.classList.add('dragging');
@@ -6397,6 +6415,10 @@
         function onHandPointerDown(e, index, el) {
             if (!isFingerPointer(e) || e.isPrimary === false) return;
             if (gameState !== 'playing' || turn !== 'player') return;
+            if (swallowClick && swallowForIndex !== index) {
+                swallowClick = false;
+                swallowForIndex = null;
+            }
             pointerDrag.pointerId = e.pointerId;
             pointerDrag.index = index;
             pointerDrag.startX = e.clientX;
@@ -6451,9 +6473,12 @@
                 const cellIdx = cellIndexFromPoint(clientX, clientY);
                 const handIndex = pointerDrag.index;
                 swallowClick = true;
+                swallowForIndex = handIndex;
                 resetFingerDrag();
                 if (cellIdx !== null && board[cellIdx] === null && gameState === 'playing' && turn === 'player') {
                     executeCardPlay(handIndex, cellIdx);
+                } else {
+                    paintHandSelection();
                 }
                 return;
             }
@@ -6790,9 +6815,17 @@
         window.addEventListener('touchcancel', onFingerTouchEnd, {passive: false});
         document.addEventListener('click', (e) => {
             if (!swallowClick) return;
+            const card = e.target && e.target.closest && e.target.closest('#bottom-area .hand .card');
+            const idx = card ? Number(card.dataset.handIndex) : NaN;
+            if (card && Number.isFinite(idx) && idx !== swallowForIndex) {
+                swallowClick = false;
+                swallowForIndex = null;
+                return;
+            }
             e.stopPropagation();
             e.preventDefault();
             swallowClick = false;
+            swallowForIndex = null;
         }, true);
         document.addEventListener('pointerdown', (e) => {
             if (!tooltipPinned || !tooltipAnchor) return;
