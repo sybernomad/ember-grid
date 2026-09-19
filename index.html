@@ -7,7 +7,9 @@
     <title>Ember Grid</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             color-scheme: dark;
@@ -125,7 +127,9 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        input, textarea, code {
+        input,
+        textarea,
+        code {
             user-select: text;
             -webkit-user-select: text;
         }
@@ -178,49 +182,181 @@
             --drift: 10px;
         }
 
-        .embers span:nth-child(odd) { --drift: 14px; }
-        .embers span:nth-child(even) { --drift: -12px; }
-        .embers span:nth-child(1) { left: 8%; animation-duration: 8s; animation-delay: 0s; }
-        .embers span:nth-child(2) { left: 22%; animation-duration: 11s; animation-delay: 1.4s; width: 2px; height: 2px; }
-        .embers span:nth-child(3) { left: 37%; animation-duration: 7.5s; animation-delay: 2.1s; }
-        .embers span:nth-child(4) { left: 51%; animation-duration: 10s; animation-delay: 0.6s; width: 4px; height: 4px; }
-        .embers span:nth-child(5) { left: 64%; animation-duration: 8.5s; animation-delay: 3s; }
-        .embers span:nth-child(6) { left: 76%; animation-duration: 12s; animation-delay: 1s; width: 2px; height: 2px; }
-        .embers span:nth-child(7) { left: 88%; animation-duration: 9.5s; animation-delay: 2.6s; }
-        .embers span:nth-child(8) { left: 95%; animation-duration: 7s; animation-delay: 4s; }
-        .embers span:nth-child(9) { left: 14%; animation-duration: 9.2s; animation-delay: 0.8s; width: 2px; height: 2px; }
-        .embers span:nth-child(10) { left: 29%; animation-duration: 10.5s; animation-delay: 3.4s; }
-        .embers span:nth-child(11) { left: 43%; animation-duration: 8.2s; animation-delay: 1.8s; width: 4px; height: 4px; }
-        .embers span:nth-child(12) { left: 58%; animation-duration: 11.4s; animation-delay: 4.2s; }
-        .embers span:nth-child(13) { left: 71%; animation-duration: 7.8s; animation-delay: 2.4s; width: 2px; height: 2px; }
-        .embers span:nth-child(14) { left: 83%; animation-duration: 9.8s; animation-delay: 0.3s; }
-        .embers span:nth-child(15) { left: 4%; animation-duration: 12.2s; animation-delay: 5s; }
-        .embers span:nth-child(16) { left: 91%; animation-duration: 8.8s; animation-delay: 3.8s; width: 4px; height: 4px; }
-
-        @keyframes emberRise {
-            0% { transform: translate3d(0, 0, 0) scale(1); opacity: 0; }
-            12% { opacity: 0.85; }
-            100% { transform: translate3d(var(--drift, 8px), -105vh, 0) scale(0.4); opacity: 0; }
+        .embers span:nth-child(odd) {
+            --drift: 14px;
         }
 
-        [data-theme="light"] .embers { opacity: 0.45; }
+        .embers span:nth-child(even) {
+            --drift: -12px;
+        }
+
+        .embers span:nth-child(1) {
+            left: 8%;
+            animation-duration: 8s;
+            animation-delay: 0s;
+        }
+
+        .embers span:nth-child(2) {
+            left: 22%;
+            animation-duration: 11s;
+            animation-delay: 1.4s;
+            width: 2px;
+            height: 2px;
+        }
+
+        .embers span:nth-child(3) {
+            left: 37%;
+            animation-duration: 7.5s;
+            animation-delay: 2.1s;
+        }
+
+        .embers span:nth-child(4) {
+            left: 51%;
+            animation-duration: 10s;
+            animation-delay: 0.6s;
+            width: 4px;
+            height: 4px;
+        }
+
+        .embers span:nth-child(5) {
+            left: 64%;
+            animation-duration: 8.5s;
+            animation-delay: 3s;
+        }
+
+        .embers span:nth-child(6) {
+            left: 76%;
+            animation-duration: 12s;
+            animation-delay: 1s;
+            width: 2px;
+            height: 2px;
+        }
+
+        .embers span:nth-child(7) {
+            left: 88%;
+            animation-duration: 9.5s;
+            animation-delay: 2.6s;
+        }
+
+        .embers span:nth-child(8) {
+            left: 95%;
+            animation-duration: 7s;
+            animation-delay: 4s;
+        }
+
+        .embers span:nth-child(9) {
+            left: 14%;
+            animation-duration: 9.2s;
+            animation-delay: 0.8s;
+            width: 2px;
+            height: 2px;
+        }
+
+        .embers span:nth-child(10) {
+            left: 29%;
+            animation-duration: 10.5s;
+            animation-delay: 3.4s;
+        }
+
+        .embers span:nth-child(11) {
+            left: 43%;
+            animation-duration: 8.2s;
+            animation-delay: 1.8s;
+            width: 4px;
+            height: 4px;
+        }
+
+        .embers span:nth-child(12) {
+            left: 58%;
+            animation-duration: 11.4s;
+            animation-delay: 4.2s;
+        }
+
+        .embers span:nth-child(13) {
+            left: 71%;
+            animation-duration: 7.8s;
+            animation-delay: 2.4s;
+            width: 2px;
+            height: 2px;
+        }
+
+        .embers span:nth-child(14) {
+            left: 83%;
+            animation-duration: 9.8s;
+            animation-delay: 0.3s;
+        }
+
+        .embers span:nth-child(15) {
+            left: 4%;
+            animation-duration: 12.2s;
+            animation-delay: 5s;
+        }
+
+        .embers span:nth-child(16) {
+            left: 91%;
+            animation-duration: 8.8s;
+            animation-delay: 3.8s;
+            width: 4px;
+            height: 4px;
+        }
+
+        @keyframes emberRise {
+            0% {
+                transform: translate3d(0, 0, 0) scale(1);
+                opacity: 0;
+            }
+
+            12% {
+                opacity: 0.85;
+            }
+
+            100% {
+                transform: translate3d(var(--drift, 8px), -105vh, 0) scale(0.4);
+                opacity: 0;
+            }
+        }
+
+        [data-theme="light"] .embers {
+            opacity: 0.45;
+        }
 
         @media (prefers-reduced-motion: reduce) {
-            .embers span { animation: none; opacity: 0; }
-            .card.flipped { animation: none; }
-            .card.selected { animation: none; }
-            .turn-banner, .capture-pop, .fx-ring,
-            .score-pill.score-tick, .turn-indicator.pulse,
-            .stat-flash { animation: none; }
+            .embers span {
+                animation: none;
+                opacity: 0;
+            }
+
+            .card.flipped {
+                animation: none;
+            }
+
+            .card.selected {
+                animation: none;
+            }
+
+            .turn-banner,
+            .capture-pop,
+            .fx-ring,
+            .score-pill.score-tick,
+            .turn-indicator.pulse,
+            .stat-flash,
+            .mech-burst,
+            .mech-travel,
+            .mech-bolt-svg {
+                animation: none;
+            }
+
             .turn-banner.show {
                 animation: toastHold 1.15s ease forwards;
             }
+
             .modal,
             .modal .modal-content {
                 animation: none !important;
                 transition: none !important;
                 transform: none !important;
             }
+
             .modal:not(.hidden) .modal-content {
                 opacity: 1;
             }
@@ -276,7 +412,7 @@
         }
 
         .menu-btn {
-            background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.18));
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.18));
             background-color: var(--panel-bg);
             border: 1px solid var(--border-color);
             color: var(--text-color);
@@ -289,7 +425,7 @@
             align-items: center;
             justify-content: center;
             transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 4px 10px rgba(0,0,0,0.25);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 4px 10px rgba(0, 0, 0, 0.25);
         }
 
         .menu-btn:hover {
@@ -367,11 +503,11 @@
             width: 100%;
             max-width: calc(var(--grid-w) * 3 + 18px);
             padding: 5px 10px;
-            background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(0,0,0,0.18));
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.18));
             background-color: var(--panel-bg);
             border: 1px solid rgba(232, 195, 106, 0.28);
             border-radius: 999px;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 8px 18px rgba(0,0,0,0.28);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 8px 18px rgba(0, 0, 0, 0.28);
         }
 
         .score-pill {
@@ -409,6 +545,19 @@
             align-items: center;
             gap: 4px;
             width: 100%;
+        }
+
+        .board-wrap {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .board-fx {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 85;
+            overflow: visible;
         }
 
         .hand {
@@ -454,7 +603,7 @@
 
         .cell {
             background:
-                linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.18)),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(0, 0, 0, 0.18)),
                 var(--cell-bg);
             border: 1px solid rgba(232, 195, 106, 0.16);
             border-radius: 10px;
@@ -531,7 +680,7 @@
             font-weight: 700;
             cursor: grab;
             position: relative;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.22);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.22);
             transition: transform 0.18s cubic-bezier(0.4, 0, 0.2, 1), filter 0.15s, box-shadow 0.18s;
             touch-action: none;
         }
@@ -551,7 +700,7 @@
             position: absolute;
             inset: 0;
             border-radius: inherit;
-            background: linear-gradient(125deg, rgba(255,255,255,0.28) 0%, transparent 34%, transparent 62%, rgba(255,255,255,0.08) 100%);
+            background: linear-gradient(125deg, rgba(255, 255, 255, 0.28) 0%, transparent 34%, transparent 62%, rgba(255, 255, 255, 0.08) 100%);
             pointer-events: none;
             mix-blend-mode: soft-light;
             z-index: 3;
@@ -576,13 +725,22 @@
             transform-origin: top left;
             transition: none !important;
             animation: none !important;
-            box-shadow: 0 18px 32px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255,255,255,0.22);
+            box-shadow: 0 18px 32px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.22);
         }
 
         @keyframes pulseFlip {
-            0% { transform: scale(1) rotateY(0deg); }
-            50% { transform: scale(1.1) rotateY(90deg); filter: brightness(1.45); }
-            100% { transform: scale(1) rotateY(0deg); }
+            0% {
+                transform: scale(1) rotateY(0deg);
+            }
+
+            50% {
+                transform: scale(1.1) rotateY(90deg);
+                filter: brightness(1.45);
+            }
+
+            100% {
+                transform: scale(1) rotateY(0deg);
+            }
         }
 
         .card.flipped {
@@ -607,7 +765,7 @@
 
         .card.card-back {
             background:
-                repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0 5px, transparent 5px 10px),
+                repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.05) 0 5px, transparent 5px 10px),
                 linear-gradient(160deg, #9f1239, #4c0519);
             border-color: #fda4af;
         }
@@ -630,7 +788,7 @@
             padding: 3px 5px;
             line-height: 1;
             border: 1px solid var(--gold);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.45);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
         }
 
         .ability-badge.silenced {
@@ -698,9 +856,9 @@
             justify-content: center;
             font-size: 1.15em;
             z-index: 1;
-            background: radial-gradient(circle at 50% 38%, rgba(255,255,255,0.2), rgba(0,0,0,0.28));
+            background: radial-gradient(circle at 50% 38%, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.28));
             border-radius: 50%;
-            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.16), 0 4px 8px rgba(0,0,0,0.35);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16), 0 4px 8px rgba(0, 0, 0, 0.35);
             filter: none;
         }
 
@@ -725,8 +883,8 @@
             border: 1px solid rgba(232, 195, 106, 0.5);
             border-radius: 50%;
             font-variant-numeric: tabular-nums;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
             position: absolute;
         }
 
@@ -758,14 +916,14 @@
             color: var(--stat-up-fg);
             background: var(--stat-up-bg);
             border-color: var(--stat-up-border);
-            text-shadow: 0 1px 2px rgba(0,0,0,0.9);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
         }
 
         .stat-down {
             color: var(--stat-down-fg);
             background: var(--stat-down-bg);
             border-color: var(--stat-down-border);
-            text-shadow: 0 1px 2px rgba(0,0,0,0.95);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.95);
         }
 
         .stat-flash {
@@ -773,9 +931,20 @@
         }
 
         @keyframes statFlash {
-            0% { filter: brightness(1.75); box-shadow: 0 0 0 2px currentColor, 0 0 12px currentColor; }
-            55% { filter: brightness(1.2); box-shadow: 0 0 8px currentColor; }
-            100% { filter: none; box-shadow: 0 1px 3px rgba(0,0,0,0.5); }
+            0% {
+                filter: brightness(1.75);
+                box-shadow: 0 0 0 2px currentColor, 0 0 12px currentColor;
+            }
+
+            55% {
+                filter: brightness(1.2);
+                box-shadow: 0 0 8px currentColor;
+            }
+
+            100% {
+                filter: none;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+            }
         }
 
         .status-msg {
@@ -850,7 +1019,7 @@
             overflow-wrap: anywhere;
         }
 
-        .battle-log-entry .log-part + .log-part {
+        .battle-log-entry .log-part+.log-part {
             margin-top: 4px;
             opacity: 0.88;
         }
@@ -944,9 +1113,11 @@
                 opacity: 0;
                 transform: translate3d(0, 22px, 0) scale(0.94);
             }
+
             60% {
                 opacity: 1;
             }
+
             100% {
                 opacity: 1;
                 transform: translate3d(0, 0, 0) scale(1);
@@ -1002,7 +1173,7 @@
 
         .modal-content {
             background:
-                linear-gradient(180deg, rgba(255,255,255,0.04), transparent 28%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 28%),
                 var(--panel-bg);
             color: var(--text-color);
             padding: 1.25rem 1.15rem 1.1rem;
@@ -1098,7 +1269,7 @@
             letter-spacing: 0.04em;
             cursor: pointer;
             transition: filter 0.15s, transform 0.1s, box-shadow 0.15s;
-            box-shadow: 0 3px 0 #92400e, 0 8px 16px rgba(0,0,0,0.28);
+            box-shadow: 0 3px 0 #92400e, 0 8px 16px rgba(0, 0, 0, 0.28);
         }
 
         .btn:hover {
@@ -1127,7 +1298,7 @@
         .btn-muted {
             background: linear-gradient(180deg, #57534e, #3f3a36);
             color: #f5f0e8;
-            box-shadow: 0 3px 0 #292524, 0 8px 16px rgba(0,0,0,0.28);
+            box-shadow: 0 3px 0 #292524, 0 8px 16px rgba(0, 0, 0, 0.28);
         }
 
         .menu-links {
@@ -1334,7 +1505,7 @@
             margin-bottom: 8px;
         }
 
-        .settings-stack > span {
+        .settings-stack>span {
             font-size: 0.8rem;
             font-weight: 700;
         }
@@ -1391,7 +1562,7 @@
             font-size: 0.82rem;
         }
 
-        .menu-play-actions + .menu-play-actions {
+        .menu-play-actions+.menu-play-actions {
             margin-top: 8px;
         }
 
@@ -1550,7 +1721,7 @@
         #compendium-modal .modal-title,
         #compendium-modal .set-blurb,
         #compendium-modal .compendium-filter,
-        #compendium-modal .modal-content > .btn {
+        #compendium-modal .modal-content>.btn {
             flex-shrink: 0;
         }
 
@@ -1597,10 +1768,10 @@
             color: #fff;
             overflow: hidden;
             background:
-                radial-gradient(circle at 50% 35%, rgba(255,255,255,0.12), transparent 55%),
+                radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.12), transparent 55%),
                 linear-gradient(160deg, #57534e, #292524);
             border: 1px solid #e8c36a;
-            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255,255,255,0.16);
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.16);
         }
 
         .compendium-card {
@@ -1642,11 +1813,20 @@
             padding: 0 3px;
             line-height: 1.1;
         }
-        .compendium-card .card-name { font-size: 0.48rem; }
-        .draft-card .card-name { font-size: var(--draft-font-name); }
+
+        .compendium-card .card-name {
+            font-size: 0.48rem;
+        }
+
+        .draft-card .card-name {
+            font-size: var(--draft-font-name);
+        }
 
         .compendium-card .stat-top,
-        .draft-card .stat-top { top: 2px; }
+        .draft-card .stat-top {
+            top: 2px;
+        }
+
         .compendium-card .card-emoji,
         .draft-card .card-emoji {
             width: 1.85em;
@@ -1664,7 +1844,7 @@
         }
 
         .stat-card {
-            background: rgba(0,0,0,0.18);
+            background: rgba(0, 0, 0, 0.18);
             padding: 8px 10px;
             border-radius: 10px;
             border: 1px solid var(--border-color);
@@ -1704,21 +1884,43 @@
             border: 1px solid var(--gold);
             background: rgba(16, 12, 9, 0.88);
             color: var(--gold);
-            box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
         }
 
         .turn-banner.show {
             animation: bannerIn 0.85s ease forwards;
         }
 
-        .turn-banner.player { color: var(--blue-card); border-color: rgba(110, 160, 255, 0.5); }
-        .turn-banner.ai { color: var(--red-card); border-color: rgba(255, 107, 87, 0.5); }
+        .turn-banner.player {
+            color: var(--blue-card);
+            border-color: rgba(110, 160, 255, 0.5);
+        }
+
+        .turn-banner.ai {
+            color: var(--red-card);
+            border-color: rgba(255, 107, 87, 0.5);
+        }
 
         @keyframes bannerIn {
-            0% { opacity: 0; transform: translate(-50%, -18px) scale(0.9); }
-            18% { opacity: 1; transform: translate(-50%, 0) scale(1); }
-            62% { opacity: 1; transform: translate(-50%, 0) scale(1); }
-            100% { opacity: 0; transform: translate(-50%, -8px) scale(0.98); }
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -18px) scale(0.9);
+            }
+
+            18% {
+                opacity: 1;
+                transform: translate(-50%, 0) scale(1);
+            }
+
+            62% {
+                opacity: 1;
+                transform: translate(-50%, 0) scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -8px) scale(0.98);
+            }
         }
 
         @media (max-width: 480px) {
@@ -1730,8 +1932,15 @@
         }
 
         @keyframes toastHold {
-            0%, 62% { opacity: 1; }
-            100% { opacity: 0; }
+
+            0%,
+            62% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
         }
 
         .score-pill.score-tick {
@@ -1739,9 +1948,18 @@
         }
 
         @keyframes scoreTick {
-            0% { transform: scale(1); }
-            35% { transform: scale(1.12); filter: brightness(1.3); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            35% {
+                transform: scale(1.12);
+                filter: brightness(1.3);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
 
         .turn-indicator.pulse {
@@ -1749,9 +1967,20 @@
         }
 
         @keyframes turnPulse {
-            0% { transform: scale(1); letter-spacing: 0.16em; }
-            40% { transform: scale(1.08); letter-spacing: 0.22em; }
-            100% { transform: scale(1); letter-spacing: 0.16em; }
+            0% {
+                transform: scale(1);
+                letter-spacing: 0.16em;
+            }
+
+            40% {
+                transform: scale(1.08);
+                letter-spacing: 0.22em;
+            }
+
+            100% {
+                transform: scale(1);
+                letter-spacing: 0.16em;
+            }
         }
 
         .capture-pop {
@@ -1774,10 +2003,25 @@
         }
 
         @keyframes captureFloat {
-            0% { opacity: 0; transform: translate(-50%, 8px) scale(0.8); }
-            12% { opacity: 1; transform: translate(-50%, -6px) scale(1.05); }
-            72% { opacity: 1; transform: translate(-50%, -10px) scale(1); }
-            100% { opacity: 0; transform: translate(-50%, -22px) scale(0.95); }
+            0% {
+                opacity: 0;
+                transform: translate(-50%, 8px) scale(0.8);
+            }
+
+            12% {
+                opacity: 1;
+                transform: translate(-50%, -6px) scale(1.05);
+            }
+
+            72% {
+                opacity: 1;
+                transform: translate(-50%, -10px) scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -22px) scale(0.95);
+            }
         }
 
         .fx-ring {
@@ -1789,20 +2033,704 @@
             animation: fxRing 0.7s ease-out forwards;
         }
 
-        .fx-ring.curse { box-shadow: 0 0 0 2px #c084fc, 0 0 18px #a855f7; }
-        .fx-ring.bolt { box-shadow: 0 0 0 2px #60a5fa, 0 0 18px #3b82f6; }
-        .fx-ring.poison { box-shadow: 0 0 0 2px #4ade80, 0 0 16px #22c55e; }
-        .fx-ring.buff { box-shadow: 0 0 0 2px var(--gold), 0 0 16px #e8a317; }
-        .fx-ring.blast { box-shadow: 0 0 0 2px #fb923c, 0 0 18px #f97316; }
-        .fx-ring.spite { box-shadow: 0 0 0 2px #fb7185, 0 0 18px #e11d48; }
-        .fx-ring.silence { box-shadow: 0 0 0 2px #94a3b8, 0 0 16px #64748b; }
-        .fx-ring.chill { box-shadow: 0 0 0 2px #7dd3fc, 0 0 16px #38bdf8; }
-        .fx-ring.cinder { box-shadow: 0 0 0 2px #fb923c, 0 0 18px #ea580c; }
+        .fx-ring.curse {
+            box-shadow: 0 0 0 2px #c084fc, 0 0 18px #a855f7;
+        }
+
+        .fx-ring.bolt {
+            box-shadow: 0 0 0 2px #60a5fa, 0 0 18px #3b82f6;
+        }
+
+        .fx-ring.poison {
+            box-shadow: 0 0 0 2px #4ade80, 0 0 16px #22c55e;
+        }
+
+        .fx-ring.buff {
+            box-shadow: 0 0 0 2px var(--gold), 0 0 16px #e8a317;
+        }
+
+        .fx-ring.blast {
+            box-shadow: 0 0 0 2px #fb923c, 0 0 18px #f97316;
+        }
+
+        .fx-ring.spite {
+            box-shadow: 0 0 0 2px #fb7185, 0 0 18px #e11d48;
+        }
+
+        .fx-ring.silence {
+            box-shadow: 0 0 0 2px #94a3b8, 0 0 16px #64748b;
+        }
+
+        .fx-ring.chill {
+            box-shadow: 0 0 0 2px #7dd3fc, 0 0 16px #38bdf8;
+        }
+
+        .fx-ring.cinder {
+            box-shadow: 0 0 0 2px #fb923c, 0 0 18px #ea580c;
+        }
+
+        .fx-ring.equalizer {
+            box-shadow: 0 0 0 2px #e2e8f0, 0 0 16px #94a3b8;
+        }
 
         @keyframes fxRing {
-            0% { opacity: 0; transform: scale(0.92); }
-            30% { opacity: 1; transform: scale(1.04); }
-            100% { opacity: 0; transform: scale(1.08); }
+            0% {
+                opacity: 0;
+                transform: scale(0.92);
+            }
+
+            30% {
+                opacity: 1;
+                transform: scale(1.04);
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(1.08);
+            }
+        }
+
+        .mech-burst {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            overflow: visible;
+        }
+
+        .mech-burst>* {
+            pointer-events: none;
+        }
+
+        .mech-flash {
+            position: absolute;
+            inset: 6%;
+            border-radius: 10px;
+            opacity: 0;
+            animation: mechFlash 0.55s ease-out forwards;
+        }
+
+        .mech-flash.bolt {
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(96, 165, 250, 0.5) 42%, transparent 74%);
+        }
+
+        .mech-flash.buff {
+            background: radial-gradient(circle, rgba(255, 236, 170, 0.75) 0%, rgba(232, 163, 23, 0.32) 50%, transparent 74%);
+        }
+
+        .mech-flash.curse {
+            background: radial-gradient(circle, rgba(216, 180, 254, 0.7) 0%, rgba(88, 28, 135, 0.36) 55%, transparent 76%);
+        }
+
+        .mech-flash.blast {
+            background: radial-gradient(circle, rgba(255, 220, 160, 0.78) 0%, rgba(249, 115, 22, 0.38) 50%, transparent 74%);
+        }
+
+        .mech-flash.poison {
+            background: radial-gradient(circle, rgba(134, 239, 172, 0.58) 0%, rgba(22, 163, 74, 0.3) 52%, transparent 74%);
+        }
+
+        .mech-flash.silence {
+            background: radial-gradient(circle, rgba(226, 232, 240, 0.5) 0%, rgba(100, 116, 139, 0.3) 55%, transparent 74%);
+        }
+
+        .mech-flash.chill {
+            background: radial-gradient(circle, rgba(224, 246, 255, 0.72) 0%, rgba(56, 189, 248, 0.3) 52%, transparent 76%);
+        }
+
+        .mech-flash.cinder {
+            background: radial-gradient(circle, rgba(255, 180, 80, 0.7) 0%, rgba(234, 88, 12, 0.34) 52%, transparent 74%);
+        }
+
+        .mech-flash.spite {
+            background: radial-gradient(circle, rgba(254, 202, 202, 0.62) 0%, rgba(225, 29, 72, 0.36) 50%, transparent 74%);
+        }
+
+        .mech-flash.equalizer {
+            background: radial-gradient(circle, rgba(248, 250, 252, 0.7) 0%, rgba(148, 163, 184, 0.3) 52%, transparent 74%);
+        }
+
+        @keyframes mechFlash {
+            0% {
+                opacity: 0;
+                transform: scale(0.86);
+            }
+
+            14% {
+                opacity: 1;
+                transform: scale(1.06);
+            }
+
+            58% {
+                opacity: 0.88;
+                transform: scale(1.08);
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(1.16);
+            }
+        }
+
+        .mech-wave {
+            position: absolute;
+            inset: 4%;
+            border-radius: 12px;
+            border: 3px solid rgba(255, 186, 92, 0.95);
+            box-shadow: 0 0 22px rgba(249, 115, 22, 0.65);
+            animation: mechWave 0.78s ease-out forwards;
+        }
+
+        @keyframes mechWave {
+            0% {
+                opacity: 1;
+                transform: scale(0.5);
+            }
+
+            45% {
+                opacity: 0.75;
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(1.95);
+            }
+        }
+
+        .mech-spark {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 9px;
+            height: 9px;
+            margin: -4px 0 0 -4px;
+            border-radius: 50%;
+            background: #fff7d6;
+            box-shadow: 0 0 10px #fbbf24, 0 0 18px #f97316;
+            animation: mechSpark 0.7s ease-out forwards;
+            --dx: 0px;
+            --dy: -18px;
+        }
+
+        @keyframes mechSpark {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1.15);
+            }
+
+            55% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(var(--dx), var(--dy)) scale(0.25);
+            }
+        }
+
+        .mech-mote {
+            position: absolute;
+            left: 50%;
+            top: 62%;
+            width: 7px;
+            height: 7px;
+            margin: -3px 0 0 -3px;
+            border-radius: 50%;
+            background: #ffe08a;
+            box-shadow: 0 0 10px #e8a317, 0 0 16px #fbbf24;
+            animation: mechMote 0.82s ease-out forwards;
+            --dx: 0px;
+        }
+
+        @keyframes mechMote {
+            0% {
+                opacity: 0;
+                transform: translate(0, 8px) scale(0.4);
+            }
+
+            18% {
+                opacity: 1;
+            }
+
+            62% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(var(--dx), -32px) scale(0.85);
+            }
+        }
+
+        .mech-drip {
+            position: absolute;
+            left: 50%;
+            top: 18%;
+            width: 7px;
+            height: 12px;
+            margin-left: -3px;
+            border-radius: 40% 40% 55% 55%;
+            background: linear-gradient(#bbf7d0, #16a34a);
+            box-shadow: 0 0 10px #22c55e;
+            animation: mechDrip 0.8s ease-in forwards;
+            --dx: 0px;
+        }
+
+        @keyframes mechDrip {
+            0% {
+                opacity: 0;
+                transform: translate(var(--dx), -6px) scale(0.6);
+            }
+
+            16% {
+                opacity: 1;
+            }
+
+            55% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(var(--dx), 36px) scale(0.9);
+            }
+        }
+
+        .mech-crystal {
+            position: absolute;
+            width: 11px;
+            height: 11px;
+            background: linear-gradient(135deg, #f0f9ff, #38bdf8);
+            box-shadow: 0 0 10px #7dd3fc, 0 0 16px #38bdf8;
+            clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+            animation: mechCrystal 0.8s ease-out forwards;
+        }
+
+        .mech-crystal.c1 {
+            left: 12%;
+            top: 14%;
+        }
+
+        .mech-crystal.c2 {
+            right: 12%;
+            top: 16%;
+        }
+
+        .mech-crystal.c3 {
+            left: 14%;
+            bottom: 22%;
+        }
+
+        .mech-crystal.c4 {
+            right: 14%;
+            bottom: 20%;
+        }
+
+        @keyframes mechCrystal {
+            0% {
+                opacity: 0;
+                transform: scale(0.2) rotate(0deg);
+            }
+
+            22% {
+                opacity: 1;
+                transform: scale(1.2) rotate(12deg);
+            }
+
+            62% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(0.7) rotate(28deg);
+            }
+        }
+
+        .mech-mute {
+            position: absolute;
+            inset: 14%;
+            border: 3px solid rgba(226, 232, 240, 0.95);
+            box-shadow: 0 0 12px #94a3b8;
+            border-radius: 50%;
+            animation: mechMute 0.72s ease-out forwards;
+        }
+
+        .mech-mute::after {
+            content: "";
+            position: absolute;
+            left: 12%;
+            right: 12%;
+            top: 48%;
+            height: 2px;
+            background: rgba(226, 232, 240, 0.95);
+            box-shadow: 0 0 8px #94a3b8;
+            transform: rotate(-28deg);
+        }
+
+        @keyframes mechMute {
+            0% {
+                opacity: 0;
+                transform: scale(0.6);
+            }
+
+            20% {
+                opacity: 1;
+                transform: scale(1.06);
+            }
+
+            60% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(1.22);
+            }
+        }
+
+        .mech-balance {
+            position: absolute;
+            left: 18%;
+            right: 18%;
+            top: 48%;
+            height: 3px;
+            background: #f8fafc;
+            box-shadow: 0 0 10px #e2e8f0;
+            transform-origin: center;
+            animation: mechBalance 0.55s ease-out forwards;
+        }
+
+        .mech-balance::before,
+        .mech-balance::after {
+            content: "";
+            position: absolute;
+            top: -7px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            box-shadow: 0 0 8px #94a3b8;
+        }
+
+        .mech-balance::before {
+            left: 0;
+        }
+
+        .mech-balance::after {
+            right: 0;
+        }
+
+        @keyframes mechBalance {
+            0% {
+                opacity: 0;
+                transform: scaleX(0.2);
+            }
+
+            22% {
+                opacity: 1;
+                transform: scaleX(1.06);
+            }
+
+            62% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                transform: scaleX(1);
+            }
+        }
+
+        .mech-crack {
+            position: absolute;
+            inset: 10% 22%;
+            background:
+                linear-gradient(115deg, transparent 46%, #fecdd3 46%, #e11d48 50%, transparent 54%),
+                linear-gradient(70deg, transparent 48%, rgba(251, 113, 133, 0.9) 50%, transparent 53%);
+            animation: mechCrack 0.5s ease-out forwards;
+            filter: drop-shadow(0 0 6px #e11d48);
+        }
+
+        @keyframes mechCrack {
+            0% {
+                opacity: 0;
+                clip-path: inset(50% 50% 50% 50%);
+            }
+
+            16% {
+                opacity: 1;
+                clip-path: inset(0 0 0 0);
+            }
+
+            58% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .mech-flame {
+            position: absolute;
+            left: 50%;
+            bottom: 16%;
+            width: 12px;
+            height: 22px;
+            margin-left: -6px;
+            border-radius: 50% 50% 40% 40%;
+            background: linear-gradient(#fff7ed, #fb923c, #ea580c);
+            box-shadow: 0 0 14px #f97316, 0 0 20px #ea580c;
+            animation: mechFlame 0.82s ease-out forwards;
+            --dx: 0px;
+        }
+
+        @keyframes mechFlame {
+            0% {
+                opacity: 0;
+                transform: translate(var(--dx), 10px) scale(0.4);
+            }
+
+            18% {
+                opacity: 1;
+                transform: translate(var(--dx), 0) scale(1.05);
+            }
+
+            58% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(var(--dx), -24px) scale(0.5);
+            }
+        }
+
+        .mech-wisp {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            margin: -7px 0 0 -7px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #f3e8ff 0%, #a855f7 55%, transparent 72%);
+            box-shadow: 0 0 12px #c084fc;
+            filter: blur(0.4px);
+            animation: mechWisp 0.42s ease-in forwards;
+        }
+
+        @keyframes mechWisp {
+            0% {
+                opacity: 0;
+                transform: scale(0.4);
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.2;
+                transform: scale(0.85);
+            }
+        }
+
+        .mech-travel {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            margin: -6px 0 0 -6px;
+            border-radius: 50%;
+            z-index: 2;
+            transition: transform 0.38s cubic-bezier(0.2, 0.75, 0.25, 1);
+        }
+
+        .mech-travel.bolt {
+            background: #fff;
+            box-shadow: 0 0 12px #93c5fd, 0 0 22px #3b82f6;
+        }
+
+        .mech-travel.cinder {
+            width: 11px;
+            height: 11px;
+            margin: -5px 0 0 -5px;
+            background: #fdba74;
+            box-shadow: 0 0 12px #f97316, 0 0 20px #ea580c;
+        }
+
+        .mech-travel.curse {
+            width: 15px;
+            height: 15px;
+            margin: -7px 0 0 -7px;
+            background: radial-gradient(circle, #f3e8ff, #7e22ce);
+            box-shadow: 0 0 14px #a855f7, 0 0 22px #6b21a8;
+        }
+
+        .mech-bolt-svg {
+            position: absolute;
+            inset: 0;
+            overflow: visible;
+            z-index: 3;
+        }
+
+        .mech-bolt-svg polyline {
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            animation: mechBoltStroke 1.05s ease-out forwards;
+        }
+
+        .mech-bolt-svg .bolt-glow {
+            stroke: #93c5fd;
+            stroke-width: 18;
+            opacity: 0.9;
+            filter: blur(2.2px);
+        }
+
+        .mech-bolt-svg .bolt-core {
+            stroke: #fff;
+            stroke-width: 5;
+        }
+
+        .mech-bolt-svg .bolt-core-2 {
+            stroke: #3b82f6;
+            stroke-width: 2.4;
+            opacity: 0.95;
+        }
+
+        @keyframes mechBoltStroke {
+            0% {
+                opacity: 0;
+            }
+
+            8% {
+                opacity: 1;
+            }
+
+            18% {
+                opacity: 0.35;
+            }
+
+            28% {
+                opacity: 1;
+            }
+
+            70% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .mech-ray-svg {
+            position: absolute;
+            inset: 0;
+            overflow: visible;
+        }
+
+        .mech-ray-svg line {
+            stroke: #fde68a;
+            stroke-width: 2.6;
+            stroke-linecap: round;
+            filter: drop-shadow(0 0 6px #e8a317);
+            animation: mechRay 0.72s ease-out forwards;
+        }
+
+        @keyframes mechRay {
+            0% {
+                opacity: 0;
+            }
+
+            18% {
+                opacity: 1;
+            }
+
+            62% {
+                opacity: 0.85;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .card.mech-hit-bolt {
+            animation: mechHitBolt 0.38s ease-out;
+        }
+
+        .card.mech-hit-spite {
+            animation: mechHitSpite 0.4s ease-out;
+        }
+
+        .card.mech-hit-chill {
+            animation: mechHitChill 0.45s ease-out;
+        }
+
+        @keyframes mechHitBolt {
+            0% {
+                filter: brightness(1.8);
+            }
+
+            100% {
+                filter: none;
+            }
+        }
+
+        @keyframes mechHitSpite {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            20% {
+                transform: translate(-2px, 1px);
+            }
+
+            40% {
+                transform: translate(2px, -1px);
+            }
+
+            60% {
+                transform: translate(-1px, 0);
+            }
+        }
+
+        @keyframes mechHitChill {
+            0% {
+                filter: brightness(1.25) saturate(0.85);
+            }
+
+            100% {
+                filter: none;
+            }
+        }
+
+        .mech-bolt-glyph {
+            position: absolute;
+            width: 1.4em;
+            height: 1.4em;
+            margin: -0.7em 0 0 -0.7em;
+            font-size: 2.4rem;
+            line-height: 1;
+            color: #fff;
+            text-shadow: 0 0 10px #93c5fd, 0 0 22px #2563eb;
+            filter: drop-shadow(0 0 8px #60a5fa);
+            z-index: 4;
+            transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .mech-travel {
+                transition-duration: 0.01s;
+            }
+
+            .card.mech-hit-bolt,
+            .card.mech-hit-spite,
+            .card.mech-hit-chill {
+                animation-duration: 0.2s;
+            }
         }
 
         .cell.coach-target {
@@ -1833,7 +2761,7 @@
             border: 1px solid var(--gold);
             border-radius: 12px;
             padding: 10px 12px 8px;
-            box-shadow: 0 16px 36px rgba(0,0,0,0.45);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
             text-align: center;
         }
 
@@ -2118,8 +3046,8 @@
             border: 1px solid rgba(232, 195, 106, 0.48);
             background:
                 radial-gradient(ellipse 80% 80% at 50% 0%, rgba(232, 163, 23, 0.22), transparent 70%),
-                linear-gradient(180deg, rgba(255,255,255,0.04), transparent 60%);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+                linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 60%);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
         }
 
         .league-crown-title {
@@ -2315,7 +3243,7 @@
             z-index: 2;
         }
 
-        .league-actions > .btn + .btn {
+        .league-actions>.btn+.btn {
             margin-top: 8px;
         }
 
@@ -2418,10 +3346,21 @@
             z-index: 4;
         }
 
-        .draft-card.taken-you { box-shadow: inset 0 0 0 3px var(--blue-card); }
-        .draft-card.taken-ash { box-shadow: inset 0 0 0 3px #f59e0b; }
-        .draft-card.taken-vesper { box-shadow: inset 0 0 0 3px #a78bfa; }
-        .draft-card.taken-rook { box-shadow: inset 0 0 0 3px #94a3b8; }
+        .draft-card.taken-you {
+            box-shadow: inset 0 0 0 3px var(--blue-card);
+        }
+
+        .draft-card.taken-ash {
+            box-shadow: inset 0 0 0 3px #f59e0b;
+        }
+
+        .draft-card.taken-vesper {
+            box-shadow: inset 0 0 0 3px #a78bfa;
+        }
+
+        .draft-card.taken-rook {
+            box-shadow: inset 0 0 0 3px #94a3b8;
+        }
 
         #league-roster {
             z-index: 125;
@@ -2613,39 +3552,116 @@
 <body data-theme="dark">
     <!-- Lucide-style SVG icons (ISC license, https://lucide.dev) -->
     <svg class="icon-sprite" aria-hidden="true" focusable="false">
-        <symbol id="i-stats" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></symbol>
-        <symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></symbol>
-        <symbol id="i-library" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 6 4 14"/><path d="M12 6v14"/><path d="M8 8v12"/><path d="M4 4v16"/></symbol>
-        <symbol id="i-sliders" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5H3"/><path d="M21 5h-7"/><path d="M21 12h-9"/><path d="M8 12H3"/><path d="M21 19h-5"/><path d="M12 19H3"/><circle cx="12" cy="5" r="2"/><circle cx="8" cy="12" r="2"/><circle cx="16" cy="19" r="2"/></symbol>
-        <symbol id="i-volume" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z"/><path d="M16 9a5 5 0 0 1 0 6"/><path d="M19.364 18.364a9 9 0 0 0 0-12.728"/></symbol>
-        <symbol id="i-volume-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/></symbol>
-        <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></symbol>
-        <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></symbol>
-        <symbol id="i-house" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+        <symbol id="i-stats" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 20V10" />
+            <path d="M12 20V4" />
+            <path d="M6 20v-6" />
+        </symbol>
+        <symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 7v14" />
+            <path
+                d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z" />
+        </symbol>
+        <symbol id="i-library" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="m16 6 4 14" />
+            <path d="M12 6v14" />
+            <path d="M8 8v12" />
+            <path d="M4 4v16" />
+        </symbol>
+        <symbol id="i-sliders" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 5H3" />
+            <path d="M21 5h-7" />
+            <path d="M21 12h-9" />
+            <path d="M8 12H3" />
+            <path d="M21 19h-5" />
+            <path d="M12 19H3" />
+            <circle cx="12" cy="5" r="2" />
+            <circle cx="8" cy="12" r="2" />
+            <circle cx="16" cy="19" r="2" />
+        </symbol>
+        <symbol id="i-volume" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path
+                d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z" />
+            <path d="M16 9a5 5 0 0 1 0 6" />
+            <path d="M19.364 18.364a9 9 0 0 0 0-12.728" />
+        </symbol>
+        <symbol id="i-volume-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path
+                d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z" />
+            <line x1="22" x2="16" y1="9" y2="15" />
+            <line x1="16" x2="22" y1="9" y2="15" />
+        </symbol>
+        <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2v2" />
+            <path d="M12 20v2" />
+            <path d="m4.93 4.93 1.41 1.41" />
+            <path d="m17.66 17.66 1.41 1.41" />
+            <path d="M2 12h2" />
+            <path d="M20 12h2" />
+            <path d="m6.34 17.66-1.41 1.41" />
+            <path d="m19.07 4.93-1.41 1.41" />
+        </symbol>
+        <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+        </symbol>
+        <symbol id="i-house" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
+            <path
+                d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+        </symbol>
     </svg>
 
-    <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="embers" aria-hidden="true">
+        <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
 
     <div class="container">
         <header>
             <h1>EMBER GRID</h1>
             <div class="nav-group">
                 <button type="button" class="menu-btn" onclick="showStatsModal()" title="Stats" aria-label="Stats">
-                    <svg class="ui-icon" aria-hidden="true"><use href="#i-stats"></use></svg>
+                    <svg class="ui-icon" aria-hidden="true">
+                        <use href="#i-stats"></use>
+                    </svg>
                 </button>
                 <button type="button" class="menu-btn" onclick="showRulesModal()" title="Rules" aria-label="Rules">
-                    <svg class="ui-icon" aria-hidden="true"><use href="#i-book"></use></svg>
+                    <svg class="ui-icon" aria-hidden="true">
+                        <use href="#i-book"></use>
+                    </svg>
                 </button>
-                <button type="button" class="menu-btn" id="audio-toggle-btn" onclick="toggleAudio()" title="Mute audio" aria-label="Mute audio">
-                    <svg class="ui-icon icon-audio-on" aria-hidden="true"><use href="#i-volume"></use></svg>
-                    <svg class="ui-icon icon-audio-off" aria-hidden="true"><use href="#i-volume-off"></use></svg>
+                <button type="button" class="menu-btn" id="audio-toggle-btn" onclick="toggleAudio()" title="Mute audio"
+                    aria-label="Mute audio">
+                    <svg class="ui-icon icon-audio-on" aria-hidden="true">
+                        <use href="#i-volume"></use>
+                    </svg>
+                    <svg class="ui-icon icon-audio-off" aria-hidden="true">
+                        <use href="#i-volume-off"></use>
+                    </svg>
                 </button>
-                <button type="button" class="menu-btn" id="theme-toggle-btn" onclick="toggleTheme()" title="Switch to light theme" aria-label="Switch to light theme">
-                    <svg class="ui-icon icon-sun" aria-hidden="true"><use href="#i-sun"></use></svg>
-                    <svg class="ui-icon icon-moon" aria-hidden="true"><use href="#i-moon"></use></svg>
+                <button type="button" class="menu-btn" id="theme-toggle-btn" onclick="toggleTheme()"
+                    title="Switch to light theme" aria-label="Switch to light theme">
+                    <svg class="ui-icon icon-sun" aria-hidden="true">
+                        <use href="#i-sun"></use>
+                    </svg>
+                    <svg class="ui-icon icon-moon" aria-hidden="true">
+                        <use href="#i-moon"></use>
+                    </svg>
                 </button>
-                <button type="button" class="menu-btn" onclick="showModeMenu()" title="Main Menu" aria-label="Main Menu">
-                    <svg class="ui-icon" aria-hidden="true"><use href="#i-house"></use></svg>
+                <button type="button" class="menu-btn" onclick="showModeMenu()" title="Main Menu"
+                    aria-label="Main Menu">
+                    <svg class="ui-icon" aria-hidden="true">
+                        <use href="#i-house"></use>
+                    </svg>
                 </button>
             </div>
         </header>
@@ -2658,14 +3674,18 @@
 
         <div class="battlefield">
             <div id="top-area"></div>
-            <div class="grid" id="board-grid"></div>
+            <div class="board-wrap">
+                <div class="grid" id="board-grid"></div>
+            </div>
             <div id="bottom-area"></div>
         </div>
 
         <div class="status-msg" id="status-msg">The Base Set is the deck. Each player is dealt a hand of five.</div>
-        <button type="button" class="battle-log-link" id="battle-log-link" onclick="showBattleLogModal()">Battle log</button>
+        <button type="button" class="battle-log-link" id="battle-log-link" onclick="showBattleLogModal()">Battle
+            log</button>
     </div>
 
+    <div id="board-fx" class="board-fx" aria-hidden="true"></div>
     <div id="turn-banner" class="turn-banner" aria-live="polite"></div>
     <div id="coach-spotlight" class="coach-spotlight hidden"></div>
     <div id="coach-card" class="coach-card hidden">
@@ -2678,30 +3698,41 @@
 
     <!-- Main Menu Modal -->
     <div id="main-menu-modal" class="modal modal-ember">
-        <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="embers" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
         <div class="modal-content">
             <h2 class="modal-title">Ember Grid</h2>
             <p class="brand-tag">The Base Set</p>
 
             <div class="menu-section-title">Core Rules</div>
             <div class="rules-compact">
-                <strong>🃏 The deck:</strong> Cards are dealt or drafted from a shared deck - the Base Set, 50 cards. Tribe Decks play one tribe of five. Every Ember card has an ability.<br>
-                <strong>⚔️ Capture:</strong> Play a card from your hand next to an enemy. If your touching stat is higher,
+                <strong>🃏 The deck:</strong> Cards are dealt or drafted from a shared deck - the Base Set, 50 cards.
+                Tribe Decks play one tribe of five. Every Ember card has an ability.<br>
+                <strong>⚔️ Capture:</strong> Play a card from your hand next to an enemy. If your touching stat is
+                higher,
                 you capture it.<br>
-                <strong>🏆 Victory:</strong> <span id="victory-compact">Fill the 3x3. Most cards on the board wins. Leftover in hand does not count.</span>
+                <strong>🏆 Victory:</strong> <span id="victory-compact">Fill the 3x3. Most cards on the board wins.
+                    Leftover in hand does not count.</span>
             </div>
 
             <nav class="menu-links">
                 <button type="button" class="btn btn-alt" onclick="showRulesModal()">
-                    <svg class="ui-icon" aria-hidden="true"><use href="#i-book"></use></svg>
+                    <svg class="ui-icon" aria-hidden="true">
+                        <use href="#i-book"></use>
+                    </svg>
                     Rules
                 </button>
                 <button type="button" class="btn btn-alt" onclick="showCompendiumModal()">
-                    <svg class="ui-icon" aria-hidden="true"><use href="#i-library"></use></svg>
+                    <svg class="ui-icon" aria-hidden="true">
+                        <use href="#i-library"></use>
+                    </svg>
                     Compendium
                 </button>
                 <button type="button" class="btn btn-alt" onclick="showOptionsModal()">
-                    <svg class="ui-icon" aria-hidden="true"><use href="#i-sliders"></use></svg>
+                    <svg class="ui-icon" aria-hidden="true">
+                        <use href="#i-sliders"></use>
+                    </svg>
                     Options
                 </button>
             </nav>
@@ -2717,14 +3748,15 @@
             <details class="match-code-box" id="match-code-box">
                 <summary>Have a match code?</summary>
                 <form onsubmit="submitMatchCode(event)">
-                    <input id="match-code-input" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Paste code or link" aria-label="Match code">
+                    <input id="match-code-input" type="text" inputmode="text" autocomplete="off" autocapitalize="off"
+                        spellcheck="false" placeholder="Paste code or link" aria-label="Match code">
                     <button type="submit" class="btn btn-alt">Play</button>
                 </form>
                 <p id="match-code-error" class="match-code-error" hidden></p>
             </details>
             <div class="menu-foot">
                 <!-- Bump BUILD on every PR. Still pre-1.0, so this stays Alpha until 1.0 ships. -->
-                <p class="build-stamp">0.30 Alpha</p>
+                <p class="build-stamp">0.31 Alpha</p>
                 <p class="dev-note">Still in active development. Cards and rules may change.</p>
             </div>
         </div>
@@ -2732,31 +3764,47 @@
 
     <!-- Rules Modal -->
     <div id="expanded-rules-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, closeRulesModal)">
-        <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="embers" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="closeRulesModal()" aria-label="Close rules"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+            <button type="button" class="modal-close" onclick="closeRulesModal()" aria-label="Close rules"><svg
+                    class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+                    <path d="M18 6 6 18" />
+                    <path d="m6 6 12 12" />
+                </svg></button>
             <h2 class="modal-title">Rules</h2>
 
             <div class="menu-section-title" style="margin-top: 0;">The table</div>
             <div class="expanded-rules-list">
                 <div class="rule-detail-item">
-                    <strong>The deck:</strong> The Base Set is 50 cards in ten tribes. Every Ember card has an ability. Shuffle it and deal two hands of five, or spread sixteen and draft until each hand is five.
+                    <strong>The deck:</strong> The Base Set is 50 cards in ten tribes. Every Ember card has an ability.
+                    Shuffle it and deal two hands of five, or spread sixteen and draft until each hand is five.
                 </div>
                 <div class="rule-detail-item">
-                    <strong>League:</strong> You plus three named AI. Snake-draft twenty cards (five each), then a six-week double round-robin. You play each rival twice. Each meeting is best of three, and first player swaps so both get an opener. Their series resolve with the same engine and land on the table. Standings break ties by series wins, then game wins, then combined board score. Leftover and Ember/Classic lock at season start. All three AI use the Options difficulty. Backing out saves the season.
+                    <strong>League:</strong> You plus three named AI. Snake-draft twenty cards (five each), then a
+                    six-week double round-robin. You play each rival twice. Each meeting is best of three, and first
+                    player swaps so both get an opener. Their series resolve with the same engine and land on the table.
+                    Standings break ties by series wins, then game wins, then combined board score. Leftover and
+                    Ember/Classic lock at season start. All three AI use the Options difficulty. Backing out saves the
+                    season.
                 </div>
                 <div class="rule-detail-item">
-                    <strong>Tribe Decks:</strong> Each deck is one tribe of five. Pick yours and the opponent's, or leave either one random. Same tribe on both sides is a mirror match.
+                    <strong>Tribe Decks:</strong> Each deck is one tribe of five. Pick yours and the opponent's, or
+                    leave either one random. Same tribe on both sides is a mirror match.
                 </div>
                 <div class="rule-detail-item">
-                    <strong>Placement:</strong> On your turn, play one card from your hand onto an empty cell of the 3x3 grid.
+                    <strong>Placement:</strong> On your turn, play one card from your hand onto an empty cell of the 3x3
+                    grid.
                 </div>
                 <div class="rule-detail-item">
                     <strong>Capturing:</strong> When your card touches an enemy card, compare touching values (Top,
                     Right, Bottom, Left). If your attacking stat is strictly greater, you capture their card!
                 </div>
                 <div class="rule-detail-item">
-                    <strong>Victory:</strong> <span id="victory-rules">Two hands of five. After the board fills, most cards on the board wins. Leftover in hand does not count. Options can turn leftover scores on, which makes a 5-4 board a 5-5 draw.</span>
+                    <strong>Victory:</strong> <span id="victory-rules">Two hands of five. After the board fills, most
+                        cards on the board wins. Leftover in hand does not count. Options can turn leftover scores on,
+                        which makes a 5-4 board a 5-5 draw.</span>
                 </div>
                 <div class="rule-detail-item">
                     <strong>Stat Cap:</strong> Stats range from 1 to 10 (represented by A). Stat boosts cannot raise
@@ -2766,16 +3814,30 @@
 
             <div class="menu-section-title">Ember Mode Abilities</div>
             <div class="expanded-rules-list">
-                <div class="rule-detail-item"><strong>⚡ Buff:</strong> While this card sits there, adjacent friendly cards get +1 to all stats. Radiance tribe - Celestial, Fairy, Unicorn, Paladin, Angel.</div>
-                <div class="rule-detail-item"><strong>💀 Curse:</strong> On play, the strongest enemy loses 1 from all stats, then this card captures. Grave tribe - Ghost, Vampire, Skull, Zombie, Bat.</div>
-                <div class="rule-detail-item"><strong>💥 Blast:</strong> +2 to all stats on the turn this card is played. Beasts tribe - Dragon, T-Rex, Lion, Shark, Eagle.</div>
-                <div class="rule-detail-item"><strong>🦠 Poison:</strong> At the end of every turn, adjacent enemies lose 1 from all stats. Does not capture on the tick - later plays use the lower stats. Vermin tribe - Spider, Scorpion, Snake, Frog, Beetle.</div>
-                <div class="rule-detail-item"><strong>⚖️ Equalizer:</strong> Captures when touching stats match. Balance tribe - Monk, Titan, Robot, Owl, Alien.</div>
-                <div class="rule-detail-item"><strong>💢 Spite:</strong> When this card is captured, the captor loses 1 from all stats. Wrath tribe - Cyclops, Gorilla, Wrath, Vendetta, Oni.</div>
-                <div class="rule-detail-item"><strong>🔇 Silence:</strong> Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel - neither silences anyone else. Hush tribe - Dread, Hush, Raven, Ninja, Cat.</div>
-                <div class="rule-detail-item"><strong>🔥 Cinder:</strong> On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange. Ember tribe - Scorch, Brand, Fox, Phoenix, Lizard.</div>
-                <div class="rule-detail-item"><strong>🔮 Bolt:</strong> On play, zaps a random enemy by -2 to all stats before this card captures. The zap can help this play steal that card. Arcane tribe - Wizard, Genie, Witch, Mage, Imp.</div>
-                <div class="rule-detail-item"><strong>❄️ Chill:</strong> While this card sits there, adjacent enemies are -1 to all stats. Counts for captures. Frost tribe - Frost, Wolf, Penguin, Polar, Seal.</div>
+                <div class="rule-detail-item"><strong>⚡ Buff:</strong> While this card sits there, adjacent friendly
+                    cards get +1 to all stats. Radiance tribe - Celestial, Fairy, Unicorn, Paladin, Angel.</div>
+                <div class="rule-detail-item"><strong>💀 Curse:</strong> On play, the strongest enemy loses 1 from all
+                    stats, then this card captures. Grave tribe - Ghost, Vampire, Skull, Zombie, Bat.</div>
+                <div class="rule-detail-item"><strong>💥 Blast:</strong> +2 to all stats on the turn this card is
+                    played. Beasts tribe - Dragon, T-Rex, Lion, Shark, Eagle.</div>
+                <div class="rule-detail-item"><strong>🦠 Poison:</strong> At the end of every turn, adjacent enemies
+                    lose 1 from all stats. Does not capture on the tick - later plays use the lower stats. Vermin tribe
+                    - Spider, Scorpion, Snake, Frog, Beetle.</div>
+                <div class="rule-detail-item"><strong>⚖️ Equalizer:</strong> Captures when touching stats match. Balance
+                    tribe - Monk, Titan, Robot, Owl, Alien.</div>
+                <div class="rule-detail-item"><strong>💢 Spite:</strong> When this card is captured, the captor loses 1
+                    from all stats. Wrath tribe - Cyclops, Gorilla, Wrath, Vendetta, Oni.</div>
+                <div class="rule-detail-item"><strong>🔇 Silence:</strong> Adjacent enemies lose their abilities while
+                    this card sits there. Capture still works. Next to an enemy Silence, both cancel - neither silences
+                    anyone else. Hush tribe - Dread, Hush, Raven, Ninja, Cat.</div>
+                <div class="rule-detail-item"><strong>🔥 Cinder:</strong> On play, a random empty cell becomes Cindered.
+                    Whoever sits there is -1 to all stats. The cell glows orange. Ember tribe - Scorch, Brand, Fox,
+                    Phoenix, Lizard.</div>
+                <div class="rule-detail-item"><strong>🔮 Bolt:</strong> On play, zaps a random enemy by -2 to all stats
+                    before this card captures. The zap can help this play steal that card. Arcane tribe - Wizard, Genie,
+                    Witch, Mage, Imp.</div>
+                <div class="rule-detail-item"><strong>❄️ Chill:</strong> While this card sits there, adjacent enemies
+                    are -1 to all stats. Counts for captures. Frost tribe - Frost, Wolf, Penguin, Polar, Seal.</div>
             </div>
 
             <button class="btn btn-alt btn-dismiss" onclick="closeRulesModal()">Close</button>
@@ -2784,11 +3846,19 @@
 
     <!-- Compendium Modal -->
     <div id="compendium-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, closeCompendiumModal)">
-        <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="embers" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="closeCompendiumModal()" aria-label="Close compendium"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+            <button type="button" class="modal-close" onclick="closeCompendiumModal()"
+                aria-label="Close compendium"><svg class="ui-icon" aria-hidden="true" focusable="false"
+                    viewBox="0 0 24 24">
+                    <path d="M18 6 6 18" />
+                    <path d="m6 6 12 12" />
+                </svg></button>
             <h2 class="modal-title">Compendium</h2>
-            <p class="set-blurb">The Base Set is 50 cards in ten tribes. Every Ember card has an ability. Classic Mode still strips abilities and plays as pure stats.</p>
+            <p class="set-blurb">The Base Set is 50 cards in ten tribes. Every Ember card has an ability. Classic Mode
+                still strips abilities and plays as pure stats.</p>
             <select id="compendium-filter" class="settings-select compendium-filter" onchange="renderCompendium()">
                 <option value="all">All cards</option>
                 <option value="aura_buff">Buff</option>
@@ -2809,15 +3879,22 @@
 
     <!-- Options Modal -->
     <div id="options-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, closeOptionsModal)">
-        <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="embers" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="closeOptionsModal()" aria-label="Close options"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+            <button type="button" class="modal-close" onclick="closeOptionsModal()" aria-label="Close options"><svg
+                    class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+                    <path d="M18 6 6 18" />
+                    <path d="m6 6 12 12" />
+                </svg></button>
             <h2 class="modal-title">Options</h2>
 
             <div class="menu-section-title" style="margin-top: 0;">Match</div>
             <div class="settings-stack">
                 <span>Game Mode</span>
-                <select id="ruleset-select" class="settings-select settings-select-full" onchange="updateRuleset(this.value)">
+                <select id="ruleset-select" class="settings-select settings-select-full"
+                    onchange="updateRuleset(this.value)">
                     <option value="ember" selected>Ember Mode (Abilities)</option>
                     <option value="classic">Classic Mode (Pure Stats)</option>
                 </select>
@@ -2828,7 +3905,8 @@
             </div>
             <div class="settings-stack">
                 <span>AI Difficulty</span>
-                <select id="ai-difficulty-select" class="settings-select settings-select-full" onchange="updateDifficulty(this.value)">
+                <select id="ai-difficulty-select" class="settings-select settings-select-full"
+                    onchange="updateDifficulty(this.value)">
                     <option value="easy">Easy</option>
                     <option value="normal" selected>Normal</option>
                     <option value="hard">Hard</option>
@@ -2836,17 +3914,28 @@
             </div>
             <label class="settings-row" for="open-hands-check">
                 <span>Show Hands</span>
-                <input type="checkbox" id="open-hands-check" class="settings-check" onchange="updateOpenHands(this.checked)">
+                <input type="checkbox" id="open-hands-check" class="settings-check"
+                    onchange="updateOpenHands(this.checked)">
             </label>
             <label class="settings-row" for="leftover-check">
                 <span>Leftover scores</span>
-                <input type="checkbox" id="leftover-check" class="settings-check" onchange="updateLeftoverScores(this.checked)">
+                <input type="checkbox" id="leftover-check" class="settings-check"
+                    onchange="updateLeftoverScores(this.checked)">
             </label>
             <div id="leftover-desc" class="ruleset-desc-box">
                 <strong>Off (default):</strong> Only the board counts. Unplayed cards are choices, not points.
             </div>
+            <label class="settings-row" for="haptics-check">
+                <span>Haptics</span>
+                <input type="checkbox" id="haptics-check" class="settings-check" onchange="updateHaptics(this.checked)">
+            </label>
+            <div class="ruleset-desc-box">
+                <strong>Off (default):</strong> No vibration. On: a short pulse when a card plays, an ability hits, or a
+                capture lands. Phones that support it only.
+            </div>
             <p id="league-options-note" class="ruleset-desc-box" hidden>
-                An Ember League is in progress. Leftover and Ember/Classic are locked for that season. Ash, Vesper, and Rook all use the AI difficulty set here.
+                An Ember League is in progress. Leftover and Ember/Classic are locked for that season. Ash, Vesper, and
+                Rook all use the AI difficulty set here.
             </p>
 
             <button class="btn btn-alt btn-dismiss" onclick="closeOptionsModal()">Close</button>
@@ -2855,9 +3944,15 @@
 
     <!-- Stats Modal -->
     <div id="stats-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, closeStatsModal)">
-        <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="embers" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="closeStatsModal()" aria-label="Close stats"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+            <button type="button" class="modal-close" onclick="closeStatsModal()" aria-label="Close stats"><svg
+                    class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+                    <path d="M18 6 6 18" />
+                    <path d="m6 6 12 12" />
+                </svg></button>
             <h2 class="modal-title">Career Stats</h2>
             <div class="stats-grid">
                 <div class="stat-card">
@@ -2889,26 +3984,41 @@
 
     <!-- Draft Modal -->
     <div id="draft-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, cancelDraft)">
-        <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="embers" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="cancelDraft()" aria-label="Cancel draft"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+            <button type="button" class="modal-close" onclick="cancelDraft()" aria-label="Cancel draft"><svg
+                    class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+                    <path d="M18 6 6 18" />
+                    <path d="m6 6 12 12" />
+                </svg></button>
             <h2 id="draft-title" class="modal-title">Draft Hands</h2>
-            <p id="draft-order" class="draft-order">Sixteen cards from the deck. Snake order: 1 pick, then pairs of 2, until each hand is five.</p>
+            <p id="draft-order" class="draft-order">Sixteen cards from the deck. Snake order: 1 pick, then pairs of 2,
+                until each hand is five.</p>
             <p id="draft-status" class="draft-status"></p>
             <div class="draft-seats hidden" id="draft-seats"></div>
             <div class="draft-grid" id="draft-pool-grid"></div>
             <div class="draft-rosters" id="draft-rosters">Your Hand: 0/5 | AI Hand: 0/5</div>
-            <button class="btn btn-muted btn-dismiss" id="draft-cancel-btn" onclick="cancelDraft()">Cancel Draft</button>
+            <button class="btn btn-muted btn-dismiss" id="draft-cancel-btn" onclick="cancelDraft()">Cancel
+                Draft</button>
         </div>
     </div>
 
     <!-- Tribe Decks Modal -->
     <div id="deck-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, cancelDeckPicker)">
-        <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="embers" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="cancelDeckPicker()" aria-label="Cancel deck pick"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+            <button type="button" class="modal-close" onclick="cancelDeckPicker()" aria-label="Cancel deck pick"><svg
+                    class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+                    <path d="M18 6 6 18" />
+                    <path d="m6 6 12 12" />
+                </svg></button>
             <h2 class="modal-title">Tribe Decks</h2>
-            <p class="draft-order">Each deck is one tribe of five. Pick yours and the opponent's, or leave either one random.</p>
+            <p class="draft-order">Each deck is one tribe of five. Pick yours and the opponent's, or leave either one
+                random.</p>
             <div class="menu-section-title" style="margin-top: 8px;">Your deck</div>
             <div id="deck-you-picks" class="deck-picks"></div>
             <div class="menu-section-title">Opponent</div>
@@ -2920,26 +4030,36 @@
 
     <!-- Game Over Modal -->
     <div id="gameover-modal" class="modal modal-ember hidden" onclick="onGameoverBackdrop(event)">
-        <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="embers" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="viewFinalBoard()" aria-label="View board"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+            <button type="button" class="modal-close" onclick="viewFinalBoard()" aria-label="View board"><svg
+                    class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+                    <path d="M18 6 6 18" />
+                    <path d="m6 6 12 12" />
+                </svg></button>
             <h2 id="gameover-title" class="modal-title">Match Over</h2>
             <div class="gameover-score" aria-live="polite">
-                <div class="score-pill score-blue"><span id="gameover-blue-label">Blue</span> <strong id="gameover-blue">-</strong></div>
+                <div class="score-pill score-blue"><span id="gameover-blue-label">Blue</span> <strong
+                        id="gameover-blue">-</strong></div>
                 <span class="gameover-score-sep" aria-hidden="true">–</span>
-                <div class="score-pill score-red"><span id="gameover-red-label">Red</span> <strong id="gameover-red">-</strong></div>
+                <div class="score-pill score-red"><span id="gameover-red-label">Red</span> <strong
+                        id="gameover-red">-</strong></div>
             </div>
             <div class="gameover-actions" id="gameover-casual-actions">
                 <button class="btn" onclick="rematchSwapFirst()" title="Same hands, swap who goes first">Replay</button>
                 <div class="gameover-secondary">
                     <button class="btn btn-alt" onclick="startCurrentModeAgain()">New Hands</button>
-                    <button type="button" class="btn btn-alt" id="match-share-btn" onclick="shareCurrentMatch()">Share</button>
+                    <button type="button" class="btn btn-alt" id="match-share-btn"
+                        onclick="shareCurrentMatch()">Share</button>
                 </div>
             </div>
             <p id="gameover-series" class="league-series-line" hidden></p>
             <div class="gameover-actions" id="gameover-league-actions" hidden>
                 <button class="btn" id="gameover-league-next" hidden onclick="playNextLeagueMatch()">Next Game</button>
-                <button class="btn btn-alt" id="gameover-league-table" onclick="openLeagueHubFromGameover()">League Table</button>
+                <button class="btn btn-alt" id="gameover-league-table" onclick="openLeagueHubFromGameover()">League
+                    Table</button>
             </div>
             <div class="gameover-links">
                 <button type="button" class="gameover-link" onclick="viewFinalBoard()">View board</button>
@@ -2951,9 +4071,15 @@
 
     <!-- Battle Log Modal -->
     <div id="battle-log-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, closeBattleLogModal)">
-        <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="embers" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="closeBattleLogModal()" aria-label="Close battle log"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+            <button type="button" class="modal-close" onclick="closeBattleLogModal()" aria-label="Close battle log"><svg
+                    class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+                    <path d="M18 6 6 18" />
+                    <path d="m6 6 12 12" />
+                </svg></button>
             <h2 class="modal-title">Battle log</h2>
             <p class="battle-log-blurb">This match, in order. Captures still flash on the cards.</p>
             <ol class="battle-log-list" id="battle-log-list"></ol>
@@ -2963,16 +4089,24 @@
 
     <!-- League Hub Modal -->
     <div id="league-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, leaveLeagueToMenu)">
-        <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="embers" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="leaveLeagueToMenu()" aria-label="Close league"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+            <button type="button" class="modal-close" onclick="leaveLeagueToMenu()" aria-label="Close league"><svg
+                    class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+                    <path d="M18 6 6 18" />
+                    <path d="m6 6 12 12" />
+                </svg></button>
             <h2 class="modal-title">Ember League</h2>
             <div id="league-hub"></div>
         </div>
     </div>
 
     <div id="league-roster" class="modal modal-ember hidden" onclick="onModalBackdrop(event, closeLeagueRoster)">
-        <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="embers" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
         <div class="modal-content" onclick="event.stopPropagation()">
             <div class="league-roster-bar">
                 <p class="league-roster-title" id="league-roster-title">Deck</p>
@@ -3238,7 +4372,7 @@
                 img.draggable = false;
                 img.alt = emoji;
                 img.src = twemojiFile(emoji);
-                img.onerror = () => { el.textContent = emoji; };
+                img.onerror = () => {el.textContent = emoji;};
                 el.textContent = '';
                 el.appendChild(img);
             });
@@ -3254,7 +4388,7 @@
                 if (raw && isDeckPick(raw.player) && isDeckPick(raw.ai)) {
                     return {player: raw.player, ai: raw.ai};
                 }
-            } catch (e) {}
+            } catch (e) { }
             return {player: 'random', ai: 'random'};
         }
 
@@ -3293,6 +4427,8 @@
         let showBothHands = localStorage.getItem('ember_grid_open_hands') === 'true';
         let leftoverScores = localStorage.getItem('ember_grid_leftover') === 'true';
         let leftoverThisMatch = leftoverScores;
+        let hapticsOn = localStorage.getItem('ember_grid_haptics') === 'true';
+        let pendingMechFx = [];
         let currentRuleset = 'ember';
         let deckPicks = loadDeckPicks();
         let resolvedDecks = {player: null, ai: null};
@@ -3308,7 +4444,7 @@
         let swallowClick = false;
         let gameoverClickLock = false;
         let gameoverUnlockTimer = null;
-        let coach = { active: false, step: null, cellIndex: 4, pendingCapture: false, taughtHand: false };
+        let coach = {active: false, step: null, cellIndex: 4, pendingCapture: false, taughtHand: false};
         const SNAKE_SEQ = (starter) => {
             const other = starter === 'player' ? 'ai' : 'player';
             return [starter, other, other, starter, starter, other, other, starter, starter, other];
@@ -3357,7 +4493,7 @@
                         lastChampion: raw.lastChampion || null
                     };
                 }
-            } catch (e) {}
+            } catch (e) { }
             return {played: 0, won: 0, lastPlace: null, lastChampion: null};
         }
 
@@ -3544,7 +4680,7 @@
         function loadLeague() {
             try {
                 return sanitizeLeague(JSON.parse(localStorage.getItem(LEAGUE_KEY) || 'null'));
-            } catch (e) {}
+            } catch (e) { }
             return null;
         }
 
@@ -3930,9 +5066,9 @@
                 a.pf += s.awayPf; a.pa += s.homePf; a.played++;
                 h.gw += s.home; h.gl += s.away;
                 a.gw += s.away; a.gl += s.home;
-                if (fx.result.winner === 'draw') { h.d++; a.d++; }
-                else if (fx.result.winner === fx.home) { h.w++; a.l++; }
-                else { a.w++; h.l++; }
+                if (fx.result.winner === 'draw') {h.d++; a.d++;}
+                else if (fx.result.winner === fx.home) {h.w++; a.l++;}
+                else {a.w++; h.l++;}
             });
             const h2h = (a, b) => {
                 const meetings = league.fixtures.filter(f => f.result && ((f.home === a && f.away === b) || (f.home === b && f.away === a)));
@@ -3941,8 +5077,8 @@
                     const s = seriesGameWins(f);
                     if (f.result.winner === a) aW++;
                     else if (f.result.winner === b) bW++;
-                    if (f.home === a) { aGw += s.home; bGw += s.away; }
-                    else { aGw += s.away; bGw += s.home; }
+                    if (f.home === a) {aGw += s.home; bGw += s.away;}
+                    else {aGw += s.away; bGw += s.home;}
                 });
                 return (bW - aW) || (bGw - aGw);
             };
@@ -4042,7 +5178,7 @@
         function standingsMap() {
             const table = leagueStandings();
             const map = {};
-            table.forEach((row, i) => { map[row.id] = {rank: i + 1, row}; });
+            table.forEach((row, i) => {map[row.id] = {rank: i + 1, row};});
             return map;
         }
 
@@ -4410,6 +5546,27 @@
             localStorage.setItem('ember_grid_leftover', leftoverScores ? 'true' : 'false');
             refreshVictoryCopy();
         }
+        function canHaptic() {
+            return !!(hapticsOn && !silentSim && navigator.vibrate);
+        }
+        function haptic(pattern) {
+            if (!canHaptic()) return;
+            try {navigator.vibrate(pattern);} catch (err) { }
+        }
+        function hapticForPlay(fx) {
+            const ability = fx.abilityFx || fx.buffFx || fx.silenceFx || fx.chillFx || fx.psnFx;
+            const captured = !!(fx.capLog);
+            if (ability && ability.kind === 'bolt') haptic(captured ? [10, 28, 36, 40, 18] : [10, 30, 36]);
+            else if (captured) haptic([12, 28, 22]);
+            else if (ability) haptic([16, 24, 20]);
+            else haptic(14);
+        }
+        function updateHaptics(checked) {
+            sfx.click();
+            hapticsOn = !!checked;
+            localStorage.setItem('ember_grid_haptics', hapticsOn ? 'true' : 'false');
+            if (hapticsOn) haptic(18);
+        }
         function refreshRulesetDesc() {
             const descBox = document.getElementById('ruleset-desc');
             if (!descBox) return;
@@ -4434,6 +5591,9 @@
             cellEffects = Array(9).fill(null);
             selectedCard = null;
             shownStatValues.clear();
+            pendingMechFx = [];
+            const layer = document.getElementById('board-fx');
+            if (layer) layer.innerHTML = '';
             if (blastPreviewTimer) {clearTimeout(blastPreviewTimer); blastPreviewTimer = null;}
         }
 
@@ -4604,6 +5764,8 @@
             document.getElementById('ai-difficulty-select').value = aiDifficulty;
             document.getElementById('open-hands-check').checked = showBothHands;
             document.getElementById('leftover-check').checked = leftoverScores;
+            const hapticsCheck = document.getElementById('haptics-check');
+            if (hapticsCheck) hapticsCheck.checked = hapticsOn;
             refreshRulesetDesc();
             refreshVictoryCopy();
             const leagueNote = document.getElementById('league-options-note');
@@ -4849,7 +6011,7 @@
 
         function startCurrentModeAgain() {
             if (gameoverClickLock) return;
-            if (isLeagueMatch()) { openLeagueHubFromGameover(); return; }
+            if (isLeagueMatch()) {openLeagueHubFromGameover(); return;}
             unlockGameoverClicks();
             sfx.click(); hideTooltip(); startGame(activeMode);
         }
@@ -4919,7 +6081,7 @@
                 if (q) return q.trim();
                 const hm = (u.hash || '').match(/m=([^&]+)/i);
                 if (hm) return decodeURIComponent(hm[1]).trim();
-            } catch (e) {}
+            } catch (e) { }
             const found = text.match(/EG1[RDTrdt][ECec][PApa]\d{20}/);
             if (found) return found[0];
             return text;
@@ -4972,7 +6134,7 @@
             try {
                 const q = new URLSearchParams(location.search).get('m');
                 if (q) return q;
-            } catch (e) {}
+            } catch (e) { }
             const hm = (location.hash || '').match(/[#&]m=([^&]+)/i);
             return hm ? decodeURIComponent(hm[1]) : '';
         }
@@ -5070,7 +6232,7 @@
             try {
                 await navigator.clipboard.writeText(text);
                 return true;
-            } catch (e) {}
+            } catch (e) { }
             const ta = document.createElement('textarea');
             ta.value = text;
             ta.setAttribute('readonly', '');
@@ -5079,7 +6241,7 @@
             document.body.appendChild(ta);
             ta.select();
             let ok = false;
-            try { ok = document.execCommand('copy'); } catch (e) {}
+            try {ok = document.execCommand('copy');} catch (e) { }
             document.body.removeChild(ta);
             return ok;
         }
@@ -5094,7 +6256,7 @@
             const ok = await copyText(code);
             shareButtons().forEach(btn => {
                 btn.textContent = ok ? 'Copied' : 'Copy failed';
-                setTimeout(() => { btn.textContent = 'Share'; }, 1400);
+                setTimeout(() => {btn.textContent = 'Share';}, 1400);
             });
         }
 
@@ -5105,7 +6267,7 @@
 
         function rematchSwapFirst() {
             if (gameoverClickLock) return;
-            if (isLeagueMatch()) { openLeagueHubFromGameover(); return; }
+            if (isLeagueMatch()) {openLeagueHubFromGameover(); return;}
             if (!lastMatch) {startGame(activeMode); return;}
             unlockGameoverClicks();
             sfx.click(); hideTooltip();
@@ -5369,7 +6531,7 @@
         }
 
         function maybeStartCoach() {
-            if (skipCoachOnce) { skipCoachOnce = false; return; }
+            if (skipCoachOnce) {skipCoachOnce = false; return;}
             if (isLeagueMatch()) return;
             if (localStorage.getItem('ember_grid_coached') === 'true') return;
             if (gameState !== 'playing') return;
@@ -5427,7 +6589,7 @@
                 if (!c || c.owner !== 'red') return;
                 const row = Math.floor(i / 3), col = i % 3;
                 [{idx: i - 3, ok: row > 0}, {idx: i + 1, ok: col < 2}, {idx: i + 3, ok: row < 2}, {idx: i - 1, ok: col > 0}]
-                    .forEach(n => { if (n.ok && board[n.idx] === null) emptyAdj.push(n.idx); });
+                    .forEach(n => {if (n.ok && board[n.idx] === null) emptyAdj.push(n.idx);});
             });
             return emptyAdj[0] ?? firstEmptyCell();
         }
@@ -5594,11 +6756,13 @@
                     let targetCard = enemies[0].c;
                     targetCard.baseStats = targetCard.baseStats.map(s => Math.max(1, s - 1));
                     targetCard.fxType = 'curse';
+                    queueMechFx('curse', index, [enemies[0].i]);
                     return {text: `${placedCard.name} cursed ${targetCard.name} (-1)`, kind: 'curse'};
                 }
             } else if (abType === 'blast') {
                 placedCard.fxType = 'blast';
                 placedCard.blastPreview = true;
+                queueMechFx('blast', index, []);
                 return {text: `${placedCard.name} blasted (+2 this turn)`, kind: 'blast'};
             } else if (abType === 'cinder') {
                 const fresh = board.map((c, i) => (c === null && cellEffects[i] !== 'cinder') ? i : null).filter(i => i !== null);
@@ -5606,14 +6770,17 @@
                 const target = empties.length ? empties[Math.floor(Math.random() * empties.length)] : index;
                 cellEffects[target] = 'cinder';
                 placedCard.fxType = 'cinder';
+                queueMechFx('cinder', index, [target]);
                 return {text: `${placedCard.name} cindered a cell`, kind: 'cinder'};
             } else if (abType === 'bolt') {
                 const enemies = board.map((c, i) => (c && c.owner !== placedCard.owner) ? {c, i} : null).filter(Boolean);
                 if (enemies.length > 0) {
-                    const targetCard = enemies[Math.floor(Math.random() * enemies.length)].c;
+                    const pick = enemies[Math.floor(Math.random() * enemies.length)];
+                    const targetCard = pick.c;
                     targetCard.baseStats = targetCard.baseStats.map(s => Math.max(1, s - 2));
                     targetCard.fxType = 'bolt';
                     placedCard.fxType = 'bolt';
+                    queueMechFx('bolt', index, [pick.i]);
                     return {text: `${placedCard.name} bolted ${targetCard.name} (-2)`, kind: 'bolt'};
                 }
             }
@@ -5623,12 +6790,15 @@
         function tagAuraBuffs(placedCard, index) {
             if (!placedCard.ability || placedCard.ability.type !== 'aura_buff' || isSilenced(index)) return null;
             const names = [];
+            const hits = [];
             neighborIndexes(index).forEach(idx => {
                 if (board[idx] && board[idx].owner === placedCard.owner) {
                     board[idx].fxType = 'buff';
                     names.push(board[idx].name);
+                    hits.push(idx);
                 }
             });
+            if (hits.length) queueMechFx('buff', index, hits);
             return names.length ? {text: `${placedCard.name} buffed ${listNames(names)} (+1)`, kind: 'buff'} : null;
         }
 
@@ -5636,26 +6806,32 @@
             if (!isSilenceCard(placedCard)) return null;
             const cancelled = silenceCancelled(index);
             const names = [];
+            const hits = [];
             neighborIndexes(index).forEach(idx => {
                 const n = board[idx];
                 if (!n || n.owner === placedCard.owner || !n.ability) return;
                 if (cancelled && !isSilenceCard(n)) return;
                 n.fxType = 'silence';
                 names.push(n.name);
+                hits.push(idx);
             });
+            if (hits.length) queueMechFx('silence', index, hits);
             return names.length ? {text: `${placedCard.name} silenced ${listNames(names)}`, kind: 'silence'} : null;
         }
 
         function tagChill(placedCard, index) {
             if (!placedCard.ability || placedCard.ability.type !== 'chill' || isSilenced(index)) return null;
             const names = [];
+            const hits = [];
             neighborIndexes(index).forEach(idx => {
                 const n = board[idx];
                 if (n && n.owner !== placedCard.owner) {
                     n.fxType = 'chill';
                     names.push(n.name);
+                    hits.push(idx);
                 }
             });
+            if (hits.length) queueMechFx('chill', index, hits);
             return names.length ? {text: `${placedCard.name} chilled ${listNames(names)} (-1)`, kind: 'chill'} : null;
         }
 
@@ -5664,6 +6840,7 @@
             board.forEach((card, index) => {
                 if (card && card.ability && card.ability.type === 'poison' && !isSilenced(index)) {
                     const hit = [];
+                    const hits = [];
                     neighborIndexes(index).forEach(idx => {
                         const n = board[idx];
                         if (!n || n.owner === card.owner) return;
@@ -5675,8 +6852,10 @@
                         if (reduced) {
                             n.fxType = n.fxType || 'poison';
                             hit.push(n.name);
+                            hits.push(idx);
                         }
                     });
+                    if (hits.length) queueMechFx('poison', index, hits);
                     if (hit.length) parts.push(`${card.name} poisoned ${listNames(hit)} (-1)`);
                 }
             });
@@ -5685,6 +6864,248 @@
 
         function hasEnemyNeighbor(placedIndex, placedCard) {
             return neighborIndexes(placedIndex).some(idx => board[idx] && board[idx].owner !== placedCard.owner);
+        }
+
+        function queueMechFx(kind, fromIndex, toIndexes) {
+            if (silentSim) return;
+            pendingMechFx.push({
+                kind,
+                from: fromIndex,
+                to: (toIndexes || []).filter(i => i != null && i >= 0)
+            });
+        }
+
+        function cellFxPoint(index) {
+            const grid = document.getElementById('board-grid');
+            const cell = grid && grid.children[index];
+            if (!cell) return null;
+            const a = cell.getBoundingClientRect();
+            if (a.width < 4 || a.height < 4) return null;
+            return {
+                x: a.left + a.width / 2,
+                y: a.top + a.height / 2,
+                w: a.width,
+                h: a.height
+            };
+        }
+
+        function fxLayer() {
+            return document.getElementById('board-fx');
+        }
+
+        function spawnFxEl(html, life, cls) {
+            const layer = fxLayer();
+            if (!layer) return null;
+            const el = document.createElement('div');
+            if (cls) el.className = cls;
+            if (typeof html === 'string') el.innerHTML = html;
+            layer.appendChild(el);
+            setTimeout(() => {if (el.parentNode) el.parentNode.removeChild(el);}, life);
+            return el;
+        }
+
+        function placeBurst(pt, kind, inner, life) {
+            if (!pt) return null;
+            const el = spawnFxEl(inner, life || 720, `mech-burst mech-${kind}`);
+            if (!el) return null;
+            el.style.left = `${pt.x}px`;
+            el.style.top = `${pt.y}px`;
+            el.style.width = `${pt.w}px`;
+            el.style.height = `${pt.h}px`;
+            return el;
+        }
+
+        function tapCardFx(index, cls, ms) {
+            const cell = document.getElementById('board-grid') && document.getElementById('board-grid').children[index];
+            const card = cell && cell.querySelector('.card');
+            if (!card) return;
+            card.classList.add(cls);
+            setTimeout(() => card.classList.remove(cls), ms || 400);
+        }
+
+        function travelFx(from, to, kind, ms) {
+            if (!from || !to) return;
+            const el = spawnFxEl('', (ms || 400) + 40, `mech-travel ${kind}`);
+            if (!el) return;
+            el.style.left = `${from.x}px`;
+            el.style.top = `${from.y}px`;
+            requestAnimationFrame(() => {
+                el.style.transform = `translate(${to.x - from.x}px, ${to.y - from.y}px)`;
+            });
+        }
+
+        function lightningPoints(x1, y1, x2, y2, scale) {
+            const pts = [[x1, y1]];
+            const segs = 4;
+            const dx = x2 - x1, dy = y2 - y1;
+            const len = Math.hypot(dx, dy) || 1;
+            const nx = -dy / len, ny = dx / len;
+            let sign = 1;
+            for (let i = 1; i < segs; i++) {
+                const t = i / segs;
+                const amp = (22 + Math.random() * 16) * scale * sign;
+                sign *= -1;
+                pts.push([x1 + dx * t + nx * amp, y1 + dy * t + ny * amp]);
+            }
+            pts.push([x2, y2]);
+            return pts.map(p => `${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' ');
+        }
+
+        function lightningFork(x1, y1, x2, y2) {
+            const dx = x2 - x1, dy = y2 - y1;
+            const len = Math.hypot(dx, dy) || 1;
+            const nx = -dy / len, ny = dx / len;
+            const mx = x1 + dx * 0.55, my = y1 + dy * 0.55;
+            const fx = mx + nx * 28 + dx * 0.18;
+            const fy = my + ny * 28 + dy * 0.18;
+            return lightningPoints(mx, my, fx, fy, 0.55);
+        }
+
+        function sparkBurst(count, dist) {
+            let html = '';
+            for (let i = 0; i < count; i++) {
+                const ang = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.35;
+                const d = dist * (0.7 + Math.random() * 0.4);
+                html += `<span class="mech-spark" style="--dx:${Math.cos(ang) * d}px;--dy:${Math.sin(ang) * d}px;animation-delay:${(i * 0.02).toFixed(2)}s"></span>`;
+            }
+            return html;
+        }
+
+        function playBoltFx(fromIdx, toIdx) {
+            const from = cellFxPoint(fromIdx);
+            const to = cellFxPoint(toIdx);
+            const layer = fxLayer();
+            if (!from || !to || !layer) return;
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('class', 'mech-bolt-svg');
+            svg.setAttribute('aria-hidden', 'true');
+            const a = lightningPoints(from.x, from.y, to.x, to.y, 1);
+            const b = lightningPoints(from.x, from.y, to.x, to.y, 0.7);
+            const fork = lightningFork(from.x, from.y, to.x, to.y);
+            svg.innerHTML = `<polyline class="bolt-glow" points="${a}"></polyline><polyline class="bolt-glow" points="${fork}"></polyline><polyline class="bolt-core" points="${a}"></polyline><polyline class="bolt-core bolt-core-2" points="${b}"></polyline><polyline class="bolt-core" points="${fork}"></polyline>`;
+            layer.appendChild(svg);
+            setTimeout(() => {if (svg.parentNode) svg.parentNode.removeChild(svg);}, 1100);
+            const glyph = spawnFxEl('⚡', 500, 'mech-bolt-glyph');
+            if (glyph) {
+                glyph.style.left = `${from.x}px`;
+                glyph.style.top = `${from.y}px`;
+                requestAnimationFrame(() => {
+                    glyph.style.transform = `translate(${to.x - from.x}px, ${to.y - from.y}px) scale(1.25)`;
+                });
+            }
+            placeBurst(from, 'bolt', `<div class="mech-flash bolt"></div>`, 900);
+            placeBurst(to, 'bolt', `<div class="mech-flash bolt"></div>${sparkBurst(8, 28)}`, 1000);
+            tapCardFx(toIdx, 'mech-hit-bolt', 500);
+        }
+
+        function playBuffFx(fromIdx, toIdxs) {
+            const from = cellFxPoint(fromIdx);
+            const layer = fxLayer();
+            placeBurst(from, 'buff', `<div class="mech-flash buff"></div><span class="mech-mote" style="--dx:-8px"></span><span class="mech-mote" style="--dx:8px;animation-delay:0.06s"></span>`, 720);
+            if (from && layer && toIdxs.length) {
+                const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg.setAttribute('class', 'mech-ray-svg');
+                svg.setAttribute('aria-hidden', 'true');
+                svg.innerHTML = toIdxs.map(idx => {
+                    const to = cellFxPoint(idx);
+                    if (!to) return '';
+                    return `<line x1="${from.x.toFixed(1)}" y1="${from.y.toFixed(1)}" x2="${to.x.toFixed(1)}" y2="${to.y.toFixed(1)}"></line>`;
+                }).join('');
+                layer.appendChild(svg);
+                setTimeout(() => {if (svg.parentNode) svg.parentNode.removeChild(svg);}, 620);
+            }
+            toIdxs.forEach(idx => {
+                placeBurst(cellFxPoint(idx), 'buff', `<div class="mech-flash buff"></div><span class="mech-mote" style="--dx:-6px"></span><span class="mech-mote" style="--dx:7px;animation-delay:0.05s"></span><span class="mech-mote" style="--dx:0px;animation-delay:0.1s"></span>`, 740);
+            });
+        }
+
+        function playCurseFx(fromIdx, toIdx) {
+            const from = cellFxPoint(fromIdx);
+            const to = cellFxPoint(toIdx);
+            travelFx(from, to, 'curse', 380);
+            placeBurst(from, 'curse', `<div class="mech-flash curse"></div>`, 620);
+            placeBurst(to, 'curse', `<div class="mech-flash curse"></div>`, 620);
+            setTimeout(() => {
+                placeBurst(to, 'curse', `<span class="mech-wisp" style="left:50%;top:42%"></span>`, 680);
+            }, 280);
+        }
+
+        function playBlastFx(fromIdx) {
+            const from = cellFxPoint(fromIdx);
+            placeBurst(from, 'blast', `<div class="mech-flash blast"></div><div class="mech-wave"></div>${sparkBurst(8, 26)}`, 760);
+        }
+
+        function playPoisonFx(fromIdx, toIdxs) {
+            placeBurst(cellFxPoint(fromIdx), 'poison', `<div class="mech-flash poison"></div>`, 600);
+            toIdxs.forEach(idx => {
+                placeBurst(cellFxPoint(idx), 'poison', `<div class="mech-flash poison"></div><span class="mech-drip" style="--dx:-10px"></span><span class="mech-drip" style="--dx:2px;animation-delay:0.06s"></span><span class="mech-drip" style="--dx:11px;animation-delay:0.12s"></span>`, 760);
+            });
+        }
+
+        function playSilenceFx(fromIdx, toIdxs) {
+            placeBurst(cellFxPoint(fromIdx), 'silence', `<div class="mech-flash silence"></div>`, 560);
+            toIdxs.forEach(idx => {
+                placeBurst(cellFxPoint(idx), 'silence', `<div class="mech-flash silence"></div><div class="mech-mute"></div>`, 680);
+            });
+        }
+
+        function playChillFx(fromIdx, toIdxs) {
+            placeBurst(cellFxPoint(fromIdx), 'chill', `<div class="mech-flash chill"></div>`, 560);
+            toIdxs.forEach(idx => {
+                placeBurst(cellFxPoint(idx), 'chill', `<div class="mech-flash chill"></div><span class="mech-crystal c1"></span><span class="mech-crystal c2"></span><span class="mech-crystal c3"></span><span class="mech-crystal c4"></span>`, 740);
+                tapCardFx(idx, 'mech-hit-chill', 450);
+            });
+        }
+
+        function playCinderFx(fromIdx, toIdx) {
+            const from = cellFxPoint(fromIdx);
+            const to = cellFxPoint(toIdx);
+            travelFx(from, to, 'cinder', 380);
+            placeBurst(from, 'cinder', `<div class="mech-flash cinder"></div>`, 620);
+            placeBurst(to, 'cinder', `<div class="mech-flash cinder"></div><span class="mech-flame" style="--dx:-8px"></span><span class="mech-flame" style="--dx:0px;animation-delay:0.05s"></span><span class="mech-flame" style="--dx:8px;animation-delay:0.1s"></span>`, 820);
+        }
+
+        function playSpiteFx(fromIdx, toIdx) {
+            placeBurst(cellFxPoint(fromIdx), 'spite', `<div class="mech-flash spite"></div>`, 520);
+            placeBurst(cellFxPoint(toIdx), 'spite', `<div class="mech-flash spite"></div><div class="mech-crack"></div>`, 560);
+            tapCardFx(toIdx, 'mech-hit-spite', 400);
+        }
+
+        function playEqualizerFx(fromIdx, toIdx) {
+            placeBurst(cellFxPoint(fromIdx), 'equalizer', `<div class="mech-flash equalizer"></div><div class="mech-balance"></div>`, 620);
+            placeBurst(cellFxPoint(toIdx), 'equalizer', `<div class="mech-flash equalizer"></div><div class="mech-balance"></div>`, 620);
+        }
+
+        function playMechFx(events) {
+            if (!events || !events.length) return;
+            events.forEach(ev => {
+                const to = ev.to || [];
+                if (ev.kind === 'bolt' && to[0] != null) playBoltFx(ev.from, to[0]);
+                else if (ev.kind === 'buff') playBuffFx(ev.from, to);
+                else if (ev.kind === 'curse' && to[0] != null) playCurseFx(ev.from, to[0]);
+                else if (ev.kind === 'blast') playBlastFx(ev.from);
+                else if (ev.kind === 'poison') playPoisonFx(ev.from, to);
+                else if (ev.kind === 'silence') playSilenceFx(ev.from, to);
+                else if (ev.kind === 'chill') playChillFx(ev.from, to);
+                else if (ev.kind === 'cinder' && to[0] != null) playCinderFx(ev.from, to[0]);
+                else if (ev.kind === 'spite' && to[0] != null) playSpiteFx(ev.from, to[0]);
+                else if (ev.kind === 'equalizer' && to[0] != null) playEqualizerFx(ev.from, to[0]);
+            });
+        }
+
+        function flushMechFx() {
+            const events = pendingMechFx.splice(0);
+            if (!events.length) return;
+            let tries = 0;
+            const run = () => {
+                const ready = events.some(ev => cellFxPoint(ev.from) || (ev.to && ev.to.some(i => cellFxPoint(i))));
+                if (!ready && tries++ < 8) {
+                    requestAnimationFrame(run);
+                    return;
+                }
+                playMechFx(events);
+            };
+            requestAnimationFrame(() => requestAnimationFrame(run));
         }
 
         function render() {
@@ -5907,7 +7328,7 @@
             document.body.appendChild(ghost);
             pointerDrag.ghost = ghost;
             moveDragGhost(e.clientX, e.clientY);
-            try {pointerDrag.sourceEl.setPointerCapture(e.pointerId);} catch (err) {}
+            try {pointerDrag.sourceEl.setPointerCapture(e.pointerId);} catch (err) { }
             statusMsg.textContent = "Drop on an empty cell.";
         }
 
@@ -5996,7 +7417,7 @@
         }
 
         function applyPlacementCore(index, placedCard) {
-            board.forEach(c => { if (c && c !== placedCard) c.blastPreview = false; });
+            board.forEach(c => {if (c && c !== placedCard) c.blastPreview = false;});
             const enemyNeighbor = hasEnemyNeighbor(index, placedCard);
             const abilityFx = applyOnPlayAbilities(placedCard, index);
             recalculateDynamicStats();
@@ -6020,6 +7441,8 @@
             const placedBy = placedCard.owner === 'blue' ? 'player' : 'ai';
             turn = turn === 'player' ? 'ai' : 'player';
             render();
+            flushMechFx();
+            hapticForPlay(fx);
             requestAnimationFrame(updateCoach);
 
             if (placedBy === 'player') onCoachPlaced(!!fx.capLog, fx.enemyNeighbor);
@@ -6057,7 +7480,7 @@
             const spiteHits = [];
             const placedSilenced = isSilenced(placedIndex);
 
-            const flipEnemy = (neighborCard, silencedWhenHit) => {
+            const flipEnemy = (neighborCard, silencedWhenHit, neighborIdx) => {
                 if (neighborCard.owner === placedCard.owner) return;
                 const origOwner = neighborCard.owner;
                 neighborCard.owner = placedCard.owner;
@@ -6070,6 +7493,7 @@
                     placedCard.stats = (placedCard.stats || placedCard.baseStats).map(s => Math.max(1, s - 1));
                     placedCard.fxType = 'spite';
                     spiteHits.push(neighborCard.name);
+                    queueMechFx('spite', neighborIdx, [placedIndex]);
                 }
             };
 
@@ -6080,8 +7504,18 @@
                 const myVal = getEffectiveStat(placedCard, n.p, true, placedSilenced);
                 const theirVal = getEffectiveStat(neighborCard, n.n, false, silencedWhenHit);
                 let captures = myVal > theirVal;
-                if (!captures && !placedSilenced && placedCard.ability && placedCard.ability.type === 'equalizer' && myVal === theirVal) captures = true;
-                if (captures) flipEnemy(neighborCard, silencedWhenHit);
+                let equalized = false;
+                if (!captures && !placedSilenced && placedCard.ability && placedCard.ability.type === 'equalizer' && myVal === theirVal) {
+                    captures = true;
+                    equalized = true;
+                }
+                if (captures) {
+                    flipEnemy(neighborCard, silencedWhenHit, n.idx);
+                    if (equalized) {
+                        neighborCard.fxType = neighborCard.fxType || 'equalizer';
+                        queueMechFx('equalizer', placedIndex, [n.idx]);
+                    }
+                }
             });
 
             if (!silentSim) {
@@ -6171,7 +7605,7 @@
         }
 
         function executeAIMove(cardIdx, cellIdx) {
-            if (!silentSim) { sfx.place(); hideTooltip(); }
+            if (!silentSim) {sfx.place(); hideTooltip();}
             const chosenCard = aiHand.splice(cardIdx, 1)[0];
             chosenCard.stats = [...chosenCard.baseStats];
             board[cellIdx] = chosenCard;
@@ -6207,7 +7641,7 @@
             resetFingerDrag();
             hideTurnBanner();
             if (blastPreviewTimer) {clearTimeout(blastPreviewTimer); blastPreviewTimer = null;}
-            board.forEach(c => { if (c) c.blastPreview = false; });
+            board.forEach(c => {if (c) c.blastPreview = false;});
             let blueCount = ownedCount('blue'), redCount = ownedCount('red');
             stats.played++;
             if (blueCount > redCount) {stats.wins++; stats.streak++; if (stats.streak > stats.bestStreak) stats.bestStreak = stats.streak; if (!silentSim) sfx.win(); logAction("Victory achieved!");}
