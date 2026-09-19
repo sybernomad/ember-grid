@@ -978,7 +978,8 @@
         #stats-modal,
         #draft-modal,
         #deck-modal,
-        #gameover-modal {
+        #gameover-modal,
+        #league-modal {
             z-index: 110;
         }
 
@@ -1162,7 +1163,8 @@
 
         #main-menu-modal .modal-content,
         #draft-modal .modal-content,
-        #deck-modal .modal-content {
+        #deck-modal .modal-content,
+        #league-modal .modal-content {
             display: flex;
             flex-direction: column;
         }
@@ -1617,7 +1619,7 @@
             transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
         }
 
-        .draft-card:hover:not(.drafted) {
+        .draft-card:hover:not(.drafted):not(.taken) {
             transform: scale(1.06);
             border-color: var(--accent);
             box-shadow: 0 0 16px rgba(232, 163, 23, 0.3);
@@ -1964,6 +1966,11 @@
             gap: 8px;
         }
 
+        .gameover-actions[hidden],
+        .gameover-actions.hidden {
+            display: none !important;
+        }
+
         .gameover-secondary {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -2092,6 +2099,514 @@
         .rematch-bar .gameover-link {
             align-self: center;
         }
+
+        #league-modal {
+            z-index: 110;
+        }
+
+        #league-modal .modal-content {
+            max-width: 520px;
+            width: min(520px, 100%);
+            text-align: left;
+        }
+
+        .league-crown {
+            text-align: center;
+            padding: 14px 12px 12px;
+            margin: 0 0 14px;
+            border-radius: 14px;
+            border: 1px solid rgba(232, 195, 106, 0.48);
+            background:
+                radial-gradient(ellipse 80% 80% at 50% 0%, rgba(232, 163, 23, 0.22), transparent 70%),
+                linear-gradient(180deg, rgba(255,255,255,0.04), transparent 60%);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+        }
+
+        .league-crown-title {
+            font-family: var(--font-display);
+            font-size: 1.05rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin: 0 0 4px;
+        }
+
+        .league-crown-sub {
+            margin: 0;
+            font-size: 0.78rem;
+            opacity: 0.8;
+        }
+
+        .league-rivals {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 6px;
+            margin: 0 0 14px;
+        }
+
+        .league-rival-chip {
+            text-align: center;
+            padding: 8px 4px 7px;
+            border-radius: 12px;
+            border: 1px solid rgba(232, 195, 106, 0.22);
+            background: rgba(0, 0, 0, 0.16);
+            font-size: 0.68rem;
+            line-height: 1.3;
+            width: 100%;
+            color: inherit;
+            font-family: inherit;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        .league-rival-chip:hover,
+        .league-rival-chip.is-open {
+            border-color: rgba(232, 163, 23, 0.7);
+            background: rgba(232, 163, 23, 0.12);
+        }
+
+        .league-rival-chip .who {
+            display: block;
+            font-family: var(--font-display);
+            font-size: 0.78rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            font-weight: 800;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .league-rival-chip .diff {
+            opacity: 0.55;
+            font-size: 0.6rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .league-table-wrap {
+            overflow-x: auto;
+            margin: 0 0 12px;
+        }
+
+        .league-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.78rem;
+        }
+
+        .league-table th {
+            text-align: left;
+            font-size: 0.58rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            opacity: 0.5;
+            font-weight: 700;
+            padding: 4px 6px 6px 0;
+        }
+
+        .league-table th.num,
+        .league-table td.num {
+            text-align: right;
+        }
+
+        .league-table td {
+            padding: 7px 6px 7px 0;
+            border-bottom: 1px solid rgba(232, 195, 106, 0.12);
+            white-space: nowrap;
+        }
+
+        .league-table tr.is-you td {
+            color: var(--blue-card);
+            font-weight: 700;
+        }
+
+        .league-table td.league-name {
+            cursor: pointer;
+        }
+
+        .league-table td.league-name:hover {
+            color: var(--gold);
+        }
+
+        .league-table tr.is-crown td:first-child {
+            color: var(--gold);
+        }
+
+        .league-recap {
+            margin: 0 0 12px;
+            padding: 8px 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(232, 195, 106, 0.22);
+            font-size: 0.78rem;
+            line-height: 1.4;
+            background: rgba(0, 0, 0, 0.14);
+        }
+
+        .league-week {
+            margin: 0 0 10px;
+            padding: 10px 10px 8px;
+            border-radius: 12px;
+            border: 1px solid rgba(232, 195, 106, 0.18);
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .league-week.is-current {
+            border-color: rgba(232, 163, 23, 0.55);
+            box-shadow: 0 0 0 1px rgba(232, 163, 23, 0.12);
+        }
+
+        .league-week-title {
+            font-family: var(--font-display);
+            font-size: 0.68rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin: 0 0 6px;
+        }
+
+        .league-fixture {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 0;
+            font-size: 0.8rem;
+        }
+
+        .league-fixture.is-next .versus {
+            color: var(--gold);
+            font-weight: 800;
+        }
+
+        .league-fixture .versus {
+            min-width: 0;
+        }
+
+        .league-fixture .mark {
+            flex-shrink: 0;
+            font-size: 0.72rem;
+            font-weight: 700;
+            opacity: 0.85;
+            text-align: right;
+        }
+
+        .league-fixture .mark.pending {
+            opacity: 0.42;
+            font-weight: 600;
+        }
+
+        .league-series-line {
+            margin: -4px 0 12px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            opacity: 0.78;
+        }
+
+        .league-actions {
+            position: sticky;
+            bottom: 0;
+            padding: 10px 0 2px;
+            background: linear-gradient(180deg, transparent, var(--panel-bg) 14%);
+            z-index: 2;
+        }
+
+        .league-actions > .btn + .btn {
+            margin-top: 8px;
+        }
+
+        .league-actions .league-danger {
+            margin-top: 8px;
+        }
+
+        .league-danger {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .league-danger .btn {
+            flex: 1;
+            width: auto;
+            font-size: 0.72rem;
+        }
+
+        .league-confirm {
+            margin: 0 0 12px;
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 107, 87, 0.4);
+            background: rgba(153, 27, 27, 0.16);
+            font-size: 0.78rem;
+            line-height: 1.4;
+        }
+
+        .league-confirm .row {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .league-confirm .row .btn {
+            flex: 1;
+            width: auto;
+        }
+
+        .draft-seats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            margin: 8px 0 4px;
+        }
+
+        .draft-seat {
+            text-align: left;
+            padding: 6px 8px;
+            border-radius: 10px;
+            border: 1px solid rgba(232, 195, 106, 0.18);
+            font-size: 0.7rem;
+            line-height: 1.25;
+            background: rgba(0, 0, 0, 0.12);
+            width: 100%;
+            color: inherit;
+            font-family: inherit;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        .draft-seat.active {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 1px rgba(232, 163, 23, 0.28);
+        }
+
+        .draft-seat:hover,
+        .draft-seat.is-open {
+            border-color: rgba(232, 163, 23, 0.7);
+        }
+
+        .draft-seat .seat-name {
+            font-weight: 800;
+        }
+
+        .draft-seat .seat-picks {
+            opacity: 0.7;
+            font-size: 0.62rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .draft-card.taken {
+            opacity: 1;
+            cursor: default;
+            pointer-events: none;
+            filter: grayscale(0.75) brightness(0.42);
+            transform: none;
+        }
+
+        .draft-card.taken::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(8, 5, 3, 0.38);
+            pointer-events: none;
+            z-index: 4;
+        }
+
+        .draft-card.taken-you { box-shadow: inset 0 0 0 3px var(--blue-card); }
+        .draft-card.taken-ash { box-shadow: inset 0 0 0 3px #f59e0b; }
+        .draft-card.taken-vesper { box-shadow: inset 0 0 0 3px #a78bfa; }
+        .draft-card.taken-rook { box-shadow: inset 0 0 0 3px #94a3b8; }
+
+        #league-roster {
+            z-index: 125;
+        }
+
+        #league-roster .modal-content {
+            width: min(560px, 100%);
+            max-height: min(86dvh, calc(100dvh - 24px));
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .league-roster-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin: 0 0 10px;
+            flex: 0 0 auto;
+        }
+
+        .league-roster-title {
+            margin: 0;
+            font-family: var(--font-display);
+            font-size: 0.92rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent);
+        }
+
+        .league-roster-bar .btn {
+            width: auto;
+            min-width: 84px;
+            padding: 7px 14px;
+            font-size: 0.72rem;
+            margin: 0;
+        }
+
+        .league-roster-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+            gap: 8px;
+            justify-items: center;
+            align-content: start;
+            overflow-x: hidden;
+            overflow-y: auto;
+            flex: 1 1 auto;
+            min-height: 0;
+            padding: 2px 0 4px;
+        }
+
+        .league-roster-grid .draft-card {
+            width: 100%;
+            max-width: 132px;
+            min-width: 0;
+            height: auto;
+            aspect-ratio: 4 / 5;
+            cursor: default;
+            pointer-events: auto;
+        }
+
+        .league-roster-empty {
+            margin: 18px 0 8px;
+            text-align: center;
+            opacity: 0.7;
+            font-size: 0.82rem;
+        }
+
+        #draft-modal.league-draft .modal-content {
+            max-width: 680px;
+            height: min(90dvh, calc(100dvh - 16px));
+            max-height: min(90dvh, calc(100dvh - 16px));
+            overflow: hidden;
+        }
+
+        #draft-modal.league-draft .modal-title {
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+
+        #draft-modal.league-draft .draft-order {
+            display: none;
+        }
+
+        #draft-modal.league-draft .draft-grid {
+            --draft-gap: 6px;
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow: hidden;
+            container-type: size;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            grid-template-rows: repeat(4, minmax(0, 1fr));
+            gap: var(--draft-gap);
+            align-content: stretch;
+            justify-items: center;
+            align-items: center;
+            margin: 6px 0 8px;
+        }
+
+        #draft-modal.league-draft .draft-card {
+            box-sizing: border-box;
+            aspect-ratio: 4 / 5;
+            width: min(100%, calc((100cqh - 3 * var(--draft-gap)) / 4 * 4 / 5));
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+            min-width: 0;
+            min-height: 0;
+            overflow: hidden;
+            contain: layout paint;
+            --nameplate-h: 20px;
+            --draft-font-main: 0.62rem;
+            --draft-font-name: 0.4rem;
+        }
+
+        #draft-modal.league-draft .draft-card .card-emoji {
+            width: 1.45em;
+            height: 1.45em;
+            font-size: 1.05em;
+        }
+
+        #draft-modal.league-draft .draft-card:hover {
+            transform: none;
+        }
+
+        #draft-modal.league-draft .draft-status {
+            position: relative;
+            z-index: 2;
+            min-height: 0;
+            margin: 0 0 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #draft-modal.league-draft .draft-seats {
+            flex: 0 0 auto;
+            margin: 0 0 4px;
+        }
+
+        #draft-modal.league-draft .btn-dismiss {
+            flex: 0 0 auto;
+        }
+
+        @media (max-width: 640px) {
+            #league-modal .modal-content {
+                max-width: min(520px, 100%);
+                width: 100%;
+                max-height: min(90dvh, calc(100dvh - 24px));
+            }
+
+            #draft-modal.league-draft .modal-content {
+                max-width: min(680px, 100%);
+                height: min(90dvh, calc(100dvh - 16px));
+                max-height: min(90dvh, calc(100dvh - 16px));
+            }
+
+            #draft-modal.league-draft .draft-grid {
+                --draft-gap: 5px;
+                grid-template-columns: repeat(5, minmax(0, 1fr));
+                grid-template-rows: repeat(4, minmax(0, 1fr));
+            }
+
+            #draft-modal.league-draft .draft-card {
+                aspect-ratio: 4 / 5;
+                width: min(100%, calc((100cqh - 3 * var(--draft-gap)) / 4 * 4 / 5));
+                height: auto;
+                max-width: 100%;
+                min-width: 0;
+            }
+
+            .league-roster-grid {
+                grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
+                gap: 6px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .league-rivals {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
     </style>
 </head>
 
@@ -2197,6 +2712,7 @@
             </div>
             <div class="menu-play-actions">
                 <button class="btn btn-alt" onclick="openDeckPicker()">Tribe Decks</button>
+                <button class="btn" id="league-menu-btn" onclick="openLeague()">League</button>
             </div>
             <details class="match-code-box" id="match-code-box">
                 <summary>Have a match code?</summary>
@@ -2208,7 +2724,7 @@
             </details>
             <div class="menu-foot">
                 <!-- Bump BUILD on every PR. Still pre-1.0, so this stays Alpha until 1.0 ships. -->
-                <p class="build-stamp">0.28 Alpha</p>
+                <p class="build-stamp">0.30 Alpha</p>
                 <p class="dev-note">Still in active development. Cards and rules may change.</p>
             </div>
         </div>
@@ -2225,6 +2741,9 @@
             <div class="expanded-rules-list">
                 <div class="rule-detail-item">
                     <strong>The deck:</strong> The Base Set is 50 cards in ten tribes. Every Ember card has an ability. Shuffle it and deal two hands of five, or spread sixteen and draft until each hand is five.
+                </div>
+                <div class="rule-detail-item">
+                    <strong>League:</strong> You plus three named AI. Snake-draft twenty cards (five each), then a six-week double round-robin. You play each rival twice. Each meeting is best of three, and first player swaps so both get an opener. Their series resolve with the same engine and land on the table. Standings break ties by series wins, then game wins, then combined board score. Leftover and Ember/Classic lock at season start. All three AI use the Options difficulty. Backing out saves the season.
                 </div>
                 <div class="rule-detail-item">
                     <strong>Tribe Decks:</strong> Each deck is one tribe of five. Pick yours and the opponent's, or leave either one random. Same tribe on both sides is a mirror match.
@@ -2326,6 +2845,9 @@
             <div id="leftover-desc" class="ruleset-desc-box">
                 <strong>Off (default):</strong> Only the board counts. Unplayed cards are choices, not points.
             </div>
+            <p id="league-options-note" class="ruleset-desc-box" hidden>
+                An Ember League is in progress. Leftover and Ember/Classic are locked for that season. Ash, Vesper, and Rook all use the AI difficulty set here.
+            </p>
 
             <button class="btn btn-alt btn-dismiss" onclick="closeOptionsModal()">Close</button>
         </div>
@@ -2370,12 +2892,13 @@
         <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="modal-content" onclick="event.stopPropagation()">
             <button type="button" class="modal-close" onclick="cancelDraft()" aria-label="Cancel draft"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
-            <h2 class="modal-title" style="color: var(--blue-card);">Draft Hands</h2>
-            <p class="draft-order">Sixteen cards from the deck. Snake order: 1 pick, then pairs of 2, until each hand is five.</p>
+            <h2 id="draft-title" class="modal-title">Draft Hands</h2>
+            <p id="draft-order" class="draft-order">Sixteen cards from the deck. Snake order: 1 pick, then pairs of 2, until each hand is five.</p>
             <p id="draft-status" class="draft-status"></p>
+            <div class="draft-seats hidden" id="draft-seats"></div>
             <div class="draft-grid" id="draft-pool-grid"></div>
             <div class="draft-rosters" id="draft-rosters">Your Hand: 0/5 | AI Hand: 0/5</div>
-            <button class="btn btn-muted btn-dismiss" onclick="cancelDraft()">Cancel Draft</button>
+            <button class="btn btn-muted btn-dismiss" id="draft-cancel-btn" onclick="cancelDraft()">Cancel Draft</button>
         </div>
     </div>
 
@@ -2402,21 +2925,26 @@
             <button type="button" class="modal-close" onclick="viewFinalBoard()" aria-label="View board"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
             <h2 id="gameover-title" class="modal-title">Match Over</h2>
             <div class="gameover-score" aria-live="polite">
-                <div class="score-pill score-blue">Blue <strong id="gameover-blue">-</strong></div>
+                <div class="score-pill score-blue"><span id="gameover-blue-label">Blue</span> <strong id="gameover-blue">-</strong></div>
                 <span class="gameover-score-sep" aria-hidden="true">–</span>
-                <div class="score-pill score-red">Red <strong id="gameover-red">-</strong></div>
+                <div class="score-pill score-red"><span id="gameover-red-label">Red</span> <strong id="gameover-red">-</strong></div>
             </div>
-            <div class="gameover-actions">
+            <div class="gameover-actions" id="gameover-casual-actions">
                 <button class="btn" onclick="rematchSwapFirst()" title="Same hands, swap who goes first">Replay</button>
                 <div class="gameover-secondary">
                     <button class="btn btn-alt" onclick="startCurrentModeAgain()">New Hands</button>
                     <button type="button" class="btn btn-alt" id="match-share-btn" onclick="shareCurrentMatch()">Share</button>
                 </div>
-                <div class="gameover-links">
-                    <button type="button" class="gameover-link" onclick="viewFinalBoard()">View board</button>
-                    <button type="button" class="gameover-link" onclick="showBattleLogModal()">Battle log</button>
-                    <button type="button" class="gameover-link" onclick="closeGameoverToMenu()">Menu</button>
-                </div>
+            </div>
+            <p id="gameover-series" class="league-series-line" hidden></p>
+            <div class="gameover-actions" id="gameover-league-actions" hidden>
+                <button class="btn" id="gameover-league-next" hidden onclick="playNextLeagueMatch()">Next Game</button>
+                <button class="btn btn-alt" id="gameover-league-table" onclick="openLeagueHubFromGameover()">League Table</button>
+            </div>
+            <div class="gameover-links">
+                <button type="button" class="gameover-link" onclick="viewFinalBoard()">View board</button>
+                <button type="button" class="gameover-link" onclick="showBattleLogModal()">Battle log</button>
+                <button type="button" class="gameover-link" onclick="closeGameoverToMenu()">Menu</button>
             </div>
         </div>
     </div>
@@ -2430,6 +2958,28 @@
             <p class="battle-log-blurb">This match, in order. Captures still flash on the cards.</p>
             <ol class="battle-log-list" id="battle-log-list"></ol>
             <button class="btn btn-alt btn-dismiss" onclick="closeBattleLogModal()">Close</button>
+        </div>
+    </div>
+
+    <!-- League Hub Modal -->
+    <div id="league-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, leaveLeagueToMenu)">
+        <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button type="button" class="modal-close" onclick="leaveLeagueToMenu()" aria-label="Close league"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+            <h2 class="modal-title">Ember League</h2>
+            <div id="league-hub"></div>
+        </div>
+    </div>
+
+    <div id="league-roster" class="modal modal-ember hidden" onclick="onModalBackdrop(event, closeLeagueRoster)">
+        <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="league-roster-bar">
+                <p class="league-roster-title" id="league-roster-title">Deck</p>
+                <button type="button" class="btn btn-alt" onclick="closeLeagueRoster()">Back</button>
+            </div>
+            <div class="league-roster-grid" id="league-roster-grid"></div>
+            <p class="league-roster-empty" id="league-roster-empty" hidden>No cards yet.</p>
         </div>
     </div>
 
@@ -2764,10 +3314,974 @@
             return [starter, other, other, starter, starter, other, other, starter, starter, other];
         };
 
+        const LEAGUE_KEY = 'ember_grid_league';
+        const LEAGUE_CROWNS_KEY = 'ember_grid_league_crowns';
+        const LEAGUE_RIVALS = [
+            {id: 'ash', name: 'Ash', icon: '🕯️', style: 'Kindling. Blast, Buff, Cinder.'},
+            {id: 'vesper', name: 'Vesper', icon: '🌙', style: 'Quiet edges. Chill, Silence, Poison.'},
+            {id: 'rook', name: 'Rook', icon: '♟️', style: 'Takes the strongest card.'}
+        ];
+        const LEAGUE_HAND_SIZE = 5;
+        let league = loadLeague();
+        let leagueCrowns = loadLeagueCrowns();
+        let leagueMatch = null;
+        let leagueDrafting = false;
+        let leagueHandsLive = {you: [], ash: [], vesper: [], rook: []};
+        let leagueDraftSeq = [];
+        let silentSim = false;
+        let cloneRulesetOverride = null;
+        let leagueHubConfirm = null;
+        let leagueRosterSeat = null;
+
+        function snakeSeq4(order) {
+            const seq = [];
+            for (let round = 0; round < LEAGUE_HAND_SIZE; round++) {
+                const row = round % 2 === 0 ? order : order.slice().reverse();
+                seq.push(...row);
+            }
+            return seq;
+        }
+
+        function youSeat() {
+            return {id: 'you', name: 'You', icon: '⚔️', style: 'The human at the table.'};
+        }
+
+        function loadLeagueCrowns() {
+            try {
+                const raw = JSON.parse(localStorage.getItem(LEAGUE_CROWNS_KEY) || 'null');
+                if (raw && typeof raw === 'object') {
+                    return {
+                        played: Number(raw.played) || 0,
+                        won: Number(raw.won) || 0,
+                        lastPlace: raw.lastPlace || null,
+                        lastChampion: raw.lastChampion || null
+                    };
+                }
+            } catch (e) {}
+            return {played: 0, won: 0, lastPlace: null, lastChampion: null};
+        }
+
+        function saveLeagueCrowns() {
+            localStorage.setItem(LEAGUE_CROWNS_KEY, JSON.stringify(leagueCrowns));
+        }
+
+        function isLeagueSeat(id) {
+            return id === 'you' || LEAGUE_RIVALS.some(r => r.id === id);
+        }
+
+        function leagueAiDifficulty() {
+            return aiDifficulty === 'easy' || aiDifficulty === 'hard' ? aiDifficulty : 'normal';
+        }
+
+        function makeLeaguePairings() {
+            const first = [];
+            const arr = ['you', 'ash', 'vesper', 'rook'];
+            for (let week = 1; week <= 3; week++) {
+                first.push({week, home: arr[0], away: arr[3]});
+                first.push({week, home: arr[1], away: arr[2]});
+                const last = arr[3];
+                for (let i = 3; i > 1; i--) arr[i] = arr[i - 1];
+                arr[1] = last;
+            }
+            return first;
+        }
+
+        function emptyLeagueFixture(week, home, away, seriesFirst) {
+            return {week, home, away, seriesFirst, games: [], result: null};
+        }
+
+        function makeLeagueFixtures() {
+            const first = makeLeaguePairings();
+            const fixtures = first.map(p => emptyLeagueFixture(p.week, p.home, p.away, p.home));
+            first.forEach(p => fixtures.push(emptyLeagueFixture(p.week + 3, p.home, p.away, p.away)));
+            return fixtures;
+        }
+
+        function sanitizeLeagueGame(g, fallbackFirst) {
+            if (!g || typeof g !== 'object') return null;
+            return {
+                homeScore: Number(g.homeScore) || 0,
+                awayScore: Number(g.awayScore) || 0,
+                winner: g.winner === 'draw' || isLeagueSeat(g.winner) ? g.winner : 'draw',
+                first: isLeagueSeat(g.first) ? g.first : fallbackFirst
+            };
+        }
+
+        function seriesGameWins(fx) {
+            const games = (fx && fx.games) || [];
+            let home = 0, away = 0, draws = 0, homePf = 0, awayPf = 0;
+            games.forEach(g => {
+                homePf += Number(g.homeScore) || 0;
+                awayPf += Number(g.awayScore) || 0;
+                if (g.winner === fx.home) home++;
+                else if (g.winner === fx.away) away++;
+                else draws++;
+            });
+            return {home, away, draws, played: games.length, homePf, awayPf};
+        }
+
+        function seriesComplete(fx) {
+            if (!fx) return false;
+            if (fx.result) return true;
+            const s = seriesGameWins(fx);
+            return s.home >= 2 || s.away >= 2 || s.played >= 3;
+        }
+
+        function seriesNextFirst(fx) {
+            const n = ((fx && fx.games) || []).length;
+            const seriesFirst = (fx && isLeagueSeat(fx.seriesFirst)) ? fx.seriesFirst : (fx ? fx.home : 'you');
+            const other = fx && seriesFirst === fx.home ? fx.away : (fx ? fx.home : 'you');
+            return n === 1 ? other : seriesFirst;
+        }
+
+        function finalizeSeries(fx) {
+            const s = seriesGameWins(fx);
+            let winner = 'draw';
+            if (s.home > s.away) winner = fx.home;
+            else if (s.away > s.home) winner = fx.away;
+            else if (s.homePf > s.awayPf) winner = fx.home;
+            else if (s.awayPf > s.homePf) winner = fx.away;
+            fx.result = {
+                homeScore: s.homePf,
+                awayScore: s.awayPf,
+                homeGames: s.home,
+                awayGames: s.away,
+                winner
+            };
+            return fx;
+        }
+
+        function normalizeLeagueFixture(rawFx, fallback) {
+            const home = rawFx && isLeagueSeat(rawFx.home) ? rawFx.home : fallback.home;
+            const away = rawFx && isLeagueSeat(rawFx.away) ? rawFx.away : fallback.away;
+            const seriesFirst = rawFx && isLeagueSeat(rawFx.seriesFirst)
+                ? rawFx.seriesFirst
+                : (rawFx && isLeagueSeat(rawFx.first) ? rawFx.first : fallback.seriesFirst);
+            const games = [];
+            const legacySingle = !!(rawFx && rawFx.result && typeof rawFx.result === 'object' && (!Array.isArray(rawFx.games) || !rawFx.games.length));
+            if (rawFx && Array.isArray(rawFx.games) && rawFx.games.length) {
+                rawFx.games.forEach(g => {
+                    const sg = sanitizeLeagueGame(g, seriesFirst);
+                    if (sg) games.push(sg);
+                });
+            } else if (legacySingle) {
+                games.push({
+                    homeScore: Number(rawFx.result.homeScore) || 0,
+                    awayScore: Number(rawFx.result.awayScore) || 0,
+                    winner: rawFx.result.winner === 'draw' || isLeagueSeat(rawFx.result.winner) ? rawFx.result.winner : 'draw',
+                    first: seriesFirst
+                });
+            }
+            const fx = {week: fallback.week, home, away, seriesFirst, games, result: null};
+            if (legacySingle || seriesComplete(fx)) finalizeSeries(fx);
+            return fx;
+        }
+
+        function migrateLeagueFixtures(rawFx) {
+            const template = makeLeagueFixtures();
+            if (!Array.isArray(rawFx) || !rawFx.length) return template;
+            if (rawFx.length === 12) {
+                return template.map((t, i) => normalizeLeagueFixture(rawFx[i], t));
+            }
+            return template.map(t => {
+                if (t.week > 3) return t;
+                const old = rawFx.find(fx => fx && fx.week === t.week && fx.home === t.home && fx.away === t.away)
+                    || rawFx.find(fx => fx && fx.week === t.week && ((fx.home === t.home && fx.away === t.away) || (fx.home === t.away && fx.away === t.home)));
+                return normalizeLeagueFixture(old, t);
+            });
+        }
+
+        function sanitizeLeague(raw) {
+            if (!raw || typeof raw !== 'object') return null;
+            if (!['draft', 'season', 'complete'].includes(raw.phase)) return null;
+            if (!Array.isArray(raw.players) || raw.players.length !== 4) return null;
+            const ids = raw.players.map(p => p && p.id);
+            if (ids[0] !== 'you' || !ids.every(isLeagueSeat) || new Set(ids).size !== 4) return null;
+            if (!raw.hands || typeof raw.hands !== 'object') return null;
+            const hands = {};
+            for (const id of ids) {
+                const list = Array.isArray(raw.hands[id]) ? raw.hands[id].filter(x => typeof x === 'string') : [];
+                hands[id] = list;
+            }
+            if (raw.phase !== 'draft') {
+                if (ids.some(id => hands[id].length !== LEAGUE_HAND_SIZE)) return null;
+            }
+            if (!Array.isArray(raw.draftOrder) || raw.draftOrder.length !== 4) return null;
+            if (!raw.draftOrder.every(isLeagueSeat)) return null;
+            const pool = Array.isArray(raw.pool) ? raw.pool.filter(c => c && c.id && (c.draftedBy === null || isLeagueSeat(c.draftedBy))) : [];
+            if (raw.phase === 'draft' && pool.length !== LEAGUE_HAND_SIZE * 4) return null;
+            let fixtures = raw.phase === 'draft' ? [] : migrateLeagueFixtures(Array.isArray(raw.fixtures) ? raw.fixtures : []);
+            if (raw.phase !== 'draft' && fixtures.length !== 12) return null;
+            if (raw.phase === 'season') {
+                const userWeeks = new Set(
+                    fixtures.filter(fx => seriesComplete(fx) && (fx.home === 'you' || fx.away === 'you')).map(fx => fx.week)
+                );
+                fixtures.forEach(fx => {
+                    if (fx.home === 'you' || fx.away === 'you') return;
+                    if ((fx.result || (fx.games && fx.games.length)) && !userWeeks.has(fx.week)) {
+                        fx.games = [];
+                        fx.result = null;
+                    }
+                });
+            }
+            return {
+                version: 2,
+                phase: raw.phase,
+                createdAt: raw.createdAt || Date.now(),
+                ruleset: raw.ruleset === 'classic' ? 'classic' : 'ember',
+                leftover: !!raw.leftover,
+                players: [youSeat(), ...LEAGUE_RIVALS],
+                draftOrder: raw.draftOrder.slice(),
+                draftPickIndex: Math.max(0, Number(raw.draftPickIndex) || 0),
+                pool,
+                hands,
+                fixtures,
+                recap: typeof raw.recap === 'string' ? raw.recap : '',
+                champion: isLeagueSeat(raw.champion) ? raw.champion : null
+            };
+        }
+
+        function loadLeague() {
+            try {
+                return sanitizeLeague(JSON.parse(localStorage.getItem(LEAGUE_KEY) || 'null'));
+            } catch (e) {}
+            return null;
+        }
+
+        function saveLeague() {
+            if (!league) {
+                localStorage.removeItem(LEAGUE_KEY);
+                return;
+            }
+            localStorage.setItem(LEAGUE_KEY, JSON.stringify(league));
+        }
+
+        function clearLeague() {
+            league = null;
+            leagueMatch = null;
+            leagueDrafting = false;
+            leagueHubConfirm = null;
+            cloneRulesetOverride = null;
+            closeLeagueRoster();
+            saveLeague();
+        }
+
+        function leaguePlayer(id) {
+            if (!league) return id === 'you' ? youSeat() : LEAGUE_RIVALS.find(r => r.id === id) || youSeat();
+            return league.players.find(p => p.id === id) || youSeat();
+        }
+
+        function leagueLabel(id) {
+            const p = leaguePlayer(id);
+            return `${p.icon} ${p.name}`;
+        }
+
+        function leagueTakeLine(id, object) {
+            if (id === 'you') return `You take the ${object}`;
+            return `${leaguePlayer(id).name} takes the ${object}`;
+        }
+
+        function leagueSeatCards(seatId) {
+            if (leagueDrafting) return (leagueHandsLive[seatId] || []).slice();
+            if (!league || !league.hands) return [];
+            const ids = league.hands[seatId] || [];
+            return ids.map(id => {
+                const master = masterCards.find(c => c.id === id);
+                return master ? cloneCard(master, {}, league.ruleset) : null;
+            }).filter(Boolean);
+        }
+
+        function draftCardFaceHTML(card) {
+            return `
+                ${card.ability ? `<div class="ability-badge">${card.ability.icon}</div>` : ''}
+                <div class="stat-top">${formatStat(card.baseStats[0])}</div>
+                <div class="stat-right">${formatStat(card.baseStats[1])}</div>
+                <div class="stat-bottom">${formatStat(card.baseStats[2])}</div>
+                <div class="stat-left">${formatStat(card.baseStats[3])}</div>
+                <div class="card-emoji">${card.emoji}</div>
+                ${nameplateHTML(card)}
+            `;
+        }
+
+        function fillLeagueRoster(seatId) {
+            const grid = document.getElementById('league-roster-grid');
+            const empty = document.getElementById('league-roster-empty');
+            const title = document.getElementById('league-roster-title');
+            if (!grid || !empty || !title) return;
+            const p = leaguePlayer(seatId);
+            const cards = leagueSeatCards(seatId);
+            title.textContent = `${p.icon} ${p.name}`;
+            grid.innerHTML = '';
+            cards.forEach(card => {
+                const el = document.createElement('div');
+                el.className = 'draft-card';
+                el.innerHTML = draftCardFaceHTML(card);
+                addTooltipListeners(el, abilityTip(card));
+                paintCardFaces(el);
+                grid.appendChild(el);
+            });
+            empty.hidden = cards.length > 0;
+            grid.hidden = cards.length === 0;
+        }
+
+        function openLeagueRoster(seatId) {
+            if (!isLeagueSeat(seatId)) return;
+            sfx.click(); hideTooltip();
+            if (leagueRosterSeat === seatId && !document.getElementById('league-roster').classList.contains('hidden')) {
+                closeLeagueRoster();
+                return;
+            }
+            leagueRosterSeat = seatId;
+            fillLeagueRoster(seatId);
+            document.getElementById('league-roster').classList.remove('hidden');
+            if (leagueDrafting) renderLeagueDraftSeats();
+            else if (league) {
+                document.querySelectorAll('.league-rival-chip').forEach(el => {
+                    el.classList.toggle('is-open', el.getAttribute('data-seat') === seatId);
+                });
+            }
+        }
+
+        function closeLeagueRoster() {
+            const el = document.getElementById('league-roster');
+            if (el) el.classList.add('hidden');
+            leagueRosterSeat = null;
+            hideTooltip();
+            if (leagueDrafting) renderLeagueDraftSeats();
+            document.querySelectorAll('.league-rival-chip.is-open').forEach(chip => chip.classList.remove('is-open'));
+        }
+
+        function isLeagueActive() {
+            return !!(league && league.phase !== 'complete');
+        }
+
+        function isLeagueMatch() {
+            return activeMode === 'league' && !!leagueMatch;
+        }
+
+        function shuffleCopy(list) {
+            const arr = list.slice();
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                const t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+            }
+            return arr;
+        }
+
+        function createLeague() {
+            const order = shuffleCopy(['you', 'ash', 'vesper', 'rook']);
+            return {
+                version: 2,
+                phase: 'draft',
+                createdAt: Date.now(),
+                ruleset: currentRuleset === 'classic' ? 'classic' : 'ember',
+                leftover: !!leftoverScores,
+                players: [youSeat(), ...LEAGUE_RIVALS],
+                draftOrder: order,
+                draftPickIndex: 0,
+                pool: shuffleCopy(masterCards).slice(0, LEAGUE_HAND_SIZE * 4).map(c => ({id: c.id, draftedBy: null})),
+                hands: {you: [], ash: [], vesper: [], rook: []},
+                fixtures: [],
+                recap: '',
+                champion: null
+            };
+        }
+
+        function refreshLeagueMenuButton() {
+            const btn = document.getElementById('league-menu-btn');
+            if (!btn) return;
+            if (!league) btn.textContent = 'League';
+            else if (league.phase === 'complete') btn.textContent = 'League Crown';
+            else if (league.phase === 'draft') btn.textContent = 'Continue Draft';
+            else btn.textContent = 'Continue League';
+        }
+
+        function openLeague() {
+            sfx.click(); hideTooltip();
+            hideModal('main-menu-modal');
+            document.body.classList.add('menu-open');
+            if (!league) {
+                startNewLeague(true);
+                return;
+            }
+            if (league.phase === 'draft') {
+                resumeLeagueDraft();
+                return;
+            }
+            resolvePendingAutoMatches();
+            showLeagueHub();
+        }
+
+        function startNewLeague(fromMenu) {
+            hideModal('league-modal');
+            leagueHubConfirm = null;
+            league = createLeague();
+            saveLeague();
+            startLeagueDraft();
+        }
+
+        function requestNewLeague() {
+            sfx.click();
+            if (league && league.phase !== 'complete') {
+                leagueHubConfirm = 'new';
+                renderLeagueHub();
+                return;
+            }
+            startNewLeague(true);
+        }
+
+        function confirmLeagueAction(action) {
+            sfx.click();
+            if (action === 'end') {
+                clearLeague();
+                showModeMenu();
+                return;
+            }
+            if (action === 'new') {
+                leagueHubConfirm = null;
+                startNewLeague(true);
+            }
+        }
+
+        function cancelLeagueConfirm() {
+            sfx.click();
+            leagueHubConfirm = null;
+            renderLeagueHub();
+        }
+
+        function requestEndLeague() {
+            sfx.click();
+            leagueHubConfirm = 'end';
+            renderLeagueHub();
+        }
+
+        function leaveLeagueToMenu() {
+            sfx.click(); hideTooltip();
+            closeLeagueRoster();
+            if (league && league.phase === 'draft') persistLeagueDraft();
+            saveLeague();
+            hideModal('league-modal');
+            showModeMenu();
+        }
+
+        function persistLeagueDraft() {
+            if (!league || league.phase !== 'draft') return;
+            league.draftPickIndex = draftPickIndex;
+            league.pool = draftPool.map(c => ({id: c.id, draftedBy: c.draftedBy || null}));
+            league.hands = {
+                you: leagueHandsLive.you.map(c => c.id),
+                ash: leagueHandsLive.ash.map(c => c.id),
+                vesper: leagueHandsLive.vesper.map(c => c.id),
+                rook: leagueHandsLive.rook.map(c => c.id)
+            };
+            saveLeague();
+        }
+
+        function hydrateLeagueDraft() {
+            leagueHandsLive = {you: [], ash: [], vesper: [], rook: []};
+            draftPool = (league.pool || []).map(entry => {
+                const master = masterCards.find(c => c.id === entry.id);
+                if (!master) return null;
+                const card = cloneCard(master, {draftedBy: entry.draftedBy || null}, league.ruleset);
+                if (entry.draftedBy && leagueHandsLive[entry.draftedBy]) leagueHandsLive[entry.draftedBy].push(card);
+                return card;
+            }).filter(Boolean);
+            draftPickIndex = Math.min(league.draftPickIndex || 0, LEAGUE_HAND_SIZE * 4 - 1);
+            leagueDraftSeq = snakeSeq4(league.draftOrder);
+            draftTurn = leagueDraftSeq[draftPickIndex];
+            leagueDrafting = true;
+        }
+
+        function startLeagueDraft() {
+            hideTooltip();
+            hideModals(['main-menu-modal', 'league-modal', 'deck-modal', 'gameover-modal', 'battle-log-modal']);
+            document.body.classList.add('menu-open');
+            hydrateLeagueDraft();
+            const draftedOut = ['you', 'ash', 'vesper', 'rook'].every(id => (leagueHandsLive[id] || []).length >= LEAGUE_HAND_SIZE);
+            if (draftedOut) {
+                finishLeagueDraft();
+                return;
+            }
+            setupDraftChrome(true);
+            renderDraftPool();
+            document.getElementById('draft-modal').classList.remove('hidden');
+            if (draftTurn && draftTurn !== 'you') scheduleAiDraftPick(520);
+        }
+
+        function resumeLeagueDraft() {
+            startLeagueDraft();
+        }
+
+        function setupDraftChrome(isLeague) {
+            const modal = document.getElementById('draft-modal');
+            const title = document.getElementById('draft-title');
+            const order = document.getElementById('draft-order');
+            const cancel = document.getElementById('draft-cancel-btn');
+            const seats = document.getElementById('draft-seats');
+            const rosters = document.getElementById('draft-rosters');
+            modal.classList.toggle('league-draft', !!isLeague);
+            if (isLeague) {
+                title.textContent = 'League Draft';
+                order.hidden = true;
+                cancel.textContent = 'Save & Leave';
+                seats.classList.remove('hidden');
+                rosters.classList.add('hidden');
+            } else {
+                title.textContent = 'Draft Hands';
+                order.hidden = false;
+                order.textContent = 'Sixteen cards from the deck. Snake order: 1 pick, then pairs of 2, until each hand is five.';
+                cancel.textContent = 'Cancel Draft';
+                seats.classList.add('hidden');
+                rosters.classList.remove('hidden');
+            }
+        }
+
+        function renderLeagueDraftSeats() {
+            const seats = document.getElementById('draft-seats');
+            if (!seats || !leagueDrafting) return;
+            seats.innerHTML = '';
+            ['you', 'ash', 'vesper', 'rook'].forEach(id => {
+                const p = leaguePlayer(id);
+                const hand = leagueHandsLive[id] || [];
+                const el = document.createElement('button');
+                el.type = 'button';
+                el.className = 'draft-seat' + (draftTurn === id ? ' active' : '') + (leagueRosterSeat === id ? ' is-open' : '');
+                const last = hand.length ? hand[hand.length - 1].name : '—';
+                el.innerHTML = `<div class="seat-name">${p.icon} ${p.name} · ${hand.length}/${LEAGUE_HAND_SIZE}</div><div class="seat-picks">${hand.length ? last : 'waiting'}</div>`;
+                el.title = `View ${p.name === 'You' ? 'your' : p.name + "'s"} cards`;
+                el.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openLeagueRoster(id);
+                });
+                seats.appendChild(el);
+            });
+            if (leagueRosterSeat) fillLeagueRoster(leagueRosterSeat);
+        }
+
+        function leagueDraftScore(card, playerId) {
+            let score = getCardDraftScore(card);
+            const t = card.ability && card.ability.type;
+            if (playerId === 'ash' && (t === 'blast' || t === 'aura_buff' || t === 'cinder')) score += 3;
+            if (playerId === 'vesper' && (t === 'chill' || t === 'silence' || t === 'poison' || t === 'curse_adj')) score += 3;
+            if (playerId === 'rook') {
+                score += 1;
+                if (t === 'equalizer' || t === 'blast') score += 1.5;
+            }
+            const noise = playerId === 'rook' ? Math.random() * 0.4 : Math.random() * 1.8;
+            return score + noise;
+        }
+
+        function personalityPlayBias(card, personality) {
+            if (!personality || !card.ability) return 0;
+            const t = card.ability.type;
+            if (personality === 'ash' && (t === 'blast' || t === 'aura_buff' || t === 'cinder')) return 2.5;
+            if (personality === 'vesper' && (t === 'chill' || t === 'silence' || t === 'poison' || t === 'curse_adj')) return 2.5;
+            if (personality === 'rook' && (t === 'equalizer' || t === 'blast')) return 1.5;
+            return 0;
+        }
+
+        function finishLeagueDraft() {
+            league.hands = {
+                you: leagueHandsLive.you.map(c => c.id),
+                ash: leagueHandsLive.ash.map(c => c.id),
+                vesper: leagueHandsLive.vesper.map(c => c.id),
+                rook: leagueHandsLive.rook.map(c => c.id)
+            };
+            league.pool = draftPool.map(c => ({id: c.id, draftedBy: c.draftedBy || null}));
+            league.fixtures = makeLeagueFixtures();
+            league.phase = 'season';
+            league.draftPickIndex = LEAGUE_HAND_SIZE * 4;
+            leagueDrafting = false;
+            closeLeagueRoster();
+            saveLeague();
+            hideModal('draft-modal');
+            setupDraftChrome(false);
+            resolvePendingAutoMatches();
+            showLeagueHub();
+        }
+
+        function nextUserFixture() {
+            if (!league) return null;
+            return league.fixtures.find(fx => !seriesComplete(fx) && (fx.home === 'you' || fx.away === 'you')) || null;
+        }
+
+        function nextUserFixtureIndex() {
+            if (!league) return -1;
+            return league.fixtures.findIndex(fx => !seriesComplete(fx) && (fx.home === 'you' || fx.away === 'you'));
+        }
+
+        function currentLeagueWeek() {
+            const next = nextUserFixture();
+            if (!next) return 7;
+            return next.week;
+        }
+
+        function leagueStandings() {
+            const rows = league.players.map(p => ({
+                id: p.id, name: p.name, icon: p.icon, w: 0, l: 0, d: 0, gw: 0, gl: 0, pf: 0, pa: 0, played: 0
+            }));
+            const byId = Object.fromEntries(rows.map(r => [r.id, r]));
+            league.fixtures.forEach(fx => {
+                if (!fx.result) return;
+                const s = seriesGameWins(fx);
+                const h = byId[fx.home], a = byId[fx.away];
+                if (!h || !a) return;
+                h.pf += s.homePf; h.pa += s.awayPf; h.played++;
+                a.pf += s.awayPf; a.pa += s.homePf; a.played++;
+                h.gw += s.home; h.gl += s.away;
+                a.gw += s.away; a.gl += s.home;
+                if (fx.result.winner === 'draw') { h.d++; a.d++; }
+                else if (fx.result.winner === fx.home) { h.w++; a.l++; }
+                else { a.w++; h.l++; }
+            });
+            const h2h = (a, b) => {
+                const meetings = league.fixtures.filter(f => f.result && ((f.home === a && f.away === b) || (f.home === b && f.away === a)));
+                let aW = 0, bW = 0, aGw = 0, bGw = 0;
+                meetings.forEach(f => {
+                    const s = seriesGameWins(f);
+                    if (f.result.winner === a) aW++;
+                    else if (f.result.winner === b) bW++;
+                    if (f.home === a) { aGw += s.home; bGw += s.away; }
+                    else { aGw += s.away; bGw += s.home; }
+                });
+                return (bW - aW) || (bGw - aGw);
+            };
+            rows.sort((x, y) => y.w - x.w || y.gw - x.gw || y.pf - x.pf || (y.pf - y.pa) - (x.pf - x.pa) || h2h(x.id, y.id) || x.name.localeCompare(y.name));
+            return rows;
+        }
+
+        function recordLeagueCrown() {
+            const table = leagueStandings();
+            const youRow = table.find(r => r.id === 'you');
+            const champ = table[0];
+            league.champion = champ ? champ.id : null;
+            const place = youRow ? table.indexOf(youRow) + 1 : 4;
+            leagueCrowns.played++;
+            if (place === 1) leagueCrowns.won++;
+            leagueCrowns.lastPlace = place;
+            leagueCrowns.lastChampion = champ ? champ.name : null;
+            saveLeagueCrowns();
+        }
+
+        function maybeCompleteLeague() {
+            if (!league || league.phase === 'draft') return;
+            if (league.fixtures.every(fx => fx.result)) {
+                if (league.phase !== 'complete') {
+                    league.phase = 'complete';
+                    recordLeagueCrown();
+                    saveLeague();
+                }
+            }
+        }
+
+        function playAutoSeries(fx) {
+            if (seriesComplete(fx) && fx.result) return fx;
+            const diff = leagueAiDifficulty();
+            fx.games = fx.games || [];
+            while (!seriesComplete(fx)) {
+                const firstSeat = seriesNextFirst(fx);
+                const firstColor = firstSeat === fx.home ? 'blue' : 'red';
+                const result = simulateMatch(
+                    league.hands[fx.home],
+                    league.hands[fx.away],
+                    firstColor,
+                    league.leftover,
+                    league.ruleset,
+                    diff,
+                    diff,
+                    fx.home,
+                    fx.away
+                );
+                fx.games.push({
+                    homeScore: result.blue,
+                    awayScore: result.red,
+                    winner: result.winner === 'blue' ? fx.home : result.winner === 'red' ? fx.away : 'draw',
+                    first: firstSeat
+                });
+            }
+            return finalizeSeries(fx);
+        }
+
+        function userWeeksPlayed() {
+            if (!league) return new Set();
+            return new Set(
+                league.fixtures.filter(fx => seriesComplete(fx) && (fx.home === 'you' || fx.away === 'you')).map(fx => fx.week)
+            );
+        }
+
+        function resolvePendingAutoMatches() {
+            if (!league || league.phase === 'draft') return;
+            const playedWeeks = userWeeksPlayed();
+            const seasonOver = !nextUserFixture();
+            league.fixtures.forEach(fx => {
+                const involvesYou = fx.home === 'you' || fx.away === 'you';
+                if (involvesYou) return;
+                if ((fx.result || (fx.games && fx.games.length)) && !playedWeeks.has(fx.week) && !seasonOver) {
+                    fx.games = [];
+                    fx.result = null;
+                    return;
+                }
+                if (seriesComplete(fx) && fx.result) return;
+                if (playedWeeks.has(fx.week) || seasonOver) playAutoSeries(fx);
+            });
+            maybeCompleteLeague();
+            saveLeague();
+        }
+
+        function fixtureMark(fx) {
+            const s = seriesGameWins(fx);
+            if (!s.played && !fx.result) {
+                if (fx.home === 'you' || fx.away === 'you') return {text: 'Yours', pending: true};
+                return {text: 'Soon', pending: true};
+            }
+            if (!seriesComplete(fx)) return {text: `${s.home}–${s.away}`, pending: true};
+            const winnerName = fx.result.winner === 'draw' ? 'Draw' : leaguePlayer(fx.result.winner).name;
+            return {text: `${s.home}–${s.away} ${winnerName}`, pending: false};
+        }
+
+        function standingsMap() {
+            const table = leagueStandings();
+            const map = {};
+            table.forEach((row, i) => { map[row.id] = {rank: i + 1, row}; });
+            return map;
+        }
+
+        function recordLine(row) {
+            return `${row.w}-${row.l}-${row.d}`;
+        }
+
+        function showLeagueHub() {
+            hideTooltip();
+            hideModals(['main-menu-modal', 'draft-modal', 'deck-modal', 'gameover-modal', 'battle-log-modal']);
+            document.body.classList.add('menu-open');
+            renderLeagueHub();
+            document.getElementById('league-modal').classList.remove('hidden');
+        }
+
+        function renderLeagueHub() {
+            const hub = document.getElementById('league-hub');
+            if (!hub || !league) return;
+            const table = leagueStandings();
+            const ranks = standingsMap();
+            const next = nextUserFixture();
+            const weekNow = Math.min(currentLeagueWeek(), 6);
+
+            let html = '';
+            if (league.phase === 'complete' && league.champion) {
+                const champ = leaguePlayer(league.champion);
+                const youPlace = ranks.you ? ranks.you.rank : 4;
+                const youLine = youPlace === 1
+                    ? `Seasons won: ${leagueCrowns.won}/${leagueCrowns.played}`
+                    : `You finished ${youPlace}${youPlace === 2 ? 'nd' : youPlace === 3 ? 'rd' : 'th'}. Seasons won: ${leagueCrowns.won}/${leagueCrowns.played}`;
+                html += `<div class="league-crown"><p class="league-crown-title">${champ.icon} ${leagueTakeLine(league.champion, 'crown')}</p><p class="league-crown-sub">${youLine}</p></div>`;
+            }
+
+            const seats = [youSeat(), ...LEAGUE_RIVALS];
+            html += `<div class="league-rivals">${seats.map(r => {
+                const rec = ranks[r.id] ? recordLine(ranks[r.id].row) : '0-0-0';
+                const open = leagueRosterSeat === r.id ? ' is-open' : '';
+                return `<button type="button" class="league-rival-chip${open}" data-seat="${r.id}" title="View ${r.name === 'You' ? 'your' : r.name + "'s"} deck" onclick="openLeagueRoster('${r.id}')"><span class="who">${r.icon} ${r.name}</span><span class="diff">${rec}</span></button>`;
+            }).join('')}</div>`;
+
+            if (league.recap) html += `<div class="league-recap">${league.recap}</div>`;
+
+            html += `<div class="menu-section-title" style="margin-top:0;">Standings</div><div class="league-table-wrap"><table class="league-table"><thead><tr><th>#</th><th>Name</th><th class="num">W-L-D</th><th class="num">GW</th><th class="num">PF</th><th class="num">+/-</th></tr></thead><tbody>`;
+            table.forEach((row, i) => {
+                const cls = [row.id === 'you' ? 'is-you' : '', i === 0 && row.played ? 'is-crown' : ''].filter(Boolean).join(' ');
+                const diff = row.pf - row.pa;
+                const diffStr = `${diff > 0 ? '+' : ''}${diff}`;
+                html += `<tr class="${cls}"><td>${i + 1}</td><td class="league-name" onclick="openLeagueRoster('${row.id}')">${row.icon} ${row.name}</td><td class="num">${recordLine(row)}</td><td class="num">${row.gw}</td><td class="num">${row.pf}</td><td class="num">${diffStr}</td></tr>`;
+            });
+            html += `</tbody></table></div>`;
+
+            html += `<div class="menu-section-title">Schedule</div>`;
+            for (let week = 1; week <= 6; week++) {
+                const weekFx = league.fixtures.filter(fx => fx.week === week);
+                html += `<div class="league-week${week === weekNow && league.phase !== 'complete' ? ' is-current' : ''}"><p class="league-week-title">Week ${week}</p>`;
+                weekFx.forEach(fx => {
+                    const isNext = next && fx === next;
+                    const homeRank = ranks[fx.home] ? `#${ranks[fx.home].rank}` : '';
+                    const awayRank = ranks[fx.away] ? `#${ranks[fx.away].rank}` : '';
+                    const nextFirst = seriesComplete(fx) ? null : seriesNextFirst(fx);
+                    const firstName = leaguePlayer(nextFirst || fx.seriesFirst).name;
+                    const firstBit = seriesComplete(fx)
+                        ? `${leaguePlayer(fx.seriesFirst).name} opened`
+                        : `${firstName} first`;
+                    const mark = fixtureMark(fx);
+                    html += `<div class="league-fixture${isNext ? ' is-next' : ''}"><div class="versus">${leagueLabel(fx.home)} <span style="opacity:.45">${homeRank}</span> vs ${leagueLabel(fx.away)} <span style="opacity:.45">${awayRank}</span></div><div class="mark${mark.pending ? ' pending' : ''}" title="${firstBit}">${mark.text}</div></div>`;
+                });
+                html += `</div>`;
+            }
+
+            html += `<div class="league-actions">`;
+            if (league.phase === 'complete') {
+                html += `<button class="btn" onclick="requestNewLeague()">New Season</button>`;
+            } else if (next) {
+                const opp = next.home === 'you' ? next.away : next.home;
+                const oppP = leaguePlayer(opp);
+                const oppRow = ranks[opp] ? ranks[opp].row : null;
+                const rec = oppRow ? recordLine(oppRow) : '0-0-0';
+                const gameN = (next.games || []).length + 1;
+                html += `<button class="btn" onclick="playNextLeagueMatch()">Play Week ${next.week} · Game ${gameN} · ${oppP.name} (${rec})</button>`;
+            }
+            html += `<button class="btn btn-alt" onclick="leaveLeagueToMenu()">Back to Menu</button>`;
+            html += `<div class="league-danger"><button class="btn btn-muted" onclick="requestEndLeague()">End League</button>${league.phase !== 'complete' ? '<button class="btn btn-muted" onclick="requestNewLeague()">New Season</button>' : ''}</div></div>`;
+            if (leagueHubConfirm === 'end') {
+                html = `<div class="league-confirm">This season is gone — standings, draft, and remaining matches. Casual games stay.<div class="row"><button class="btn" onclick="confirmLeagueAction('end')">End It</button><button class="btn btn-alt" onclick="cancelLeagueConfirm()">Keep It</button></div></div>` + html;
+            } else if (leagueHubConfirm === 'new') {
+                html = `<div class="league-confirm">Start a new season? The current draft and table will be wiped.<div class="row"><button class="btn" onclick="confirmLeagueAction('new')">Start New</button><button class="btn btn-alt" onclick="cancelLeagueConfirm()">Keep This One</button></div></div>` + html;
+            }
+            hub.innerHTML = html;
+            if (leagueHubConfirm) {
+                const box = hub.querySelector('.league-confirm');
+                if (box) box.scrollIntoView({block: 'nearest'});
+            }
+        }
+
+        function playNextLeagueMatch() {
+            sfx.click(); hideTooltip();
+            closeLeagueRoster();
+            hideModal('gameover-modal');
+            const idx = nextUserFixtureIndex();
+            if (idx < 0) {
+                showLeagueHub();
+                return;
+            }
+            const fx = league.fixtures[idx];
+            const oppId = fx.home === 'you' ? fx.away : fx.home;
+            const first = seriesNextFirst(fx);
+            leagueMatch = {fixtureIndex: idx, oppId, first};
+            cloneRulesetOverride = league.ruleset;
+            leftoverThisMatch = league.leftover;
+            skipCoachOnce = true;
+            activeMode = 'league';
+            hideModals(['league-modal', 'main-menu-modal', 'draft-modal', 'deck-modal', 'gameover-modal', 'battle-log-modal']);
+            resetTable();
+            gameState = 'playing';
+            const youIds = league.hands.you;
+            const oppIds = league.hands[oppId];
+            playerHand = youIds.map(id => cloneForOwner(masterCards.find(c => c.id === id), 'blue', league.ruleset));
+            aiHand = oppIds.map(id => cloneForOwner(masterCards.find(c => c.id === id), 'red', league.ruleset));
+            const firstSeat = first === 'you' ? 'player' : 'ai';
+            beginMatch(firstSeat, 'league');
+        }
+
+        function openLeagueHubFromGameover() {
+            if (gameoverClickLock) return;
+            unlockGameoverClicks();
+            sfx.click(); hideTooltip();
+            hideModal('gameover-modal');
+            resolvePendingAutoMatches();
+            showLeagueHub();
+        }
+
+        function recordUserLeagueResult(blueCount, redCount) {
+            if (!league || !leagueMatch) return;
+            const fx = league.fixtures[leagueMatch.fixtureIndex];
+            if (!fx) return;
+            const youIsHome = fx.home === 'you';
+            const winner = blueCount > redCount ? 'you' : redCount > blueCount ? leagueMatch.oppId : 'draw';
+            fx.games = fx.games || [];
+            fx.games.push({
+                homeScore: youIsHome ? blueCount : redCount,
+                awayScore: youIsHome ? redCount : blueCount,
+                winner,
+                first: leagueMatch.first || seriesNextFirst({...fx, games: fx.games.slice()})
+            });
+            const opp = leaguePlayer(leagueMatch.oppId);
+            const gameN = fx.games.length;
+            const verdict = winner === 'you' ? `You took ${opp.name}` : winner === 'draw' ? `Draw with ${opp.name}` : `${opp.name} took you`;
+            let recap = `Week ${fx.week} game ${gameN}: ${verdict} ${blueCount}–${redCount}.`;
+            if (seriesComplete(fx)) {
+                finalizeSeries(fx);
+                const s = seriesGameWins(fx);
+                const youGames = youIsHome ? s.home : s.away;
+                const oppGames = youIsHome ? s.away : s.home;
+                const seriesVerdict = fx.result.winner === 'you'
+                    ? `You take the series`
+                    : fx.result.winner === 'draw'
+                        ? `Series draw`
+                        : `${opp.name} takes the series`;
+                recap = `Week ${fx.week}: ${seriesVerdict} ${youGames}–${oppGames}. ${verdict} ${blueCount}–${redCount}.`;
+                resolvePendingAutoMatches();
+                const autoNow = league.fixtures.find(other => other.week === fx.week && other !== fx && other.result);
+                if (autoNow) {
+                    const aw = autoNow.result.winner === 'draw' ? 'Draw' : leaguePlayer(autoNow.result.winner).name;
+                    const as = seriesGameWins(autoNow);
+                    recap += ` ${leaguePlayer(autoNow.home).name} vs ${leaguePlayer(autoNow.away).name} ${as.home}–${as.away} (${aw}).`;
+                }
+            }
+            league.recap = recap;
+            maybeCompleteLeague();
+            saveLeague();
+        }
+
+        function snapshotSimTable() {
+            return {
+                board: board.map(c => c),
+                cellEffects: cellEffects.slice(),
+                playerHand: playerHand.slice(),
+                aiHand: aiHand.slice(),
+                leftoverThisMatch,
+                turn,
+                gameState,
+                selectedCard,
+                shown: Array.from(shownStatValues.entries())
+            };
+        }
+
+        function restoreSimTable(snap) {
+            board = snap.board;
+            cellEffects = snap.cellEffects;
+            playerHand = snap.playerHand;
+            aiHand = snap.aiHand;
+            leftoverThisMatch = snap.leftoverThisMatch;
+            turn = snap.turn;
+            gameState = snap.gameState;
+            selectedCard = snap.selectedCard;
+            shownStatValues.clear();
+            (snap.shown || []).forEach(([k, v]) => shownStatValues.set(k, v));
+        }
+
+        function simulateMatch(blueIds, redIds, firstColor, leftover, ruleset, blueDiff, redDiff, blueSeat, redSeat) {
+            const snap = snapshotSimTable();
+            const prevSilent = silentSim;
+            const prevOverride = cloneRulesetOverride;
+            silentSim = true;
+            cloneRulesetOverride = ruleset;
+            leftoverThisMatch = leftover;
+            resetTable();
+            playerHand = (blueIds || []).map(id => cloneForOwner(masterCards.find(c => c.id === id), 'blue', ruleset));
+            aiHand = (redIds || []).map(id => cloneForOwner(masterCards.find(c => c.id === id), 'red', ruleset));
+            let whose = firstColor === 'red' ? 'red' : 'blue';
+            let safety = 0;
+            while (board.some(c => c === null) && safety++ < 12) {
+                const hand = whose === 'blue' ? playerHand : aiHand;
+                if (!hand.length) break;
+                const diff = whose === 'blue' ? blueDiff : redDiff;
+                const seat = whose === 'blue' ? blueSeat : redSeat;
+                const move = pickAiMoveFor(whose, diff, seat);
+                if (!move) break;
+                const card = hand.splice(move.cardIndex, 1)[0];
+                card.stats = [...card.baseStats];
+                board[move.cellIdx] = card;
+                applyPlacementCore(move.cellIdx, card);
+                whose = whose === 'blue' ? 'red' : 'blue';
+            }
+            const blue = ownedCount('blue');
+            const red = ownedCount('red');
+            const winner = blue > red ? 'blue' : red > blue ? 'red' : 'draw';
+            restoreSimTable(snap);
+            silentSim = prevSilent;
+            cloneRulesetOverride = prevOverride;
+            return {blue, red, winner};
+        }
+
         const statusMsg = document.getElementById('status-msg');
         let battleLog = [];
 
         function logAction(msg) {
+            if (silentSim) return;
             if (!msg) return;
             battleLog.push(msg);
             renderBattleLog();
@@ -3023,6 +4537,10 @@
 
         function cancelDraft() {
             clearDraftTimer();
+            closeLeagueRoster();
+            if (leagueDrafting) persistLeagueDraft();
+            leagueDrafting = false;
+            setupDraftChrome(false);
             showModeMenu();
         }
 
@@ -3041,10 +4559,15 @@
             resetFingerDrag();
             hideTurnBanner();
             document.body.classList.add('menu-open');
-            hideModals(['draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal', 'battle-log-modal']);
+            hideModals(['draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal', 'battle-log-modal', 'league-modal', 'league-roster']);
+            closeLeagueRoster();
             document.getElementById('main-menu-modal').classList.remove('hidden');
             gameState = 'menu'; resetTable(); playerHand = []; aiHand = [];
             lastBlueScore = null; lastRedScore = null; lastMatch = null;
+            leagueMatch = null;
+            cloneRulesetOverride = null;
+            leagueHubConfirm = null;
+            refreshLeagueMenuButton();
             clearShareHash();
             setMatchCodeError('');
             const codeBox = document.getElementById('match-code-box');
@@ -3083,6 +4606,8 @@
             document.getElementById('leftover-check').checked = leftoverScores;
             refreshRulesetDesc();
             refreshVictoryCopy();
+            const leagueNote = document.getElementById('league-options-note');
+            if (leagueNote) leagueNote.hidden = !isLeagueActive();
             document.getElementById('options-modal').classList.remove('hidden');
         }
 
@@ -3200,7 +4725,7 @@
             clearAiPlayTimer();
             hideTurnBanner();
             clearShareHash();
-            hideModals(['main-menu-modal', 'draft-modal', 'deck-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal', 'battle-log-modal']);
+            hideModals(['main-menu-modal', 'draft-modal', 'deck-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal', 'battle-log-modal', 'league-modal']);
 
             if (mode === 'random') {
                 resetTable(); gameState = 'playing';
@@ -3243,6 +4768,10 @@
         }
 
         function withMatchup(msg) {
+            if (isLeagueMatch()) {
+                const opp = leaguePlayer(leagueMatch.oppId);
+                return `You vs ${opp.name}. ${msg}`;
+            }
             if (activeMode !== 'decks') return msg;
             const vs = deckVsLine();
             return vs ? `${vs}. ${msg}` : msg;
@@ -3304,6 +4833,7 @@
         }
 
         function startDraftMode() {
+            leagueDrafting = false;
             draftedPlayerCards = []; draftedAICards = [];
             draftPickIndex = 0;
             draftStarter = Math.random() < 0.5 ? 'player' : 'ai';
@@ -3311,6 +4841,7 @@
 
             draftPool = [...masterCards].sort(() => Math.random() - 0.5).slice(0, 16).map(c => cloneCard(c, {draftedBy: null}));
 
+            setupDraftChrome(false);
             renderDraftPool();
             document.getElementById('draft-modal').classList.remove('hidden');
             if (draftTurn === 'ai') scheduleAiDraftPick(600);
@@ -3318,11 +4849,12 @@
 
         function startCurrentModeAgain() {
             if (gameoverClickLock) return;
+            if (isLeagueMatch()) { openLeagueHubFromGameover(); return; }
             unlockGameoverClicks();
             sfx.click(); hideTooltip(); startGame(activeMode);
         }
 
-        function cloneCard(card, extra) {
+        function cloneCard(card, extra, ruleset) {
             const master = masterCards.find(c => c.id === card.id) || card;
             const copy = {
                 ...card,
@@ -3331,18 +4863,19 @@
                 ...extra
             };
             if (card.ability) copy.ability = {...card.ability};
-            if (currentRuleset === 'classic') delete copy.ability;
+            const rs = ruleset || cloneRulesetOverride || currentRuleset;
+            if (rs === 'classic') delete copy.ability;
             return copy;
         }
 
-        function cloneForOwner(card, owner) {
-            return cloneCard(card, {owner});
+        function cloneForOwner(card, owner, ruleset) {
+            return cloneCard(card, {owner}, ruleset);
         }
 
         function snapshotMatch(first) {
             lastMatch = {
                 mode: activeMode,
-                ruleset: currentRuleset,
+                ruleset: (isLeagueMatch() && league) ? league.ruleset : currentRuleset,
                 leftover: leftoverThisMatch,
                 playerIds: playerHand.map(c => c.id),
                 aiIds: aiHand.map(c => c.id),
@@ -3367,7 +4900,7 @@
         }
 
         function encodeMatchCode(match) {
-            if (!match || !match.playerIds || !match.aiIds) return '';
+            if (!match || match.mode === 'league' || !match.playerIds || !match.aiIds) return '';
             if (match.playerIds.length !== 5 || match.aiIds.length !== 5) return '';
             const nums = idsToNums(match.playerIds.concat(match.aiIds));
             if (nums.some(n => !n || n < 1 || n > masterCards.length)) return '';
@@ -3469,7 +5002,7 @@
             hideTooltip();
             clearAiPlayTimer();
             hideTurnBanner();
-            hideModals(['main-menu-modal', 'draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal', 'battle-log-modal']);
+            hideModals(['main-menu-modal', 'draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal', 'battle-log-modal', 'league-modal']);
             currentRuleset = decoded.ruleset;
             const sel = document.getElementById('ruleset-select');
             if (sel) sel.value = currentRuleset;
@@ -3572,6 +5105,7 @@
 
         function rematchSwapFirst() {
             if (gameoverClickLock) return;
+            if (isLeagueMatch()) { openLeagueHubFromGameover(); return; }
             if (!lastMatch) {startGame(activeMode); return;}
             unlockGameoverClicks();
             sfx.click(); hideTooltip();
@@ -3588,6 +5122,7 @@
             sfx.click();
             hideModal('gameover-modal');
             statusMsg.textContent = "Final board. Replay the same hands, or deal new ones.";
+            if (isLeagueMatch()) statusMsg.textContent = "Final board. Open the league table for standings.";
             render();
         }
 
@@ -3617,52 +5152,92 @@
             gameoverUnlockTimer = null;
         }
 
-        function renderDraftPool() {
-            const grid = document.getElementById('draft-pool-grid'); grid.innerHTML = '';
-            draftPool.forEach(card => {
-                const el = document.createElement('div');
-                el.className = `draft-card ${card.draftedBy ? 'drafted' : ''}`;
-                el.innerHTML = `
-                    ${card.ability ? `<div class="ability-badge">${card.ability.icon}</div>` : ''}
-                    <div class="stat-top">${formatStat(card.baseStats[0])}</div>
-                    <div class="stat-right">${formatStat(card.baseStats[1])}</div>
-                    <div class="stat-bottom">${formatStat(card.baseStats[2])}</div>
-                    <div class="stat-left">${formatStat(card.baseStats[3])}</div>
-                    <div class="card-emoji">${card.emoji}</div>
-                    ${nameplateHTML(card)}
-                `;
+        function draftCardClass(card) {
+            if (!card.draftedBy) return 'draft-card';
+            return leagueDrafting ? `draft-card taken taken-${card.draftedBy}` : 'draft-card drafted';
+        }
 
+        function bindDraftGridClicks() {
+            const grid = document.getElementById('draft-pool-grid');
+            if (!grid || grid.dataset.bound) return;
+            grid.dataset.bound = '1';
+            grid.addEventListener('click', (e) => {
+                const el = e.target.closest('.draft-card');
+                if (!el || !grid.contains(el)) return;
+                if (el.classList.contains('taken') || el.classList.contains('drafted')) return;
+                const idx = [...grid.children].indexOf(el);
+                const card = draftPool[idx];
+                if (!card || card.draftedBy) return;
+                const humanTurn = leagueDrafting ? draftTurn === 'you' : draftTurn === 'player';
+                if (!humanTurn) return;
+                sfx.click(); hideTooltip();
+                playerDraftPick(card);
+            });
+        }
+
+        function renderDraftPool() {
+            const grid = document.getElementById('draft-pool-grid');
+            bindDraftGridClicks();
+            const reuse = grid.childElementCount === draftPool.length;
+            if (!reuse) grid.innerHTML = '';
+            draftPool.forEach((card, i) => {
+                let el = reuse ? grid.children[i] : document.createElement('div');
+                el.className = draftCardClass(card);
+                if (reuse) return;
+                el.innerHTML = draftCardFaceHTML(card);
                 addTooltipListeners(el, abilityTip(card));
                 paintCardFaces(el);
-
-                if (!card.draftedBy && draftTurn === 'player') {
-                    el.addEventListener('click', () => {sfx.click(); hideTooltip(); playerDraftPick(card);});
-                }
                 grid.appendChild(el);
             });
-            document.getElementById('draft-status').textContent = draftTurn === 'player'
-                ? (isSnakeDoublePick() ? "Your pick - you choose twice." : "Your pick.")
-                : (isSnakeDoublePick() ? "AI is choosing twice..." : "AI is choosing...");
-            document.getElementById('draft-rosters').textContent =
-                `Pick ${draftPickIndex + 1}/10 · Your Hand: ${draftedPlayerCards.length}/5 | AI Hand: ${draftedAICards.length}/5`;
+            if (leagueDrafting) {
+                const picker = leaguePlayer(draftTurn);
+                const twice = isSnakeDoublePick();
+                document.getElementById('draft-status').textContent = draftTurn === 'you'
+                    ? (twice ? "Your pick — you choose twice." : "Your pick.")
+                    : (twice ? `${picker.name} is choosing twice...` : `${picker.name} is choosing...`);
+                renderLeagueDraftSeats();
+            } else {
+                document.getElementById('draft-status').textContent = draftTurn === 'player'
+                    ? (isSnakeDoublePick() ? "Your pick - you choose twice." : "Your pick.")
+                    : (isSnakeDoublePick() ? "AI is choosing twice..." : "AI is choosing...");
+                document.getElementById('draft-rosters').textContent =
+                    `Pick ${draftPickIndex + 1}/10 · Your Hand: ${draftedPlayerCards.length}/5 | AI Hand: ${draftedAICards.length}/5`;
+            }
         }
 
         function isSnakeDoublePick() {
-            const seq = SNAKE_SEQ(draftStarter);
+            const seq = leagueDrafting ? leagueDraftSeq : SNAKE_SEQ(draftStarter);
             return seq[draftPickIndex] && seq[draftPickIndex] === seq[draftPickIndex + 1];
         }
 
         function playerDraftPick(card) {
-            if (draftTurn !== 'player' || card.draftedBy) return;
+            if (card.draftedBy) return;
+            if (leagueDrafting) {
+                if (draftTurn !== 'you') return;
+                card.draftedBy = 'you';
+                leagueHandsLive.you.push(card);
+                persistLeagueDraft();
+                checkDraftProgress();
+                return;
+            }
+            if (draftTurn !== 'player') return;
             card.draftedBy = 'player'; draftedPlayerCards.push(card); checkDraftProgress();
         }
 
         function aiDraftPick() {
             if (document.getElementById('draft-modal').classList.contains('hidden')) return;
-            if (draftTurn !== 'ai' || draftedAICards.length >= 5) return;
             const available = draftPool.filter(c => !c.draftedBy);
             if (!available.length) return;
-
+            if (leagueDrafting) {
+                if (draftTurn === 'you' || !leagueHandsLive[draftTurn] || leagueHandsLive[draftTurn].length >= LEAGUE_HAND_SIZE) return;
+                available.sort((a, b) => leagueDraftScore(b, draftTurn) - leagueDraftScore(a, draftTurn));
+                available[0].draftedBy = draftTurn;
+                leagueHandsLive[draftTurn].push(available[0]);
+                persistLeagueDraft();
+                checkDraftProgress();
+                return;
+            }
+            if (draftTurn !== 'ai' || draftedAICards.length >= 5) return;
             available.sort((a, b) => getCardDraftScore(b) - getCardDraftScore(a));
             available[0].draftedBy = 'ai';
             draftedAICards.push(available[0]);
@@ -3690,6 +5265,19 @@
         }
 
         function checkDraftProgress() {
+            if (leagueDrafting) {
+                const done = ['you', 'ash', 'vesper', 'rook'].every(id => (leagueHandsLive[id] || []).length >= LEAGUE_HAND_SIZE);
+                if (done) {
+                    finishLeagueDraft();
+                    return;
+                }
+                draftPickIndex++;
+                draftTurn = leagueDraftSeq[draftPickIndex];
+                persistLeagueDraft();
+                renderDraftPool();
+                if (draftTurn && draftTurn !== 'you') scheduleAiDraftPick(480);
+                return;
+            }
             if (draftedPlayerCards.length === 5 && draftedAICards.length === 5) {
                 hideModal('draft-modal');
                 resetTable(); gameState = 'playing';
@@ -3710,7 +5298,7 @@
             hideTurnBanner();
             leftoverThisMatch = (origin === 'rematch' && lastMatch && typeof lastMatch.leftover === 'boolean')
                 ? lastMatch.leftover
-                : leftoverScores;
+                : (origin === 'league' && league ? league.leftover : leftoverScores);
             turn = first || (Math.random() < 0.5 ? 'player' : 'ai');
             snapshotMatch(turn);
             lastBlueScore = null; lastRedScore = null;
@@ -3718,6 +5306,15 @@
             if (origin === 'rematch') {
                 statusMsg.textContent = withMatchup(turn === 'player' ? "Same hands. You go first." : "Same hands. AI plays first.");
                 logAction(turn === 'player' ? "Rematch - you go first." : "Rematch - AI goes first.");
+            } else if (origin === 'league' && leagueMatch) {
+                const opp = leaguePlayer(leagueMatch.oppId);
+                const fx = league.fixtures[leagueMatch.fixtureIndex];
+                const week = fx.week;
+                const gameN = (fx.games || []).length + 1;
+                statusMsg.textContent = turn === 'player'
+                    ? `Week ${week} game ${gameN} vs ${opp.name}. Your turn - play a card.`
+                    : `Week ${week} game ${gameN} vs ${opp.name}. ${opp.name} plays first.`;
+                logAction(`League week ${week} game ${gameN} — You vs ${opp.name}.`);
             } else {
                 const vs = activeMode === 'decks' ? deckVsLine() : '';
                 const shared = origin === 'share' ? 'Shared match. ' : '';
@@ -3751,7 +5348,9 @@
             const el = document.getElementById('turn-banner');
             if (!el) return;
             positionBoardToast(el);
-            el.textContent = whose === 'player' ? 'YOUR TURN' : 'AI TURN';
+            el.textContent = whose === 'player'
+                ? 'YOUR TURN'
+                : (isLeagueMatch() ? `${leaguePlayer(leagueMatch.oppId).name.toUpperCase()} TURN` : 'AI TURN');
             el.className = `turn-banner ${whose}`;
             void el.offsetWidth;
             el.classList.add('show');
@@ -3760,7 +5359,9 @@
 
         function scheduleAiTurn(delay) {
             clearAiPlayTimer();
-            statusMsg.textContent = withMatchup("AI is thinking...");
+            statusMsg.textContent = isLeagueMatch()
+                ? withMatchup(`${leaguePlayer(leagueMatch.oppId).name} is thinking...`)
+                : withMatchup("AI is thinking...");
             aiPlayTimer = setTimeout(() => {
                 aiPlayTimer = null;
                 aiTurn();
@@ -3769,6 +5370,7 @@
 
         function maybeStartCoach() {
             if (skipCoachOnce) { skipCoachOnce = false; return; }
+            if (isLeagueMatch()) return;
             if (localStorage.getItem('ember_grid_coached') === 'true') return;
             if (gameState !== 'playing') return;
             coach.active = true;
@@ -4093,7 +5695,9 @@
             bottomArea.innerHTML = '';
 
             if (gameState === 'playing') {
-                turnInd.textContent = turn === 'player' ? 'YOUR TURN' : 'AI TURN';
+                turnInd.textContent = turn === 'player'
+                    ? 'YOUR TURN'
+                    : (isLeagueMatch() ? `${leaguePlayer(leagueMatch.oppId).name.toUpperCase()} TURN` : 'AI TURN');
                 turnInd.style.color = turn === 'player' ? 'var(--blue-card)' : 'var(--red-card)';
             } else if (gameState === 'gameover') {
                 turnInd.textContent = 'FINAL';
@@ -4124,19 +5728,39 @@
                 if (!gameoverOpen) {
                     const bar = document.createElement('div');
                     bar.className = 'rematch-bar';
-                    bar.innerHTML = `
-                        <button class="btn" onclick="rematchSwapFirst()" title="Same hands, swap who goes first">Replay</button>
-                        <div class="rematch-secondary">
-                            <button class="btn btn-alt" onclick="startCurrentModeAgain()">New Hands</button>
-                            <button type="button" class="btn btn-alt" id="board-share-btn" onclick="shareCurrentMatch()">Share</button>
-                        </div>
-                        <div class="gameover-links">
-                            <button type="button" class="gameover-link" onclick="showBattleLogModal()">Battle log</button>
-                            <button type="button" class="gameover-link" onclick="showModeMenu()">Menu</button>
-                        </div>
-                    `;
+                    if (isLeagueMatch()) {
+                        const fx = league && leagueMatch ? league.fixtures[leagueMatch.fixtureIndex] : null;
+                        const more = !!(fx && !seriesComplete(fx));
+                        bar.innerHTML = more
+                            ? `
+                            <button class="btn" onclick="playNextLeagueMatch()">Next Game</button>
+                            <div class="gameover-links">
+                                <button type="button" class="gameover-link" onclick="showBattleLogModal()">Battle log</button>
+                                <button type="button" class="gameover-link" onclick="showModeMenu()">Menu</button>
+                            </div>
+                        `
+                            : `
+                            <button class="btn" onclick="openLeagueHubFromGameover()">League Table</button>
+                            <div class="gameover-links">
+                                <button type="button" class="gameover-link" onclick="showBattleLogModal()">Battle log</button>
+                                <button type="button" class="gameover-link" onclick="showModeMenu()">Menu</button>
+                            </div>
+                        `;
+                    } else {
+                        bar.innerHTML = `
+                            <button class="btn" onclick="rematchSwapFirst()" title="Same hands, swap who goes first">Replay</button>
+                            <div class="rematch-secondary">
+                                <button class="btn btn-alt" onclick="startCurrentModeAgain()">New Hands</button>
+                                <button type="button" class="btn btn-alt" id="board-share-btn" onclick="shareCurrentMatch()">Share</button>
+                            </div>
+                            <div class="gameover-links">
+                                <button type="button" class="gameover-link" onclick="showBattleLogModal()">Battle log</button>
+                                <button type="button" class="gameover-link" onclick="showModeMenu()">Menu</button>
+                            </div>
+                        `;
+                    }
                     bottomArea.appendChild(bar);
-                    syncShareButton();
+                    if (!isLeagueMatch()) syncShareButton();
                 }
             }
 
@@ -4371,7 +5995,7 @@
             processCardPlacement(boardIndex, cardToPlay);
         }
 
-        function processCardPlacement(index, placedCard) {
+        function applyPlacementCore(index, placedCard) {
             board.forEach(c => { if (c && c !== placedCard) c.blastPreview = false; });
             const enemyNeighbor = hasEnemyNeighbor(index, placedCard);
             const abilityFx = applyOnPlayAbilities(placedCard, index);
@@ -4379,12 +6003,18 @@
             const buffFx = tagAuraBuffs(placedCard, index);
             const silenceFx = tagSilence(placedCard, index);
             const chillFx = tagChill(placedCard, index);
-            let capLog = checkCaptures(index, placedCard);
+            const capLog = checkCaptures(index, placedCard);
             recalculateDynamicStats();
-            let psnFx = applyEndOfTurnEffects();
+            const psnFx = applyEndOfTurnEffects();
             recalculateDynamicStats();
+            return {enemyNeighbor, abilityFx, buffFx, silenceFx, chillFx, capLog, psnFx};
+        }
 
-            const fxParts = [abilityFx && abilityFx.text, buffFx && buffFx.text, silenceFx && silenceFx.text, chillFx && chillFx.text, capLog, psnFx && psnFx.text].filter(Boolean);
+        function processCardPlacement(index, placedCard) {
+            const fx = applyPlacementCore(index, placedCard);
+            if (silentSim) return;
+
+            const fxParts = [fx.abilityFx && fx.abilityFx.text, fx.buffFx && fx.buffFx.text, fx.silenceFx && fx.silenceFx.text, fx.chillFx && fx.chillFx.text, fx.capLog, fx.psnFx && fx.psnFx.text].filter(Boolean);
             logAction(fxParts.length ? fxParts.join(' · ') : `${placedCard.name} played.`);
 
             const placedBy = placedCard.owner === 'blue' ? 'player' : 'ai';
@@ -4392,7 +6022,7 @@
             render();
             requestAnimationFrame(updateCoach);
 
-            if (placedBy === 'player') onCoachPlaced(!!capLog, enemyNeighbor);
+            if (placedBy === 'player') onCoachPlaced(!!fx.capLog, fx.enemyNeighbor);
 
             if (placedCard.blastPreview) {
                 if (blastPreviewTimer) clearTimeout(blastPreviewTimer);
@@ -4433,7 +6063,7 @@
                 neighborCard.owner = placedCard.owner;
                 neighborCard.justFlipped = true;
                 captured.push(neighborCard.name);
-                if (placedCard.owner === 'blue') {blueFlipped = true; if (origOwner === 'red') stats.flips++;}
+                if (placedCard.owner === 'blue') {blueFlipped = true; if (!silentSim && origOwner === 'red') stats.flips++;}
                 else redFlipped = true;
                 if (neighborCard.ability && neighborCard.ability.type === 'spite' && !silencedWhenHit) {
                     placedCard.baseStats = placedCard.baseStats.map(s => Math.max(1, s - 1));
@@ -4454,30 +6084,40 @@
                 if (captures) flipEnemy(neighborCard, silencedWhenHit);
             });
 
-            if (blueFlipped) sfx.flipBlue(); else if (redFlipped) sfx.flipRed();
+            if (!silentSim) {
+                if (blueFlipped) sfx.flipBlue(); else if (redFlipped) sfx.flipRed();
+            }
             const parts = [];
             if (captured.length) parts.push(`${placedCard.name} captured ${listNames(captured)}`);
             if (spiteHits.length) parts.push(`Spite from ${listNames(spiteHits)} hit ${placedCard.name} (-1)`);
             return parts.join(' · ');
         }
 
-        function aiTurn() {
-            if (gameState !== 'playing') return;
-            const emptyCells = board.map((c, i) => c === null ? i : null).filter(i => i !== null);
-            if (!emptyCells.length || !aiHand.length) return;
+        function currentMatchAiDifficulty() {
+            if (isLeagueMatch()) return leagueAiDifficulty();
+            return aiDifficulty;
+        }
 
-            if (aiDifficulty === 'easy' && Math.random() < 0.45) {
-                executeAIMove(Math.floor(Math.random() * aiHand.length), emptyCells[Math.floor(Math.random() * emptyCells.length)]);
-                return;
+        function pickAiMoveFor(owner, difficulty, personality) {
+            const hand = owner === 'blue' ? playerHand : aiHand;
+            const enemy = owner === 'blue' ? 'red' : 'blue';
+            const emptyCells = board.map((c, i) => c === null ? i : null).filter(i => i !== null);
+            if (!emptyCells.length || !hand.length) return null;
+
+            if (difficulty === 'easy' && Math.random() < 0.45) {
+                return {
+                    cardIndex: Math.floor(Math.random() * hand.length),
+                    cellIdx: emptyCells[Math.floor(Math.random() * emptyCells.length)]
+                };
             }
 
             let bestMove = null, maxScore = -999;
-            aiHand.forEach((card, cardIndex) => {
+            hand.forEach((card, cardIndex) => {
                 emptyCells.forEach(cellIdx => {
                     let score = 0, flipsCount = 0, exposureRisk = 0;
                     const row = Math.floor(cellIdx / 3), col = cellIdx % 3;
-                    const silencedHere = wouldBeSilenced('red', cellIdx);
-                    const hushCancels = card.ability && card.ability.type === 'silence' && neighborIndexes(cellIdx).some(i => isSilenceCard(board[i]) && board[i].owner === 'blue');
+                    const silencedHere = wouldBeSilenced(owner, cellIdx);
+                    const hushCancels = card.ability && card.ability.type === 'silence' && neighborIndexes(cellIdx).some(i => isSilenceCard(board[i]) && board[i].owner === enemy);
                     const neighbors = [
                         {idx: cellIdx - 3, p: 0, n: 2, c: row > 0}, {idx: cellIdx + 1, p: 1, n: 3, c: col < 2},
                         {idx: cellIdx + 3, p: 2, n: 0, c: row < 2}, {idx: cellIdx - 1, p: 3, n: 1, c: col > 0}
@@ -4491,20 +6131,20 @@
 
                             if (neighborCard.ability && neighborCard.ability.type === 'poison' && !isSilenced(n.idx)) exposureRisk += 2;
                             if (card.ability && card.ability.type === 'poison' && !silencedHere) {
-                                if (neighborCard.owner === 'blue') score += 3;
+                                if (neighborCard.owner === enemy) score += 3;
                             }
-                            if (card.ability && card.ability.type === 'silence' && neighborCard.owner === 'blue' && neighborCard.ability) {
+                            if (card.ability && card.ability.type === 'silence' && neighborCard.owner === enemy && neighborCard.ability) {
                                 if (!hushCancels || neighborCard.ability.type === 'silence') score += 4;
                             }
-                            if (card.ability && card.ability.type === 'chill' && neighborCard.owner === 'blue') score += 3;
-                            if (neighborCard.ability && neighborCard.ability.type === 'spite' && neighborCard.owner === 'blue') exposureRisk += 2;
+                            if (card.ability && card.ability.type === 'chill' && neighborCard.owner === enemy) score += 3;
+                            if (neighborCard.ability && neighborCard.ability.type === 'spite' && neighborCard.owner === enemy) exposureRisk += 2;
 
-                            if (neighborCard.owner === 'blue') {
+                            if (neighborCard.owner === enemy) {
                                 let captures = myVal > theirVal;
                                 if (!captures && !silencedHere && card.ability && card.ability.type === 'equalizer' && myVal === theirVal) captures = true;
                                 if (captures) flipsCount++;
                             }
-                        } else if (n.c && board[n.idx] === null && aiDifficulty === 'hard') {
+                        } else if (n.c && board[n.idx] === null && difficulty === 'hard') {
                             const exposedStatVal = getEffectiveStat(card, n.p, true, silencedHere);
                             if (exposedStatVal <= 4) exposureRisk += (5 - exposedStatVal);
                         }
@@ -4513,17 +6153,25 @@
                     score += flipsCount * 14 + card.baseStats.reduce((a, b) => a + b, 0) * 0.1 + (card.ability ? 3 : 0) - exposureRisk * 2.5;
                     if (cellEffects[cellIdx] === 'cinder') score -= 5;
                     if (silencedHere && card.ability && card.ability.type !== 'silence') score -= 3;
-                    if (card.ability && card.ability.type === 'bolt' && !silencedHere && board.some(c => c && c.owner === 'blue')) score += 3;
+                    if (card.ability && card.ability.type === 'bolt' && !silencedHere && board.some(c => c && c.owner === enemy)) score += 3;
+                    score += personalityPlayBias(card, personality);
                     if (score > maxScore) {maxScore = score; bestMove = {cardIndex, cellIdx};}
                 });
             });
 
-            if (!bestMove) bestMove = {cardIndex: 0, cellIdx: emptyCells[0]};
-            executeAIMove(bestMove.cardIndex, bestMove.cellIdx);
+            return bestMove || {cardIndex: 0, cellIdx: emptyCells[0]};
+        }
+
+        function aiTurn() {
+            if (gameState !== 'playing' || silentSim) return;
+            const personality = isLeagueMatch() ? leagueMatch.oppId : null;
+            const move = pickAiMoveFor('red', currentMatchAiDifficulty(), personality);
+            if (!move) return;
+            executeAIMove(move.cardIndex, move.cellIdx);
         }
 
         function executeAIMove(cardIdx, cellIdx) {
-            sfx.place(); hideTooltip();
+            if (!silentSim) { sfx.place(); hideTooltip(); }
             const chosenCard = aiHand.splice(cardIdx, 1)[0];
             chosenCard.stats = [...chosenCard.baseStats];
             board[cellIdx] = chosenCard;
@@ -4540,8 +6188,10 @@
             }
             const blue = ownedCount('blue');
             const red = ownedCount('red');
-            blueEl.textContent = `Blue: ${blue}`;
-            redEl.textContent = `Red: ${red}`;
+            const blueName = isLeagueMatch() ? 'You' : 'Blue';
+            const redName = isLeagueMatch() ? leaguePlayer(leagueMatch.oppId).name : 'Red';
+            blueEl.textContent = `${blueName}: ${blue}`;
+            redEl.textContent = `${redName}: ${red}`;
             if (lastBlueScore !== null && blue !== lastBlueScore) {
                 blueEl.classList.remove('score-tick'); void blueEl.offsetWidth; blueEl.classList.add('score-tick');
             }
@@ -4560,12 +6210,18 @@
             board.forEach(c => { if (c) c.blastPreview = false; });
             let blueCount = ownedCount('blue'), redCount = ownedCount('red');
             stats.played++;
-            if (blueCount > redCount) {stats.wins++; stats.streak++; if (stats.streak > stats.bestStreak) stats.bestStreak = stats.streak; sfx.win(); logAction("Victory achieved!");}
-            else if (redCount > blueCount) {stats.losses++; stats.streak = 0; sfx.lose(); logAction("Defeat suffered.");}
-            else {stats.draws++; stats.streak = 0; sfx.click(); logAction("Match ended in a draw.");}
+            if (blueCount > redCount) {stats.wins++; stats.streak++; if (stats.streak > stats.bestStreak) stats.bestStreak = stats.streak; if (!silentSim) sfx.win(); logAction("Victory achieved!");}
+            else if (redCount > blueCount) {stats.losses++; stats.streak = 0; if (!silentSim) sfx.lose(); logAction("Defeat suffered.");}
+            else {stats.draws++; stats.streak = 0; if (!silentSim) sfx.click(); logAction("Match ended in a draw.");}
             saveStats();
+            if (isLeagueMatch()) recordUserLeagueResult(blueCount, redCount);
 
             let title = blueCount > redCount ? "Victory" : (redCount > blueCount ? "Defeat" : "Draw");
+            if (isLeagueMatch() && leagueMatch) {
+                const fx = league.fixtures[leagueMatch.fixtureIndex];
+                const gameN = (fx.games || []).length;
+                title = `Game ${gameN} · ${title}`;
+            }
             const card = document.querySelector('#gameover-modal .modal-content');
             if (card) {
                 card.classList.toggle('is-win', blueCount > redCount);
@@ -4574,7 +6230,64 @@
             document.getElementById('gameover-title').textContent = title;
             document.getElementById('gameover-blue').textContent = String(blueCount);
             document.getElementById('gameover-red').textContent = String(redCount);
-            syncShareButton();
+            const blueLabel = document.getElementById('gameover-blue-label');
+            const redLabel = document.getElementById('gameover-red-label');
+            if (blueLabel) blueLabel.textContent = isLeagueMatch() ? 'You' : 'Blue';
+            if (redLabel) redLabel.textContent = isLeagueMatch() ? leaguePlayer(leagueMatch.oppId).name : 'Red';
+            const casual = document.getElementById('gameover-casual-actions');
+            const leagueActs = document.getElementById('gameover-league-actions');
+            if (casual) {
+                casual.hidden = isLeagueMatch();
+                casual.classList.toggle('hidden', isLeagueMatch());
+            }
+            if (leagueActs) {
+                leagueActs.hidden = !isLeagueMatch();
+                leagueActs.classList.toggle('hidden', !isLeagueMatch());
+            }
+            const seriesEl = document.getElementById('gameover-series');
+            const nextBtn = document.getElementById('gameover-league-next');
+            if (seriesEl) {
+                if (isLeagueMatch() && leagueMatch) {
+                    const fx = league.fixtures[leagueMatch.fixtureIndex];
+                    const s = seriesGameWins(fx);
+                    const youIsHome = fx.home === 'you';
+                    const youG = youIsHome ? s.home : s.away;
+                    const oppG = youIsHome ? s.away : s.home;
+                    const done = seriesComplete(fx);
+                    const nextFirst = !done ? seriesNextFirst(fx) : null;
+                    const nextName = nextFirst === 'you' ? 'You' : leaguePlayer(leagueMatch.oppId).name;
+                    seriesEl.hidden = false;
+                    const weekBit = `Week ${fx.week}`;
+                    seriesEl.textContent = done
+                        ? (fx.result.winner === 'you'
+                            ? `${weekBit} series ${youG}–${oppG}. You take it.`
+                            : fx.result.winner === 'draw'
+                                ? `${weekBit} series ${youG}–${oppG}. Draw.`
+                                : `${weekBit} series ${youG}–${oppG}. ${leaguePlayer(leagueMatch.oppId).name} takes it.`)
+                        : `${weekBit} series ${youG}–${oppG}. Next: ${nextName} first.`;
+                } else {
+                    seriesEl.hidden = true;
+                    seriesEl.textContent = '';
+                }
+            }
+            if (nextBtn) {
+                const fx = isLeagueMatch() && leagueMatch ? league.fixtures[leagueMatch.fixtureIndex] : null;
+                const more = !!(fx && !seriesComplete(fx));
+                nextBtn.hidden = !more;
+                nextBtn.classList.toggle('hidden', !more);
+            }
+            if (isLeagueMatch()) {
+                const opp = leaguePlayer(leagueMatch.oppId);
+                const fx = league.fixtures[leagueMatch.fixtureIndex];
+                const done = seriesComplete(fx);
+                const gameBit = blueCount > redCount
+                    ? `You took ${opp.name} ${blueCount}–${redCount}`
+                    : redCount > blueCount
+                        ? `${opp.name} took you ${redCount}–${blueCount}`
+                        : `Draw ${blueCount}–${redCount} with ${opp.name}`;
+                statusMsg.textContent = done ? `Week done. ${gameBit}.` : `Game done. ${gameBit}.`;
+            }
+            if (!isLeagueMatch()) syncShareButton();
             lockGameoverClicks();
             document.getElementById('gameover-modal').classList.remove('hidden');
             render();
@@ -4606,12 +6319,13 @@
         window.addEventListener('pageshow', (e) => {
             if (!e.persisted) return;
             clearDraftTimer();
-            hideModals(['draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'battle-log-modal']);
+            hideModals(['draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'battle-log-modal', 'league-modal', 'league-roster']);
             if (gameState !== 'playing' && gameState !== 'gameover') showModeMenu();
         });
         window.addEventListener('keydown', (e) => {
             if (e.key !== 'Escape') return;
             if (tooltipPinned) {hideTooltip(); return;}
+            if (!document.getElementById('league-roster').classList.contains('hidden')) {closeLeagueRoster(); return;}
             if (!document.getElementById('battle-log-modal').classList.contains('hidden')) {closeBattleLogModal(); return;}
             if (!document.getElementById('expanded-rules-modal').classList.contains('hidden')) {closeRulesModal(); return;}
             if (!document.getElementById('compendium-modal').classList.contains('hidden')) {closeCompendiumModal(); return;}
@@ -4619,6 +6333,7 @@
             if (!document.getElementById('stats-modal').classList.contains('hidden')) {closeStatsModal(); return;}
             if (!document.getElementById('draft-modal').classList.contains('hidden')) {cancelDraft(); return;}
             if (!document.getElementById('deck-modal').classList.contains('hidden')) {cancelDeckPicker(); return;}
+            if (!document.getElementById('league-modal').classList.contains('hidden')) {leaveLeagueToMenu(); return;}
         });
     </script>
 </body>
