@@ -3709,7 +3709,6 @@
         let draftTimer = null;
         let aiPlayTimer = null;
         let blastPreviewTimer = null;
-        let turnBannerTimer = null;
         const shownStatValues = new Map();
         const pointerDrag = {pointerId: null, index: null, startX: 0, startY: 0, active: false, sourceEl: null, ghost: null};
         let swallowClick = false;
@@ -4897,17 +4896,8 @@
         }
 
         function hideTurnBanner() {
-            if (turnBannerTimer) {clearTimeout(turnBannerTimer); turnBannerTimer = null;}
             const banner = document.getElementById('turn-banner');
             if (banner) banner.classList.remove('show');
-        }
-
-        function scheduleTurnBanner(whose) {
-            hideTurnBanner();
-            turnBannerTimer = setTimeout(() => {
-                turnBannerTimer = null;
-                if (gameState === 'playing') showTurnBanner(whose);
-            }, 1100);
         }
 
         function onModalBackdrop(e, action) {
@@ -6715,7 +6705,7 @@
 
             if (board.every(cell => cell !== null)) {hideTurnBanner(); endGame(); return;}
 
-            if (!coach.active || coach.step === 'wait') scheduleTurnBanner(turn);
+            if (!coach.active || coach.step === 'wait') showTurnBanner(turn);
 
             if (turn === 'ai') scheduleAiTurn(700);
             else {
