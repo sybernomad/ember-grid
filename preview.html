@@ -452,6 +452,164 @@
                 linear-gradient(180deg, #f3e6d0, #e0cba8);
         }
 
+        body.grid-4,
+        body.grid-5 {
+            --grid-gap: 4px;
+            --board-pad: 6px;
+            --hand-min: 0;
+        }
+
+        body.grid-4 {
+            --font-main: 0.68rem;
+            --font-name: 0.4rem;
+            --nameplate-h: 18px;
+        }
+
+        body.grid-5 {
+            --font-main: 0.54rem;
+            --font-name: 0.32rem;
+            --nameplate-h: 15px;
+            --grid-gap: 3px;
+            --board-pad: 5px;
+        }
+
+        @media (min-width: 768px) {
+            body.grid-4 { --container-max: 680px; }
+            body.grid-5 { --container-max: 760px; }
+        }
+
+        body.grid-4 .grid,
+        body.grid-5 .grid {
+            width: 100%;
+            max-width: 100%;
+            gap: var(--grid-gap);
+            padding: var(--board-pad);
+            box-sizing: border-box;
+        }
+
+        body.grid-4 .grid {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            grid-template-rows: repeat(4, minmax(0, auto));
+            max-width: min(100%, 440px);
+        }
+
+        body.grid-5 .grid {
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            grid-template-rows: repeat(5, minmax(0, auto));
+            max-width: min(100%, 500px);
+        }
+
+        body.grid-4 .cell,
+        body.grid-5 .cell {
+            aspect-ratio: 4 / 5;
+            width: 100%;
+            height: auto;
+            min-width: 0;
+            min-height: 0;
+        }
+
+        body.grid-4 .cell .card,
+        body.grid-5 .cell .card {
+            width: 100%;
+            height: 100%;
+            max-width: none;
+        }
+
+        body.grid-4 .score-board { max-width: min(100%, 440px); }
+        body.grid-5 .score-board { max-width: min(100%, 500px); }
+
+        body.grid-4 .container,
+        body.grid-5 .container {
+            gap: 4px;
+            padding-top: 6px;
+            padding-bottom: 8px;
+        }
+
+        body.grid-4 .battlefield,
+        body.grid-5 .battlefield {
+            flex: 1 1 auto;
+            min-height: 0;
+            justify-content: center;
+            width: 100%;
+        }
+
+        body.grid-4 .score-pill,
+        body.grid-5 .score-pill {
+            font-size: 0.72rem;
+            padding: 2px 8px;
+        }
+
+        body.grid-4 .turn-indicator,
+        body.grid-5 .turn-indicator {
+            font-size: 0.68rem;
+            letter-spacing: 0.1em;
+        }
+
+        body.grid-4 .status-msg,
+        body.grid-5 .status-msg {
+            font-size: 0.74rem;
+            min-height: 0;
+        }
+
+        body.grid-5 .status-msg { font-size: 0.68rem; }
+
+        body.grid-4 .battle-log-link,
+        body.grid-5 .battle-log-link {
+            min-height: 22px;
+            font-size: 0.55rem;
+        }
+
+        body.grid-4 #top-area,
+        body.grid-4 #bottom-area,
+        body.grid-5 #top-area,
+        body.grid-5 #bottom-area {
+            width: 100%;
+        }
+
+        body.grid-4 .hand,
+        body.grid-5 .hand {
+            display: grid;
+            justify-content: center;
+            justify-items: center;
+            gap: 4px;
+            min-height: 0;
+            padding: 2px;
+        }
+
+        body.grid-4 .hand {
+            grid-template-columns: repeat(4, minmax(0, 78px));
+        }
+
+        body.grid-5 .hand {
+            grid-template-columns: repeat(5, minmax(0, 64px));
+        }
+
+        body.grid-4 .hand .card,
+        body.grid-5 .hand .card {
+            width: 100%;
+            max-width: none;
+            height: auto;
+            aspect-ratio: 4 / 5;
+        }
+
+        body.grid-4 .ability-badge {
+            font-size: 0.48rem;
+            padding: 2px 4px;
+        }
+
+        body.grid-5 .ability-badge {
+            top: 2px;
+            left: 2px;
+            font-size: 0.4rem;
+            padding: 1px 3px;
+        }
+
+        body.grid-5 .card-emoji {
+            width: 1.4em;
+            height: 1.4em;
+            font-size: 0.92em;
+        }
+
         .cell {
             background:
                 linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.18)),
@@ -1037,7 +1195,7 @@
             margin-bottom: 10px;
             font-size: 1.22rem;
             padding: 0 18px;
-            white-space: normal;
+            white-space: nowrap;
         }
 
         .modal-content h2,
@@ -1585,6 +1743,27 @@
             min-height: 0;
         }
 
+        #draft-modal.draft-dense .draft-grid {
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 5px;
+            margin: 6px 0 8px;
+        }
+
+        #draft-modal.draft-dense .draft-card {
+            width: min(100%, var(--draft-w));
+            max-width: 100%;
+            height: auto;
+            aspect-ratio: 4 / 5;
+            --nameplate-h: 18px;
+            --draft-font-main: 0.58rem;
+            --draft-font-name: 0.36rem;
+        }
+
+        #draft-modal.draft-dense .draft-order {
+            font-size: 0.78rem;
+            margin-bottom: 4px;
+        }
+
         .compendium-card,
         .draft-card {
             border-radius: 8px;
@@ -2110,14 +2289,6 @@
             text-align: left;
         }
 
-        .league-tag {
-            margin: 0 0 14px;
-            font-size: 0.82rem;
-            line-height: 1.45;
-            opacity: 0.78;
-            text-align: center;
-        }
-
         .league-crown {
             text-align: center;
             padding: 14px 12px 12px;
@@ -2148,8 +2319,8 @@
 
         .league-rivals {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 6px;
             margin: 0 0 14px;
         }
 
@@ -2161,6 +2332,18 @@
             background: rgba(0, 0, 0, 0.16);
             font-size: 0.68rem;
             line-height: 1.3;
+            width: 100%;
+            color: inherit;
+            font-family: inherit;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        .league-rival-chip:hover,
+        .league-rival-chip.is-open {
+            border-color: rgba(232, 163, 23, 0.7);
+            background: rgba(232, 163, 23, 0.12);
         }
 
         .league-rival-chip .who {
@@ -2171,6 +2354,9 @@
             text-transform: uppercase;
             font-weight: 800;
             margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .league-rival-chip .diff {
@@ -2215,6 +2401,14 @@
         .league-table tr.is-you td {
             color: var(--blue-card);
             font-weight: 700;
+        }
+
+        .league-table td.league-name {
+            cursor: pointer;
+        }
+
+        .league-table td.league-name:hover {
+            color: var(--gold);
         }
 
         .league-table tr.is-crown td:first-child {
@@ -2284,11 +2478,12 @@
             font-weight: 600;
         }
 
-        .league-lock {
-            margin: 0 0 12px;
-            font-size: 0.68rem;
-            opacity: 0.55;
-            text-align: center;
+        .league-series-line {
+            margin: -4px 0 12px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            opacity: 0.78;
         }
 
         .league-actions {
@@ -2349,17 +2544,28 @@
 
         .draft-seat {
             text-align: left;
-            padding: 7px 8px;
+            padding: 6px 8px;
             border-radius: 10px;
             border: 1px solid rgba(232, 195, 106, 0.18);
             font-size: 0.7rem;
             line-height: 1.25;
             background: rgba(0, 0, 0, 0.12);
+            width: 100%;
+            color: inherit;
+            font-family: inherit;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
         }
 
         .draft-seat.active {
             border-color: var(--gold);
             box-shadow: 0 0 0 1px rgba(232, 163, 23, 0.28);
+        }
+
+        .draft-seat:hover,
+        .draft-seat.is-open {
+            border-color: rgba(232, 163, 23, 0.7);
         }
 
         .draft-seat .seat-name {
@@ -2396,30 +2602,127 @@
         .draft-card.taken-vesper { box-shadow: inset 0 0 0 3px #a78bfa; }
         .draft-card.taken-rook { box-shadow: inset 0 0 0 3px #94a3b8; }
 
-        #draft-modal.league-draft .modal-content {
-            max-width: 620px;
-            height: min(86dvh, calc(100dvh - 24px));
+        #league-roster {
+            z-index: 125;
+        }
+
+        #league-roster .modal-content {
+            width: min(560px, 100%);
             max-height: min(86dvh, calc(100dvh - 24px));
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .league-roster-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin: 0 0 10px;
+            flex: 0 0 auto;
+        }
+
+        .league-roster-title {
+            margin: 0;
+            font-family: var(--font-display);
+            font-size: 0.92rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent);
+        }
+
+        .league-roster-bar .btn {
+            width: auto;
+            min-width: 84px;
+            padding: 7px 14px;
+            font-size: 0.72rem;
+            margin: 0;
+        }
+
+        .league-roster-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+            gap: 8px;
+            justify-items: center;
+            align-content: start;
+            overflow-x: hidden;
+            overflow-y: auto;
+            flex: 1 1 auto;
+            min-height: 0;
+            padding: 2px 0 4px;
+        }
+
+        .league-roster-grid .draft-card {
+            width: 100%;
+            max-width: 132px;
+            min-width: 0;
+            height: auto;
+            aspect-ratio: 4 / 5;
+            cursor: default;
+            pointer-events: auto;
+        }
+
+        .league-roster-empty {
+            margin: 18px 0 8px;
+            text-align: center;
+            opacity: 0.7;
+            font-size: 0.82rem;
+        }
+
+        #draft-modal.league-draft .modal-content {
+            max-width: 680px;
+            height: min(90dvh, calc(100dvh - 16px));
+            max-height: min(90dvh, calc(100dvh - 16px));
             overflow: hidden;
         }
 
+        #draft-modal.league-draft .modal-title {
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+
+        #draft-modal.league-draft .draft-order {
+            display: none;
+        }
+
         #draft-modal.league-draft .draft-grid {
+            --draft-gap: 6px;
             flex: 1 1 auto;
             min-height: 0;
-            overflow-x: hidden;
-            overflow-y: auto;
-            scrollbar-gutter: stable;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 6px;
-            align-content: start;
-            margin: 8px 0 6px;
+            overflow: hidden;
+            container-type: size;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            grid-template-rows: repeat(4, minmax(0, 1fr));
+            gap: var(--draft-gap);
+            align-content: stretch;
+            justify-items: center;
+            align-items: center;
+            margin: 6px 0 8px;
         }
 
         #draft-modal.league-draft .draft-card {
-            width: 100%;
-            max-width: none;
-            height: auto;
+            box-sizing: border-box;
             aspect-ratio: 4 / 5;
+            width: min(100%, calc((100cqh - 3 * var(--draft-gap)) / 4 * 4 / 5));
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+            min-width: 0;
+            min-height: 0;
+            overflow: hidden;
+            contain: layout paint;
+            --nameplate-h: 20px;
+            --draft-font-main: 0.62rem;
+            --draft-font-name: 0.4rem;
+        }
+
+        #draft-modal.league-draft .draft-card .card-emoji {
+            width: 1.45em;
+            height: 1.45em;
+            font-size: 1.05em;
         }
 
         #draft-modal.league-draft .draft-card:hover {
@@ -2429,19 +2732,16 @@
         #draft-modal.league-draft .draft-status {
             position: relative;
             z-index: 2;
-            min-height: 2.5em;
+            min-height: 0;
+            margin: 0 0 4px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        #draft-modal.league-draft .draft-order {
-            min-height: 2.6em;
-            flex: 0 0 auto;
-        }
-
         #draft-modal.league-draft .draft-seats {
             flex: 0 0 auto;
+            margin: 0 0 4px;
         }
 
         #draft-modal.league-draft .btn-dismiss {
@@ -2456,20 +2756,34 @@
             }
 
             #draft-modal.league-draft .modal-content {
-                max-width: min(620px, 100%);
-                height: min(86dvh, calc(100dvh - 24px));
-                max-height: min(86dvh, calc(100dvh - 24px));
+                max-width: min(680px, 100%);
+                height: min(90dvh, calc(100dvh - 16px));
+                max-height: min(90dvh, calc(100dvh - 16px));
             }
 
             #draft-modal.league-draft .draft-grid {
-                grid-template-columns: repeat(4, 1fr);
+                --draft-gap: 5px;
+                grid-template-columns: repeat(5, minmax(0, 1fr));
+                grid-template-rows: repeat(4, minmax(0, 1fr));
             }
 
             #draft-modal.league-draft .draft-card {
-                width: 100%;
-                max-width: none;
-                height: auto;
                 aspect-ratio: 4 / 5;
+                width: min(100%, calc((100cqh - 3 * var(--draft-gap)) / 4 * 4 / 5));
+                height: auto;
+                max-width: 100%;
+                min-width: 0;
+            }
+
+            .league-roster-grid {
+                grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
+                gap: 6px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .league-rivals {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
             }
         }
     </style>
@@ -2550,7 +2864,7 @@
 
             <div class="menu-section-title">Core Rules</div>
             <div class="rules-compact">
-                <strong>🃏 The deck:</strong> Cards are dealt or drafted from a shared deck - the Base Set, 50 cards. Tribe Decks play one tribe of five. Every Ember card has an ability.<br>
+                <strong>🃏 The deck:</strong> Cards are dealt or drafted from a shared deck - the Base Set, 50 cards. Tribe Decks play one tribe of five. Every Ember card has an ability. Options can open a 4x4 or 5x5 table.<br>
                 <strong>⚔️ Capture:</strong> Play a card from your hand next to an enemy. If your touching stat is higher,
                 you capture it.<br>
                 <strong>🏆 Victory:</strong> <span id="victory-compact">Fill the 3x3. Most cards on the board wins. Leftover in hand does not count.</span>
@@ -2589,7 +2903,7 @@
             </details>
             <div class="menu-foot">
                 <!-- Bump BUILD on every PR. Still pre-1.0, so this stays Alpha until 1.0 ships. -->
-                <p class="build-stamp">0.29 Alpha</p>
+                <p class="build-stamp">0.31 Alpha</p>
                 <p class="dev-note">Still in active development. Cards and rules may change.</p>
             </div>
         </div>
@@ -2605,16 +2919,16 @@
             <div class="menu-section-title" style="margin-top: 0;">The table</div>
             <div class="expanded-rules-list">
                 <div class="rule-detail-item">
-                    <strong>The deck:</strong> The Base Set is 50 cards in ten tribes. Every Ember card has an ability. Shuffle it and deal two hands of five, or spread sixteen and draft until each hand is five.
+                    <strong>The deck:</strong> The Base Set is 50 cards in ten tribes. Every Ember card has an ability. Shuffle and deal, or draft, to fill the grid size in Options. Default is 3x3 / five each. 4x4 deals eight. 5x5 deals thirteen. Tribe Decks stay one tribe of five on 3x3.
                 </div>
                 <div class="rule-detail-item">
-                    <strong>League:</strong> You plus three named AI. Snake-draft twenty cards (five each), then a three-week round-robin. You play each rival once. Their matches resolve with the same engine and land on the table. Standings break ties by match wins, then combined board score. Leftover and Ember/Classic lock at season start. AI is Normal or Hard — no Easy farms. Backing out saves the season.
+                    <strong>League:</strong> You plus three named AI. Snake-draft twenty cards (five each), then a six-week double round-robin. You play each rival twice. Each meeting is best of three, and first player swaps so both get an opener. Their series resolve with the same engine and land on the table. Standings break ties by series wins, then game wins, then combined board score. Leftover and Ember/Classic lock at season start. All three AI use the Options difficulty. Backing out saves the season.
                 </div>
                 <div class="rule-detail-item">
                     <strong>Tribe Decks:</strong> Each deck is one tribe of five. Pick yours and the opponent's, or leave either one random. Same tribe on both sides is a mirror match.
                 </div>
                 <div class="rule-detail-item">
-                    <strong>Placement:</strong> On your turn, play one card from your hand onto an empty cell of the 3x3 grid.
+                    <strong>Placement:</strong> <span id="placement-rules">On your turn, play one card from your hand onto an empty cell of the 3x3 grid.</span>
                 </div>
                 <div class="rule-detail-item">
                     <strong>Capturing:</strong> When your card touches an enemy card, compare touching values (Top,
@@ -2699,6 +3013,17 @@
                     <option value="hard">Hard</option>
                 </select>
             </div>
+            <div class="settings-stack">
+                <span>Grid</span>
+                <select id="grid-size-select" class="settings-select settings-select-full" onchange="updatePreferredGrid(this.value)">
+                    <option value="3" selected>3×3 · five each</option>
+                    <option value="4">4×4 · eight each</option>
+                    <option value="5">5×5 · thirteen each</option>
+                </select>
+            </div>
+            <div id="grid-size-desc" class="ruleset-desc-box">
+                Default 3×3. Deal Hands and Draft Hands use this size. League and Tribe Decks stay 3×3.
+            </div>
             <label class="settings-row" for="open-hands-check">
                 <span>Show Hands</span>
                 <input type="checkbox" id="open-hands-check" class="settings-check" onchange="updateOpenHands(this.checked)">
@@ -2711,7 +3036,7 @@
                 <strong>Off (default):</strong> Only the board counts. Unplayed cards are choices, not points.
             </div>
             <p id="league-options-note" class="ruleset-desc-box" hidden>
-                An Ember League is in progress. That season already locked leftover and Ember/Classic. Casual games still use these knobs.
+                An Ember League is in progress. Leftover and Ember/Classic are locked for that season. Ash, Vesper, and Rook all use the AI difficulty set here.
             </p>
 
             <button class="btn btn-alt btn-dismiss" onclick="closeOptionsModal()">Close</button>
@@ -2757,7 +3082,7 @@
         <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="modal-content" onclick="event.stopPropagation()">
             <button type="button" class="modal-close" onclick="cancelDraft()" aria-label="Cancel draft"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
-            <h2 id="draft-title" class="modal-title" style="color: var(--blue-card);">Draft Hands</h2>
+            <h2 id="draft-title" class="modal-title">Draft Hands</h2>
             <p id="draft-order" class="draft-order">Sixteen cards from the deck. Snake order: 1 pick, then pairs of 2, until each hand is five.</p>
             <p id="draft-status" class="draft-status"></p>
             <div class="draft-seats hidden" id="draft-seats"></div>
@@ -2773,7 +3098,7 @@
         <div class="modal-content" onclick="event.stopPropagation()">
             <button type="button" class="modal-close" onclick="cancelDeckPicker()" aria-label="Cancel deck pick"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
             <h2 class="modal-title">Tribe Decks</h2>
-            <p class="draft-order">Each deck is one tribe of five. Pick yours and the opponent's, or leave either one random.</p>
+            <p class="draft-order">Each deck is one tribe of five on the 3×3 table. Pick yours and the opponent's, or leave either one random.</p>
             <div class="menu-section-title" style="margin-top: 8px;">Your deck</div>
             <div id="deck-you-picks" class="deck-picks"></div>
             <div class="menu-section-title">Opponent</div>
@@ -2801,8 +3126,10 @@
                     <button type="button" class="btn btn-alt" id="match-share-btn" onclick="shareCurrentMatch()">Share</button>
                 </div>
             </div>
+            <p id="gameover-series" class="league-series-line" hidden></p>
             <div class="gameover-actions" id="gameover-league-actions" hidden>
-                <button class="btn" onclick="openLeagueHubFromGameover()">League table</button>
+                <button class="btn" id="gameover-league-next" hidden onclick="playNextLeagueMatch()">Next Game</button>
+                <button class="btn btn-alt" id="gameover-league-table" onclick="openLeagueHubFromGameover()">League Table</button>
             </div>
             <div class="gameover-links">
                 <button type="button" class="gameover-link" onclick="viewFinalBoard()">View board</button>
@@ -2830,8 +3157,19 @@
         <div class="modal-content" onclick="event.stopPropagation()">
             <button type="button" class="modal-close" onclick="leaveLeagueToMenu()" aria-label="Close league"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
             <h2 class="modal-title">Ember League</h2>
-            <p class="league-tag" id="league-tag">You plus three AI. Snake-draft twenty, then three weeks. Everyone plays everyone.</p>
             <div id="league-hub"></div>
+        </div>
+    </div>
+
+    <div id="league-roster" class="modal modal-ember hidden" onclick="onModalBackdrop(event, closeLeagueRoster)">
+        <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="league-roster-bar">
+                <p class="league-roster-title" id="league-roster-title">Deck</p>
+                <button type="button" class="btn btn-alt" onclick="closeLeagueRoster()">Back</button>
+            </div>
+            <div class="league-roster-grid" id="league-roster-grid"></div>
+            <p class="league-roster-empty" id="league-roster-empty" hidden>No cards yet.</p>
         </div>
     </div>
 
@@ -3145,6 +3483,41 @@
         let showBothHands = localStorage.getItem('ember_grid_open_hands') === 'true';
         let leftoverScores = localStorage.getItem('ember_grid_leftover') === 'true';
         let leftoverThisMatch = leftoverScores;
+        const GRID_PRESETS = {
+            3: {size: 3, hand: 5, draftPool: 16},
+            4: {size: 4, hand: 8, draftPool: 16},
+            5: {size: 5, hand: 13, draftPool: 26}
+        };
+        function loadPreferredGrid() {
+            const n = parseInt(localStorage.getItem('ember_grid_size') || '3', 10);
+            return GRID_PRESETS[n] ? n : 3;
+        }
+        let preferredGridSize = loadPreferredGrid();
+        let gridSize = 3;
+        function cellCount() { return gridSize * gridSize; }
+        function matchHandSize() { return GRID_PRESETS[gridSize].hand; }
+        function matchDraftPoolSize() { return GRID_PRESETS[gridSize].draftPool; }
+        function applyGridSize(n) {
+            gridSize = GRID_PRESETS[n] ? n : 3;
+            document.body.classList.toggle('grid-4', gridSize === 4);
+            document.body.classList.toggle('grid-5', gridSize === 5);
+        }
+        function snakeSeq2(starter, n) {
+            const other = starter === 'player' ? 'ai' : 'player';
+            const seq = [starter];
+            let who = other;
+            let left = n * 2 - 1;
+            while (left > 0) {
+                const take = Math.min(2, left);
+                for (let i = 0; i < take; i++) seq.push(who);
+                left -= take;
+                who = who === starter ? other : starter;
+            }
+            return seq;
+        }
+        function currentSnakeSeq() {
+            return leagueDrafting ? leagueDraftSeq : snakeSeq2(draftStarter, matchHandSize());
+        }
         let currentRuleset = 'ember';
         let deckPicks = loadDeckPicks();
         let resolvedDecks = {player: null, ai: null};
@@ -3161,18 +3534,16 @@
         let gameoverClickLock = false;
         let gameoverUnlockTimer = null;
         let coach = { active: false, step: null, cellIndex: 4, pendingCapture: false, taughtHand: false };
-        const SNAKE_SEQ = (starter) => {
-            const other = starter === 'player' ? 'ai' : 'player';
-            return [starter, other, other, starter, starter, other, other, starter, starter, other];
-        };
+        const SNAKE_SEQ = (starter) => snakeSeq2(starter, matchHandSize());
 
         const LEAGUE_KEY = 'ember_grid_league';
         const LEAGUE_CROWNS_KEY = 'ember_grid_league_crowns';
         const LEAGUE_RIVALS = [
-            {id: 'ash', name: 'Ash', icon: '🕯️', difficulty: 'normal', style: 'Kindling. Blast, Buff, Cinder.'},
-            {id: 'vesper', name: 'Vesper', icon: '🌙', difficulty: 'normal', style: 'Quiet edges. Chill, Silence, Poison.'},
-            {id: 'rook', name: 'Rook', icon: '♟️', difficulty: 'hard', style: 'Takes the strongest card. Hard.'}
+            {id: 'ash', name: 'Ash', icon: '🕯️', style: 'Kindling. Blast, Buff, Cinder.'},
+            {id: 'vesper', name: 'Vesper', icon: '🌙', style: 'Quiet edges. Chill, Silence, Poison.'},
+            {id: 'rook', name: 'Rook', icon: '♟️', style: 'Takes the strongest card.'}
         ];
+        const LEAGUE_HAND_SIZE = 5;
         let league = loadLeague();
         let leagueCrowns = loadLeagueCrowns();
         let leagueMatch = null;
@@ -3182,10 +3553,11 @@
         let silentSim = false;
         let cloneRulesetOverride = null;
         let leagueHubConfirm = null;
+        let leagueRosterSeat = null;
 
         function snakeSeq4(order) {
             const seq = [];
-            for (let round = 0; round < 5; round++) {
+            for (let round = 0; round < LEAGUE_HAND_SIZE; round++) {
                 const row = round % 2 === 0 ? order : order.slice().reverse();
                 seq.push(...row);
             }
@@ -3193,7 +3565,7 @@
         }
 
         function youSeat() {
-            return {id: 'you', name: 'You', icon: '⚔️', difficulty: null, style: 'The human at the table.'};
+            return {id: 'you', name: 'You', icon: '⚔️', style: 'The human at the table.'};
         }
 
         function loadLeagueCrowns() {
@@ -3219,6 +3591,128 @@
             return id === 'you' || LEAGUE_RIVALS.some(r => r.id === id);
         }
 
+        function leagueAiDifficulty() {
+            return aiDifficulty === 'easy' || aiDifficulty === 'hard' ? aiDifficulty : 'normal';
+        }
+
+        function makeLeaguePairings() {
+            const first = [];
+            const arr = ['you', 'ash', 'vesper', 'rook'];
+            for (let week = 1; week <= 3; week++) {
+                first.push({week, home: arr[0], away: arr[3]});
+                first.push({week, home: arr[1], away: arr[2]});
+                const last = arr[3];
+                for (let i = 3; i > 1; i--) arr[i] = arr[i - 1];
+                arr[1] = last;
+            }
+            return first;
+        }
+
+        function emptyLeagueFixture(week, home, away, seriesFirst) {
+            return {week, home, away, seriesFirst, games: [], result: null};
+        }
+
+        function makeLeagueFixtures() {
+            const first = makeLeaguePairings();
+            const fixtures = first.map(p => emptyLeagueFixture(p.week, p.home, p.away, p.home));
+            first.forEach(p => fixtures.push(emptyLeagueFixture(p.week + 3, p.home, p.away, p.away)));
+            return fixtures;
+        }
+
+        function sanitizeLeagueGame(g, fallbackFirst) {
+            if (!g || typeof g !== 'object') return null;
+            return {
+                homeScore: Number(g.homeScore) || 0,
+                awayScore: Number(g.awayScore) || 0,
+                winner: g.winner === 'draw' || isLeagueSeat(g.winner) ? g.winner : 'draw',
+                first: isLeagueSeat(g.first) ? g.first : fallbackFirst
+            };
+        }
+
+        function seriesGameWins(fx) {
+            const games = (fx && fx.games) || [];
+            let home = 0, away = 0, draws = 0, homePf = 0, awayPf = 0;
+            games.forEach(g => {
+                homePf += Number(g.homeScore) || 0;
+                awayPf += Number(g.awayScore) || 0;
+                if (g.winner === fx.home) home++;
+                else if (g.winner === fx.away) away++;
+                else draws++;
+            });
+            return {home, away, draws, played: games.length, homePf, awayPf};
+        }
+
+        function seriesComplete(fx) {
+            if (!fx) return false;
+            if (fx.result) return true;
+            const s = seriesGameWins(fx);
+            return s.home >= 2 || s.away >= 2 || s.played >= 3;
+        }
+
+        function seriesNextFirst(fx) {
+            const n = ((fx && fx.games) || []).length;
+            const seriesFirst = (fx && isLeagueSeat(fx.seriesFirst)) ? fx.seriesFirst : (fx ? fx.home : 'you');
+            const other = fx && seriesFirst === fx.home ? fx.away : (fx ? fx.home : 'you');
+            return n === 1 ? other : seriesFirst;
+        }
+
+        function finalizeSeries(fx) {
+            const s = seriesGameWins(fx);
+            let winner = 'draw';
+            if (s.home > s.away) winner = fx.home;
+            else if (s.away > s.home) winner = fx.away;
+            else if (s.homePf > s.awayPf) winner = fx.home;
+            else if (s.awayPf > s.homePf) winner = fx.away;
+            fx.result = {
+                homeScore: s.homePf,
+                awayScore: s.awayPf,
+                homeGames: s.home,
+                awayGames: s.away,
+                winner
+            };
+            return fx;
+        }
+
+        function normalizeLeagueFixture(rawFx, fallback) {
+            const home = rawFx && isLeagueSeat(rawFx.home) ? rawFx.home : fallback.home;
+            const away = rawFx && isLeagueSeat(rawFx.away) ? rawFx.away : fallback.away;
+            const seriesFirst = rawFx && isLeagueSeat(rawFx.seriesFirst)
+                ? rawFx.seriesFirst
+                : (rawFx && isLeagueSeat(rawFx.first) ? rawFx.first : fallback.seriesFirst);
+            const games = [];
+            const legacySingle = !!(rawFx && rawFx.result && typeof rawFx.result === 'object' && (!Array.isArray(rawFx.games) || !rawFx.games.length));
+            if (rawFx && Array.isArray(rawFx.games) && rawFx.games.length) {
+                rawFx.games.forEach(g => {
+                    const sg = sanitizeLeagueGame(g, seriesFirst);
+                    if (sg) games.push(sg);
+                });
+            } else if (legacySingle) {
+                games.push({
+                    homeScore: Number(rawFx.result.homeScore) || 0,
+                    awayScore: Number(rawFx.result.awayScore) || 0,
+                    winner: rawFx.result.winner === 'draw' || isLeagueSeat(rawFx.result.winner) ? rawFx.result.winner : 'draw',
+                    first: seriesFirst
+                });
+            }
+            const fx = {week: fallback.week, home, away, seriesFirst, games, result: null};
+            if (legacySingle || seriesComplete(fx)) finalizeSeries(fx);
+            return fx;
+        }
+
+        function migrateLeagueFixtures(rawFx) {
+            const template = makeLeagueFixtures();
+            if (!Array.isArray(rawFx) || !rawFx.length) return template;
+            if (rawFx.length === 12) {
+                return template.map((t, i) => normalizeLeagueFixture(rawFx[i], t));
+            }
+            return template.map(t => {
+                if (t.week > 3) return t;
+                const old = rawFx.find(fx => fx && fx.week === t.week && fx.home === t.home && fx.away === t.away)
+                    || rawFx.find(fx => fx && fx.week === t.week && ((fx.home === t.home && fx.away === t.away) || (fx.home === t.away && fx.away === t.home)));
+                return normalizeLeagueFixture(old, t);
+            });
+        }
+
         function sanitizeLeague(raw) {
             if (!raw || typeof raw !== 'object') return null;
             if (!['draft', 'season', 'complete'].includes(raw.phase)) return null;
@@ -3232,44 +3726,28 @@
                 hands[id] = list;
             }
             if (raw.phase !== 'draft') {
-                if (ids.some(id => hands[id].length !== 5)) return null;
+                if (ids.some(id => hands[id].length !== LEAGUE_HAND_SIZE)) return null;
             }
             if (!Array.isArray(raw.draftOrder) || raw.draftOrder.length !== 4) return null;
             if (!raw.draftOrder.every(isLeagueSeat)) return null;
             const pool = Array.isArray(raw.pool) ? raw.pool.filter(c => c && c.id && (c.draftedBy === null || isLeagueSeat(c.draftedBy))) : [];
-            if (raw.phase === 'draft' && pool.length !== 20) return null;
-            let fixtures = Array.isArray(raw.fixtures) ? raw.fixtures : [];
-            if (raw.phase !== 'draft' && fixtures.length !== 6) return null;
-            fixtures = fixtures.map(fx => {
-                if (!fx || !isLeagueSeat(fx.home) || !isLeagueSeat(fx.away)) return null;
-                const result = fx.result && typeof fx.result === 'object'
-                    ? {
-                        homeScore: Number(fx.result.homeScore) || 0,
-                        awayScore: Number(fx.result.awayScore) || 0,
-                        winner: fx.result.winner === 'draw' || isLeagueSeat(fx.result.winner) ? fx.result.winner : 'draw'
-                    }
-                    : null;
-                return {
-                    week: Number(fx.week) || 1,
-                    home: fx.home,
-                    away: fx.away,
-                    first: isLeagueSeat(fx.first) ? fx.first : fx.home,
-                    auto: !!(fx.home !== 'you' && fx.away !== 'you'),
-                    result
-                };
-            }).filter(Boolean);
-            if (raw.phase !== 'draft' && fixtures.length !== 6) return null;
+            if (raw.phase === 'draft' && pool.length !== LEAGUE_HAND_SIZE * 4) return null;
+            let fixtures = raw.phase === 'draft' ? [] : migrateLeagueFixtures(Array.isArray(raw.fixtures) ? raw.fixtures : []);
+            if (raw.phase !== 'draft' && fixtures.length !== 12) return null;
             if (raw.phase === 'season') {
                 const userWeeks = new Set(
-                    fixtures.filter(fx => fx.result && (fx.home === 'you' || fx.away === 'you')).map(fx => fx.week)
+                    fixtures.filter(fx => seriesComplete(fx) && (fx.home === 'you' || fx.away === 'you')).map(fx => fx.week)
                 );
                 fixtures.forEach(fx => {
                     if (fx.home === 'you' || fx.away === 'you') return;
-                    if (fx.result && !userWeeks.has(fx.week)) fx.result = null;
+                    if ((fx.result || (fx.games && fx.games.length)) && !userWeeks.has(fx.week)) {
+                        fx.games = [];
+                        fx.result = null;
+                    }
                 });
             }
             return {
-                version: 1,
+                version: 2,
                 phase: raw.phase,
                 createdAt: raw.createdAt || Date.now(),
                 ruleset: raw.ruleset === 'classic' ? 'classic' : 'ember',
@@ -3306,6 +3784,7 @@
             leagueDrafting = false;
             leagueHubConfirm = null;
             cloneRulesetOverride = null;
+            closeLeagueRoster();
             saveLeague();
         }
 
@@ -3317,6 +3796,81 @@
         function leagueLabel(id) {
             const p = leaguePlayer(id);
             return `${p.icon} ${p.name}`;
+        }
+
+        function leagueTakeLine(id, object) {
+            if (id === 'you') return `You take the ${object}`;
+            return `${leaguePlayer(id).name} takes the ${object}`;
+        }
+
+        function leagueSeatCards(seatId) {
+            if (leagueDrafting) return (leagueHandsLive[seatId] || []).slice();
+            if (!league || !league.hands) return [];
+            const ids = league.hands[seatId] || [];
+            return ids.map(id => {
+                const master = masterCards.find(c => c.id === id);
+                return master ? cloneCard(master, {}, league.ruleset) : null;
+            }).filter(Boolean);
+        }
+
+        function draftCardFaceHTML(card) {
+            return `
+                ${card.ability ? `<div class="ability-badge">${card.ability.icon}</div>` : ''}
+                <div class="stat-top">${formatStat(card.baseStats[0])}</div>
+                <div class="stat-right">${formatStat(card.baseStats[1])}</div>
+                <div class="stat-bottom">${formatStat(card.baseStats[2])}</div>
+                <div class="stat-left">${formatStat(card.baseStats[3])}</div>
+                <div class="card-emoji">${card.emoji}</div>
+                ${nameplateHTML(card)}
+            `;
+        }
+
+        function fillLeagueRoster(seatId) {
+            const grid = document.getElementById('league-roster-grid');
+            const empty = document.getElementById('league-roster-empty');
+            const title = document.getElementById('league-roster-title');
+            if (!grid || !empty || !title) return;
+            const p = leaguePlayer(seatId);
+            const cards = leagueSeatCards(seatId);
+            title.textContent = `${p.icon} ${p.name}`;
+            grid.innerHTML = '';
+            cards.forEach(card => {
+                const el = document.createElement('div');
+                el.className = 'draft-card';
+                el.innerHTML = draftCardFaceHTML(card);
+                addTooltipListeners(el, abilityTip(card));
+                paintCardFaces(el);
+                grid.appendChild(el);
+            });
+            empty.hidden = cards.length > 0;
+            grid.hidden = cards.length === 0;
+        }
+
+        function openLeagueRoster(seatId) {
+            if (!isLeagueSeat(seatId)) return;
+            sfx.click(); hideTooltip();
+            if (leagueRosterSeat === seatId && !document.getElementById('league-roster').classList.contains('hidden')) {
+                closeLeagueRoster();
+                return;
+            }
+            leagueRosterSeat = seatId;
+            fillLeagueRoster(seatId);
+            document.getElementById('league-roster').classList.remove('hidden');
+            if (leagueDrafting) renderLeagueDraftSeats();
+            else if (league) {
+                document.querySelectorAll('.league-rival-chip').forEach(el => {
+                    el.classList.toggle('is-open', el.getAttribute('data-seat') === seatId);
+                });
+            }
+        }
+
+        function closeLeagueRoster() {
+            const el = document.getElementById('league-roster');
+            if (el) el.classList.add('hidden');
+            leagueRosterSeat = null;
+            hideTooltip();
+            if (leagueDrafting) renderLeagueDraftSeats();
+            document.querySelectorAll('.league-rival-chip.is-open').forEach(chip => chip.classList.remove('is-open'));
         }
 
         function isLeagueActive() {
@@ -3336,37 +3890,10 @@
             return arr;
         }
 
-        function makeLeagueFixtures() {
-            const arr = ['you', 'ash', 'vesper', 'rook'];
-            const fixtures = [];
-            for (let week = 1; week <= 3; week++) {
-                fixtures.push({
-                    week,
-                    home: arr[0],
-                    away: arr[3],
-                    first: Math.random() < 0.5 ? arr[0] : arr[3],
-                    auto: false,
-                    result: null
-                });
-                fixtures.push({
-                    week,
-                    home: arr[1],
-                    away: arr[2],
-                    first: Math.random() < 0.5 ? arr[1] : arr[2],
-                    auto: true,
-                    result: null
-                });
-                const last = arr[3];
-                for (let i = 3; i > 1; i--) arr[i] = arr[i - 1];
-                arr[1] = last;
-            }
-            return fixtures;
-        }
-
         function createLeague() {
             const order = shuffleCopy(['you', 'ash', 'vesper', 'rook']);
             return {
-                version: 1,
+                version: 2,
                 phase: 'draft',
                 createdAt: Date.now(),
                 ruleset: currentRuleset === 'classic' ? 'classic' : 'ember',
@@ -3374,7 +3901,7 @@
                 players: [youSeat(), ...LEAGUE_RIVALS],
                 draftOrder: order,
                 draftPickIndex: 0,
-                pool: shuffleCopy(masterCards).slice(0, 20).map(c => ({id: c.id, draftedBy: null})),
+                pool: shuffleCopy(masterCards).slice(0, LEAGUE_HAND_SIZE * 4).map(c => ({id: c.id, draftedBy: null})),
                 hands: {you: [], ash: [], vesper: [], rook: []},
                 fixtures: [],
                 recap: '',
@@ -3408,6 +3935,7 @@
         }
 
         function startNewLeague(fromMenu) {
+            applyGridSize(3);
             hideModal('league-modal');
             leagueHubConfirm = null;
             league = createLeague();
@@ -3452,6 +3980,7 @@
 
         function leaveLeagueToMenu() {
             sfx.click(); hideTooltip();
+            closeLeagueRoster();
             if (league && league.phase === 'draft') persistLeagueDraft();
             saveLeague();
             hideModal('league-modal');
@@ -3480,7 +4009,7 @@
                 if (entry.draftedBy && leagueHandsLive[entry.draftedBy]) leagueHandsLive[entry.draftedBy].push(card);
                 return card;
             }).filter(Boolean);
-            draftPickIndex = Math.min(league.draftPickIndex || 0, 19);
+            draftPickIndex = Math.min(league.draftPickIndex || 0, LEAGUE_HAND_SIZE * 4 - 1);
             leagueDraftSeq = snakeSeq4(league.draftOrder);
             draftTurn = leagueDraftSeq[draftPickIndex];
             leagueDrafting = true;
@@ -3488,10 +4017,11 @@
 
         function startLeagueDraft() {
             hideTooltip();
+            applyGridSize(3);
             hideModals(['main-menu-modal', 'league-modal', 'deck-modal', 'gameover-modal', 'battle-log-modal']);
             document.body.classList.add('menu-open');
             hydrateLeagueDraft();
-            const draftedOut = ['you', 'ash', 'vesper', 'rook'].every(id => (leagueHandsLive[id] || []).length >= 5);
+            const draftedOut = ['you', 'ash', 'vesper', 'rook'].every(id => (leagueHandsLive[id] || []).length >= LEAGUE_HAND_SIZE);
             if (draftedOut) {
                 finishLeagueDraft();
                 return;
@@ -3514,15 +4044,21 @@
             const seats = document.getElementById('draft-seats');
             const rosters = document.getElementById('draft-rosters');
             modal.classList.toggle('league-draft', !!isLeague);
+            modal.classList.toggle('draft-dense', !isLeague && preferredGridSize === 5);
             if (isLeague) {
                 title.textContent = 'League Draft';
-                order.textContent = 'Twenty cards. Snake among four. Five each. No Tribe Decks.';
-                cancel.textContent = 'Save & leave';
+                order.hidden = true;
+                cancel.textContent = 'Save & Leave';
                 seats.classList.remove('hidden');
                 rosters.classList.add('hidden');
             } else {
+                const hand = matchHandSize();
+                const pool = matchDraftPoolSize();
                 title.textContent = 'Draft Hands';
-                order.textContent = 'Sixteen cards from the deck. Snake order: 1 pick, then pairs of 2, until each hand is five.';
+                order.hidden = false;
+                order.textContent = pool === 16 && hand === 5
+                    ? 'Sixteen cards from the deck. Snake order: 1 pick, then pairs of 2, until each hand is five.'
+                    : `${pool === 16 ? 'Sixteen' : 'Twenty-six'} cards. Snake until each hand is ${hand === 8 ? 'eight' : 'thirteen'}.`;
                 cancel.textContent = 'Cancel Draft';
                 seats.classList.add('hidden');
                 rosters.classList.remove('hidden');
@@ -3536,12 +4072,19 @@
             ['you', 'ash', 'vesper', 'rook'].forEach(id => {
                 const p = leaguePlayer(id);
                 const hand = leagueHandsLive[id] || [];
-                const el = document.createElement('div');
-                el.className = 'draft-seat' + (draftTurn === id ? ' active' : '');
+                const el = document.createElement('button');
+                el.type = 'button';
+                el.className = 'draft-seat' + (draftTurn === id ? ' active' : '') + (leagueRosterSeat === id ? ' is-open' : '');
                 const last = hand.length ? hand[hand.length - 1].name : '—';
-                el.innerHTML = `<div class="seat-name">${p.icon} ${p.name} · ${hand.length}/5</div><div class="seat-picks">${hand.length ? last : 'waiting'}</div>`;
+                el.innerHTML = `<div class="seat-name">${p.icon} ${p.name} · ${hand.length}/${LEAGUE_HAND_SIZE}</div><div class="seat-picks">${hand.length ? last : 'waiting'}</div>`;
+                el.title = `View ${p.name === 'You' ? 'your' : p.name + "'s"} cards`;
+                el.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openLeagueRoster(id);
+                });
                 seats.appendChild(el);
             });
+            if (leagueRosterSeat) fillLeagueRoster(leagueRosterSeat);
         }
 
         function leagueDraftScore(card, playerId) {
@@ -3576,8 +4119,9 @@
             league.pool = draftPool.map(c => ({id: c.id, draftedBy: c.draftedBy || null}));
             league.fixtures = makeLeagueFixtures();
             league.phase = 'season';
-            league.draftPickIndex = 20;
+            league.draftPickIndex = LEAGUE_HAND_SIZE * 4;
             leagueDrafting = false;
+            closeLeagueRoster();
             saveLeague();
             hideModal('draft-modal');
             setupDraftChrome(false);
@@ -3587,43 +4131,51 @@
 
         function nextUserFixture() {
             if (!league) return null;
-            return league.fixtures.find(fx => !fx.result && (fx.home === 'you' || fx.away === 'you')) || null;
+            return league.fixtures.find(fx => !seriesComplete(fx) && (fx.home === 'you' || fx.away === 'you')) || null;
         }
 
         function nextUserFixtureIndex() {
             if (!league) return -1;
-            return league.fixtures.findIndex(fx => !fx.result && (fx.home === 'you' || fx.away === 'you'));
+            return league.fixtures.findIndex(fx => !seriesComplete(fx) && (fx.home === 'you' || fx.away === 'you'));
         }
 
         function currentLeagueWeek() {
             const next = nextUserFixture();
-            if (!next) return 4;
+            if (!next) return 7;
             return next.week;
         }
 
         function leagueStandings() {
             const rows = league.players.map(p => ({
-                id: p.id, name: p.name, icon: p.icon, w: 0, l: 0, d: 0, pf: 0, pa: 0, played: 0
+                id: p.id, name: p.name, icon: p.icon, w: 0, l: 0, d: 0, gw: 0, gl: 0, pf: 0, pa: 0, played: 0
             }));
             const byId = Object.fromEntries(rows.map(r => [r.id, r]));
             league.fixtures.forEach(fx => {
                 if (!fx.result) return;
+                const s = seriesGameWins(fx);
                 const h = byId[fx.home], a = byId[fx.away];
                 if (!h || !a) return;
-                h.pf += fx.result.homeScore; h.pa += fx.result.awayScore; h.played++;
-                a.pf += fx.result.awayScore; a.pa += fx.result.homeScore; a.played++;
+                h.pf += s.homePf; h.pa += s.awayPf; h.played++;
+                a.pf += s.awayPf; a.pa += s.homePf; a.played++;
+                h.gw += s.home; h.gl += s.away;
+                a.gw += s.away; a.gl += s.home;
                 if (fx.result.winner === 'draw') { h.d++; a.d++; }
                 else if (fx.result.winner === fx.home) { h.w++; a.l++; }
                 else { a.w++; h.l++; }
             });
             const h2h = (a, b) => {
-                const fx = league.fixtures.find(f => f.result && ((f.home === a && f.away === b) || (f.home === b && f.away === a)));
-                if (!fx || fx.result.winner === 'draw') return 0;
-                if (fx.result.winner === a) return -1;
-                if (fx.result.winner === b) return 1;
-                return 0;
+                const meetings = league.fixtures.filter(f => f.result && ((f.home === a && f.away === b) || (f.home === b && f.away === a)));
+                let aW = 0, bW = 0, aGw = 0, bGw = 0;
+                meetings.forEach(f => {
+                    const s = seriesGameWins(f);
+                    if (f.result.winner === a) aW++;
+                    else if (f.result.winner === b) bW++;
+                    if (f.home === a) { aGw += s.home; bGw += s.away; }
+                    else { aGw += s.away; bGw += s.home; }
+                });
+                return (bW - aW) || (bGw - aGw);
             };
-            rows.sort((x, y) => y.w - x.w || y.pf - x.pf || (y.pf - y.pa) - (x.pf - x.pa) || h2h(x.id, y.id) || x.name.localeCompare(y.name));
+            rows.sort((x, y) => y.w - x.w || y.gw - x.gw || y.pf - x.pf || (y.pf - y.pa) - (x.pf - x.pa) || h2h(x.id, y.id) || x.name.localeCompare(y.name));
             return rows;
         }
 
@@ -3651,33 +4203,38 @@
             }
         }
 
-        function playAutoFixture(fx) {
-            const homeP = leaguePlayer(fx.home);
-            const awayP = leaguePlayer(fx.away);
-            const firstColor = fx.first === fx.home ? 'blue' : 'red';
-            const result = simulateMatch(
-                league.hands[fx.home],
-                league.hands[fx.away],
-                firstColor,
-                league.leftover,
-                league.ruleset,
-                homeP.difficulty || 'normal',
-                awayP.difficulty || 'normal',
-                fx.home,
-                fx.away
-            );
-            fx.result = {
-                homeScore: result.blue,
-                awayScore: result.red,
-                winner: result.winner === 'blue' ? fx.home : result.winner === 'red' ? fx.away : 'draw'
-            };
-            return fx;
+        function playAutoSeries(fx) {
+            if (seriesComplete(fx) && fx.result) return fx;
+            const diff = leagueAiDifficulty();
+            fx.games = fx.games || [];
+            while (!seriesComplete(fx)) {
+                const firstSeat = seriesNextFirst(fx);
+                const firstColor = firstSeat === fx.home ? 'blue' : 'red';
+                const result = simulateMatch(
+                    league.hands[fx.home],
+                    league.hands[fx.away],
+                    firstColor,
+                    league.leftover,
+                    league.ruleset,
+                    diff,
+                    diff,
+                    fx.home,
+                    fx.away
+                );
+                fx.games.push({
+                    homeScore: result.blue,
+                    awayScore: result.red,
+                    winner: result.winner === 'blue' ? fx.home : result.winner === 'red' ? fx.away : 'draw',
+                    first: firstSeat
+                });
+            }
+            return finalizeSeries(fx);
         }
 
         function userWeeksPlayed() {
             if (!league) return new Set();
             return new Set(
-                league.fixtures.filter(fx => fx.result && (fx.home === 'you' || fx.away === 'you')).map(fx => fx.week)
+                league.fixtures.filter(fx => seriesComplete(fx) && (fx.home === 'you' || fx.away === 'you')).map(fx => fx.week)
             );
         }
 
@@ -3688,24 +4245,27 @@
             league.fixtures.forEach(fx => {
                 const involvesYou = fx.home === 'you' || fx.away === 'you';
                 if (involvesYou) return;
-                if (fx.result && !playedWeeks.has(fx.week) && !seasonOver) {
+                if ((fx.result || (fx.games && fx.games.length)) && !playedWeeks.has(fx.week) && !seasonOver) {
+                    fx.games = [];
                     fx.result = null;
                     return;
                 }
-                if (fx.result) return;
-                if (playedWeeks.has(fx.week) || seasonOver) playAutoFixture(fx);
+                if (seriesComplete(fx) && fx.result) return;
+                if (playedWeeks.has(fx.week) || seasonOver) playAutoSeries(fx);
             });
             maybeCompleteLeague();
             saveLeague();
         }
 
-        function fixtureMark(fx, standings) {
-            if (!fx.result) {
+        function fixtureMark(fx) {
+            const s = seriesGameWins(fx);
+            if (!s.played && !fx.result) {
                 if (fx.home === 'you' || fx.away === 'you') return {text: 'Yours', pending: true};
                 return {text: 'Soon', pending: true};
             }
+            if (!seriesComplete(fx)) return {text: `${s.home}–${s.away}`, pending: true};
             const winnerName = fx.result.winner === 'draw' ? 'Draw' : leaguePlayer(fx.result.winner).name;
-            return {text: `${fx.result.homeScore}–${fx.result.awayScore} ${winnerName}`, pending: false};
+            return {text: `${s.home}–${s.away} ${winnerName}`, pending: false};
         }
 
         function standingsMap() {
@@ -3729,74 +4289,76 @@
 
         function renderLeagueHub() {
             const hub = document.getElementById('league-hub');
-            const tag = document.getElementById('league-tag');
             if (!hub || !league) return;
             const table = leagueStandings();
             const ranks = standingsMap();
             const next = nextUserFixture();
-            const weekNow = Math.min(currentLeagueWeek(), 3);
-            const leftoverBit = league.leftover ? 'Leftover scores on' : 'Leftover-off';
-            const modeBit = league.ruleset === 'classic' ? 'Classic' : 'Ember';
-            tag.textContent = league.phase === 'complete'
-                ? 'Season complete. Crown on the table. Start a new one whenever you like.'
-                : 'Snake-draft is locked. Three weeks, six matches, three of them yours. Casual games do not wipe this.';
+            const weekNow = Math.min(currentLeagueWeek(), 6);
 
             let html = '';
             if (league.phase === 'complete' && league.champion) {
                 const champ = leaguePlayer(league.champion);
                 const youPlace = ranks.you ? ranks.you.rank : 4;
-                const youLine = youPlace === 1 ? 'You take the crown.' : `You finished ${youPlace}${youPlace === 2 ? 'nd' : youPlace === 3 ? 'rd' : 'th'}.`;
-                html += `<div class="league-crown"><p class="league-crown-title">${champ.icon} ${champ.name} takes the crown</p><p class="league-crown-sub">${youLine} Seasons won: ${leagueCrowns.won}/${leagueCrowns.played}</p></div>`;
-            } else {
-                html += `<div class="league-rivals">${LEAGUE_RIVALS.map(r => {
-                    const rec = ranks[r.id] ? recordLine(ranks[r.id].row) : '0-0-0';
-                    return `<div class="league-rival-chip"><span class="who">${r.icon} ${r.name}</span><span class="diff">${r.difficulty} · ${rec}</span></div>`;
-                }).join('')}</div>`;
+                const youLine = youPlace === 1
+                    ? `Seasons won: ${leagueCrowns.won}/${leagueCrowns.played}`
+                    : `You finished ${youPlace}${youPlace === 2 ? 'nd' : youPlace === 3 ? 'rd' : 'th'}. Seasons won: ${leagueCrowns.won}/${leagueCrowns.played}`;
+                html += `<div class="league-crown"><p class="league-crown-title">${champ.icon} ${leagueTakeLine(league.champion, 'crown')}</p><p class="league-crown-sub">${youLine}</p></div>`;
             }
+
+            const seats = [youSeat(), ...LEAGUE_RIVALS];
+            html += `<div class="league-rivals">${seats.map(r => {
+                const rec = ranks[r.id] ? recordLine(ranks[r.id].row) : '0-0-0';
+                const open = leagueRosterSeat === r.id ? ' is-open' : '';
+                return `<button type="button" class="league-rival-chip${open}" data-seat="${r.id}" title="View ${r.name === 'You' ? 'your' : r.name + "'s"} deck" onclick="openLeagueRoster('${r.id}')"><span class="who">${r.icon} ${r.name}</span><span class="diff">${rec}</span></button>`;
+            }).join('')}</div>`;
 
             if (league.recap) html += `<div class="league-recap">${league.recap}</div>`;
 
-            html += `<div class="menu-section-title" style="margin-top:0;">Standings</div><div class="league-table-wrap"><table class="league-table"><thead><tr><th>#</th><th>Name</th><th class="num">W-L-D</th><th class="num">PF</th><th class="num">+/-</th></tr></thead><tbody>`;
+            html += `<div class="menu-section-title" style="margin-top:0;">Standings</div><div class="league-table-wrap"><table class="league-table"><thead><tr><th>#</th><th>Name</th><th class="num">W-L-D</th><th class="num">GW</th><th class="num">PF</th><th class="num">+/-</th></tr></thead><tbody>`;
             table.forEach((row, i) => {
                 const cls = [row.id === 'you' ? 'is-you' : '', i === 0 && row.played ? 'is-crown' : ''].filter(Boolean).join(' ');
                 const diff = row.pf - row.pa;
                 const diffStr = `${diff > 0 ? '+' : ''}${diff}`;
-                html += `<tr class="${cls}"><td>${i + 1}</td><td>${row.icon} ${row.name}</td><td class="num">${recordLine(row)}</td><td class="num">${row.pf}</td><td class="num">${diffStr}</td></tr>`;
+                html += `<tr class="${cls}"><td>${i + 1}</td><td class="league-name" onclick="openLeagueRoster('${row.id}')">${row.icon} ${row.name}</td><td class="num">${recordLine(row)}</td><td class="num">${row.gw}</td><td class="num">${row.pf}</td><td class="num">${diffStr}</td></tr>`;
             });
             html += `</tbody></table></div>`;
 
             html += `<div class="menu-section-title">Schedule</div>`;
-            for (let week = 1; week <= 3; week++) {
+            for (let week = 1; week <= 6; week++) {
                 const weekFx = league.fixtures.filter(fx => fx.week === week);
                 html += `<div class="league-week${week === weekNow && league.phase !== 'complete' ? ' is-current' : ''}"><p class="league-week-title">Week ${week}</p>`;
                 weekFx.forEach(fx => {
                     const isNext = next && fx === next;
                     const homeRank = ranks[fx.home] ? `#${ranks[fx.home].rank}` : '';
                     const awayRank = ranks[fx.away] ? `#${ranks[fx.away].rank}` : '';
-                    const firstBit = fx.first === fx.home ? `${leaguePlayer(fx.home).name} first` : `${leaguePlayer(fx.away).name} first`;
+                    const nextFirst = seriesComplete(fx) ? null : seriesNextFirst(fx);
+                    const firstName = leaguePlayer(nextFirst || fx.seriesFirst).name;
+                    const firstBit = seriesComplete(fx)
+                        ? `${leaguePlayer(fx.seriesFirst).name} opened`
+                        : `${firstName} first`;
                     const mark = fixtureMark(fx);
                     html += `<div class="league-fixture${isNext ? ' is-next' : ''}"><div class="versus">${leagueLabel(fx.home)} <span style="opacity:.45">${homeRank}</span> vs ${leagueLabel(fx.away)} <span style="opacity:.45">${awayRank}</span></div><div class="mark${mark.pending ? ' pending' : ''}" title="${firstBit}">${mark.text}</div></div>`;
                 });
                 html += `</div>`;
             }
 
-            html += `<p class="league-lock">${modeBit} · ${leftoverBit} · AI locked Normal/Hard</p>`;
             html += `<div class="league-actions">`;
             if (league.phase === 'complete') {
-                html += `<button class="btn" onclick="requestNewLeague()">New season</button>`;
+                html += `<button class="btn" onclick="requestNewLeague()">New Season</button>`;
             } else if (next) {
                 const opp = next.home === 'you' ? next.away : next.home;
                 const oppP = leaguePlayer(opp);
                 const oppRow = ranks[opp] ? ranks[opp].row : null;
                 const rec = oppRow ? recordLine(oppRow) : '0-0-0';
-                html += `<button class="btn" onclick="playNextLeagueMatch()">Play week ${next.week} · ${oppP.name} (${rec})</button>`;
+                const gameN = (next.games || []).length + 1;
+                html += `<button class="btn" onclick="playNextLeagueMatch()">Play Week ${next.week} · Game ${gameN} · ${oppP.name} (${rec})</button>`;
             }
-            html += `<button class="btn btn-alt" onclick="leaveLeagueToMenu()">Back to menu</button>`;
-            html += `<div class="league-danger"><button class="btn btn-muted" onclick="requestEndLeague()">End league</button>${league.phase !== 'complete' ? '<button class="btn btn-muted" onclick="requestNewLeague()">New season</button>' : ''}</div></div>`;
+            html += `<button class="btn btn-alt" onclick="leaveLeagueToMenu()">Back to Menu</button>`;
+            html += `<div class="league-danger"><button class="btn btn-muted" onclick="requestEndLeague()">End League</button>${league.phase !== 'complete' ? '<button class="btn btn-muted" onclick="requestNewLeague()">New Season</button>' : ''}</div></div>`;
             if (leagueHubConfirm === 'end') {
-                html = `<div class="league-confirm">This season is gone — standings, draft, and remaining matches. Casual games stay.<div class="row"><button class="btn" onclick="confirmLeagueAction('end')">End it</button><button class="btn btn-alt" onclick="cancelLeagueConfirm()">Keep it</button></div></div>` + html;
+                html = `<div class="league-confirm">This season is gone — standings, draft, and remaining matches. Casual games stay.<div class="row"><button class="btn" onclick="confirmLeagueAction('end')">End It</button><button class="btn btn-alt" onclick="cancelLeagueConfirm()">Keep It</button></div></div>` + html;
             } else if (leagueHubConfirm === 'new') {
-                html = `<div class="league-confirm">Start a new season? The current draft and table will be wiped.<div class="row"><button class="btn" onclick="confirmLeagueAction('new')">Start new</button><button class="btn btn-alt" onclick="cancelLeagueConfirm()">Keep this one</button></div></div>` + html;
+                html = `<div class="league-confirm">Start a new season? The current draft and table will be wiped.<div class="row"><button class="btn" onclick="confirmLeagueAction('new')">Start New</button><button class="btn btn-alt" onclick="cancelLeagueConfirm()">Keep This One</button></div></div>` + html;
             }
             hub.innerHTML = html;
             if (leagueHubConfirm) {
@@ -3807,6 +4369,8 @@
 
         function playNextLeagueMatch() {
             sfx.click(); hideTooltip();
+            closeLeagueRoster();
+            hideModal('gameover-modal');
             const idx = nextUserFixtureIndex();
             if (idx < 0) {
                 showLeagueHub();
@@ -3814,19 +4378,21 @@
             }
             const fx = league.fixtures[idx];
             const oppId = fx.home === 'you' ? fx.away : fx.home;
-            leagueMatch = {fixtureIndex: idx, oppId, first: fx.first};
+            const first = seriesNextFirst(fx);
+            leagueMatch = {fixtureIndex: idx, oppId, first};
             cloneRulesetOverride = league.ruleset;
             leftoverThisMatch = league.leftover;
             skipCoachOnce = true;
             activeMode = 'league';
             hideModals(['league-modal', 'main-menu-modal', 'draft-modal', 'deck-modal', 'gameover-modal', 'battle-log-modal']);
+            applyGridSize(3);
             resetTable();
             gameState = 'playing';
             const youIds = league.hands.you;
             const oppIds = league.hands[oppId];
             playerHand = youIds.map(id => cloneForOwner(masterCards.find(c => c.id === id), 'blue', league.ruleset));
             aiHand = oppIds.map(id => cloneForOwner(masterCards.find(c => c.id === id), 'red', league.ruleset));
-            const firstSeat = fx.first === 'you' ? 'player' : 'ai';
+            const firstSeat = first === 'you' ? 'player' : 'ai';
             beginMatch(firstSeat, 'league');
         }
 
@@ -3845,20 +4411,35 @@
             if (!fx) return;
             const youIsHome = fx.home === 'you';
             const winner = blueCount > redCount ? 'you' : redCount > blueCount ? leagueMatch.oppId : 'draw';
-            fx.result = {
+            fx.games = fx.games || [];
+            fx.games.push({
                 homeScore: youIsHome ? blueCount : redCount,
                 awayScore: youIsHome ? redCount : blueCount,
-                winner
-            };
+                winner,
+                first: leagueMatch.first || seriesNextFirst({...fx, games: fx.games.slice()})
+            });
             const opp = leaguePlayer(leagueMatch.oppId);
+            const gameN = fx.games.length;
             const verdict = winner === 'you' ? `You took ${opp.name}` : winner === 'draw' ? `Draw with ${opp.name}` : `${opp.name} took you`;
-            const auto = league.fixtures.find(other => other.week === fx.week && other !== fx);
-            let recap = `Week ${fx.week}: ${verdict} ${blueCount}–${redCount}.`;
-            resolvePendingAutoMatches();
-            const autoNow = auto && auto.result ? auto : league.fixtures.find(other => other.week === fx.week && other !== fx);
-            if (autoNow && autoNow.result) {
-                const aw = autoNow.result.winner === 'draw' ? 'Draw' : leaguePlayer(autoNow.result.winner).name;
-                recap += ` ${leaguePlayer(autoNow.home).name} vs ${leaguePlayer(autoNow.away).name} ${autoNow.result.homeScore}–${autoNow.result.awayScore} (${aw}).`;
+            let recap = `Week ${fx.week} game ${gameN}: ${verdict} ${blueCount}–${redCount}.`;
+            if (seriesComplete(fx)) {
+                finalizeSeries(fx);
+                const s = seriesGameWins(fx);
+                const youGames = youIsHome ? s.home : s.away;
+                const oppGames = youIsHome ? s.away : s.home;
+                const seriesVerdict = fx.result.winner === 'you'
+                    ? `You take the series`
+                    : fx.result.winner === 'draw'
+                        ? `Series draw`
+                        : `${opp.name} takes the series`;
+                recap = `Week ${fx.week}: ${seriesVerdict} ${youGames}–${oppGames}. ${verdict} ${blueCount}–${redCount}.`;
+                resolvePendingAutoMatches();
+                const autoNow = league.fixtures.find(other => other.week === fx.week && other !== fx && other.result);
+                if (autoNow) {
+                    const aw = autoNow.result.winner === 'draw' ? 'Draw' : leaguePlayer(autoNow.result.winner).name;
+                    const as = seriesGameWins(autoNow);
+                    recap += ` ${leaguePlayer(autoNow.home).name} vs ${leaguePlayer(autoNow.away).name} ${as.home}–${as.away} (${aw}).`;
+                }
             }
             league.recap = recap;
             maybeCompleteLeague();
@@ -3899,12 +4480,14 @@
             silentSim = true;
             cloneRulesetOverride = ruleset;
             leftoverThisMatch = leftover;
+            const prevGrid = gridSize;
+            applyGridSize(3);
             resetTable();
             playerHand = (blueIds || []).map(id => cloneForOwner(masterCards.find(c => c.id === id), 'blue', ruleset));
             aiHand = (redIds || []).map(id => cloneForOwner(masterCards.find(c => c.id === id), 'red', ruleset));
             let whose = firstColor === 'red' ? 'red' : 'blue';
             let safety = 0;
-            while (board.some(c => c === null) && safety++ < 12) {
+            while (board.some(c => c === null) && safety++ < cellCount() + 4) {
                 const hand = whose === 'blue' ? playerHand : aiHand;
                 if (!hand.length) break;
                 const diff = whose === 'blue' ? blueDiff : redDiff;
@@ -3920,6 +4503,7 @@
             const blue = ownedCount('blue');
             const red = ownedCount('red');
             const winner = blue > red ? 'blue' : red > blue ? 'red' : 'draw';
+            applyGridSize(prevGrid);
             restoreSimTable(snap);
             silentSim = prevSilent;
             cloneRulesetOverride = prevOverride;
@@ -4031,17 +4615,43 @@
             if (gameState === 'playing' || gameState === 'gameover') render();
         }
         function leftoverVictoryCopy() {
+            const n = preferredGridSize;
+            const label = `${n}x${n}`;
+            if (n === 4) {
+                if (leftoverScores) {
+                    return {
+                        compact: `Fill the 4x4. Eight each fills the board, so leftover scores has nothing extra to add.`,
+                        rules: "4x4 deals eight each. Sixteen cards fill sixteen cells. Leftover scores does not change the result on this size.",
+                        option: "<strong>On:</strong> Unplayed cards count. On 4x4 there is no leftover, so the score is still the board.",
+                        place: "On your turn, play one card from your hand onto an empty cell of the 4x4 grid."
+                    };
+                }
+                return {
+                    compact: "Fill the 4x4. Eight each. Most cards on the board wins.",
+                    rules: "4x4 deals eight each. After the board fills, most cards on the board wins.",
+                    option: "<strong>Off (default):</strong> Only the board counts. Unplayed cards are choices, not points.",
+                    place: "On your turn, play one card from your hand onto an empty cell of the 4x4 grid."
+                };
+            }
             if (leftoverScores) {
                 return {
-                    compact: "Fill the 3x3. Most cards wins - leftover in hand still counts.",
-                    rules: "Two hands of five is ten cards. After the board fills, leftover in hand still counts, so 6+ wins and 5-5 is a draw.",
-                    option: "<strong>On:</strong> Unplayed cards count. A 5-4 board is a 5-5 draw."
+                    compact: `Fill the ${label}. Most cards wins - leftover in hand still counts.`,
+                    rules: n === 5
+                        ? "5x5 deals thirteen each. After the board fills, leftover in hand still counts."
+                        : "Two hands of five is ten cards. After the board fills, leftover in hand still counts, so 6+ wins and 5-5 is a draw.",
+                    option: n === 5
+                        ? "<strong>On:</strong> Unplayed cards count. A 13-12 board is a 13-13 draw."
+                        : "<strong>On:</strong> Unplayed cards count. A 5-4 board is a 5-5 draw.",
+                    place: `On your turn, play one card from your hand onto an empty cell of the ${label} grid.`
                 };
             }
             return {
-                compact: "Fill the 3x3. Most cards on the board wins. Leftover in hand does not count.",
-                rules: "Two hands of five. After the board fills, most cards on the board wins. Leftover in hand does not count. Options can turn leftover scores on, which makes a 5-4 board a 5-5 draw.",
-                option: "<strong>Off (default):</strong> Only the board counts. Unplayed cards are choices, not points."
+                compact: `Fill the ${label}. Most cards on the board wins. Leftover in hand does not count.`,
+                rules: n === 5
+                    ? "5x5 deals thirteen each. After the board fills, most cards on the board wins. Leftover in hand does not count."
+                    : "Two hands of five. After the board fills, most cards on the board wins. Leftover in hand does not count. Options can turn leftover scores on, which makes a 5-4 board a 5-5 draw.",
+                option: "<strong>Off (default):</strong> Only the board counts. Unplayed cards are choices, not points.",
+                place: `On your turn, play one card from your hand onto an empty cell of the ${label} grid.`
             };
         }
         function refreshVictoryCopy() {
@@ -4049,9 +4659,30 @@
             const compact = document.getElementById('victory-compact');
             const rules = document.getElementById('victory-rules');
             const desc = document.getElementById('leftover-desc');
+            const place = document.getElementById('placement-rules');
             if (compact) compact.textContent = copy.compact;
             if (rules) rules.textContent = copy.rules;
             if (desc) desc.innerHTML = copy.option;
+            if (place) place.textContent = copy.place;
+        }
+        function refreshGridSizeDesc() {
+            const el = document.getElementById('grid-size-desc');
+            if (!el) return;
+            const n = preferredGridSize;
+            const hand = GRID_PRESETS[n].hand;
+            el.innerHTML = n === 3
+                ? "<strong>3×3 (default):</strong> Five each. League and Tribe Decks always use this size."
+                : n === 4
+                    ? "<strong>4×4:</strong> Eight each, no leftover. League and Tribe Decks stay 3×3."
+                    : "<strong>5×5:</strong> Thirteen each. Compact cards on phones. League and Tribe Decks stay 3×3.";
+        }
+        function updatePreferredGrid(val) {
+            sfx.click();
+            const n = parseInt(val, 10);
+            preferredGridSize = GRID_PRESETS[n] ? n : 3;
+            localStorage.setItem('ember_grid_size', String(preferredGridSize));
+            refreshGridSizeDesc();
+            refreshVictoryCopy();
         }
         function updateLeftoverScores(checked) {
             sfx.click();
@@ -4079,21 +4710,26 @@
         }
 
         function resetTable() {
-            board = Array(9).fill(null);
-            cellEffects = Array(9).fill(null);
+            board = Array(cellCount()).fill(null);
+            cellEffects = Array(cellCount()).fill(null);
             selectedCard = null;
             shownStatValues.clear();
             if (blastPreviewTimer) {clearTimeout(blastPreviewTimer); blastPreviewTimer = null;}
         }
 
+        function neighborDirs(index) {
+            const n = gridSize;
+            const row = Math.floor(index / n), col = index % n;
+            return [
+                {idx: index - n, p: 0, n: 2, ok: row > 0},
+                {idx: index + 1, p: 1, n: 3, ok: col < n - 1},
+                {idx: index + n, p: 2, n: 0, ok: row < n - 1},
+                {idx: index - 1, p: 3, n: 1, ok: col > 0}
+            ];
+        }
+
         function neighborIndexes(index) {
-            const row = Math.floor(index / 3), col = index % 3;
-            const out = [];
-            if (row > 0) out.push(index - 3);
-            if (col < 2) out.push(index + 1);
-            if (row < 2) out.push(index + 3);
-            if (col > 0) out.push(index - 1);
-            return out;
+            return neighborDirs(index).filter(d => d.ok).map(d => d.idx);
         }
 
         function isSilenceCard(card) {
@@ -4186,6 +4822,7 @@
 
         function cancelDraft() {
             clearDraftTimer();
+            closeLeagueRoster();
             if (leagueDrafting) persistLeagueDraft();
             leagueDrafting = false;
             setupDraftChrome(false);
@@ -4207,8 +4844,10 @@
             resetFingerDrag();
             hideTurnBanner();
             document.body.classList.add('menu-open');
-            hideModals(['draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal', 'battle-log-modal', 'league-modal']);
+            hideModals(['draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal', 'battle-log-modal', 'league-modal', 'league-roster']);
+            closeLeagueRoster();
             document.getElementById('main-menu-modal').classList.remove('hidden');
+            applyGridSize(preferredGridSize);
             gameState = 'menu'; resetTable(); playerHand = []; aiHand = [];
             lastBlueScore = null; lastRedScore = null; lastMatch = null;
             leagueMatch = null;
@@ -4251,7 +4890,9 @@
             document.getElementById('ai-difficulty-select').value = aiDifficulty;
             document.getElementById('open-hands-check').checked = showBothHands;
             document.getElementById('leftover-check').checked = leftoverScores;
+            document.getElementById('grid-size-select').value = String(preferredGridSize);
             refreshRulesetDesc();
+            refreshGridSizeDesc();
             refreshVictoryCopy();
             const leagueNote = document.getElementById('league-options-note');
             if (leagueNote) leagueNote.hidden = !isLeagueActive();
@@ -4375,12 +5016,14 @@
             hideModals(['main-menu-modal', 'draft-modal', 'deck-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal', 'battle-log-modal', 'league-modal']);
 
             if (mode === 'random') {
+                applyGridSize(preferredGridSize);
                 resetTable(); gameState = 'playing';
                 const shuffled = [...masterCards].sort(() => Math.random() - 0.5);
+                const n = matchHandSize();
 
-                playerHand = shuffled.slice(0, 5).map(c => cloneCard(c, {owner: 'blue'}));
+                playerHand = shuffled.slice(0, n).map(c => cloneCard(c, {owner: 'blue'}));
 
-                aiHand = shuffled.slice(5, 10).map(c => cloneCard(c, {owner: 'red'}));
+                aiHand = shuffled.slice(n, n * 2).map(c => cloneCard(c, {owner: 'red'}));
 
                 beginMatch();
             } else if (mode === 'draft') {
@@ -4463,6 +5106,7 @@
         }
 
         function startDeckMatch() {
+            applyGridSize(3);
             resetTable();
             gameState = 'playing';
             resolvedDecks = {
@@ -4480,13 +5124,14 @@
         }
 
         function startDraftMode() {
+            applyGridSize(preferredGridSize);
             leagueDrafting = false;
             draftedPlayerCards = []; draftedAICards = [];
             draftPickIndex = 0;
             draftStarter = Math.random() < 0.5 ? 'player' : 'ai';
-            draftTurn = SNAKE_SEQ(draftStarter)[0];
+            draftTurn = snakeSeq2(draftStarter, matchHandSize())[0];
 
-            draftPool = [...masterCards].sort(() => Math.random() - 0.5).slice(0, 16).map(c => cloneCard(c, {draftedBy: null}));
+            draftPool = [...masterCards].sort(() => Math.random() - 0.5).slice(0, matchDraftPoolSize()).map(c => cloneCard(c, {draftedBy: null}));
 
             setupDraftChrome(false);
             renderDraftPool();
@@ -4524,6 +5169,7 @@
                 mode: activeMode,
                 ruleset: (isLeagueMatch() && league) ? league.ruleset : currentRuleset,
                 leftover: leftoverThisMatch,
+                gridSize,
                 playerIds: playerHand.map(c => c.id),
                 aiIds: aiHand.map(c => c.id),
                 first
@@ -4548,13 +5194,16 @@
 
         function encodeMatchCode(match) {
             if (!match || match.mode === 'league' || !match.playerIds || !match.aiIds) return '';
-            if (match.playerIds.length !== 5 || match.aiIds.length !== 5) return '';
+            const size = GRID_PRESETS[match.gridSize] ? match.gridSize : 3;
+            const hand = GRID_PRESETS[size].hand;
+            if (match.playerIds.length !== hand || match.aiIds.length !== hand) return '';
             const nums = idsToNums(match.playerIds.concat(match.aiIds));
             if (nums.some(n => !n || n < 1 || n > masterCards.length)) return '';
             const modeCh = match.mode === 'draft' ? 'D' : match.mode === 'decks' ? 'T' : 'R';
             const ruleCh = match.ruleset === 'classic' ? 'C' : 'E';
             const firstCh = match.first === 'ai' ? 'A' : 'P';
-            return `EG1${modeCh}${ruleCh}${firstCh}${nums.map(n => String(n).padStart(2, '0')).join('')}`;
+            if (size === 3) return `EG1${modeCh}${ruleCh}${firstCh}${nums.map(n => String(n).padStart(2, '0')).join('')}`;
+            return `EG2${modeCh}${ruleCh}${firstCh}${size}${nums.map(n => String(n).padStart(2, '0')).join('')}`;
         }
 
         function extractMatchCode(raw) {
@@ -4567,6 +5216,8 @@
                 const hm = (u.hash || '').match(/m=([^&]+)/i);
                 if (hm) return decodeURIComponent(hm[1]).trim();
             } catch (e) {}
+            const found2 = text.match(/EG2[RDTrdt][ECec][PApa][45]\d{32,}/i);
+            if (found2) return found2[0];
             const found = text.match(/EG1[RDTrdt][ECec][PApa]\d{20}/);
             if (found) return found[0];
             return text;
@@ -4574,6 +5225,26 @@
 
         function decodeMatchCode(raw) {
             const code = extractMatchCode(raw).toUpperCase().replace(/[^A-Z0-9]/g, '');
+            const m2 = code.match(/^EG2([RDT])([EC])([PA])([45])((?:\d{2})+)$/);
+            if (m2) {
+                const size = parseInt(m2[4], 10);
+                const hand = GRID_PRESETS[size].hand;
+                const digits = m2[5];
+                if (digits.length !== hand * 4) return null;
+                const nums = [];
+                for (let i = 0; i < digits.length; i += 2) nums.push(parseInt(digits.slice(i, i + 2), 10));
+                if (nums.some(n => n < 1 || n > masterCards.length)) return null;
+                const ids = numsToIds(nums);
+                if (ids.some(id => !masterCards.some(c => c.id === id))) return null;
+                return {
+                    mode: m2[1] === 'D' ? 'draft' : m2[1] === 'T' ? 'decks' : 'random',
+                    ruleset: m2[2] === 'C' ? 'classic' : 'ember',
+                    first: m2[3] === 'A' ? 'ai' : 'player',
+                    gridSize: size,
+                    playerIds: ids.slice(0, hand),
+                    aiIds: ids.slice(hand)
+                };
+            }
             const m = code.match(/^EG1([RDT])([EC])([PA])((?:\d{2}){10})$/);
             if (!m) return null;
             const mode = m[1] === 'D' ? 'draft' : m[1] === 'T' ? 'decks' : 'random';
@@ -4588,6 +5259,7 @@
                 mode,
                 ruleset,
                 first,
+                gridSize: 3,
                 playerIds: ids.slice(0, 5),
                 aiIds: ids.slice(5, 10)
             };
@@ -4655,6 +5327,7 @@
             if (sel) sel.value = currentRuleset;
             refreshRulesetDesc();
             activeMode = decoded.mode;
+            applyGridSize(decoded.gridSize || 3);
             resolvedDecks = decoded.mode === 'decks'
                 ? {player: tribeOfCardId(decoded.playerIds[0]), ai: tribeOfCardId(decoded.aiIds[0])}
                 : {player: null, ai: null};
@@ -4758,6 +5431,7 @@
             sfx.click(); hideTooltip();
             hideModal('gameover-modal');
             hideModal('main-menu-modal');
+            applyGridSize(lastMatch.gridSize || 3);
             resetTable(); gameState = 'playing';
             handsFromIds(lastMatch.playerIds, lastMatch.aiIds);
             beginMatch(lastMatch.first === 'player' ? 'ai' : 'player', 'rematch');
@@ -4831,15 +5505,7 @@
                 let el = reuse ? grid.children[i] : document.createElement('div');
                 el.className = draftCardClass(card);
                 if (reuse) return;
-                el.innerHTML = `
-                    ${card.ability ? `<div class="ability-badge">${card.ability.icon}</div>` : ''}
-                    <div class="stat-top">${formatStat(card.baseStats[0])}</div>
-                    <div class="stat-right">${formatStat(card.baseStats[1])}</div>
-                    <div class="stat-bottom">${formatStat(card.baseStats[2])}</div>
-                    <div class="stat-left">${formatStat(card.baseStats[3])}</div>
-                    <div class="card-emoji">${card.emoji}</div>
-                    ${nameplateHTML(card)}
-                `;
+                el.innerHTML = draftCardFaceHTML(card);
                 addTooltipListeners(el, abilityTip(card));
                 paintCardFaces(el);
                 grid.appendChild(el);
@@ -4855,13 +5521,14 @@
                 document.getElementById('draft-status').textContent = draftTurn === 'player'
                     ? (isSnakeDoublePick() ? "Your pick - you choose twice." : "Your pick.")
                     : (isSnakeDoublePick() ? "AI is choosing twice..." : "AI is choosing...");
+                const hand = matchHandSize();
                 document.getElementById('draft-rosters').textContent =
-                    `Pick ${draftPickIndex + 1}/10 · Your Hand: ${draftedPlayerCards.length}/5 | AI Hand: ${draftedAICards.length}/5`;
+                    `Pick ${draftPickIndex + 1}/${hand * 2} · Your Hand: ${draftedPlayerCards.length}/${hand} | AI Hand: ${draftedAICards.length}/${hand}`;
             }
         }
 
         function isSnakeDoublePick() {
-            const seq = leagueDrafting ? leagueDraftSeq : SNAKE_SEQ(draftStarter);
+            const seq = currentSnakeSeq();
             return seq[draftPickIndex] && seq[draftPickIndex] === seq[draftPickIndex + 1];
         }
 
@@ -4884,7 +5551,7 @@
             const available = draftPool.filter(c => !c.draftedBy);
             if (!available.length) return;
             if (leagueDrafting) {
-                if (draftTurn === 'you' || !leagueHandsLive[draftTurn] || leagueHandsLive[draftTurn].length >= 5) return;
+                if (draftTurn === 'you' || !leagueHandsLive[draftTurn] || leagueHandsLive[draftTurn].length >= LEAGUE_HAND_SIZE) return;
                 available.sort((a, b) => leagueDraftScore(b, draftTurn) - leagueDraftScore(a, draftTurn));
                 available[0].draftedBy = draftTurn;
                 leagueHandsLive[draftTurn].push(available[0]);
@@ -4892,7 +5559,7 @@
                 checkDraftProgress();
                 return;
             }
-            if (draftTurn !== 'ai' || draftedAICards.length >= 5) return;
+            if (draftTurn !== 'ai' || draftedAICards.length >= matchHandSize()) return;
             available.sort((a, b) => getCardDraftScore(b) - getCardDraftScore(a));
             available[0].draftedBy = 'ai';
             draftedAICards.push(available[0]);
@@ -4921,7 +5588,7 @@
 
         function checkDraftProgress() {
             if (leagueDrafting) {
-                const done = ['you', 'ash', 'vesper', 'rook'].every(id => (leagueHandsLive[id] || []).length >= 5);
+                const done = ['you', 'ash', 'vesper', 'rook'].every(id => (leagueHandsLive[id] || []).length >= LEAGUE_HAND_SIZE);
                 if (done) {
                     finishLeagueDraft();
                     return;
@@ -4933,7 +5600,7 @@
                 if (draftTurn && draftTurn !== 'you') scheduleAiDraftPick(480);
                 return;
             }
-            if (draftedPlayerCards.length === 5 && draftedAICards.length === 5) {
+            if (draftedPlayerCards.length === matchHandSize() && draftedAICards.length === matchHandSize()) {
                 hideModal('draft-modal');
                 resetTable(); gameState = 'playing';
                 playerHand = draftedPlayerCards.map(c => cloneCard(c, {owner: 'blue'}));
@@ -4941,7 +5608,7 @@
                 beginMatch();
             } else {
                 draftPickIndex++;
-                draftTurn = SNAKE_SEQ(draftStarter)[draftPickIndex];
+                draftTurn = snakeSeq2(draftStarter, matchHandSize())[draftPickIndex];
                 renderDraftPool();
                 if (draftTurn === 'ai') scheduleAiDraftPick(550);
             }
@@ -4963,18 +5630,22 @@
                 logAction(turn === 'player' ? "Rematch - you go first." : "Rematch - AI goes first.");
             } else if (origin === 'league' && leagueMatch) {
                 const opp = leaguePlayer(leagueMatch.oppId);
-                const week = league.fixtures[leagueMatch.fixtureIndex].week;
+                const fx = league.fixtures[leagueMatch.fixtureIndex];
+                const week = fx.week;
+                const gameN = (fx.games || []).length + 1;
                 statusMsg.textContent = turn === 'player'
-                    ? `Week ${week} vs ${opp.name}. Your turn - play a card.`
-                    : `Week ${week} vs ${opp.name}. ${opp.name} plays first.`;
-                logAction(`League week ${week} — You vs ${opp.name}.`);
+                    ? `Week ${week} game ${gameN} vs ${opp.name}. Your turn - play a card.`
+                    : `Week ${week} game ${gameN} vs ${opp.name}. ${opp.name} plays first.`;
+                logAction(`League week ${week} game ${gameN} — You vs ${opp.name}.`);
             } else {
                 const vs = activeMode === 'decks' ? deckVsLine() : '';
                 const shared = origin === 'share' ? 'Shared match. ' : '';
                 statusMsg.textContent = vs
                     ? (turn === 'player' ? `${vs}. Your turn - play a card.` : `${vs}. AI plays first.`)
                     : (turn === 'player' ? `${shared}Hands dealt. Your turn - play a card.` : `${shared}Hands dealt. AI plays first.`);
-                logAction(vs || (origin === 'share' ? "Shared hands of five." : "Hands of five."));
+                const n = matchHandSize();
+                const words = n === 5 ? 'five' : n === 8 ? 'eight' : 'thirteen';
+                logAction(vs || (origin === 'share' ? `Shared hands of ${words}.` : `Hands of ${words}.`));
             }
             recalculateDynamicStats(); render();
             maybeStartCoach();
@@ -5071,16 +5742,14 @@
 
         function firstEmptyCell() {
             const i = board.findIndex(c => c === null);
-            return i < 0 ? 4 : i;
+            return i < 0 ? Math.floor(cellCount() / 2) : i;
         }
 
         function captureLessonCell() {
             const emptyAdj = [];
             board.forEach((c, i) => {
                 if (!c || c.owner !== 'red') return;
-                const row = Math.floor(i / 3), col = i % 3;
-                [{idx: i - 3, ok: row > 0}, {idx: i + 1, ok: col < 2}, {idx: i + 3, ok: row < 2}, {idx: i - 1, ok: col > 0}]
-                    .forEach(n => { if (n.ok && board[n.idx] === null) emptyAdj.push(n.idx); });
+                neighborDirs(i).forEach(n => { if (n.ok && board[n.idx] === null) emptyAdj.push(n.idx); });
             });
             return emptyAdj[0] ?? firstEmptyCell();
         }
@@ -5382,8 +6051,18 @@
                     const bar = document.createElement('div');
                     bar.className = 'rematch-bar';
                     if (isLeagueMatch()) {
-                        bar.innerHTML = `
-                            <button class="btn" onclick="openLeagueHubFromGameover()">League table</button>
+                        const fx = league && leagueMatch ? league.fixtures[leagueMatch.fixtureIndex] : null;
+                        const more = !!(fx && !seriesComplete(fx));
+                        bar.innerHTML = more
+                            ? `
+                            <button class="btn" onclick="playNextLeagueMatch()">Next Game</button>
+                            <div class="gameover-links">
+                                <button type="button" class="gameover-link" onclick="showBattleLogModal()">Battle log</button>
+                                <button type="button" class="gameover-link" onclick="showModeMenu()">Menu</button>
+                            </div>
+                        `
+                            : `
+                            <button class="btn" onclick="openLeagueHubFromGameover()">League Table</button>
                             <div class="gameover-links">
                                 <button type="button" class="gameover-link" onclick="showBattleLogModal()">Battle log</button>
                                 <button type="button" class="gameover-link" onclick="showModeMenu()">Menu</button>
@@ -5689,11 +6368,7 @@
         }
 
         function checkCaptures(placedIndex, placedCard) {
-            const row = Math.floor(placedIndex / 3), col = placedIndex % 3;
-            const neighbors = [
-                {idx: placedIndex - 3, p: 0, n: 2, ok: row > 0}, {idx: placedIndex + 1, p: 1, n: 3, ok: col < 2},
-                {idx: placedIndex + 3, p: 2, n: 0, ok: row < 2}, {idx: placedIndex - 1, p: 3, n: 1, ok: col > 0}
-            ].filter(n => n.ok && board[n.idx]);
+            const neighbors = neighborDirs(placedIndex).filter(n => n.ok && board[n.idx]);
 
             let blueFlipped = false, redFlipped = false;
             const captured = [];
@@ -5737,10 +6412,7 @@
         }
 
         function currentMatchAiDifficulty() {
-            if (isLeagueMatch()) {
-                const opp = leaguePlayer(leagueMatch.oppId);
-                return opp.difficulty || 'normal';
-            }
+            if (isLeagueMatch()) return leagueAiDifficulty();
             return aiDifficulty;
         }
 
@@ -5761,16 +6433,12 @@
             hand.forEach((card, cardIndex) => {
                 emptyCells.forEach(cellIdx => {
                     let score = 0, flipsCount = 0, exposureRisk = 0;
-                    const row = Math.floor(cellIdx / 3), col = cellIdx % 3;
                     const silencedHere = wouldBeSilenced(owner, cellIdx);
                     const hushCancels = card.ability && card.ability.type === 'silence' && neighborIndexes(cellIdx).some(i => isSilenceCard(board[i]) && board[i].owner === enemy);
-                    const neighbors = [
-                        {idx: cellIdx - 3, p: 0, n: 2, c: row > 0}, {idx: cellIdx + 1, p: 1, n: 3, c: col < 2},
-                        {idx: cellIdx + 3, p: 2, n: 0, c: row < 2}, {idx: cellIdx - 1, p: 3, n: 1, c: col > 0}
-                    ];
+                    const neighbors = neighborDirs(cellIdx);
 
                     neighbors.forEach(n => {
-                        if (n.c && board[n.idx]) {
+                        if (n.ok && board[n.idx]) {
                             const neighborCard = board[n.idx];
                             const myVal = getEffectiveStat(card, n.p, true, silencedHere);
                             const theirVal = getEffectiveStat(neighborCard, n.n, false, isSilenced(n.idx));
@@ -5790,7 +6458,7 @@
                                 if (!captures && !silencedHere && card.ability && card.ability.type === 'equalizer' && myVal === theirVal) captures = true;
                                 if (captures) flipsCount++;
                             }
-                        } else if (n.c && board[n.idx] === null && difficulty === 'hard') {
+                        } else if (n.ok && board[n.idx] === null && difficulty === 'hard') {
                             const exposedStatVal = getEffectiveStat(card, n.p, true, silencedHere);
                             if (exposedStatVal <= 4) exposureRisk += (5 - exposedStatVal);
                         }
@@ -5864,8 +6532,9 @@
 
             let title = blueCount > redCount ? "Victory" : (redCount > blueCount ? "Defeat" : "Draw");
             if (isLeagueMatch() && leagueMatch) {
-                const week = league.fixtures[leagueMatch.fixtureIndex].week;
-                title = `Week ${week} · ${title}`;
+                const fx = league.fixtures[leagueMatch.fixtureIndex];
+                const gameN = (fx.games || []).length;
+                title = `Game ${gameN} · ${title}`;
             }
             const card = document.querySelector('#gameover-modal .modal-content');
             if (card) {
@@ -5889,13 +6558,48 @@
                 leagueActs.hidden = !isLeagueMatch();
                 leagueActs.classList.toggle('hidden', !isLeagueMatch());
             }
+            const seriesEl = document.getElementById('gameover-series');
+            const nextBtn = document.getElementById('gameover-league-next');
+            if (seriesEl) {
+                if (isLeagueMatch() && leagueMatch) {
+                    const fx = league.fixtures[leagueMatch.fixtureIndex];
+                    const s = seriesGameWins(fx);
+                    const youIsHome = fx.home === 'you';
+                    const youG = youIsHome ? s.home : s.away;
+                    const oppG = youIsHome ? s.away : s.home;
+                    const done = seriesComplete(fx);
+                    const nextFirst = !done ? seriesNextFirst(fx) : null;
+                    const nextName = nextFirst === 'you' ? 'You' : leaguePlayer(leagueMatch.oppId).name;
+                    seriesEl.hidden = false;
+                    const weekBit = `Week ${fx.week}`;
+                    seriesEl.textContent = done
+                        ? (fx.result.winner === 'you'
+                            ? `${weekBit} series ${youG}–${oppG}. You take it.`
+                            : fx.result.winner === 'draw'
+                                ? `${weekBit} series ${youG}–${oppG}. Draw.`
+                                : `${weekBit} series ${youG}–${oppG}. ${leaguePlayer(leagueMatch.oppId).name} takes it.`)
+                        : `${weekBit} series ${youG}–${oppG}. Next: ${nextName} first.`;
+                } else {
+                    seriesEl.hidden = true;
+                    seriesEl.textContent = '';
+                }
+            }
+            if (nextBtn) {
+                const fx = isLeagueMatch() && leagueMatch ? league.fixtures[leagueMatch.fixtureIndex] : null;
+                const more = !!(fx && !seriesComplete(fx));
+                nextBtn.hidden = !more;
+                nextBtn.classList.toggle('hidden', !more);
+            }
             if (isLeagueMatch()) {
                 const opp = leaguePlayer(leagueMatch.oppId);
-                statusMsg.textContent = blueCount > redCount
-                    ? `Week done. You took ${opp.name} ${blueCount}–${redCount}.`
+                const fx = league.fixtures[leagueMatch.fixtureIndex];
+                const done = seriesComplete(fx);
+                const gameBit = blueCount > redCount
+                    ? `You took ${opp.name} ${blueCount}–${redCount}`
                     : redCount > blueCount
-                        ? `Week done. ${opp.name} took you ${redCount}–${blueCount}.`
-                        : `Week done. Draw ${blueCount}–${redCount} with ${opp.name}.`;
+                        ? `${opp.name} took you ${redCount}–${blueCount}`
+                        : `Draw ${blueCount}–${redCount} with ${opp.name}`;
+                statusMsg.textContent = done ? `Week done. ${gameBit}.` : `Game done. ${gameBit}.`;
             }
             if (!isLeagueMatch()) syncShareButton();
             lockGameoverClicks();
@@ -5904,7 +6608,9 @@
         }
 
         refreshRulesetDesc();
+        refreshGridSizeDesc();
         refreshVictoryCopy();
+        applyGridSize(preferredGridSize);
         if (!bootSharedMatch()) showModeMenu();
         window.addEventListener('pointermove', onFingerDragMove, {passive: false});
         window.addEventListener('pointerup', onFingerDragEnd);
@@ -5929,12 +6635,13 @@
         window.addEventListener('pageshow', (e) => {
             if (!e.persisted) return;
             clearDraftTimer();
-            hideModals(['draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'battle-log-modal', 'league-modal']);
+            hideModals(['draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'battle-log-modal', 'league-modal', 'league-roster']);
             if (gameState !== 'playing' && gameState !== 'gameover') showModeMenu();
         });
         window.addEventListener('keydown', (e) => {
             if (e.key !== 'Escape') return;
             if (tooltipPinned) {hideTooltip(); return;}
+            if (!document.getElementById('league-roster').classList.contains('hidden')) {closeLeagueRoster(); return;}
             if (!document.getElementById('battle-log-modal').classList.contains('hidden')) {closeBattleLogModal(); return;}
             if (!document.getElementById('expanded-rules-modal').classList.contains('hidden')) {closeRulesModal(); return;}
             if (!document.getElementById('compendium-modal').classList.contains('hidden')) {closeCompendiumModal(); return;}
