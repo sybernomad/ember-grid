@@ -3756,7 +3756,7 @@
             </details>
             <div class="menu-foot">
                 <!-- Bump BUILD on every PR. Still pre-1.0, so this stays Alpha until 1.0 ships. -->
-                <p class="build-stamp">0.31 Alpha</p>
+                <p class="build-stamp">0.32 Alpha</p>
                 <p class="dev-note">Still in active development. Cards and rules may change.</p>
             </div>
         </div>
@@ -4120,12 +4120,126 @@
     <script>
         // --- Audio Engine ---
         let audioCtx = null;
+        let masterGain = null;
+        let masterFilter = null;
+        let noiseBuf = null;
         let isAudioMuted = localStorage.getItem('ember_grid_muted') === 'true';
         updateAudioButtonIcon();
 
         function initAudio() {
             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             if (audioCtx.state === 'suspended') audioCtx.resume();
+            if (audioCtx && !masterGain) {
+                masterGain = audioCtx.createGain();
+                masterGain.gain.value = 1;
+                masterFilter = audioCtx.createBiquadFilter();
+                masterFilter.type = 'lowpass';
+                masterFilter.Q.value = 0.7;
+                masterFilter.frequency.value = document.querySelector('.modal:not(.hidden)') ? 380 : 18000;
+                masterGain.connect(masterFilter);
+                masterFilter.connect(audioCtx.destination);
+            }
+        }
+
+        function audioOut() {
+            return masterGain || (audioCtx && audioCtx.destination);
+        }
+
+        function tablePitch() {
+            if (!board || !board.length) return 1;
+            return 1 + (board.filter(Boolean).length / board.length) * 0.14;
+        }
+
+        function clampNum(n, a, b) {
+            return Math.max(a, Math.min(b, n));
+        }
+
+        function spaceForIndex(index) {
+            const pt = typeof cellFxPoint === 'function' ? cellFxPoint(index) : null;
+            const w = window.innerWidth || 1;
+            const h = window.innerHeight || 1;
+            if (!pt) return {pan: 0, gain: 1};
+            return {
+                pan: clampNum((pt.x / w) * 2 - 1, -0.9, 0.9),
+                gain: clampNum(0.78 + (pt.y / h) * 0.28, 0.7, 1.1)
+            };
+        }
+
+        function refreshTableMuffle() {
+            if (!audioCtx || !masterFilter) return;
+            const muffled = !!document.querySelector('.modal:not(.hidden)');
+            const now = audioCtx.currentTime;
+            masterFilter.frequency.cancelScheduledValues(now);
+            masterFilter.frequency.setTargetAtTime(muffled ? 380 : 18000, now, 0.07);
+        }
+
+        function watchModalMuffle() {
+            document.querySelectorAll('.modal').forEach(el => {
+                new MutationObserver(refreshTableMuffle).observe(el, {attributes: true, attributeFilter: ['class']});
+            });
+        }
+
+        function startVoice(source, opts) {
+            const now = audioCtx.currentTime;
+            const g = audioCtx.createGain();
+            g.gain.setValueAtTime(Math.max(0.0001, opts.gain), now);
+            g.gain.exponentialRampToValueAtTime(0.0001, now + opts.dur);
+            let last = source;
+            if (opts.filterFreq) {
+                const f = audioCtx.createBiquadFilter();
+                f.type = opts.filterType || 'lowpass';
+                f.frequency.setValueAtTime(opts.filterFreq, now);
+                if (opts.filterSlide) {
+                    f.frequency.exponentialRampToValueAtTime(Math.max(40, opts.filterSlide), now + opts.dur);
+                }
+                last.connect(f);
+                last = f;
+            }
+            last.connect(g);
+            const dest = audioOut();
+            if (audioCtx.createStereoPanner) {
+                const p = audioCtx.createStereoPanner();
+                p.pan.setValueAtTime(clampNum(opts.pan || 0, -1, 1), now);
+                g.connect(p);
+                p.connect(dest);
+            } else {
+                g.connect(dest);
+            }
+            source.start(now);
+            source.stop(now + opts.dur + 0.03);
+        }
+
+        function oscVoice(opts) {
+            if (isAudioMuted) return;
+            try {
+                initAudio();
+                if (!audioCtx) return;
+                const osc = audioCtx.createOscillator();
+                osc.type = opts.type || 'sine';
+                const pitch = opts.table === false ? 1 : tablePitch();
+                const freq = Math.max(40, (opts.freq || 440) * pitch);
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                if (opts.slide) {
+                    osc.frequency.exponentialRampToValueAtTime(Math.max(40, opts.slide * pitch), audioCtx.currentTime + opts.dur);
+                }
+                startVoice(osc, opts);
+            } catch (e) { }
+        }
+
+        function noiseVoice(opts) {
+            if (isAudioMuted) return;
+            try {
+                initAudio();
+                if (!audioCtx) return;
+                if (!noiseBuf) {
+                    noiseBuf = audioCtx.createBuffer(1, Math.floor(audioCtx.sampleRate * 0.5), audioCtx.sampleRate);
+                    const data = noiseBuf.getChannelData(0);
+                    for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+                }
+                const src = audioCtx.createBufferSource();
+                src.buffer = noiseBuf;
+                startVoice(src, opts);
+            } catch (e) { }
         }
 
         function toggleAudio() {
@@ -4145,21 +4259,53 @@
         }
 
         function playTone(freq, type, duration, gainVal = 0.1) {
-            if (isAudioMuted) return;
-            try {
-                initAudio();
-                if (!audioCtx) return;
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = type;
-                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-                gain.gain.setValueAtTime(gainVal, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + duration);
-            } catch (e) { }
+            oscVoice({freq, type, dur: duration, gain: gainVal, pan: 0, table: false});
+        }
+
+        function sfxAbility(kind, fromIdx, toIdxs) {
+            if (isAudioMuted || silentSim) return;
+            const dest = (toIdxs && toIdxs[0] != null) ? toIdxs[0] : fromIdx;
+            const a = spaceForIndex(fromIdx);
+            const b = spaceForIndex(dest);
+            const midPan = (a.pan + b.pan) / 2;
+            if (kind === 'bolt') {
+                noiseVoice({dur: 0.1, gain: 0.1 * b.gain, pan: b.pan, filterFreq: 2800, filterType: 'highpass', filterSlide: 900});
+                oscVoice({freq: 1680, slide: 220, type: 'sawtooth', dur: 0.24, gain: 0.055 * b.gain, pan: b.pan, filterFreq: 2600});
+                setTimeout(() => oscVoice({freq: 740, slide: 180, type: 'square', dur: 0.08, gain: 0.03 * b.gain, pan: b.pan}), 40);
+            } else if (kind === 'buff') {
+                oscVoice({freq: 523, type: 'sine', dur: 0.16, gain: 0.05 * a.gain, pan: a.pan});
+                setTimeout(() => oscVoice({freq: 784, type: 'sine', dur: 0.22, gain: 0.045 * b.gain, pan: b.pan}), 70);
+            } else if (kind === 'curse') {
+                oscVoice({freq: 130, slide: 70, type: 'triangle', dur: 0.32, gain: 0.07 * b.gain, pan: b.pan, filterFreq: 400});
+                noiseVoice({dur: 0.2, gain: 0.04 * b.gain, pan: b.pan, filterFreq: 500, filterSlide: 180});
+            } else if (kind === 'blast') {
+                noiseVoice({dur: 0.18, gain: 0.11 * a.gain, pan: a.pan, filterFreq: 900, filterSlide: 160});
+                oscVoice({freq: 90, slide: 45, type: 'sine', dur: 0.28, gain: 0.1 * a.gain, pan: a.pan});
+            } else if (kind === 'poison') {
+                (toIdxs && toIdxs.length ? toIdxs : [dest]).forEach((idx, i) => {
+                    const s = spaceForIndex(idx);
+                    setTimeout(() => {
+                        oscVoice({freq: 640, slide: 240, type: 'sine', dur: 0.12, gain: 0.04 * s.gain, pan: s.pan});
+                        noiseVoice({dur: 0.08, gain: 0.03 * s.gain, pan: s.pan, filterFreq: 700});
+                    }, i * 45);
+                });
+            } else if (kind === 'silence') {
+                noiseVoice({dur: 0.22, gain: 0.06 * b.gain, pan: b.pan, filterFreq: 3200, filterSlide: 220});
+                oscVoice({freq: 210, slide: 80, type: 'triangle', dur: 0.2, gain: 0.04 * b.gain, pan: midPan});
+            } else if (kind === 'chill') {
+                oscVoice({freq: 1480, type: 'sine', dur: 0.28, gain: 0.035 * b.gain, pan: b.pan});
+                oscVoice({freq: 2220, type: 'sine', dur: 0.32, gain: 0.028 * b.gain, pan: b.pan * 0.7});
+            } else if (kind === 'cinder') {
+                noiseVoice({dur: 0.24, gain: 0.07 * b.gain, pan: b.pan, filterFreq: 1400, filterType: 'bandpass', filterSlide: 600});
+                oscVoice({freq: 190, slide: 110, type: 'sawtooth', dur: 0.2, gain: 0.035 * b.gain, pan: b.pan, filterFreq: 500});
+            } else if (kind === 'spite') {
+                oscVoice({freq: 240, slide: 90, type: 'sawtooth', dur: 0.18, gain: 0.06 * b.gain, pan: b.pan, filterFreq: 800});
+                noiseVoice({dur: 0.1, gain: 0.04 * b.gain, pan: b.pan, filterFreq: 1000});
+            } else if (kind === 'equalizer') {
+                oscVoice({freq: 392, type: 'sine', dur: 0.16, gain: 0.05 * a.gain, pan: a.pan});
+                oscVoice({freq: 494, type: 'sine', dur: 0.16, gain: 0.05 * b.gain, pan: b.pan});
+                setTimeout(() => oscVoice({freq: 440, type: 'sine', dur: 0.22, gain: 0.055, pan: midPan}), 90);
+            }
         }
 
         const sfx = {
@@ -4168,7 +4314,8 @@
             flipBlue: () => {playTone(523, 'sine', 0.08, 0.06); setTimeout(() => playTone(659, 'sine', 0.1, 0.06), 50);},
             flipRed: () => {playTone(280, 'sawtooth', 0.08, 0.05); setTimeout(() => playTone(200, 'sawtooth', 0.1, 0.05), 50);},
             win: () => {playTone(523, 'sine', 0.1, 0.08); setTimeout(() => playTone(659, 'sine', 0.1, 0.08), 80); setTimeout(() => playTone(783, 'sine', 0.2, 0.08), 160);},
-            lose: () => {playTone(300, 'sawtooth', 0.12, 0.08); setTimeout(() => playTone(180, 'sawtooth', 0.2, 0.08), 100);}
+            lose: () => {playTone(300, 'sawtooth', 0.12, 0.08); setTimeout(() => playTone(180, 'sawtooth', 0.2, 0.08), 100);},
+            ability: sfxAbility
         };
 
         // --- Clamped Mobile-Friendly Tooltip Engine ---
@@ -5669,6 +5816,7 @@
             if (!el) return;
             releaseUiFocus(el);
             el.classList.add('hidden');
+            refreshTableMuffle();
         }
 
         function hideModals(ids) {
@@ -7080,6 +7228,7 @@
             if (!events || !events.length) return;
             events.forEach(ev => {
                 const to = ev.to || [];
+                sfx.ability(ev.kind, ev.from, to);
                 if (ev.kind === 'bolt' && to[0] != null) playBoltFx(ev.from, to[0]);
                 else if (ev.kind === 'buff') playBuffFx(ev.from, to);
                 else if (ev.kind === 'curse' && to[0] != null) playCurseFx(ev.from, to[0]);
@@ -7729,6 +7878,7 @@
 
         refreshRulesetDesc();
         refreshVictoryCopy();
+        watchModalMuffle();
         if (!bootSharedMatch()) showModeMenu();
         window.addEventListener('pointermove', onFingerDragMove, {passive: false});
         window.addEventListener('pointerup', onFingerDragEnd);
