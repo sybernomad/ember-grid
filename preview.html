@@ -7591,11 +7591,9 @@
             const fx = applyPlacementCore(index, placedCard);
             if (silentSim) return;
 
-            if (!pendingMechFx.length) {
-                sfx.place();
-                if (fx.flip === 'blue') sfx.flipBlue();
-                else if (fx.flip === 'red') sfx.flipRed();
-            }
+            if (!pendingMechFx.length) sfx.place();
+            if (fx.flip === 'blue') sfx.flipBlue();
+            else if (fx.flip === 'red') sfx.flipRed();
 
             const fxParts = [fx.abilityFx && fx.abilityFx.text, fx.buffFx && fx.buffFx.text, fx.silenceFx && fx.silenceFx.text, fx.chillFx && fx.chillFx.text, fx.capLog, fx.psnFx && fx.psnFx.text].filter(Boolean);
             logAction(fxParts.length ? fxParts.join(' · ') : `${placedCard.name} played.`);
