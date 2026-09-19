@@ -2423,38 +2423,17 @@
         .draft-card.taken-vesper { box-shadow: inset 0 0 0 3px #a78bfa; }
         .draft-card.taken-rook { box-shadow: inset 0 0 0 3px #94a3b8; }
 
-        .league-roster {
-            position: fixed;
-            inset: 0;
+        #league-roster {
             z-index: 125;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 12px;
-            background: rgba(8, 5, 3, 0.58);
         }
 
-        .league-roster.hidden {
-            display: none !important;
-        }
-
-        .league-roster-sheet {
+        #league-roster .modal-content {
             width: min(560px, 100%);
             max-height: min(86dvh, calc(100dvh - 24px));
             overflow: hidden;
             display: flex;
             flex-direction: column;
             text-align: left;
-            background:
-                linear-gradient(180deg, rgba(255,255,255,0.04), transparent 28%),
-                var(--panel-bg);
-            color: var(--text-color);
-            padding: 1.1rem 1.05rem 1rem;
-            border-radius: 16px;
-            border: 1px solid rgba(232, 195, 106, 0.38);
-            box-shadow:
-                0 0 0 1px rgba(232, 195, 106, 0.22),
-                0 24px 50px rgba(0, 0, 0, 0.55);
         }
 
         .league-roster-bar {
@@ -2531,26 +2510,29 @@
         }
 
         #draft-modal.league-draft .draft-grid {
+            --draft-gap: 6px;
             flex: 1 1 auto;
             min-height: 0;
             overflow: hidden;
+            container-type: size;
             grid-template-columns: repeat(5, minmax(0, 1fr));
             grid-template-rows: repeat(4, minmax(0, 1fr));
-            gap: 6px;
+            gap: var(--draft-gap);
             align-content: stretch;
-            justify-items: stretch;
+            justify-items: center;
+            align-items: center;
             margin: 6px 0 8px;
         }
 
         #draft-modal.league-draft .draft-card {
             box-sizing: border-box;
-            width: 100%;
+            aspect-ratio: 4 / 5;
+            width: min(100%, calc((100cqh - 3 * var(--draft-gap)) / 4 * 4 / 5));
+            height: auto;
             max-width: 100%;
+            max-height: 100%;
             min-width: 0;
             min-height: 0;
-            height: 100%;
-            max-height: none;
-            aspect-ratio: auto;
             overflow: hidden;
             contain: layout paint;
             --nameplate-h: 20px;
@@ -2601,17 +2583,17 @@
             }
 
             #draft-modal.league-draft .draft-grid {
+                --draft-gap: 5px;
                 grid-template-columns: repeat(5, minmax(0, 1fr));
                 grid-template-rows: repeat(4, minmax(0, 1fr));
-                gap: 5px;
             }
 
             #draft-modal.league-draft .draft-card {
-                width: 100%;
+                aspect-ratio: 4 / 5;
+                width: min(100%, calc((100cqh - 3 * var(--draft-gap)) / 4 * 4 / 5));
+                height: auto;
                 max-width: 100%;
                 min-width: 0;
-                height: 100%;
-                aspect-ratio: auto;
             }
 
             .league-roster-grid {
@@ -2989,8 +2971,9 @@
         </div>
     </div>
 
-    <div id="league-roster" class="league-roster hidden" onclick="onLeagueRosterBackdrop(event)">
-        <div class="league-roster-sheet" onclick="event.stopPropagation()">
+    <div id="league-roster" class="modal modal-ember hidden" onclick="onModalBackdrop(event, closeLeagueRoster)">
+        <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="modal-content" onclick="event.stopPropagation()">
             <div class="league-roster-bar">
                 <p class="league-roster-title" id="league-roster-title">Deck</p>
                 <button type="button" class="btn btn-alt" onclick="closeLeagueRoster()">Back</button>
@@ -3627,7 +3610,7 @@
             if (!grid || !empty || !title) return;
             const p = leaguePlayer(seatId);
             const cards = leagueSeatCards(seatId);
-            title.textContent = `${p.icon} ${p.name} · ${cards.length}/${LEAGUE_HAND_SIZE}`;
+            title.textContent = `${p.icon} ${p.name}`;
             grid.innerHTML = '';
             cards.forEach(card => {
                 const el = document.createElement('div');
@@ -3666,10 +3649,6 @@
             hideTooltip();
             if (leagueDrafting) renderLeagueDraftSeats();
             document.querySelectorAll('.league-rival-chip.is-open').forEach(chip => chip.classList.remove('is-open'));
-        }
-
-        function onLeagueRosterBackdrop(e) {
-            if (e.target && e.target.id === 'league-roster') closeLeagueRoster();
         }
 
         function isLeagueActive() {
@@ -4580,7 +4559,7 @@
             resetFingerDrag();
             hideTurnBanner();
             document.body.classList.add('menu-open');
-            hideModals(['draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal', 'battle-log-modal', 'league-modal']);
+            hideModals(['draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal', 'battle-log-modal', 'league-modal', 'league-roster']);
             closeLeagueRoster();
             document.getElementById('main-menu-modal').classList.remove('hidden');
             gameState = 'menu'; resetTable(); playerHand = []; aiHand = [];
@@ -6340,7 +6319,7 @@
         window.addEventListener('pageshow', (e) => {
             if (!e.persisted) return;
             clearDraftTimer();
-            hideModals(['draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'battle-log-modal', 'league-modal']);
+            hideModals(['draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'battle-log-modal', 'league-modal', 'league-roster']);
             if (gameState !== 'playing' && gameState !== 'gameover') showModeMenu();
         });
         window.addEventListener('keydown', (e) => {
