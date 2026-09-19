@@ -2110,14 +2110,6 @@
             text-align: left;
         }
 
-        .league-tag {
-            margin: 0 0 14px;
-            font-size: 0.82rem;
-            line-height: 1.45;
-            opacity: 0.78;
-            text-align: center;
-        }
-
         .league-crown {
             text-align: center;
             padding: 14px 12px 12px;
@@ -2148,8 +2140,8 @@
 
         .league-rivals {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 6px;
             margin: 0 0 14px;
         }
 
@@ -2161,6 +2153,18 @@
             background: rgba(0, 0, 0, 0.16);
             font-size: 0.68rem;
             line-height: 1.3;
+            width: 100%;
+            color: inherit;
+            font-family: inherit;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        .league-rival-chip:hover,
+        .league-rival-chip.is-open {
+            border-color: rgba(232, 163, 23, 0.7);
+            background: rgba(232, 163, 23, 0.12);
         }
 
         .league-rival-chip .who {
@@ -2171,6 +2175,9 @@
             text-transform: uppercase;
             font-weight: 800;
             margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .league-rival-chip .diff {
@@ -2215,6 +2222,14 @@
         .league-table tr.is-you td {
             color: var(--blue-card);
             font-weight: 700;
+        }
+
+        .league-table td.league-name {
+            cursor: pointer;
+        }
+
+        .league-table td.league-name:hover {
+            color: var(--gold);
         }
 
         .league-table tr.is-crown td:first-child {
@@ -2292,13 +2307,6 @@
             opacity: 0.78;
         }
 
-        .league-lock {
-            margin: 0 0 12px;
-            font-size: 0.68rem;
-            opacity: 0.55;
-            text-align: center;
-        }
-
         .league-actions {
             position: sticky;
             bottom: 0;
@@ -2357,17 +2365,28 @@
 
         .draft-seat {
             text-align: left;
-            padding: 7px 8px;
+            padding: 6px 8px;
             border-radius: 10px;
             border: 1px solid rgba(232, 195, 106, 0.18);
             font-size: 0.7rem;
             line-height: 1.25;
             background: rgba(0, 0, 0, 0.12);
+            width: 100%;
+            color: inherit;
+            font-family: inherit;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
         }
 
         .draft-seat.active {
             border-color: var(--gold);
             box-shadow: 0 0 0 1px rgba(232, 163, 23, 0.28);
+        }
+
+        .draft-seat:hover,
+        .draft-seat.is-open {
+            border-color: rgba(232, 163, 23, 0.7);
         }
 
         .draft-seat .seat-name {
@@ -2404,24 +2423,123 @@
         .draft-card.taken-vesper { box-shadow: inset 0 0 0 3px #a78bfa; }
         .draft-card.taken-rook { box-shadow: inset 0 0 0 3px #94a3b8; }
 
-        #draft-modal.league-draft .modal-content {
-            max-width: 620px;
-            height: min(86dvh, calc(100dvh - 24px));
+        .league-roster {
+            position: fixed;
+            inset: 0;
+            z-index: 125;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            background: rgba(8, 5, 3, 0.58);
+        }
+
+        .league-roster.hidden {
+            display: none !important;
+        }
+
+        .league-roster-sheet {
+            width: min(560px, 100%);
             max-height: min(86dvh, calc(100dvh - 24px));
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            background:
+                linear-gradient(180deg, rgba(255,255,255,0.04), transparent 28%),
+                var(--panel-bg);
+            color: var(--text-color);
+            padding: 1.1rem 1.05rem 1rem;
+            border-radius: 16px;
+            border: 1px solid rgba(232, 195, 106, 0.38);
+            box-shadow:
+                0 0 0 1px rgba(232, 195, 106, 0.22),
+                0 24px 50px rgba(0, 0, 0, 0.55);
+        }
+
+        .league-roster-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin: 0 0 10px;
+            flex: 0 0 auto;
+        }
+
+        .league-roster-title {
+            margin: 0;
+            font-family: var(--font-display);
+            font-size: 0.92rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent);
+        }
+
+        .league-roster-bar .btn {
+            width: auto;
+            min-width: 84px;
+            padding: 7px 14px;
+            font-size: 0.72rem;
+            margin: 0;
+        }
+
+        .league-roster-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+            gap: 8px;
+            justify-items: center;
+            align-content: start;
+            overflow-x: hidden;
+            overflow-y: auto;
+            flex: 1 1 auto;
+            min-height: 0;
+            padding: 2px 0 4px;
+        }
+
+        .league-roster-grid .draft-card {
+            width: 100%;
+            max-width: 132px;
+            min-width: 0;
+            height: auto;
+            aspect-ratio: 4 / 5;
+            cursor: default;
+            pointer-events: auto;
+        }
+
+        .league-roster-empty {
+            margin: 18px 0 8px;
+            text-align: center;
+            opacity: 0.7;
+            font-size: 0.82rem;
+        }
+
+        #draft-modal.league-draft .modal-content {
+            max-width: 680px;
+            height: min(90dvh, calc(100dvh - 16px));
+            max-height: min(90dvh, calc(100dvh - 16px));
+            overflow: hidden;
+        }
+
+        #draft-modal.league-draft .modal-title {
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+
+        #draft-modal.league-draft .draft-order {
+            display: none;
         }
 
         #draft-modal.league-draft .draft-grid {
             flex: 1 1 auto;
             min-height: 0;
-            overflow-x: hidden;
-            overflow-y: auto;
-            scrollbar-gutter: stable;
+            overflow: hidden;
             grid-template-columns: repeat(5, minmax(0, 1fr));
-            gap: 5px;
-            align-content: start;
+            grid-template-rows: repeat(4, minmax(0, 1fr));
+            gap: 6px;
+            align-content: stretch;
             justify-items: stretch;
-            margin: 8px 0 6px;
+            margin: 6px 0 8px;
         }
 
         #draft-modal.league-draft .draft-card {
@@ -2430,20 +2548,20 @@
             max-width: 100%;
             min-width: 0;
             min-height: 0;
-            height: auto;
+            height: 100%;
             max-height: none;
-            aspect-ratio: 4 / 5;
+            aspect-ratio: auto;
             overflow: hidden;
             contain: layout paint;
-            --nameplate-h: 16px;
-            --draft-font-main: 0.54rem;
-            --draft-font-name: 0.34rem;
+            --nameplate-h: 20px;
+            --draft-font-main: 0.62rem;
+            --draft-font-name: 0.4rem;
         }
 
         #draft-modal.league-draft .draft-card .card-emoji {
-            width: 1.25em;
-            height: 1.25em;
-            font-size: 0.95em;
+            width: 1.45em;
+            height: 1.45em;
+            font-size: 1.05em;
         }
 
         #draft-modal.league-draft .draft-card:hover {
@@ -2453,19 +2571,16 @@
         #draft-modal.league-draft .draft-status {
             position: relative;
             z-index: 2;
-            min-height: 2.5em;
+            min-height: 0;
+            margin: 0 0 4px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        #draft-modal.league-draft .draft-order {
-            min-height: 2.6em;
-            flex: 0 0 auto;
-        }
-
         #draft-modal.league-draft .draft-seats {
             flex: 0 0 auto;
+            margin: 0 0 4px;
         }
 
         #draft-modal.league-draft .btn-dismiss {
@@ -2480,22 +2595,34 @@
             }
 
             #draft-modal.league-draft .modal-content {
-                max-width: min(620px, 100%);
-                height: min(86dvh, calc(100dvh - 24px));
-                max-height: min(86dvh, calc(100dvh - 24px));
+                max-width: min(680px, 100%);
+                height: min(90dvh, calc(100dvh - 16px));
+                max-height: min(90dvh, calc(100dvh - 16px));
             }
 
             #draft-modal.league-draft .draft-grid {
                 grid-template-columns: repeat(5, minmax(0, 1fr));
-                gap: 4px;
+                grid-template-rows: repeat(4, minmax(0, 1fr));
+                gap: 5px;
             }
 
             #draft-modal.league-draft .draft-card {
                 width: 100%;
                 max-width: 100%;
                 min-width: 0;
-                height: auto;
-                aspect-ratio: 4 / 5;
+                height: 100%;
+                aspect-ratio: auto;
+            }
+
+            .league-roster-grid {
+                grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
+                gap: 6px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .league-rivals {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
             }
         }
     </style>
@@ -2783,7 +2910,7 @@
         <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="modal-content" onclick="event.stopPropagation()">
             <button type="button" class="modal-close" onclick="cancelDraft()" aria-label="Cancel draft"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
-            <h2 id="draft-title" class="modal-title" style="color: var(--blue-card);">Draft Hands</h2>
+            <h2 id="draft-title" class="modal-title">Draft Hands</h2>
             <p id="draft-order" class="draft-order">Sixteen cards from the deck. Snake order: 1 pick, then pairs of 2, until each hand is five.</p>
             <p id="draft-status" class="draft-status"></p>
             <div class="draft-seats hidden" id="draft-seats"></div>
@@ -2829,8 +2956,8 @@
             </div>
             <p id="gameover-series" class="league-series-line" hidden></p>
             <div class="gameover-actions" id="gameover-league-actions" hidden>
-                <button class="btn" id="gameover-league-next" hidden onclick="playNextLeagueMatch()">Next game</button>
-                <button class="btn btn-alt" id="gameover-league-table" onclick="openLeagueHubFromGameover()">League table</button>
+                <button class="btn" id="gameover-league-next" hidden onclick="playNextLeagueMatch()">Next Game</button>
+                <button class="btn btn-alt" id="gameover-league-table" onclick="openLeagueHubFromGameover()">League Table</button>
             </div>
             <div class="gameover-links">
                 <button type="button" class="gameover-link" onclick="viewFinalBoard()">View board</button>
@@ -2858,8 +2985,18 @@
         <div class="modal-content" onclick="event.stopPropagation()">
             <button type="button" class="modal-close" onclick="leaveLeagueToMenu()" aria-label="Close league"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
             <h2 class="modal-title">Ember League</h2>
-            <p class="league-tag" id="league-tag">You plus three AI. Snake-draft twenty, then six weeks. Everyone plays everyone twice.</p>
             <div id="league-hub"></div>
+        </div>
+    </div>
+
+    <div id="league-roster" class="league-roster hidden" onclick="onLeagueRosterBackdrop(event)">
+        <div class="league-roster-sheet" onclick="event.stopPropagation()">
+            <div class="league-roster-bar">
+                <p class="league-roster-title" id="league-roster-title">Deck</p>
+                <button type="button" class="btn btn-alt" onclick="closeLeagueRoster()">Back</button>
+            </div>
+            <div class="league-roster-grid" id="league-roster-grid"></div>
+            <p class="league-roster-empty" id="league-roster-empty" hidden>No cards yet.</p>
         </div>
     </div>
 
@@ -3201,6 +3338,7 @@
             {id: 'vesper', name: 'Vesper', icon: '🌙', style: 'Quiet edges. Chill, Silence, Poison.'},
             {id: 'rook', name: 'Rook', icon: '♟️', style: 'Takes the strongest card.'}
         ];
+        const LEAGUE_HAND_SIZE = 5;
         let league = loadLeague();
         let leagueCrowns = loadLeagueCrowns();
         let leagueMatch = null;
@@ -3210,10 +3348,11 @@
         let silentSim = false;
         let cloneRulesetOverride = null;
         let leagueHubConfirm = null;
+        let leagueRosterSeat = null;
 
         function snakeSeq4(order) {
             const seq = [];
-            for (let round = 0; round < 5; round++) {
+            for (let round = 0; round < LEAGUE_HAND_SIZE; round++) {
                 const row = round % 2 === 0 ? order : order.slice().reverse();
                 seq.push(...row);
             }
@@ -3249,11 +3388,6 @@
 
         function leagueAiDifficulty() {
             return aiDifficulty === 'easy' || aiDifficulty === 'hard' ? aiDifficulty : 'normal';
-        }
-
-        function leagueDifficultyLabel() {
-            const d = leagueAiDifficulty();
-            return d === 'easy' ? 'Easy' : d === 'hard' ? 'Hard' : 'Normal';
         }
 
         function makeLeaguePairings() {
@@ -3387,12 +3521,12 @@
                 hands[id] = list;
             }
             if (raw.phase !== 'draft') {
-                if (ids.some(id => hands[id].length !== 5)) return null;
+                if (ids.some(id => hands[id].length !== LEAGUE_HAND_SIZE)) return null;
             }
             if (!Array.isArray(raw.draftOrder) || raw.draftOrder.length !== 4) return null;
             if (!raw.draftOrder.every(isLeagueSeat)) return null;
             const pool = Array.isArray(raw.pool) ? raw.pool.filter(c => c && c.id && (c.draftedBy === null || isLeagueSeat(c.draftedBy))) : [];
-            if (raw.phase === 'draft' && pool.length !== 20) return null;
+            if (raw.phase === 'draft' && pool.length !== LEAGUE_HAND_SIZE * 4) return null;
             let fixtures = raw.phase === 'draft' ? [] : migrateLeagueFixtures(Array.isArray(raw.fixtures) ? raw.fixtures : []);
             if (raw.phase !== 'draft' && fixtures.length !== 12) return null;
             if (raw.phase === 'season') {
@@ -3445,6 +3579,7 @@
             leagueDrafting = false;
             leagueHubConfirm = null;
             cloneRulesetOverride = null;
+            closeLeagueRoster();
             saveLeague();
         }
 
@@ -3456,6 +3591,85 @@
         function leagueLabel(id) {
             const p = leaguePlayer(id);
             return `${p.icon} ${p.name}`;
+        }
+
+        function leagueTakeLine(id, object) {
+            if (id === 'you') return `You take the ${object}`;
+            return `${leaguePlayer(id).name} takes the ${object}`;
+        }
+
+        function leagueSeatCards(seatId) {
+            if (leagueDrafting) return (leagueHandsLive[seatId] || []).slice();
+            if (!league || !league.hands) return [];
+            const ids = league.hands[seatId] || [];
+            return ids.map(id => {
+                const master = masterCards.find(c => c.id === id);
+                return master ? cloneCard(master, {}, league.ruleset) : null;
+            }).filter(Boolean);
+        }
+
+        function draftCardFaceHTML(card) {
+            return `
+                ${card.ability ? `<div class="ability-badge">${card.ability.icon}</div>` : ''}
+                <div class="stat-top">${formatStat(card.baseStats[0])}</div>
+                <div class="stat-right">${formatStat(card.baseStats[1])}</div>
+                <div class="stat-bottom">${formatStat(card.baseStats[2])}</div>
+                <div class="stat-left">${formatStat(card.baseStats[3])}</div>
+                <div class="card-emoji">${card.emoji}</div>
+                ${nameplateHTML(card)}
+            `;
+        }
+
+        function fillLeagueRoster(seatId) {
+            const grid = document.getElementById('league-roster-grid');
+            const empty = document.getElementById('league-roster-empty');
+            const title = document.getElementById('league-roster-title');
+            if (!grid || !empty || !title) return;
+            const p = leaguePlayer(seatId);
+            const cards = leagueSeatCards(seatId);
+            title.textContent = `${p.icon} ${p.name} · ${cards.length}/${LEAGUE_HAND_SIZE}`;
+            grid.innerHTML = '';
+            cards.forEach(card => {
+                const el = document.createElement('div');
+                el.className = 'draft-card';
+                el.innerHTML = draftCardFaceHTML(card);
+                addTooltipListeners(el, abilityTip(card));
+                paintCardFaces(el);
+                grid.appendChild(el);
+            });
+            empty.hidden = cards.length > 0;
+            grid.hidden = cards.length === 0;
+        }
+
+        function openLeagueRoster(seatId) {
+            if (!isLeagueSeat(seatId)) return;
+            sfx.click(); hideTooltip();
+            if (leagueRosterSeat === seatId && !document.getElementById('league-roster').classList.contains('hidden')) {
+                closeLeagueRoster();
+                return;
+            }
+            leagueRosterSeat = seatId;
+            fillLeagueRoster(seatId);
+            document.getElementById('league-roster').classList.remove('hidden');
+            if (leagueDrafting) renderLeagueDraftSeats();
+            else if (league) {
+                document.querySelectorAll('.league-rival-chip').forEach(el => {
+                    el.classList.toggle('is-open', el.getAttribute('data-seat') === seatId);
+                });
+            }
+        }
+
+        function closeLeagueRoster() {
+            const el = document.getElementById('league-roster');
+            if (el) el.classList.add('hidden');
+            leagueRosterSeat = null;
+            hideTooltip();
+            if (leagueDrafting) renderLeagueDraftSeats();
+            document.querySelectorAll('.league-rival-chip.is-open').forEach(chip => chip.classList.remove('is-open'));
+        }
+
+        function onLeagueRosterBackdrop(e) {
+            if (e.target && e.target.id === 'league-roster') closeLeagueRoster();
         }
 
         function isLeagueActive() {
@@ -3486,7 +3700,7 @@
                 players: [youSeat(), ...LEAGUE_RIVALS],
                 draftOrder: order,
                 draftPickIndex: 0,
-                pool: shuffleCopy(masterCards).slice(0, 20).map(c => ({id: c.id, draftedBy: null})),
+                pool: shuffleCopy(masterCards).slice(0, LEAGUE_HAND_SIZE * 4).map(c => ({id: c.id, draftedBy: null})),
                 hands: {you: [], ash: [], vesper: [], rook: []},
                 fixtures: [],
                 recap: '',
@@ -3564,6 +3778,7 @@
 
         function leaveLeagueToMenu() {
             sfx.click(); hideTooltip();
+            closeLeagueRoster();
             if (league && league.phase === 'draft') persistLeagueDraft();
             saveLeague();
             hideModal('league-modal');
@@ -3592,7 +3807,7 @@
                 if (entry.draftedBy && leagueHandsLive[entry.draftedBy]) leagueHandsLive[entry.draftedBy].push(card);
                 return card;
             }).filter(Boolean);
-            draftPickIndex = Math.min(league.draftPickIndex || 0, 19);
+            draftPickIndex = Math.min(league.draftPickIndex || 0, LEAGUE_HAND_SIZE * 4 - 1);
             leagueDraftSeq = snakeSeq4(league.draftOrder);
             draftTurn = leagueDraftSeq[draftPickIndex];
             leagueDrafting = true;
@@ -3603,7 +3818,7 @@
             hideModals(['main-menu-modal', 'league-modal', 'deck-modal', 'gameover-modal', 'battle-log-modal']);
             document.body.classList.add('menu-open');
             hydrateLeagueDraft();
-            const draftedOut = ['you', 'ash', 'vesper', 'rook'].every(id => (leagueHandsLive[id] || []).length >= 5);
+            const draftedOut = ['you', 'ash', 'vesper', 'rook'].every(id => (leagueHandsLive[id] || []).length >= LEAGUE_HAND_SIZE);
             if (draftedOut) {
                 finishLeagueDraft();
                 return;
@@ -3628,12 +3843,13 @@
             modal.classList.toggle('league-draft', !!isLeague);
             if (isLeague) {
                 title.textContent = 'League Draft';
-                order.textContent = 'Twenty cards. Snake among four. Five each. No Tribe Decks.';
-                cancel.textContent = 'Save & leave';
+                order.hidden = true;
+                cancel.textContent = 'Save & Leave';
                 seats.classList.remove('hidden');
                 rosters.classList.add('hidden');
             } else {
                 title.textContent = 'Draft Hands';
+                order.hidden = false;
                 order.textContent = 'Sixteen cards from the deck. Snake order: 1 pick, then pairs of 2, until each hand is five.';
                 cancel.textContent = 'Cancel Draft';
                 seats.classList.add('hidden');
@@ -3648,12 +3864,19 @@
             ['you', 'ash', 'vesper', 'rook'].forEach(id => {
                 const p = leaguePlayer(id);
                 const hand = leagueHandsLive[id] || [];
-                const el = document.createElement('div');
-                el.className = 'draft-seat' + (draftTurn === id ? ' active' : '');
+                const el = document.createElement('button');
+                el.type = 'button';
+                el.className = 'draft-seat' + (draftTurn === id ? ' active' : '') + (leagueRosterSeat === id ? ' is-open' : '');
                 const last = hand.length ? hand[hand.length - 1].name : '—';
-                el.innerHTML = `<div class="seat-name">${p.icon} ${p.name} · ${hand.length}/5</div><div class="seat-picks">${hand.length ? last : 'waiting'}</div>`;
+                el.innerHTML = `<div class="seat-name">${p.icon} ${p.name} · ${hand.length}/${LEAGUE_HAND_SIZE}</div><div class="seat-picks">${hand.length ? last : 'waiting'}</div>`;
+                el.title = `View ${p.name === 'You' ? 'your' : p.name + "'s"} cards`;
+                el.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openLeagueRoster(id);
+                });
                 seats.appendChild(el);
             });
+            if (leagueRosterSeat) fillLeagueRoster(leagueRosterSeat);
         }
 
         function leagueDraftScore(card, playerId) {
@@ -3688,8 +3911,9 @@
             league.pool = draftPool.map(c => ({id: c.id, draftedBy: c.draftedBy || null}));
             league.fixtures = makeLeagueFixtures();
             league.phase = 'season';
-            league.draftPickIndex = 20;
+            league.draftPickIndex = LEAGUE_HAND_SIZE * 4;
             leagueDrafting = false;
+            closeLeagueRoster();
             saveLeague();
             hideModal('draft-modal');
             setupDraftChrome(false);
@@ -3857,31 +4081,28 @@
 
         function renderLeagueHub() {
             const hub = document.getElementById('league-hub');
-            const tag = document.getElementById('league-tag');
             if (!hub || !league) return;
             const table = leagueStandings();
             const ranks = standingsMap();
             const next = nextUserFixture();
             const weekNow = Math.min(currentLeagueWeek(), 6);
-            const leftoverBit = league.leftover ? 'Leftover scores on' : 'Leftover-off';
-            const modeBit = league.ruleset === 'classic' ? 'Classic' : 'Ember';
-            const diffBit = leagueDifficultyLabel();
-            tag.textContent = league.phase === 'complete'
-                ? 'Season complete. Crown on the table. Start a new one whenever you like.'
-                : 'Snake-draft is locked. Six weeks, twelve series, six of them yours. Best of three. Casual games do not wipe this.';
 
             let html = '';
             if (league.phase === 'complete' && league.champion) {
                 const champ = leaguePlayer(league.champion);
                 const youPlace = ranks.you ? ranks.you.rank : 4;
-                const youLine = youPlace === 1 ? 'You take the crown.' : `You finished ${youPlace}${youPlace === 2 ? 'nd' : youPlace === 3 ? 'rd' : 'th'}.`;
-                html += `<div class="league-crown"><p class="league-crown-title">${champ.icon} ${champ.name} takes the crown</p><p class="league-crown-sub">${youLine} Seasons won: ${leagueCrowns.won}/${leagueCrowns.played}</p></div>`;
-            } else {
-                html += `<div class="league-rivals">${LEAGUE_RIVALS.map(r => {
-                    const rec = ranks[r.id] ? recordLine(ranks[r.id].row) : '0-0-0';
-                    return `<div class="league-rival-chip"><span class="who">${r.icon} ${r.name}</span><span class="diff">${diffBit} · ${rec}</span></div>`;
-                }).join('')}</div>`;
+                const youLine = youPlace === 1
+                    ? `Seasons won: ${leagueCrowns.won}/${leagueCrowns.played}`
+                    : `You finished ${youPlace}${youPlace === 2 ? 'nd' : youPlace === 3 ? 'rd' : 'th'}. Seasons won: ${leagueCrowns.won}/${leagueCrowns.played}`;
+                html += `<div class="league-crown"><p class="league-crown-title">${champ.icon} ${leagueTakeLine(league.champion, 'crown')}</p><p class="league-crown-sub">${youLine}</p></div>`;
             }
+
+            const seats = [youSeat(), ...LEAGUE_RIVALS];
+            html += `<div class="league-rivals">${seats.map(r => {
+                const rec = ranks[r.id] ? recordLine(ranks[r.id].row) : '0-0-0';
+                const open = leagueRosterSeat === r.id ? ' is-open' : '';
+                return `<button type="button" class="league-rival-chip${open}" data-seat="${r.id}" title="View ${r.name === 'You' ? 'your' : r.name + "'s"} deck" onclick="openLeagueRoster('${r.id}')"><span class="who">${r.icon} ${r.name}</span><span class="diff">${rec}</span></button>`;
+            }).join('')}</div>`;
 
             if (league.recap) html += `<div class="league-recap">${league.recap}</div>`;
 
@@ -3890,7 +4111,7 @@
                 const cls = [row.id === 'you' ? 'is-you' : '', i === 0 && row.played ? 'is-crown' : ''].filter(Boolean).join(' ');
                 const diff = row.pf - row.pa;
                 const diffStr = `${diff > 0 ? '+' : ''}${diff}`;
-                html += `<tr class="${cls}"><td>${i + 1}</td><td>${row.icon} ${row.name}</td><td class="num">${recordLine(row)}</td><td class="num">${row.gw}</td><td class="num">${row.pf}</td><td class="num">${diffStr}</td></tr>`;
+                html += `<tr class="${cls}"><td>${i + 1}</td><td class="league-name" onclick="openLeagueRoster('${row.id}')">${row.icon} ${row.name}</td><td class="num">${recordLine(row)}</td><td class="num">${row.gw}</td><td class="num">${row.pf}</td><td class="num">${diffStr}</td></tr>`;
             });
             html += `</tbody></table></div>`;
 
@@ -3913,24 +4134,23 @@
                 html += `</div>`;
             }
 
-            html += `<p class="league-lock">${modeBit} · ${leftoverBit} · AI ${diffBit}</p>`;
             html += `<div class="league-actions">`;
             if (league.phase === 'complete') {
-                html += `<button class="btn" onclick="requestNewLeague()">New season</button>`;
+                html += `<button class="btn" onclick="requestNewLeague()">New Season</button>`;
             } else if (next) {
                 const opp = next.home === 'you' ? next.away : next.home;
                 const oppP = leaguePlayer(opp);
                 const oppRow = ranks[opp] ? ranks[opp].row : null;
                 const rec = oppRow ? recordLine(oppRow) : '0-0-0';
                 const gameN = (next.games || []).length + 1;
-                html += `<button class="btn" onclick="playNextLeagueMatch()">Play week ${next.week} · game ${gameN} · ${oppP.name} (${rec})</button>`;
+                html += `<button class="btn" onclick="playNextLeagueMatch()">Play Week ${next.week} · Game ${gameN} · ${oppP.name} (${rec})</button>`;
             }
-            html += `<button class="btn btn-alt" onclick="leaveLeagueToMenu()">Back to menu</button>`;
-            html += `<div class="league-danger"><button class="btn btn-muted" onclick="requestEndLeague()">End league</button>${league.phase !== 'complete' ? '<button class="btn btn-muted" onclick="requestNewLeague()">New season</button>' : ''}</div></div>`;
+            html += `<button class="btn btn-alt" onclick="leaveLeagueToMenu()">Back to Menu</button>`;
+            html += `<div class="league-danger"><button class="btn btn-muted" onclick="requestEndLeague()">End League</button>${league.phase !== 'complete' ? '<button class="btn btn-muted" onclick="requestNewLeague()">New Season</button>' : ''}</div></div>`;
             if (leagueHubConfirm === 'end') {
-                html = `<div class="league-confirm">This season is gone — standings, draft, and remaining matches. Casual games stay.<div class="row"><button class="btn" onclick="confirmLeagueAction('end')">End it</button><button class="btn btn-alt" onclick="cancelLeagueConfirm()">Keep it</button></div></div>` + html;
+                html = `<div class="league-confirm">This season is gone — standings, draft, and remaining matches. Casual games stay.<div class="row"><button class="btn" onclick="confirmLeagueAction('end')">End It</button><button class="btn btn-alt" onclick="cancelLeagueConfirm()">Keep It</button></div></div>` + html;
             } else if (leagueHubConfirm === 'new') {
-                html = `<div class="league-confirm">Start a new season? The current draft and table will be wiped.<div class="row"><button class="btn" onclick="confirmLeagueAction('new')">Start new</button><button class="btn btn-alt" onclick="cancelLeagueConfirm()">Keep this one</button></div></div>` + html;
+                html = `<div class="league-confirm">Start a new season? The current draft and table will be wiped.<div class="row"><button class="btn" onclick="confirmLeagueAction('new')">Start New</button><button class="btn btn-alt" onclick="cancelLeagueConfirm()">Keep This One</button></div></div>` + html;
             }
             hub.innerHTML = html;
             if (leagueHubConfirm) {
@@ -3941,6 +4161,7 @@
 
         function playNextLeagueMatch() {
             sfx.click(); hideTooltip();
+            closeLeagueRoster();
             hideModal('gameover-modal');
             const idx = nextUserFixtureIndex();
             if (idx < 0) {
@@ -4337,6 +4558,7 @@
 
         function cancelDraft() {
             clearDraftTimer();
+            closeLeagueRoster();
             if (leagueDrafting) persistLeagueDraft();
             leagueDrafting = false;
             setupDraftChrome(false);
@@ -4359,6 +4581,7 @@
             hideTurnBanner();
             document.body.classList.add('menu-open');
             hideModals(['draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal', 'battle-log-modal', 'league-modal']);
+            closeLeagueRoster();
             document.getElementById('main-menu-modal').classList.remove('hidden');
             gameState = 'menu'; resetTable(); playerHand = []; aiHand = [];
             lastBlueScore = null; lastRedScore = null; lastMatch = null;
@@ -4982,15 +5205,7 @@
                 let el = reuse ? grid.children[i] : document.createElement('div');
                 el.className = draftCardClass(card);
                 if (reuse) return;
-                el.innerHTML = `
-                    ${card.ability ? `<div class="ability-badge">${card.ability.icon}</div>` : ''}
-                    <div class="stat-top">${formatStat(card.baseStats[0])}</div>
-                    <div class="stat-right">${formatStat(card.baseStats[1])}</div>
-                    <div class="stat-bottom">${formatStat(card.baseStats[2])}</div>
-                    <div class="stat-left">${formatStat(card.baseStats[3])}</div>
-                    <div class="card-emoji">${card.emoji}</div>
-                    ${nameplateHTML(card)}
-                `;
+                el.innerHTML = draftCardFaceHTML(card);
                 addTooltipListeners(el, abilityTip(card));
                 paintCardFaces(el);
                 grid.appendChild(el);
@@ -5035,7 +5250,7 @@
             const available = draftPool.filter(c => !c.draftedBy);
             if (!available.length) return;
             if (leagueDrafting) {
-                if (draftTurn === 'you' || !leagueHandsLive[draftTurn] || leagueHandsLive[draftTurn].length >= 5) return;
+                if (draftTurn === 'you' || !leagueHandsLive[draftTurn] || leagueHandsLive[draftTurn].length >= LEAGUE_HAND_SIZE) return;
                 available.sort((a, b) => leagueDraftScore(b, draftTurn) - leagueDraftScore(a, draftTurn));
                 available[0].draftedBy = draftTurn;
                 leagueHandsLive[draftTurn].push(available[0]);
@@ -5072,7 +5287,7 @@
 
         function checkDraftProgress() {
             if (leagueDrafting) {
-                const done = ['you', 'ash', 'vesper', 'rook'].every(id => (leagueHandsLive[id] || []).length >= 5);
+                const done = ['you', 'ash', 'vesper', 'rook'].every(id => (leagueHandsLive[id] || []).length >= LEAGUE_HAND_SIZE);
                 if (done) {
                     finishLeagueDraft();
                     return;
@@ -5539,14 +5754,14 @@
                         const more = !!(fx && !seriesComplete(fx));
                         bar.innerHTML = more
                             ? `
-                            <button class="btn" onclick="playNextLeagueMatch()">Next game</button>
+                            <button class="btn" onclick="playNextLeagueMatch()">Next Game</button>
                             <div class="gameover-links">
                                 <button type="button" class="gameover-link" onclick="showBattleLogModal()">Battle log</button>
                                 <button type="button" class="gameover-link" onclick="showModeMenu()">Menu</button>
                             </div>
                         `
                             : `
-                            <button class="btn" onclick="openLeagueHubFromGameover()">League table</button>
+                            <button class="btn" onclick="openLeagueHubFromGameover()">League Table</button>
                             <div class="gameover-links">
                                 <button type="button" class="gameover-link" onclick="showBattleLogModal()">Battle log</button>
                                 <button type="button" class="gameover-link" onclick="showModeMenu()">Menu</button>
@@ -6131,6 +6346,7 @@
         window.addEventListener('keydown', (e) => {
             if (e.key !== 'Escape') return;
             if (tooltipPinned) {hideTooltip(); return;}
+            if (!document.getElementById('league-roster').classList.contains('hidden')) {closeLeagueRoster(); return;}
             if (!document.getElementById('battle-log-modal').classList.contains('hidden')) {closeBattleLogModal(); return;}
             if (!document.getElementById('expanded-rules-modal').classList.contains('hidden')) {closeRulesModal(); return;}
             if (!document.getElementById('compendium-modal').classList.contains('hidden')) {closeCompendiumModal(); return;}
