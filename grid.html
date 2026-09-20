@@ -339,7 +339,10 @@
             .fx-ring,
             .score-pill.score-tick,
             .turn-indicator.pulse,
-            .stat-flash {
+            .stat-flash,
+            .mech-burst,
+            .mech-travel,
+            .mech-bolt-svg {
                 animation: none;
             }
 
@@ -542,6 +545,19 @@
             align-items: center;
             gap: 4px;
             width: 100%;
+        }
+
+        .board-wrap {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .board-fx {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 85;
+            overflow: visible;
         }
 
         .hand {
@@ -778,24 +794,12 @@
         body.grid-5 .hand {
             display: flex;
             flex-wrap: nowrap;
-            justify-content: safe center;
+            justify-content: center;
             align-items: flex-end;
             gap: var(--fan-gap);
-            overflow-x: auto;
-            overflow-y: hidden;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-            touch-action: pan-x;
-            overscroll-behavior-x: contain;
-            padding: 28px 12px 8px;
-            min-height: calc(var(--fan-h) + 36px);
-        }
-
-        body.grid-4 .hand::-webkit-scrollbar,
-        body.grid-5 .hand::-webkit-scrollbar {
-            display: none;
-            width: 0;
-            height: 0;
+            overflow: hidden;
+            padding: 16px 8px 6px;
+            min-height: calc(var(--fan-h) + 22px);
         }
 
         body.grid-4 .hand .card,
@@ -809,8 +813,8 @@
             transform: translateY(0) scale(1);
             transform-origin: center bottom;
             transition:
-                transform 0.42s cubic-bezier(0.22, 1.45, 0.36, 1),
-                box-shadow 0.28s ease,
+                transform 0.22s cubic-bezier(0.22, 1.45, 0.36, 1),
+                box-shadow 0.22s ease,
                 border-color 0.22s ease,
                 filter 0.22s ease;
         }
@@ -2373,6 +2377,10 @@
             box-shadow: 0 0 0 2px #fb923c, 0 0 18px #ea580c;
         }
 
+        .fx-ring.equalizer {
+            box-shadow: 0 0 0 2px #e2e8f0, 0 0 16px #94a3b8;
+        }
+
         @keyframes fxRing {
             0% {
                 opacity: 0;
@@ -2387,6 +2395,649 @@
             100% {
                 opacity: 0;
                 transform: scale(1.08);
+            }
+        }
+
+        .mech-burst {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            overflow: visible;
+        }
+
+        .mech-burst>* {
+            pointer-events: none;
+        }
+
+        .mech-flash {
+            position: absolute;
+            inset: 6%;
+            border-radius: 10px;
+            opacity: 0;
+            animation: mechFlash 0.55s ease-out forwards;
+        }
+
+        .mech-flash.bolt {
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(96, 165, 250, 0.5) 42%, transparent 74%);
+        }
+
+        .mech-flash.buff {
+            background: radial-gradient(circle, rgba(255, 236, 170, 0.75) 0%, rgba(232, 163, 23, 0.32) 50%, transparent 74%);
+        }
+
+        .mech-flash.curse {
+            background: radial-gradient(circle, rgba(216, 180, 254, 0.7) 0%, rgba(88, 28, 135, 0.36) 55%, transparent 76%);
+        }
+
+        .mech-flash.blast {
+            background: radial-gradient(circle, rgba(255, 220, 160, 0.78) 0%, rgba(249, 115, 22, 0.38) 50%, transparent 74%);
+        }
+
+        .mech-flash.poison {
+            background: radial-gradient(circle, rgba(134, 239, 172, 0.58) 0%, rgba(22, 163, 74, 0.3) 52%, transparent 74%);
+        }
+
+        .mech-flash.silence {
+            background: radial-gradient(circle, rgba(226, 232, 240, 0.5) 0%, rgba(100, 116, 139, 0.3) 55%, transparent 74%);
+        }
+
+        .mech-flash.chill {
+            background: radial-gradient(circle, rgba(224, 246, 255, 0.72) 0%, rgba(56, 189, 248, 0.3) 52%, transparent 76%);
+        }
+
+        .mech-flash.cinder {
+            background: radial-gradient(circle, rgba(255, 180, 80, 0.7) 0%, rgba(234, 88, 12, 0.34) 52%, transparent 74%);
+        }
+
+        .mech-flash.spite {
+            background: radial-gradient(circle, rgba(254, 202, 202, 0.62) 0%, rgba(225, 29, 72, 0.36) 50%, transparent 74%);
+        }
+
+        .mech-flash.equalizer {
+            background: radial-gradient(circle, rgba(248, 250, 252, 0.7) 0%, rgba(148, 163, 184, 0.3) 52%, transparent 74%);
+        }
+
+        @keyframes mechFlash {
+            0% {
+                opacity: 0;
+                transform: scale(0.86);
+            }
+
+            14% {
+                opacity: 1;
+                transform: scale(1.06);
+            }
+
+            58% {
+                opacity: 0.88;
+                transform: scale(1.08);
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(1.16);
+            }
+        }
+
+        .mech-wave {
+            position: absolute;
+            inset: 4%;
+            border-radius: 12px;
+            border: 3px solid rgba(255, 186, 92, 0.95);
+            box-shadow: 0 0 22px rgba(249, 115, 22, 0.65);
+            animation: mechWave 0.78s ease-out forwards;
+        }
+
+        @keyframes mechWave {
+            0% {
+                opacity: 1;
+                transform: scale(0.5);
+            }
+
+            45% {
+                opacity: 0.75;
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(1.95);
+            }
+        }
+
+        .mech-spark {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 9px;
+            height: 9px;
+            margin: -4px 0 0 -4px;
+            border-radius: 50%;
+            background: #fff7d6;
+            box-shadow: 0 0 10px #fbbf24, 0 0 18px #f97316;
+            animation: mechSpark 0.7s ease-out forwards;
+            --dx: 0px;
+            --dy: -18px;
+        }
+
+        @keyframes mechSpark {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1.15);
+            }
+
+            55% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(var(--dx), var(--dy)) scale(0.25);
+            }
+        }
+
+        .mech-mote {
+            position: absolute;
+            left: 50%;
+            top: 62%;
+            width: 7px;
+            height: 7px;
+            margin: -3px 0 0 -3px;
+            border-radius: 50%;
+            background: #ffe08a;
+            box-shadow: 0 0 10px #e8a317, 0 0 16px #fbbf24;
+            animation: mechMote 0.82s ease-out forwards;
+            --dx: 0px;
+        }
+
+        @keyframes mechMote {
+            0% {
+                opacity: 0;
+                transform: translate(0, 8px) scale(0.4);
+            }
+
+            18% {
+                opacity: 1;
+            }
+
+            62% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(var(--dx), -32px) scale(0.85);
+            }
+        }
+
+        .mech-drip {
+            position: absolute;
+            left: 50%;
+            top: 18%;
+            width: 7px;
+            height: 12px;
+            margin-left: -3px;
+            border-radius: 40% 40% 55% 55%;
+            background: linear-gradient(#bbf7d0, #16a34a);
+            box-shadow: 0 0 10px #22c55e;
+            animation: mechDrip 0.8s ease-in forwards;
+            --dx: 0px;
+        }
+
+        @keyframes mechDrip {
+            0% {
+                opacity: 0;
+                transform: translate(var(--dx), -6px) scale(0.6);
+            }
+
+            16% {
+                opacity: 1;
+            }
+
+            55% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(var(--dx), 36px) scale(0.9);
+            }
+        }
+
+        .mech-crystal {
+            position: absolute;
+            width: 11px;
+            height: 11px;
+            background: linear-gradient(135deg, #f0f9ff, #38bdf8);
+            box-shadow: 0 0 10px #7dd3fc, 0 0 16px #38bdf8;
+            clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+            animation: mechCrystal 0.8s ease-out forwards;
+        }
+
+        .mech-crystal.c1 {
+            left: 12%;
+            top: 14%;
+        }
+
+        .mech-crystal.c2 {
+            right: 12%;
+            top: 16%;
+        }
+
+        .mech-crystal.c3 {
+            left: 14%;
+            bottom: 22%;
+        }
+
+        .mech-crystal.c4 {
+            right: 14%;
+            bottom: 20%;
+        }
+
+        @keyframes mechCrystal {
+            0% {
+                opacity: 0;
+                transform: scale(0.2) rotate(0deg);
+            }
+
+            22% {
+                opacity: 1;
+                transform: scale(1.2) rotate(12deg);
+            }
+
+            62% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(0.7) rotate(28deg);
+            }
+        }
+
+        .mech-mute {
+            position: absolute;
+            inset: 14%;
+            border: 3px solid rgba(226, 232, 240, 0.95);
+            box-shadow: 0 0 12px #94a3b8;
+            border-radius: 50%;
+            animation: mechMute 0.72s ease-out forwards;
+        }
+
+        .mech-mute::after {
+            content: "";
+            position: absolute;
+            left: 12%;
+            right: 12%;
+            top: 48%;
+            height: 2px;
+            background: rgba(226, 232, 240, 0.95);
+            box-shadow: 0 0 8px #94a3b8;
+            transform: rotate(-28deg);
+        }
+
+        @keyframes mechMute {
+            0% {
+                opacity: 0;
+                transform: scale(0.6);
+            }
+
+            20% {
+                opacity: 1;
+                transform: scale(1.06);
+            }
+
+            60% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(1.22);
+            }
+        }
+
+        .mech-balance {
+            position: absolute;
+            left: 18%;
+            right: 18%;
+            top: 48%;
+            height: 3px;
+            background: #f8fafc;
+            box-shadow: 0 0 10px #e2e8f0;
+            transform-origin: center;
+            animation: mechBalance 0.55s ease-out forwards;
+        }
+
+        .mech-balance::before,
+        .mech-balance::after {
+            content: "";
+            position: absolute;
+            top: -7px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            box-shadow: 0 0 8px #94a3b8;
+        }
+
+        .mech-balance::before {
+            left: 0;
+        }
+
+        .mech-balance::after {
+            right: 0;
+        }
+
+        @keyframes mechBalance {
+            0% {
+                opacity: 0;
+                transform: scaleX(0.2);
+            }
+
+            22% {
+                opacity: 1;
+                transform: scaleX(1.06);
+            }
+
+            62% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                transform: scaleX(1);
+            }
+        }
+
+        .mech-crack {
+            position: absolute;
+            inset: 10% 22%;
+            background:
+                linear-gradient(115deg, transparent 46%, #fecdd3 46%, #e11d48 50%, transparent 54%),
+                linear-gradient(70deg, transparent 48%, rgba(251, 113, 133, 0.9) 50%, transparent 53%);
+            animation: mechCrack 0.5s ease-out forwards;
+            filter: drop-shadow(0 0 6px #e11d48);
+        }
+
+        @keyframes mechCrack {
+            0% {
+                opacity: 0;
+                clip-path: inset(50% 50% 50% 50%);
+            }
+
+            16% {
+                opacity: 1;
+                clip-path: inset(0 0 0 0);
+            }
+
+            58% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .mech-flame {
+            position: absolute;
+            left: 50%;
+            bottom: 16%;
+            width: 12px;
+            height: 22px;
+            margin-left: -6px;
+            border-radius: 50% 50% 40% 40%;
+            background: linear-gradient(#fff7ed, #fb923c, #ea580c);
+            box-shadow: 0 0 14px #f97316, 0 0 20px #ea580c;
+            animation: mechFlame 0.82s ease-out forwards;
+            --dx: 0px;
+        }
+
+        @keyframes mechFlame {
+            0% {
+                opacity: 0;
+                transform: translate(var(--dx), 10px) scale(0.4);
+            }
+
+            18% {
+                opacity: 1;
+                transform: translate(var(--dx), 0) scale(1.05);
+            }
+
+            58% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(var(--dx), -24px) scale(0.5);
+            }
+        }
+
+        .mech-wisp {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            margin: -7px 0 0 -7px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #f3e8ff 0%, #a855f7 55%, transparent 72%);
+            box-shadow: 0 0 12px #c084fc;
+            filter: blur(0.4px);
+            animation: mechWisp 0.42s ease-in forwards;
+        }
+
+        @keyframes mechWisp {
+            0% {
+                opacity: 0;
+                transform: scale(0.4);
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.2;
+                transform: scale(0.85);
+            }
+        }
+
+        .mech-travel {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            margin: -6px 0 0 -6px;
+            border-radius: 50%;
+            z-index: 2;
+            transition: transform 0.38s cubic-bezier(0.2, 0.75, 0.25, 1);
+        }
+
+        .mech-travel.bolt {
+            background: #fff;
+            box-shadow: 0 0 12px #93c5fd, 0 0 22px #3b82f6;
+        }
+
+        .mech-travel.cinder {
+            width: 11px;
+            height: 11px;
+            margin: -5px 0 0 -5px;
+            background: #fdba74;
+            box-shadow: 0 0 12px #f97316, 0 0 20px #ea580c;
+        }
+
+        .mech-travel.curse {
+            width: 15px;
+            height: 15px;
+            margin: -7px 0 0 -7px;
+            background: radial-gradient(circle, #f3e8ff, #7e22ce);
+            box-shadow: 0 0 14px #a855f7, 0 0 22px #6b21a8;
+        }
+
+        .mech-bolt-svg {
+            position: absolute;
+            inset: 0;
+            overflow: visible;
+            z-index: 3;
+        }
+
+        .mech-bolt-svg polyline {
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            animation: mechBoltStroke 1.05s ease-out forwards;
+        }
+
+        .mech-bolt-svg .bolt-glow {
+            stroke: #93c5fd;
+            stroke-width: 18;
+            opacity: 0.9;
+            filter: blur(2.2px);
+        }
+
+        .mech-bolt-svg .bolt-core {
+            stroke: #fff;
+            stroke-width: 5;
+        }
+
+        .mech-bolt-svg .bolt-core-2 {
+            stroke: #3b82f6;
+            stroke-width: 2.4;
+            opacity: 0.95;
+        }
+
+        @keyframes mechBoltStroke {
+            0% {
+                opacity: 0;
+            }
+
+            8% {
+                opacity: 1;
+            }
+
+            18% {
+                opacity: 0.35;
+            }
+
+            28% {
+                opacity: 1;
+            }
+
+            70% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .mech-ray-svg {
+            position: absolute;
+            inset: 0;
+            overflow: visible;
+        }
+
+        .mech-ray-svg line {
+            stroke: #fde68a;
+            stroke-width: 2.6;
+            stroke-linecap: round;
+            filter: drop-shadow(0 0 6px #e8a317);
+            animation: mechRay 0.72s ease-out forwards;
+        }
+
+        @keyframes mechRay {
+            0% {
+                opacity: 0;
+            }
+
+            18% {
+                opacity: 1;
+            }
+
+            62% {
+                opacity: 0.85;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .card.mech-hit-bolt {
+            animation: mechHitBolt 0.38s ease-out;
+        }
+
+        .card.mech-hit-spite {
+            animation: mechHitSpite 0.4s ease-out;
+        }
+
+        .card.mech-hit-chill {
+            animation: mechHitChill 0.45s ease-out;
+        }
+
+        @keyframes mechHitBolt {
+            0% {
+                filter: brightness(1.8);
+            }
+
+            100% {
+                filter: none;
+            }
+        }
+
+        @keyframes mechHitSpite {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            20% {
+                transform: translate(-2px, 1px);
+            }
+
+            40% {
+                transform: translate(2px, -1px);
+            }
+
+            60% {
+                transform: translate(-1px, 0);
+            }
+        }
+
+        @keyframes mechHitChill {
+            0% {
+                filter: brightness(1.25) saturate(0.85);
+            }
+
+            100% {
+                filter: none;
+            }
+        }
+
+        .mech-bolt-glyph {
+            position: absolute;
+            width: 1.4em;
+            height: 1.4em;
+            margin: -0.7em 0 0 -0.7em;
+            font-size: 2.4rem;
+            line-height: 1;
+            color: #fff;
+            text-shadow: 0 0 10px #93c5fd, 0 0 22px #2563eb;
+            filter: drop-shadow(0 0 8px #60a5fa);
+            z-index: 4;
+            transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .mech-travel {
+                transition-duration: 0.01s;
+            }
+
+            .card.mech-hit-bolt,
+            .card.mech-hit-spite,
+            .card.mech-hit-chill {
+                animation-duration: 0.2s;
             }
         }
 
@@ -3344,6 +3995,7 @@
             log</button>
     </div>
 
+    <div id="board-fx" class="board-fx" aria-hidden="true"></div>
     <div id="turn-banner" class="turn-banner" aria-live="polite"></div>
     <div id="coach-spotlight" class="coach-spotlight hidden"></div>
     <div id="coach-card" class="coach-card hidden">
@@ -3367,7 +4019,7 @@
             <div class="rules-compact">
                 <strong>🃏 The deck:</strong> Cards are dealt or drafted from a shared deck - the Base Set, 50 cards.
                 Tribe Decks play one tribe of five. Every Ember card has an ability. Options can open a 4x4 or 5x5
-                table.<br>
+                table. Hands stay five; extras draw after you play.<br>
                 <strong>⚔️ Capture:</strong> Play a card from your hand next to an enemy. If your touching stat is
                 higher,
                 you capture it.<br>
@@ -3415,7 +4067,7 @@
             </details>
             <div class="menu-foot">
                 <!-- Bump BUILD on every PR. Still pre-1.0, so this stays Alpha until 1.0 ships. -->
-                <p class="build-stamp">0.31 Alpha</p>
+                <p class="build-stamp">0.33 Alpha</p>
                 <p class="dev-note">Still in active development. Cards and rules may change.</p>
             </div>
         </div>
@@ -3438,8 +4090,9 @@
             <div class="expanded-rules-list">
                 <div class="rule-detail-item">
                     <strong>The deck:</strong> The Base Set is 50 cards in ten tribes. Every Ember card has an ability.
-                    Shuffle and deal, or draft, to fill the grid size in Options. Default is 3x3 / five each. 4x4 deals
-                    eight. 5x5 deals thirteen. Tribe Decks stay one tribe of five on 3x3.
+                    Shuffle and deal, or draft, to fill the grid size in Options. Default is 3x3 / five each with no
+                    draw. 4x4 deals eight and 5x5 deals thirteen; you open five at random and draw after each play.
+                    Tribe Decks stay one tribe of five on 3x3.
                 </div>
                 <div class="rule-detail-item">
                     <strong>League:</strong> You plus three named AI. Snake-draft twenty cards (five each), then a
@@ -3459,7 +4112,9 @@
                 </div>
                 <div class="rule-detail-item">
                     <strong>Capturing:</strong> When your card touches an enemy card, compare touching values (Top,
-                    Right, Bottom, Left). If your attacking stat is strictly greater, you capture their card!
+                    Right, Bottom, Left). If your attacking stat is strictly greater, you capture their card. Equalizer
+                    cards also capture on a tie. In Classic Mode, Options can turn on Ties capture so equal facings
+                    capture too. Ember Mode never uses that knob.
                 </div>
                 <div class="rule-detail-item">
                     <strong>Victory:</strong> <span id="victory-rules">Two hands of five. After the board fills, most
@@ -3563,6 +4218,17 @@
                 <strong>Ember Mode:</strong> Every card has an ability. Ten tribes share the pile: Buff, Curse, Blast,
                 Poison, Equalizer, Spite, Silence, Cinder, Bolt, and Chill.
             </div>
+            <div id="classic-ties-block" hidden>
+                <label class="settings-row" for="classic-ties-check">
+                    <span>Ties capture</span>
+                    <input type="checkbox" id="classic-ties-check" class="settings-check"
+                        onchange="updateClassicTies(this.checked)">
+                </label>
+                <div id="classic-ties-desc" class="ruleset-desc-box">
+                    <strong>Off (default):</strong> Equal facings do nothing. On: you capture when touching stats match.
+                    Ember Mode ignores this so Equalizer stays unique.
+                </div>
+            </div>
             <div class="settings-stack">
                 <span>AI Difficulty</span>
                 <select id="ai-difficulty-select" class="settings-select settings-select-full"
@@ -3577,12 +4243,13 @@
                 <select id="grid-size-select" class="settings-select settings-select-full"
                     onchange="updatePreferredGrid(this.value)">
                     <option value="3" selected>3×3 · five each</option>
-                    <option value="4">4×4 · eight each</option>
-                    <option value="5">5×5 · thirteen each</option>
+                    <option value="4">4×4 · eight dealt</option>
+                    <option value="5">5×5 · thirteen dealt</option>
                 </select>
             </div>
             <div id="grid-size-desc" class="ruleset-desc-box">
-                Default 3×3. Deal Hands and Draft Hands use this size. League and Tribe Decks stay 3×3.
+                Default 3×3. Hands stay five. Bigger grids deal more and draw after you play. League and Tribe Decks
+                stay 3×3.
             </div>
             <label class="settings-row" for="open-hands-check">
                 <span>Show Hands</span>
@@ -3597,9 +4264,17 @@
             <div id="leftover-desc" class="ruleset-desc-box">
                 <strong>Off (default):</strong> Only the board counts. Unplayed cards are choices, not points.
             </div>
+            <label class="settings-row" for="haptics-check">
+                <span>Haptics</span>
+                <input type="checkbox" id="haptics-check" class="settings-check" onchange="updateHaptics(this.checked)">
+            </label>
+            <div class="ruleset-desc-box">
+                <strong>Off (default):</strong> No vibration. On: a short pulse when a card plays, an ability hits, or a
+                capture lands. Phones that support it only.
+            </div>
             <p id="league-options-note" class="ruleset-desc-box" hidden>
-                An Ember League is in progress. Leftover and Ember/Classic are locked for that season. Ash, Vesper, and
-                Rook all use the AI difficulty set here.
+                An Ember League is in progress. Leftover, Ember/Classic, and Classic Ties capture are locked for that
+                season. Ash, Vesper, and Rook all use the AI difficulty set here.
             </p>
 
             <button class="btn btn-alt btn-dismiss" onclick="closeOptionsModal()">Close</button>
@@ -4084,13 +4759,18 @@
 
         let board = Array(9).fill(null);
         let cellEffects = Array(9).fill(null);
-        let playerHand = [], aiHand = [], draftPool = [], draftedPlayerCards = [], draftedAICards = [];
+        let playerHand = [], aiHand = [], playerDeck = [], aiDeck = [];
+        let draftPool = [], draftedPlayerCards = [], draftedAICards = [];
         let selectedCard = null, turn = 'player', gameState = 'menu', activeMode = 'random', draftTurn = 'player';
         let aiDifficulty = localStorage.getItem('ember_grid_ai') || 'normal';
         if (!['easy', 'normal', 'hard'].includes(aiDifficulty)) aiDifficulty = 'normal';
         let showBothHands = localStorage.getItem('ember_grid_open_hands') === 'true';
         let leftoverScores = localStorage.getItem('ember_grid_leftover') === 'true';
         let leftoverThisMatch = leftoverScores;
+        let hapticsOn = localStorage.getItem('ember_grid_haptics') === 'true';
+        let classicTies = localStorage.getItem('ember_grid_classic_ties') === 'true';
+        let classicTiesThisMatch = false;
+        let pendingMechFx = [];
         const GRID_PRESETS = {
             3: {size: 3, hand: 5, draftPool: 16},
             4: {size: 4, hand: 8, draftPool: 16},
@@ -4102,12 +4782,10 @@
         }
         let preferredGridSize = loadPreferredGrid();
         let gridSize = 3;
+        const VISIBLE_HAND = 5;
         function cellCount() {return gridSize * gridSize;}
         function matchHandSize() {return GRID_PRESETS[gridSize].hand;}
         function matchDraftPoolSize() {return GRID_PRESETS[gridSize].draftPool;}
-        function isWideGrid() {
-            return gridSize === 4 || gridSize === 5;
-        }
 
         function applyGridSize(n) {
             gridSize = GRID_PRESETS[n] ? n : 3;
@@ -4141,7 +4819,7 @@
         let aiPlayTimer = null;
         let blastPreviewTimer = null;
         const shownStatValues = new Map();
-        const pointerDrag = {pointerId: null, index: null, startX: 0, startY: 0, lastX: 0, active: false, scrolling: false, sourceEl: null, ghost: null};
+        const pointerDrag = {pointerId: null, index: null, startX: 0, startY: 0, active: false, sourceEl: null, ghost: null};
         let swallowClick = false;
         let swallowForIndex = null;
         let gameoverClickLock = false;
@@ -4365,6 +5043,7 @@
                 createdAt: raw.createdAt || Date.now(),
                 ruleset: raw.ruleset === 'classic' ? 'classic' : 'ember',
                 leftover: !!raw.leftover,
+                classicTies: raw.ruleset === 'classic' && !!raw.classicTies,
                 players: [youSeat(), ...LEAGUE_RIVALS],
                 draftOrder: raw.draftOrder.slice(),
                 draftPickIndex: Math.max(0, Number(raw.draftPickIndex) || 0),
@@ -4511,6 +5190,7 @@
                 createdAt: Date.now(),
                 ruleset: currentRuleset === 'classic' ? 'classic' : 'ember',
                 leftover: !!leftoverScores,
+                classicTies: currentRuleset === 'classic' && !!classicTies,
                 players: [youSeat(), ...LEAGUE_RIVALS],
                 draftOrder: order,
                 draftPickIndex: 0,
@@ -4671,7 +5351,7 @@
                 order.hidden = false;
                 order.textContent = pool === 16 && hand === 5
                     ? 'Sixteen cards from the deck. Snake order: 1 pick, then pairs of 2, until each hand is five.'
-                    : `${pool === 16 ? 'Sixteen' : 'Twenty-six'} cards. Snake until each hand is ${hand === 8 ? 'eight' : 'thirteen'}.`;
+                    : `${pool === 16 ? 'Sixteen' : 'Twenty-six'} cards. Snake until each side is dealt ${hand === 8 ? 'eight' : 'thirteen'}. Hands stay five; extras stay in your draw pile.`;
                 cancel.textContent = 'Cancel Draft';
                 seats.classList.add('hidden');
                 rosters.classList.remove('hidden');
@@ -5066,6 +5746,9 @@
                 playerHand: playerHand.slice(),
                 aiHand: aiHand.slice(),
                 leftoverThisMatch,
+                classicTiesThisMatch,
+                playerDeck: playerDeck.slice(),
+                aiDeck: aiDeck.slice(),
                 turn,
                 gameState,
                 selectedCard,
@@ -5079,6 +5762,9 @@
             playerHand = snap.playerHand;
             aiHand = snap.aiHand;
             leftoverThisMatch = snap.leftoverThisMatch;
+            classicTiesThisMatch = snap.classicTiesThisMatch;
+            playerDeck = snap.playerDeck ? snap.playerDeck.slice() : [];
+            aiDeck = snap.aiDeck ? snap.aiDeck.slice() : [];
             turn = snap.turn;
             gameState = snap.gameState;
             selectedCard = snap.selectedCard;
@@ -5093,9 +5779,12 @@
             silentSim = true;
             cloneRulesetOverride = ruleset;
             leftoverThisMatch = leftover;
+            classicTiesThisMatch = ruleset === 'classic' && !!(league && league.classicTies);
             const prevGrid = gridSize;
             applyGridSize(3);
             resetTable();
+            playerDeck = [];
+            aiDeck = [];
             playerHand = (blueIds || []).map(id => cloneForOwner(masterCards.find(c => c.id === id), 'blue', ruleset));
             aiHand = (redIds || []).map(id => cloneForOwner(masterCards.find(c => c.id === id), 'red', ruleset));
             let whose = firstColor === 'red' ? 'red' : 'blue';
@@ -5233,36 +5922,46 @@
             if (n === 4) {
                 if (leftoverScores) {
                     return {
-                        compact: `Fill the 4x4. Eight each fills the board, so leftover scores has nothing extra to add.`,
-                        rules: "4x4 deals eight each. Sixteen cards fill sixteen cells. Leftover scores does not change the result on this size.",
+                        compact: `Fill the 4x4. Eight dealt, five in hand, draw after you play. Leftover scores has nothing extra to add.`,
+                        rules: "4x4 deals eight each. You open five at random and draw after each play. Sixteen cards fill sixteen cells. Leftover scores does not change the result on this size.",
                         option: "<strong>On:</strong> Unplayed cards count. On 4x4 there is no leftover, so the score is still the board.",
-                        place: "On your turn, play one card from your hand onto an empty cell of the 4x4 grid."
+                        place: "On your turn, play one card from your hand onto an empty cell of the 4x4 grid. A new card is drawn from the rest of your deal."
                     };
                 }
                 return {
-                    compact: "Fill the 4x4. Eight each. Most cards on the board wins.",
-                    rules: "4x4 deals eight each. After the board fills, most cards on the board wins.",
+                    compact: "Fill the 4x4. Eight dealt, five in hand. Most cards on the board wins.",
+                    rules: "4x4 deals eight each. You open five at random and draw after each play. After the board fills, most cards on the board wins.",
                     option: "<strong>Off (default):</strong> Only the board counts. Unplayed cards are choices, not points.",
-                    place: "On your turn, play one card from your hand onto an empty cell of the 4x4 grid."
+                    place: "On your turn, play one card from your hand onto an empty cell of the 4x4 grid. A new card is drawn from the rest of your deal."
+                };
+            }
+            if (n === 5) {
+                if (leftoverScores) {
+                    return {
+                        compact: `Fill the ${label}. Thirteen dealt, five in hand. Leftover in hand still counts.`,
+                        rules: "5x5 deals thirteen each. You open five at random and draw after each play. After the board fills, leftover in hand still counts.",
+                        option: "<strong>On:</strong> Unplayed cards count. A 13-12 board is a 13-13 draw.",
+                        place: `On your turn, play one card from your hand onto an empty cell of the ${label} grid. A new card is drawn from the rest of your deal.`
+                    };
+                }
+                return {
+                    compact: `Fill the ${label}. Thirteen dealt, five in hand. Most cards on the board wins. Leftover in hand does not count.`,
+                    rules: "5x5 deals thirteen each. You open five at random and draw after each play. After the board fills, most cards on the board wins. Leftover in hand does not count.",
+                    option: "<strong>Off (default):</strong> Only the board counts. Unplayed cards are choices, not points.",
+                    place: `On your turn, play one card from your hand onto an empty cell of the ${label} grid. A new card is drawn from the rest of your deal.`
                 };
             }
             if (leftoverScores) {
                 return {
                     compact: `Fill the ${label}. Most cards wins - leftover in hand still counts.`,
-                    rules: n === 5
-                        ? "5x5 deals thirteen each. After the board fills, leftover in hand still counts."
-                        : "Two hands of five is ten cards. After the board fills, leftover in hand still counts, so 6+ wins and 5-5 is a draw.",
-                    option: n === 5
-                        ? "<strong>On:</strong> Unplayed cards count. A 13-12 board is a 13-13 draw."
-                        : "<strong>On:</strong> Unplayed cards count. A 5-4 board is a 5-5 draw.",
+                    rules: "Two hands of five is ten cards. After the board fills, leftover in hand still counts, so 6+ wins and 5-5 is a draw.",
+                    option: "<strong>On:</strong> Unplayed cards count. A 5-4 board is a 5-5 draw.",
                     place: `On your turn, play one card from your hand onto an empty cell of the ${label} grid.`
                 };
             }
             return {
                 compact: `Fill the ${label}. Most cards on the board wins. Leftover in hand does not count.`,
-                rules: n === 5
-                    ? "5x5 deals thirteen each. After the board fills, most cards on the board wins. Leftover in hand does not count."
-                    : "Two hands of five. After the board fills, most cards on the board wins. Leftover in hand does not count. Options can turn leftover scores on, which makes a 5-4 board a 5-5 draw.",
+                rules: "Two hands of five. After the board fills, most cards on the board wins. Leftover in hand does not count. Options can turn leftover scores on, which makes a 5-4 board a 5-5 draw.",
                 option: "<strong>Off (default):</strong> Only the board counts. Unplayed cards are choices, not points.",
                 place: `On your turn, play one card from your hand onto an empty cell of the ${label} grid.`
             };
@@ -5282,12 +5981,11 @@
             const el = document.getElementById('grid-size-desc');
             if (!el) return;
             const n = preferredGridSize;
-            const hand = GRID_PRESETS[n].hand;
             el.innerHTML = n === 3
-                ? "<strong>3×3 (default):</strong> Five each. League and Tribe Decks always use this size."
+                ? "<strong>3×3 (default):</strong> Five dealt, five in hand. League and Tribe Decks always use this size."
                 : n === 4
-                    ? "<strong>4×4:</strong> Eight each, no leftover. League and Tribe Decks stay 3×3."
-                    : "<strong>5×5:</strong> Thirteen each. Compact cards on phones. League and Tribe Decks stay 3×3.";
+                    ? "<strong>4×4:</strong> Eight dealt. Open five at random, draw after each play. League and Tribe Decks stay 3×3."
+                    : "<strong>5×5:</strong> Thirteen dealt. Open five at random, draw after each play. League and Tribe Decks stay 3×3.";
         }
         function updatePreferredGrid(val) {
             sfx.click();
@@ -5303,12 +6001,56 @@
             localStorage.setItem('ember_grid_leftover', leftoverScores ? 'true' : 'false');
             refreshVictoryCopy();
         }
+        function canHaptic() {
+            return !!(hapticsOn && !silentSim && navigator.vibrate);
+        }
+        function haptic(pattern) {
+            if (!canHaptic()) return;
+            try {navigator.vibrate(pattern);} catch (err) { }
+        }
+        function hapticForPlay(fx) {
+            const ability = fx.abilityFx || fx.buffFx || fx.silenceFx || fx.chillFx || fx.psnFx;
+            const captured = !!(fx.capLog);
+            if (ability && ability.kind === 'bolt') haptic(captured ? [10, 28, 36, 40, 18] : [10, 30, 36]);
+            else if (captured) haptic([12, 28, 22]);
+            else if (ability) haptic([16, 24, 20]);
+            else haptic(14);
+        }
+        function updateHaptics(checked) {
+            sfx.click();
+            hapticsOn = !!checked;
+            localStorage.setItem('ember_grid_haptics', hapticsOn ? 'true' : 'false');
+            if (hapticsOn) haptic(18);
+        }
+        function refreshClassicTiesUi() {
+            const block = document.getElementById('classic-ties-block');
+            const check = document.getElementById('classic-ties-check');
+            const desc = document.getElementById('classic-ties-desc');
+            const classic = currentRuleset === 'classic';
+            if (block) block.hidden = !classic;
+            if (check) {
+                check.checked = classicTies;
+                check.disabled = isLeagueActive();
+            }
+            if (desc) {
+                desc.innerHTML = classicTies
+                    ? '<strong>On:</strong> Equal facings capture. Classic Mode only. Ember Mode never uses this, so Equalizer stays unique.'
+                    : '<strong>Off (default):</strong> Equal facings do nothing. On: you capture when touching stats match. Ember Mode ignores this so Equalizer stays unique.';
+            }
+        }
+        function updateClassicTies(checked) {
+            sfx.click();
+            classicTies = !!checked;
+            localStorage.setItem('ember_grid_classic_ties', classicTies ? 'true' : 'false');
+            refreshClassicTiesUi();
+        }
         function refreshRulesetDesc() {
             const descBox = document.getElementById('ruleset-desc');
             if (!descBox) return;
             descBox.innerHTML = currentRuleset === 'classic'
                 ? "<strong>Classic Mode:</strong> Pure, tactical gameplay. All special abilities and card badges are disabled."
                 : "<strong>Ember Mode:</strong> Every card has an ability. Ten tribes share the pile: Buff, Curse, Blast, Poison, Equalizer, Spite, Silence, Cinder, Bolt, and Chill.";
+            refreshClassicTiesUi();
         }
         function updateRuleset(val) {
             sfx.click();
@@ -5319,7 +6061,8 @@
             const onBoard = board.filter(c => c && c.owner === color).length;
             if (!leftoverThisMatch) return onBoard;
             const hand = color === 'blue' ? playerHand : aiHand;
-            return onBoard + hand.length;
+            const deck = color === 'blue' ? playerDeck : aiDeck;
+            return onBoard + hand.length + deck.length;
         }
 
         function resetTable() {
@@ -5327,6 +6070,9 @@
             cellEffects = Array(cellCount()).fill(null);
             selectedCard = null;
             shownStatValues.clear();
+            pendingMechFx = [];
+            const layer = document.getElementById('board-fx');
+            if (layer) layer.innerHTML = '';
             if (blastPreviewTimer) {clearTimeout(blastPreviewTimer); blastPreviewTimer = null;}
         }
 
@@ -5461,7 +6207,7 @@
             closeLeagueRoster();
             document.getElementById('main-menu-modal').classList.remove('hidden');
             applyGridSize(preferredGridSize);
-            gameState = 'menu'; resetTable(); playerHand = []; aiHand = [];
+            gameState = 'menu'; resetTable(); playerHand = []; aiHand = []; playerDeck = []; aiDeck = [];
             lastBlueScore = null; lastRedScore = null; lastMatch = null;
             leagueMatch = null;
             cloneRulesetOverride = null;
@@ -5503,10 +6249,13 @@
             document.getElementById('ai-difficulty-select').value = aiDifficulty;
             document.getElementById('open-hands-check').checked = showBothHands;
             document.getElementById('leftover-check').checked = leftoverScores;
+            const hapticsCheck = document.getElementById('haptics-check');
+            if (hapticsCheck) hapticsCheck.checked = hapticsOn;
             document.getElementById('grid-size-select').value = String(preferredGridSize);
             refreshRulesetDesc();
             refreshGridSizeDesc();
             refreshVictoryCopy();
+            refreshClassicTiesUi();
             const leagueNote = document.getElementById('league-options-note');
             if (leagueNote) leagueNote.hidden = !isLeagueActive();
             document.getElementById('options-modal').classList.remove('hidden');
@@ -5777,14 +6526,49 @@
             return cloneCard(card, {owner}, ruleset);
         }
 
+        function shuffleCopy(cards) {
+            const pile = cards.slice();
+            for (let i = pile.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                const tmp = pile[i];
+                pile[i] = pile[j];
+                pile[j] = tmp;
+            }
+            return pile;
+        }
+
+        function openHandsFromDeal() {
+            const split = (cards) => {
+                const pile = shuffleCopy(cards || []);
+                const n = Math.min(VISIBLE_HAND, pile.length);
+                return {hand: pile.slice(0, n), deck: pile.slice(n)};
+            };
+            const you = split(playerHand);
+            const them = split(aiHand);
+            playerHand = you.hand;
+            playerDeck = you.deck;
+            aiHand = them.hand;
+            aiDeck = them.deck;
+        }
+
+        function drawAfterPlay(owner) {
+            if (board.every(cell => cell !== null)) return;
+            const deck = owner === 'blue' ? playerDeck : aiDeck;
+            const hand = owner === 'blue' ? playerHand : aiHand;
+            if (!deck.length) return;
+            const i = Math.floor(Math.random() * deck.length);
+            hand.push(deck.splice(i, 1)[0]);
+        }
+
         function snapshotMatch(first) {
             lastMatch = {
                 mode: activeMode,
                 ruleset: (isLeagueMatch() && league) ? league.ruleset : currentRuleset,
                 leftover: leftoverThisMatch,
+                classicTies: classicTiesThisMatch,
                 gridSize,
-                playerIds: playerHand.map(c => c.id),
-                aiIds: aiHand.map(c => c.id),
+                playerIds: playerHand.concat(playerDeck).map(c => c.id),
+                aiIds: aiHand.concat(aiDeck).map(c => c.id),
                 first
             };
         }
@@ -6235,7 +7019,17 @@
             leftoverThisMatch = (origin === 'rematch' && lastMatch && typeof lastMatch.leftover === 'boolean')
                 ? lastMatch.leftover
                 : (origin === 'league' && league ? league.leftover : leftoverScores);
+            const matchRuleset = (origin === 'league' && league)
+                ? league.ruleset
+                : (origin === 'rematch' && lastMatch && lastMatch.ruleset)
+                    ? lastMatch.ruleset
+                    : currentRuleset;
+            const tiesOpt = (origin === 'rematch' && lastMatch && typeof lastMatch.classicTies === 'boolean')
+                ? lastMatch.classicTies
+                : (origin === 'league' && league ? !!league.classicTies : classicTies);
+            classicTiesThisMatch = matchRuleset === 'classic' && !!tiesOpt;
             turn = first || (Math.random() < 0.5 ? 'player' : 'ai');
+            openHandsFromDeal();
             snapshotMatch(turn);
             lastBlueScore = null; lastRedScore = null;
             resetActionLog();
@@ -6259,7 +7053,9 @@
                     : (turn === 'player' ? `${shared}Hands dealt. Your turn - play a card.` : `${shared}Hands dealt. AI plays first.`);
                 const n = matchHandSize();
                 const words = n === 5 ? 'five' : n === 8 ? 'eight' : 'thirteen';
-                logAction(vs || (origin === 'share' ? `Shared hands of ${words}.` : `Hands of ${words}.`));
+                logAction(vs || (origin === 'share'
+                    ? (n === 5 ? `Shared hands of ${words}.` : `Shared deal of ${words}. Five in hand.`)
+                    : (n === 5 ? `Hands of ${words}.` : `Dealt ${words} each. Five in hand.`)));
             }
             recalculateDynamicStats(); render();
             maybeStartCoach();
@@ -6530,11 +7326,13 @@
                     let targetCard = enemies[0].c;
                     targetCard.baseStats = targetCard.baseStats.map(s => Math.max(1, s - 1));
                     targetCard.fxType = 'curse';
+                    queueMechFx('curse', index, [enemies[0].i]);
                     return {text: `${placedCard.name} cursed ${targetCard.name} (-1)`, kind: 'curse'};
                 }
             } else if (abType === 'blast') {
                 placedCard.fxType = 'blast';
                 placedCard.blastPreview = true;
+                queueMechFx('blast', index, []);
                 return {text: `${placedCard.name} blasted (+2 this turn)`, kind: 'blast'};
             } else if (abType === 'cinder') {
                 const fresh = board.map((c, i) => (c === null && cellEffects[i] !== 'cinder') ? i : null).filter(i => i !== null);
@@ -6542,14 +7340,17 @@
                 const target = empties.length ? empties[Math.floor(Math.random() * empties.length)] : index;
                 cellEffects[target] = 'cinder';
                 placedCard.fxType = 'cinder';
+                queueMechFx('cinder', index, [target]);
                 return {text: `${placedCard.name} cindered a cell`, kind: 'cinder'};
             } else if (abType === 'bolt') {
                 const enemies = board.map((c, i) => (c && c.owner !== placedCard.owner) ? {c, i} : null).filter(Boolean);
                 if (enemies.length > 0) {
-                    const targetCard = enemies[Math.floor(Math.random() * enemies.length)].c;
+                    const pick = enemies[Math.floor(Math.random() * enemies.length)];
+                    const targetCard = pick.c;
                     targetCard.baseStats = targetCard.baseStats.map(s => Math.max(1, s - 2));
                     targetCard.fxType = 'bolt';
                     placedCard.fxType = 'bolt';
+                    queueMechFx('bolt', index, [pick.i]);
                     return {text: `${placedCard.name} bolted ${targetCard.name} (-2)`, kind: 'bolt'};
                 }
             }
@@ -6559,12 +7360,15 @@
         function tagAuraBuffs(placedCard, index) {
             if (!placedCard.ability || placedCard.ability.type !== 'aura_buff' || isSilenced(index)) return null;
             const names = [];
+            const hits = [];
             neighborIndexes(index).forEach(idx => {
                 if (board[idx] && board[idx].owner === placedCard.owner) {
                     board[idx].fxType = 'buff';
                     names.push(board[idx].name);
+                    hits.push(idx);
                 }
             });
+            if (hits.length) queueMechFx('buff', index, hits);
             return names.length ? {text: `${placedCard.name} buffed ${listNames(names)} (+1)`, kind: 'buff'} : null;
         }
 
@@ -6572,26 +7376,32 @@
             if (!isSilenceCard(placedCard)) return null;
             const cancelled = silenceCancelled(index);
             const names = [];
+            const hits = [];
             neighborIndexes(index).forEach(idx => {
                 const n = board[idx];
                 if (!n || n.owner === placedCard.owner || !n.ability) return;
                 if (cancelled && !isSilenceCard(n)) return;
                 n.fxType = 'silence';
                 names.push(n.name);
+                hits.push(idx);
             });
+            if (hits.length) queueMechFx('silence', index, hits);
             return names.length ? {text: `${placedCard.name} silenced ${listNames(names)}`, kind: 'silence'} : null;
         }
 
         function tagChill(placedCard, index) {
             if (!placedCard.ability || placedCard.ability.type !== 'chill' || isSilenced(index)) return null;
             const names = [];
+            const hits = [];
             neighborIndexes(index).forEach(idx => {
                 const n = board[idx];
                 if (n && n.owner !== placedCard.owner) {
                     n.fxType = 'chill';
                     names.push(n.name);
+                    hits.push(idx);
                 }
             });
+            if (hits.length) queueMechFx('chill', index, hits);
             return names.length ? {text: `${placedCard.name} chilled ${listNames(names)} (-1)`, kind: 'chill'} : null;
         }
 
@@ -6600,6 +7410,7 @@
             board.forEach((card, index) => {
                 if (card && card.ability && card.ability.type === 'poison' && !isSilenced(index)) {
                     const hit = [];
+                    const hits = [];
                     neighborIndexes(index).forEach(idx => {
                         const n = board[idx];
                         if (!n || n.owner === card.owner) return;
@@ -6611,8 +7422,10 @@
                         if (reduced) {
                             n.fxType = n.fxType || 'poison';
                             hit.push(n.name);
+                            hits.push(idx);
                         }
                     });
+                    if (hits.length) queueMechFx('poison', index, hits);
                     if (hit.length) parts.push(`${card.name} poisoned ${listNames(hit)} (-1)`);
                 }
             });
@@ -6621,6 +7434,248 @@
 
         function hasEnemyNeighbor(placedIndex, placedCard) {
             return neighborIndexes(placedIndex).some(idx => board[idx] && board[idx].owner !== placedCard.owner);
+        }
+
+        function queueMechFx(kind, fromIndex, toIndexes) {
+            if (silentSim) return;
+            pendingMechFx.push({
+                kind,
+                from: fromIndex,
+                to: (toIndexes || []).filter(i => i != null && i >= 0)
+            });
+        }
+
+        function cellFxPoint(index) {
+            const grid = document.getElementById('board-grid');
+            const cell = grid && grid.children[index];
+            if (!cell) return null;
+            const a = cell.getBoundingClientRect();
+            if (a.width < 4 || a.height < 4) return null;
+            return {
+                x: a.left + a.width / 2,
+                y: a.top + a.height / 2,
+                w: a.width,
+                h: a.height
+            };
+        }
+
+        function fxLayer() {
+            return document.getElementById('board-fx');
+        }
+
+        function spawnFxEl(html, life, cls) {
+            const layer = fxLayer();
+            if (!layer) return null;
+            const el = document.createElement('div');
+            if (cls) el.className = cls;
+            if (typeof html === 'string') el.innerHTML = html;
+            layer.appendChild(el);
+            setTimeout(() => {if (el.parentNode) el.parentNode.removeChild(el);}, life);
+            return el;
+        }
+
+        function placeBurst(pt, kind, inner, life) {
+            if (!pt) return null;
+            const el = spawnFxEl(inner, life || 720, `mech-burst mech-${kind}`);
+            if (!el) return null;
+            el.style.left = `${pt.x}px`;
+            el.style.top = `${pt.y}px`;
+            el.style.width = `${pt.w}px`;
+            el.style.height = `${pt.h}px`;
+            return el;
+        }
+
+        function tapCardFx(index, cls, ms) {
+            const cell = document.getElementById('board-grid') && document.getElementById('board-grid').children[index];
+            const card = cell && cell.querySelector('.card');
+            if (!card) return;
+            card.classList.add(cls);
+            setTimeout(() => card.classList.remove(cls), ms || 400);
+        }
+
+        function travelFx(from, to, kind, ms) {
+            if (!from || !to) return;
+            const el = spawnFxEl('', (ms || 400) + 40, `mech-travel ${kind}`);
+            if (!el) return;
+            el.style.left = `${from.x}px`;
+            el.style.top = `${from.y}px`;
+            requestAnimationFrame(() => {
+                el.style.transform = `translate(${to.x - from.x}px, ${to.y - from.y}px)`;
+            });
+        }
+
+        function lightningPoints(x1, y1, x2, y2, scale) {
+            const pts = [[x1, y1]];
+            const segs = 4;
+            const dx = x2 - x1, dy = y2 - y1;
+            const len = Math.hypot(dx, dy) || 1;
+            const nx = -dy / len, ny = dx / len;
+            let sign = 1;
+            for (let i = 1; i < segs; i++) {
+                const t = i / segs;
+                const amp = (22 + Math.random() * 16) * scale * sign;
+                sign *= -1;
+                pts.push([x1 + dx * t + nx * amp, y1 + dy * t + ny * amp]);
+            }
+            pts.push([x2, y2]);
+            return pts.map(p => `${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' ');
+        }
+
+        function lightningFork(x1, y1, x2, y2) {
+            const dx = x2 - x1, dy = y2 - y1;
+            const len = Math.hypot(dx, dy) || 1;
+            const nx = -dy / len, ny = dx / len;
+            const mx = x1 + dx * 0.55, my = y1 + dy * 0.55;
+            const fx = mx + nx * 28 + dx * 0.18;
+            const fy = my + ny * 28 + dy * 0.18;
+            return lightningPoints(mx, my, fx, fy, 0.55);
+        }
+
+        function sparkBurst(count, dist) {
+            let html = '';
+            for (let i = 0; i < count; i++) {
+                const ang = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.35;
+                const d = dist * (0.7 + Math.random() * 0.4);
+                html += `<span class="mech-spark" style="--dx:${Math.cos(ang) * d}px;--dy:${Math.sin(ang) * d}px;animation-delay:${(i * 0.02).toFixed(2)}s"></span>`;
+            }
+            return html;
+        }
+
+        function playBoltFx(fromIdx, toIdx) {
+            const from = cellFxPoint(fromIdx);
+            const to = cellFxPoint(toIdx);
+            const layer = fxLayer();
+            if (!from || !to || !layer) return;
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('class', 'mech-bolt-svg');
+            svg.setAttribute('aria-hidden', 'true');
+            const a = lightningPoints(from.x, from.y, to.x, to.y, 1);
+            const b = lightningPoints(from.x, from.y, to.x, to.y, 0.7);
+            const fork = lightningFork(from.x, from.y, to.x, to.y);
+            svg.innerHTML = `<polyline class="bolt-glow" points="${a}"></polyline><polyline class="bolt-glow" points="${fork}"></polyline><polyline class="bolt-core" points="${a}"></polyline><polyline class="bolt-core bolt-core-2" points="${b}"></polyline><polyline class="bolt-core" points="${fork}"></polyline>`;
+            layer.appendChild(svg);
+            setTimeout(() => {if (svg.parentNode) svg.parentNode.removeChild(svg);}, 1100);
+            const glyph = spawnFxEl('⚡', 500, 'mech-bolt-glyph');
+            if (glyph) {
+                glyph.style.left = `${from.x}px`;
+                glyph.style.top = `${from.y}px`;
+                requestAnimationFrame(() => {
+                    glyph.style.transform = `translate(${to.x - from.x}px, ${to.y - from.y}px) scale(1.25)`;
+                });
+            }
+            placeBurst(from, 'bolt', `<div class="mech-flash bolt"></div>`, 900);
+            placeBurst(to, 'bolt', `<div class="mech-flash bolt"></div>${sparkBurst(8, 28)}`, 1000);
+            tapCardFx(toIdx, 'mech-hit-bolt', 500);
+        }
+
+        function playBuffFx(fromIdx, toIdxs) {
+            const from = cellFxPoint(fromIdx);
+            const layer = fxLayer();
+            placeBurst(from, 'buff', `<div class="mech-flash buff"></div><span class="mech-mote" style="--dx:-8px"></span><span class="mech-mote" style="--dx:8px;animation-delay:0.06s"></span>`, 720);
+            if (from && layer && toIdxs.length) {
+                const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg.setAttribute('class', 'mech-ray-svg');
+                svg.setAttribute('aria-hidden', 'true');
+                svg.innerHTML = toIdxs.map(idx => {
+                    const to = cellFxPoint(idx);
+                    if (!to) return '';
+                    return `<line x1="${from.x.toFixed(1)}" y1="${from.y.toFixed(1)}" x2="${to.x.toFixed(1)}" y2="${to.y.toFixed(1)}"></line>`;
+                }).join('');
+                layer.appendChild(svg);
+                setTimeout(() => {if (svg.parentNode) svg.parentNode.removeChild(svg);}, 620);
+            }
+            toIdxs.forEach(idx => {
+                placeBurst(cellFxPoint(idx), 'buff', `<div class="mech-flash buff"></div><span class="mech-mote" style="--dx:-6px"></span><span class="mech-mote" style="--dx:7px;animation-delay:0.05s"></span><span class="mech-mote" style="--dx:0px;animation-delay:0.1s"></span>`, 740);
+            });
+        }
+
+        function playCurseFx(fromIdx, toIdx) {
+            const from = cellFxPoint(fromIdx);
+            const to = cellFxPoint(toIdx);
+            travelFx(from, to, 'curse', 380);
+            placeBurst(from, 'curse', `<div class="mech-flash curse"></div>`, 620);
+            placeBurst(to, 'curse', `<div class="mech-flash curse"></div>`, 620);
+            setTimeout(() => {
+                placeBurst(to, 'curse', `<span class="mech-wisp" style="left:50%;top:42%"></span>`, 680);
+            }, 280);
+        }
+
+        function playBlastFx(fromIdx) {
+            const from = cellFxPoint(fromIdx);
+            placeBurst(from, 'blast', `<div class="mech-flash blast"></div><div class="mech-wave"></div>${sparkBurst(8, 26)}`, 760);
+        }
+
+        function playPoisonFx(fromIdx, toIdxs) {
+            placeBurst(cellFxPoint(fromIdx), 'poison', `<div class="mech-flash poison"></div>`, 600);
+            toIdxs.forEach(idx => {
+                placeBurst(cellFxPoint(idx), 'poison', `<div class="mech-flash poison"></div><span class="mech-drip" style="--dx:-10px"></span><span class="mech-drip" style="--dx:2px;animation-delay:0.06s"></span><span class="mech-drip" style="--dx:11px;animation-delay:0.12s"></span>`, 760);
+            });
+        }
+
+        function playSilenceFx(fromIdx, toIdxs) {
+            placeBurst(cellFxPoint(fromIdx), 'silence', `<div class="mech-flash silence"></div>`, 560);
+            toIdxs.forEach(idx => {
+                placeBurst(cellFxPoint(idx), 'silence', `<div class="mech-flash silence"></div><div class="mech-mute"></div>`, 680);
+            });
+        }
+
+        function playChillFx(fromIdx, toIdxs) {
+            placeBurst(cellFxPoint(fromIdx), 'chill', `<div class="mech-flash chill"></div>`, 560);
+            toIdxs.forEach(idx => {
+                placeBurst(cellFxPoint(idx), 'chill', `<div class="mech-flash chill"></div><span class="mech-crystal c1"></span><span class="mech-crystal c2"></span><span class="mech-crystal c3"></span><span class="mech-crystal c4"></span>`, 740);
+                tapCardFx(idx, 'mech-hit-chill', 450);
+            });
+        }
+
+        function playCinderFx(fromIdx, toIdx) {
+            const from = cellFxPoint(fromIdx);
+            const to = cellFxPoint(toIdx);
+            travelFx(from, to, 'cinder', 380);
+            placeBurst(from, 'cinder', `<div class="mech-flash cinder"></div>`, 620);
+            placeBurst(to, 'cinder', `<div class="mech-flash cinder"></div><span class="mech-flame" style="--dx:-8px"></span><span class="mech-flame" style="--dx:0px;animation-delay:0.05s"></span><span class="mech-flame" style="--dx:8px;animation-delay:0.1s"></span>`, 820);
+        }
+
+        function playSpiteFx(fromIdx, toIdx) {
+            placeBurst(cellFxPoint(fromIdx), 'spite', `<div class="mech-flash spite"></div>`, 520);
+            placeBurst(cellFxPoint(toIdx), 'spite', `<div class="mech-flash spite"></div><div class="mech-crack"></div>`, 560);
+            tapCardFx(toIdx, 'mech-hit-spite', 400);
+        }
+
+        function playEqualizerFx(fromIdx, toIdx) {
+            placeBurst(cellFxPoint(fromIdx), 'equalizer', `<div class="mech-flash equalizer"></div><div class="mech-balance"></div>`, 620);
+            placeBurst(cellFxPoint(toIdx), 'equalizer', `<div class="mech-flash equalizer"></div><div class="mech-balance"></div>`, 620);
+        }
+
+        function playMechFx(events) {
+            if (!events || !events.length) return;
+            events.forEach(ev => {
+                const to = ev.to || [];
+                if (ev.kind === 'bolt' && to[0] != null) playBoltFx(ev.from, to[0]);
+                else if (ev.kind === 'buff') playBuffFx(ev.from, to);
+                else if (ev.kind === 'curse' && to[0] != null) playCurseFx(ev.from, to[0]);
+                else if (ev.kind === 'blast') playBlastFx(ev.from);
+                else if (ev.kind === 'poison') playPoisonFx(ev.from, to);
+                else if (ev.kind === 'silence') playSilenceFx(ev.from, to);
+                else if (ev.kind === 'chill') playChillFx(ev.from, to);
+                else if (ev.kind === 'cinder' && to[0] != null) playCinderFx(ev.from, to[0]);
+                else if (ev.kind === 'spite' && to[0] != null) playSpiteFx(ev.from, to[0]);
+                else if (ev.kind === 'equalizer' && to[0] != null) playEqualizerFx(ev.from, to[0]);
+            });
+        }
+
+        function flushMechFx() {
+            const events = pendingMechFx.splice(0);
+            if (!events.length) return;
+            let tries = 0;
+            const run = () => {
+                const ready = events.some(ev => cellFxPoint(ev.from) || (ev.to && ev.to.some(i => cellFxPoint(i))));
+                if (!ready && tries++ < 8) {
+                    requestAnimationFrame(run);
+                    return;
+                }
+                playMechFx(events);
+            };
+            requestAnimationFrame(() => requestAnimationFrame(run));
         }
 
         function render() {
@@ -6885,7 +7940,6 @@
             pointerDrag.pointerId = null;
             pointerDrag.index = null;
             pointerDrag.sourceEl = null;
-            pointerDrag.scrolling = false;
         }
 
         function onHandPointerDown(e, index, el) {
@@ -6899,16 +7953,8 @@
             pointerDrag.index = index;
             pointerDrag.startX = e.clientX;
             pointerDrag.startY = e.clientY;
-            pointerDrag.lastX = e.clientX;
             pointerDrag.active = false;
-            pointerDrag.scrolling = false;
             pointerDrag.sourceEl = el;
-        }
-
-        function scrollWideHand(dx) {
-            const hand = pointerDrag.sourceEl && pointerDrag.sourceEl.closest('.hand');
-            if (!hand) return;
-            hand.scrollLeft -= dx;
         }
 
         function onFingerDragMove(e) {
@@ -6916,20 +7962,8 @@
             const dx = e.clientX - pointerDrag.startX;
             const dy = e.clientY - pointerDrag.startY;
             const dist = Math.hypot(dx, dy);
-            if (pointerDrag.scrolling) {
-                scrollWideHand(e.clientX - pointerDrag.lastX);
-                pointerDrag.lastX = e.clientX;
-                if (e.cancelable) e.preventDefault();
-                return;
-            }
             if (!pointerDrag.active) {
                 if (dist < 12) return;
-                if (isWideGrid() && Math.abs(dx) > Math.abs(dy) + 2) {
-                    pointerDrag.scrolling = true;
-                    pointerDrag.lastX = e.clientX;
-                    scrollWideHand(e.clientX - pointerDrag.startX);
-                    return;
-                }
                 if (e.cancelable) e.preventDefault();
                 startFingerDrag(e);
             }
@@ -6941,10 +7975,6 @@
         }
 
         function finishFingerDrag(clientX, clientY) {
-            if (pointerDrag.scrolling) {
-                resetFingerDrag();
-                return;
-            }
             if (pointerDrag.active) {
                 const cellIdx = cellIndexFromPoint(clientX, clientY);
                 const handIndex = pointerDrag.index;
@@ -7006,6 +8036,7 @@
 
         function processCardPlacement(index, placedCard) {
             const fx = applyPlacementCore(index, placedCard);
+            drawAfterPlay(placedCard.owner);
             if (silentSim) return;
 
             const fxParts = [fx.abilityFx && fx.abilityFx.text, fx.buffFx && fx.buffFx.text, fx.silenceFx && fx.silenceFx.text, fx.chillFx && fx.chillFx.text, fx.capLog, fx.psnFx && fx.psnFx.text].filter(Boolean);
@@ -7014,6 +8045,8 @@
             const placedBy = placedCard.owner === 'blue' ? 'player' : 'ai';
             turn = turn === 'player' ? 'ai' : 'player';
             render();
+            flushMechFx();
+            hapticForPlay(fx);
             requestAnimationFrame(updateCoach);
 
             if (placedBy === 'player') onCoachPlaced(!!fx.capLog, fx.enemyNeighbor);
@@ -7039,6 +8072,16 @@
             }
         }
 
+        function facingCaptures(myVal, theirVal, card, silenced) {
+            if (myVal > theirVal) return {captures: true, equalized: false};
+            if (myVal !== theirVal) return {captures: false, equalized: false};
+            if (!silenced && card && card.ability && card.ability.type === 'equalizer') {
+                return {captures: true, equalized: true};
+            }
+            if (classicTiesThisMatch) return {captures: true, equalized: false};
+            return {captures: false, equalized: false};
+        }
+
         function checkCaptures(placedIndex, placedCard) {
             const neighbors = neighborDirs(placedIndex).filter(n => n.ok && board[n.idx]);
 
@@ -7047,7 +8090,7 @@
             const spiteHits = [];
             const placedSilenced = isSilenced(placedIndex);
 
-            const flipEnemy = (neighborCard, silencedWhenHit) => {
+            const flipEnemy = (neighborCard, silencedWhenHit, neighborIdx) => {
                 if (neighborCard.owner === placedCard.owner) return;
                 const origOwner = neighborCard.owner;
                 neighborCard.owner = placedCard.owner;
@@ -7060,6 +8103,7 @@
                     placedCard.stats = (placedCard.stats || placedCard.baseStats).map(s => Math.max(1, s - 1));
                     placedCard.fxType = 'spite';
                     spiteHits.push(neighborCard.name);
+                    queueMechFx('spite', neighborIdx, [placedIndex]);
                 }
             };
 
@@ -7069,9 +8113,14 @@
                 const silencedWhenHit = isSilenced(n.idx);
                 const myVal = getEffectiveStat(placedCard, n.p, true, placedSilenced);
                 const theirVal = getEffectiveStat(neighborCard, n.n, false, silencedWhenHit);
-                let captures = myVal > theirVal;
-                if (!captures && !placedSilenced && placedCard.ability && placedCard.ability.type === 'equalizer' && myVal === theirVal) captures = true;
-                if (captures) flipEnemy(neighborCard, silencedWhenHit);
+                const hit = facingCaptures(myVal, theirVal, placedCard, placedSilenced);
+                if (hit.captures) {
+                    flipEnemy(neighborCard, silencedWhenHit, n.idx);
+                    if (hit.equalized) {
+                        neighborCard.fxType = neighborCard.fxType || 'equalizer';
+                        queueMechFx('equalizer', placedIndex, [n.idx]);
+                    }
+                }
             });
 
             if (!silentSim) {
@@ -7126,9 +8175,8 @@
                             if (neighborCard.ability && neighborCard.ability.type === 'spite' && neighborCard.owner === enemy) exposureRisk += 2;
 
                             if (neighborCard.owner === enemy) {
-                                let captures = myVal > theirVal;
-                                if (!captures && !silencedHere && card.ability && card.ability.type === 'equalizer' && myVal === theirVal) captures = true;
-                                if (captures) flipsCount++;
+                                const hit = facingCaptures(myVal, theirVal, card, silencedHere);
+                                if (hit.captures) flipsCount++;
                             }
                         } else if (n.ok && board[n.idx] === null && difficulty === 'hard') {
                             const exposedStatVal = getEffectiveStat(card, n.p, true, silencedHere);
