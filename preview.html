@@ -4292,8 +4292,8 @@
                 (toIdxs && toIdxs.length ? toIdxs : [dest]).forEach((idx, i) => {
                     const s = spaceForIndex(idx);
                     setTimeout(() => {
-                        oscVoice({freq: 640, slide: 240, type: 'sine', dur: 0.12, gain: 0.04 * s.gain, pan: s.pan});
-                        noiseVoice({dur: 0.08, gain: 0.03 * s.gain, pan: s.pan, filterFreq: 700});
+                        oscVoice({freq: 640, slide: 240, type: 'sine', dur: 0.16, gain: 0.055 * s.gain, pan: s.pan});
+                        noiseVoice({dur: 0.1, gain: 0.045 * s.gain, pan: s.pan, filterFreq: 700});
                     }, i * 45);
                 });
             } else if (kind === 'silence') {
@@ -4306,8 +4306,11 @@
                 noiseVoice({dur: 0.24, gain: 0.07 * b.gain, pan: b.pan, filterFreq: 1400, filterType: 'bandpass', filterSlide: 600});
                 oscVoice({freq: 190, slide: 110, type: 'sawtooth', dur: 0.2, gain: 0.035 * b.gain, pan: b.pan, filterFreq: 500});
             } else if (kind === 'spite') {
-                oscVoice({freq: 240, slide: 90, type: 'sawtooth', dur: 0.18, gain: 0.06 * b.gain, pan: b.pan, filterFreq: 800});
-                noiseVoice({dur: 0.1, gain: 0.04 * b.gain, pan: b.pan, filterFreq: 1000});
+                setTimeout(() => {
+                    noiseVoice({dur: 0.14, gain: 0.08 * b.gain, pan: b.pan, filterFreq: 1400, filterSlide: 380});
+                    oscVoice({freq: 180, slide: 70, type: 'sawtooth', dur: 0.28, gain: 0.09 * b.gain, pan: b.pan, filterFreq: 700});
+                    oscVoice({freq: 90, type: 'sine', dur: 0.24, gain: 0.07 * b.gain, pan: b.pan});
+                }, 70);
             } else if (kind === 'equalizer') {
                 oscVoice({freq: 392, type: 'sine', dur: 0.16, gain: 0.05 * a.gain, pan: a.pan});
                 oscVoice({freq: 494, type: 'sine', dur: 0.16, gain: 0.05 * b.gain, pan: b.pan});
@@ -5708,7 +5711,7 @@
             try {navigator.vibrate(pattern);} catch (err) { }
         }
         function hapticForPlay(fx) {
-            const ability = fx.abilityFx || fx.buffFx || fx.silenceFx || fx.chillFx || fx.psnFx;
+            const ability = fx.abilityFx || fx.buffFx || fx.silenceFx || fx.chillFx || fx.inFx || fx.psnFx;
             const captured = !!(fx.capLog);
             if (ability && ability.kind === 'bolt') haptic(captured ? [10, 28, 36, 40, 18] : [10, 30, 36]);
             else if (captured) haptic([12, 28, 22]);
@@ -6990,6 +6993,39 @@
             return names.length ? {text: `${placedCard.name} chilled ${listNames(names)} (-1)`, kind: 'chill'} : null;
         }
 
+        function tagIncomingEffects(placedCard, index, satOnCinder) {
+            const parts = [];
+            const buffFrom = [];
+            const chillFrom = [];
+            const silenceFrom = [];
+            neighborIndexes(index).forEach(idx => {
+                const n = board[idx];
+                if (!n || !n.ability || isSilenced(idx)) return;
+                if (n.ability.type === 'aura_buff' && n.owner === placedCard.owner) {
+                    placedCard.fxType = placedCard.fxType || 'buff';
+                    buffFrom.push({idx, name: n.name});
+                } else if (n.ability.type === 'chill' && n.owner !== placedCard.owner) {
+                    placedCard.fxType = placedCard.fxType || 'chill';
+                    chillFrom.push({idx, name: n.name});
+                } else if (isSilenceCard(n) && n.owner !== placedCard.owner && placedCard.ability) {
+                    placedCard.fxType = placedCard.fxType || 'silence';
+                    silenceFrom.push({idx, name: n.name});
+                }
+            });
+            buffFrom.forEach(s => queueMechFx('buff', s.idx, [index]));
+            chillFrom.forEach(s => queueMechFx('chill', s.idx, [index]));
+            silenceFrom.forEach(s => queueMechFx('silence', s.idx, [index]));
+            if (buffFrom.length) parts.push(`${listNames(buffFrom.map(s => s.name))} buffed ${placedCard.name} (+1)`);
+            if (chillFrom.length) parts.push(`${listNames(chillFrom.map(s => s.name))} chilled ${placedCard.name} (-1)`);
+            if (silenceFrom.length) parts.push(`${listNames(silenceFrom.map(s => s.name))} silenced ${placedCard.name}`);
+            if (satOnCinder) {
+                placedCard.fxType = placedCard.fxType || 'cinder';
+                queueMechFx('cinder', index, [index]);
+                parts.push(`${placedCard.name} sat on Cinder (-1)`);
+            }
+            return parts.length ? {text: parts.join(' · '), kind: 'incoming'} : null;
+        }
+
         function applyEndOfTurnEffects() {
             const parts = [];
             board.forEach((card, index) => {
@@ -7575,16 +7611,18 @@
         function applyPlacementCore(index, placedCard) {
             board.forEach(c => {if (c && c !== placedCard) c.blastPreview = false;});
             const enemyNeighbor = hasEnemyNeighbor(index, placedCard);
+            const satOnCinder = cellEffects[index] === 'cinder';
             const abilityFx = applyOnPlayAbilities(placedCard, index);
             recalculateDynamicStats();
             const buffFx = tagAuraBuffs(placedCard, index);
             const silenceFx = tagSilence(placedCard, index);
             const chillFx = tagChill(placedCard, index);
+            const inFx = tagIncomingEffects(placedCard, index, satOnCinder);
             const cap = checkCaptures(index, placedCard);
             recalculateDynamicStats();
             const psnFx = applyEndOfTurnEffects();
             recalculateDynamicStats();
-            return {enemyNeighbor, abilityFx, buffFx, silenceFx, chillFx, capLog: cap.text, flip: cap.flip, psnFx};
+            return {enemyNeighbor, abilityFx, buffFx, silenceFx, chillFx, inFx, capLog: cap.text, flip: cap.flip, psnFx};
         }
 
         function processCardPlacement(index, placedCard) {
@@ -7595,7 +7633,7 @@
             if (fx.flip === 'blue') sfx.flipBlue();
             else if (fx.flip === 'red') sfx.flipRed();
 
-            const fxParts = [fx.abilityFx && fx.abilityFx.text, fx.buffFx && fx.buffFx.text, fx.silenceFx && fx.silenceFx.text, fx.chillFx && fx.chillFx.text, fx.capLog, fx.psnFx && fx.psnFx.text].filter(Boolean);
+            const fxParts = [fx.abilityFx && fx.abilityFx.text, fx.buffFx && fx.buffFx.text, fx.silenceFx && fx.silenceFx.text, fx.chillFx && fx.chillFx.text, fx.inFx && fx.inFx.text, fx.capLog, fx.psnFx && fx.psnFx.text].filter(Boolean);
             logAction(fxParts.length ? fxParts.join(' · ') : `${placedCard.name} played.`);
 
             const placedBy = placedCard.owner === 'blue' ? 'player' : 'ai';
