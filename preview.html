@@ -2073,6 +2073,22 @@
             box-shadow: 0 0 0 2px #e2e8f0, 0 0 16px #94a3b8;
         }
 
+        .fx-ring.parasite {
+            box-shadow: 0 0 0 2px #e9d5ff, 0 0 16px #a855f7;
+        }
+
+        .fx-ring.siphon {
+            box-shadow: 0 0 0 2px #67e8f9, 0 0 16px #06b6d4;
+        }
+
+        .fx-ring.pendulum {
+            box-shadow: 0 0 0 2px #fde68a, 0 0 16px #f59e0b;
+        }
+
+        .fx-ring.symbiosis {
+            box-shadow: 0 0 0 2px #86efac, 0 0 16px #22c55e;
+        }
+
         @keyframes fxRing {
             0% {
                 opacity: 0;
@@ -2147,6 +2163,22 @@
 
         .mech-flash.equalizer {
             background: radial-gradient(circle, rgba(248, 250, 252, 0.7) 0%, rgba(148, 163, 184, 0.3) 52%, transparent 74%);
+        }
+
+        .mech-flash.parasite {
+            background: radial-gradient(circle, rgba(233, 213, 255, 0.72) 0%, rgba(126, 34, 206, 0.34) 52%, transparent 74%);
+        }
+
+        .mech-flash.siphon {
+            background: radial-gradient(circle, rgba(165, 243, 252, 0.7) 0%, rgba(6, 182, 212, 0.32) 52%, transparent 74%);
+        }
+
+        .mech-flash.pendulum {
+            background: radial-gradient(circle, rgba(254, 240, 138, 0.7) 0%, rgba(245, 158, 11, 0.32) 52%, transparent 74%);
+        }
+
+        .mech-flash.symbiosis {
+            background: radial-gradient(circle, rgba(187, 247, 208, 0.7) 0%, rgba(22, 163, 74, 0.32) 52%, transparent 74%);
         }
 
         @keyframes mechFlash {
@@ -3707,7 +3739,7 @@
 
             <div class="menu-section-title">Core Rules</div>
             <div class="rules-compact">
-                <strong>🃏 The deck:</strong> Cards are dealt or drafted from a shared deck - the Base Set, 50 cards.
+                <strong>🃏 The deck:</strong> Cards are dealt or drafted from a shared deck - the Base Set, 70 cards.
                 Tribe Decks play one tribe of five. Every Ember card has an ability.<br>
                 <strong>⚔️ Capture:</strong> Play a card from your hand next to an enemy. If your touching stat is
                 higher,
@@ -3778,8 +3810,8 @@
             <div class="menu-section-title" style="margin-top: 0;">The table</div>
             <div class="expanded-rules-list">
                 <div class="rule-detail-item">
-                    <strong>The deck:</strong> The Base Set is 50 cards in ten tribes. Every Ember card has an ability.
-                    Shuffle it and deal two hands of five, or spread sixteen and draft until each hand is five.
+                    <strong>The deck:</strong> The Base Set is 70 cards in fourteen tribes. Every Ember card has an
+                    ability. Shuffle it and deal two hands of five, or spread sixteen and draft until each hand is five.
                 </div>
                 <div class="rule-detail-item">
                     <strong>League:</strong> You plus three named AI. Snake-draft twenty cards (five each), then a
@@ -3838,6 +3870,18 @@
                     Witch, Mage, Imp.</div>
                 <div class="rule-detail-item"><strong>❄️ Chill:</strong> While this card sits there, adjacent enemies
                     are -1 to all stats. Counts for captures. Frost tribe - Frost, Wolf, Penguin, Polar, Seal.</div>
+                <div class="rule-detail-item"><strong>🪞 Parasite:</strong> On play, copies the ability of an adjacent
+                    enemy for the rest of the match. If that ability fires on play, it fires before this card captures.
+                    Host tribe - Mimic, Leech, Cuckoo, Doppel, Remora.</div>
+                <div class="rule-detail-item"><strong>🌀 Siphon:</strong> On play, steals 1 from each adjacent enemy's
+                    touching stat and adds it permanently to this card's opposite facing. Well tribe - Kraken, Drain,
+                    Lamprey, Mosquito, Siphon.</div>
+                <div class="rule-detail-item"><strong>⏳ Pendulum:</strong> At the start of every turn, this card swaps
+                    its top/bottom stats with its left/right stats. Tide tribe - Pendulum, Tide, Moon, Hourglass, Gyro.
+                </div>
+                <div class="rule-detail-item"><strong>🌱 Symbiosis:</strong> Whenever a friendly card captures an enemy
+                    anywhere on the board, this card gains +1 to all stats. Grove tribe - Worldtree, Mycelium, Coral,
+                    Lichen, Ivy.</div>
             </div>
 
             <button class="btn btn-alt btn-dismiss" onclick="closeRulesModal()">Close</button>
@@ -3857,8 +3901,8 @@
                     <path d="m6 6 12 12" />
                 </svg></button>
             <h2 class="modal-title">Compendium</h2>
-            <p class="set-blurb">The Base Set is 50 cards in ten tribes. Every Ember card has an ability. Classic Mode
-                still strips abilities and plays as pure stats.</p>
+            <p class="set-blurb">The Base Set is 70 cards in fourteen tribes. Every Ember card has an ability. Classic
+                Mode still strips abilities and plays as pure stats.</p>
             <select id="compendium-filter" class="settings-select compendium-filter" onchange="renderCompendium()">
                 <option value="all">All cards</option>
                 <option value="aura_buff">Buff</option>
@@ -3871,6 +3915,10 @@
                 <option value="cinder">Cinder</option>
                 <option value="bolt">Bolt</option>
                 <option value="chill">Chill</option>
+                <option value="parasite">Parasite</option>
+                <option value="siphon">Siphon</option>
+                <option value="pendulum">Pendulum</option>
+                <option value="symbiosis">Symbiosis</option>
             </select>
             <div class="compendium-grid" id="compendium-grid"></div>
             <button class="btn btn-alt btn-dismiss" onclick="closeCompendiumModal()">Close</button>
@@ -3900,8 +3948,9 @@
                 </select>
             </div>
             <div id="ruleset-desc" class="ruleset-desc-box">
-                <strong>Ember Mode:</strong> Every card has an ability. Ten tribes share the pile: Buff, Curse, Blast,
-                Poison, Equalizer, Spite, Silence, Cinder, Bolt, and Chill.
+                <strong>Ember Mode:</strong> Every card has an ability. Fourteen tribes share the pile: Buff, Curse,
+                Blast,
+                Poison, Equalizer, Spite, Silence, Cinder, Bolt, Chill, Parasite, Siphon, Pendulum, and Symbiosis.
             </div>
             <div class="settings-stack">
                 <span>AI Difficulty</span>
@@ -4120,133 +4169,12 @@
     <script>
         // --- Audio Engine ---
         let audioCtx = null;
-        let masterGain = null;
-        let masterFilter = null;
-        let noiseBuf = null;
         let isAudioMuted = localStorage.getItem('ember_grid_muted') === 'true';
         updateAudioButtonIcon();
 
         function initAudio() {
             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             if (audioCtx.state === 'suspended') audioCtx.resume();
-            if (audioCtx && !masterGain) {
-                masterGain = audioCtx.createGain();
-                masterGain.gain.value = 1;
-                masterFilter = audioCtx.createBiquadFilter();
-                masterFilter.type = 'lowpass';
-                masterFilter.Q.value = 0.7;
-                masterFilter.frequency.value = document.querySelector('.modal:not(.hidden)') ? 380 : 18000;
-                masterGain.connect(masterFilter);
-                masterFilter.connect(audioCtx.destination);
-            }
-        }
-
-        function audioOut() {
-            return masterGain || (audioCtx && audioCtx.destination);
-        }
-
-        function tablePitch() {
-            if (!board || !board.length) return 1;
-            return 1 + (board.filter(Boolean).length / board.length) * 0.14;
-        }
-
-        function clampNum(n, a, b) {
-            return Math.max(a, Math.min(b, n));
-        }
-
-        function spaceForIndex(index) {
-            const pt = typeof cellFxPoint === 'function' ? cellFxPoint(index) : null;
-            const w = window.innerWidth || 1;
-            const h = window.innerHeight || 1;
-            if (!pt) return {pan: 0, gain: 1};
-            return {
-                pan: clampNum((pt.x / w) * 2 - 1, -0.9, 0.9),
-                gain: clampNum(0.78 + (pt.y / h) * 0.28, 0.7, 1.1)
-            };
-        }
-
-        function refreshTableMuffle() {
-            if (!audioCtx || !masterFilter) return;
-            const muffled = !!document.querySelector('.modal:not(.hidden)');
-            const now = audioCtx.currentTime;
-            masterFilter.frequency.cancelScheduledValues(now);
-            masterFilter.frequency.setTargetAtTime(muffled ? 380 : 18000, now, 0.07);
-        }
-
-        function watchModalMuffle() {
-            document.querySelectorAll('.modal').forEach(el => {
-                new MutationObserver(refreshTableMuffle).observe(el, {attributes: true, attributeFilter: ['class']});
-            });
-        }
-
-        function startVoice(source, opts) {
-            const now = audioCtx.currentTime;
-            const g = audioCtx.createGain();
-            const peak = Math.max(0.0001, opts.gain);
-            if (opts.attack) {
-                g.gain.setValueAtTime(0.0001, now);
-                g.gain.exponentialRampToValueAtTime(peak, now + opts.attack);
-                g.gain.exponentialRampToValueAtTime(0.0001, now + opts.dur);
-            } else {
-                g.gain.setValueAtTime(peak, now);
-                g.gain.exponentialRampToValueAtTime(0.0001, now + opts.dur);
-            }
-            let last = source;
-            if (opts.filterFreq) {
-                const f = audioCtx.createBiquadFilter();
-                f.type = opts.filterType || 'lowpass';
-                f.frequency.setValueAtTime(opts.filterFreq, now);
-                if (opts.filterSlide) {
-                    f.frequency.exponentialRampToValueAtTime(Math.max(40, opts.filterSlide), now + opts.dur);
-                }
-                last.connect(f);
-                last = f;
-            }
-            last.connect(g);
-            const dest = audioOut();
-            if (audioCtx.createStereoPanner) {
-                const p = audioCtx.createStereoPanner();
-                p.pan.setValueAtTime(clampNum(opts.pan || 0, -1, 1), now);
-                g.connect(p);
-                p.connect(dest);
-            } else {
-                g.connect(dest);
-            }
-            source.start(now);
-            source.stop(now + opts.dur + 0.03);
-        }
-
-        function oscVoice(opts) {
-            if (isAudioMuted) return;
-            try {
-                initAudio();
-                if (!audioCtx) return;
-                const osc = audioCtx.createOscillator();
-                osc.type = opts.type || 'sine';
-                const pitch = opts.table === false ? 1 : tablePitch();
-                const freq = Math.max(40, (opts.freq || 440) * pitch);
-                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-                if (opts.slide) {
-                    osc.frequency.exponentialRampToValueAtTime(Math.max(40, opts.slide * pitch), audioCtx.currentTime + opts.dur);
-                }
-                startVoice(osc, opts);
-            } catch (e) { }
-        }
-
-        function noiseVoice(opts) {
-            if (isAudioMuted) return;
-            try {
-                initAudio();
-                if (!audioCtx) return;
-                if (!noiseBuf) {
-                    noiseBuf = audioCtx.createBuffer(1, Math.floor(audioCtx.sampleRate * 0.5), audioCtx.sampleRate);
-                    const data = noiseBuf.getChannelData(0);
-                    for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
-                }
-                const src = audioCtx.createBufferSource();
-                src.buffer = noiseBuf;
-                startVoice(src, opts);
-            } catch (e) { }
         }
 
         function toggleAudio() {
@@ -4266,56 +4194,21 @@
         }
 
         function playTone(freq, type, duration, gainVal = 0.1) {
-            oscVoice({freq, type, dur: duration, gain: gainVal, pan: 0, table: false});
-        }
-
-        function sfxAbility(kind, fromIdx, toIdxs) {
-            if (isAudioMuted || silentSim) return;
-            const dest = (toIdxs && toIdxs[0] != null) ? toIdxs[0] : fromIdx;
-            const a = spaceForIndex(fromIdx);
-            const b = spaceForIndex(dest);
-            const midPan = (a.pan + b.pan) / 2;
-            if (kind === 'bolt') {
-                noiseVoice({dur: 0.1, gain: 0.1 * b.gain, pan: b.pan, filterFreq: 2800, filterType: 'highpass', filterSlide: 900});
-                oscVoice({freq: 1680, slide: 220, type: 'sawtooth', dur: 0.24, gain: 0.055 * b.gain, pan: b.pan, filterFreq: 2600});
-                setTimeout(() => oscVoice({freq: 740, slide: 180, type: 'square', dur: 0.08, gain: 0.03 * b.gain, pan: b.pan}), 40);
-            } else if (kind === 'buff') {
-                oscVoice({freq: 523, type: 'sine', dur: 0.16, gain: 0.05 * a.gain, pan: a.pan});
-                setTimeout(() => oscVoice({freq: 784, type: 'sine', dur: 0.22, gain: 0.045 * b.gain, pan: b.pan}), 70);
-            } else if (kind === 'curse') {
-                oscVoice({freq: 130, slide: 70, type: 'triangle', dur: 0.32, gain: 0.07 * b.gain, pan: b.pan, filterFreq: 400});
-                noiseVoice({dur: 0.2, gain: 0.04 * b.gain, pan: b.pan, filterFreq: 500, filterSlide: 180});
-            } else if (kind === 'blast') {
-                noiseVoice({dur: 0.18, gain: 0.11 * a.gain, pan: a.pan, filterFreq: 900, filterSlide: 160});
-                oscVoice({freq: 90, slide: 45, type: 'sine', dur: 0.28, gain: 0.1 * a.gain, pan: a.pan});
-            } else if (kind === 'poison') {
-                (toIdxs && toIdxs.length ? toIdxs : [dest]).forEach((idx, i) => {
-                    const s = spaceForIndex(idx);
-                    setTimeout(() => {
-                        oscVoice({freq: 640, slide: 240, type: 'sine', dur: 0.16, gain: 0.055 * s.gain, pan: s.pan});
-                        noiseVoice({dur: 0.1, gain: 0.045 * s.gain, pan: s.pan, filterFreq: 700});
-                    }, i * 45);
-                });
-            } else if (kind === 'silence') {
-                noiseVoice({dur: 0.22, gain: 0.06 * b.gain, pan: b.pan, filterFreq: 3200, filterSlide: 220});
-                oscVoice({freq: 210, slide: 80, type: 'triangle', dur: 0.2, gain: 0.04 * b.gain, pan: midPan});
-            } else if (kind === 'chill') {
-                oscVoice({freq: 1480, type: 'sine', dur: 0.28, gain: 0.035 * b.gain, pan: b.pan});
-                oscVoice({freq: 2220, type: 'sine', dur: 0.32, gain: 0.028 * b.gain, pan: b.pan * 0.7});
-            } else if (kind === 'cinder') {
-                noiseVoice({dur: 0.24, gain: 0.07 * b.gain, pan: b.pan, filterFreq: 1400, filterType: 'bandpass', filterSlide: 600});
-                oscVoice({freq: 190, slide: 110, type: 'sawtooth', dur: 0.2, gain: 0.035 * b.gain, pan: b.pan, filterFreq: 500});
-            } else if (kind === 'spite') {
-                setTimeout(() => {
-                    noiseVoice({dur: 0.14, gain: 0.08 * b.gain, pan: b.pan, filterFreq: 1400, filterSlide: 380});
-                    oscVoice({freq: 180, slide: 70, type: 'sawtooth', dur: 0.28, gain: 0.09 * b.gain, pan: b.pan, filterFreq: 700});
-                    oscVoice({freq: 90, type: 'sine', dur: 0.24, gain: 0.07 * b.gain, pan: b.pan});
-                }, 70);
-            } else if (kind === 'equalizer') {
-                oscVoice({freq: 392, type: 'sine', dur: 0.16, gain: 0.05 * a.gain, pan: a.pan});
-                oscVoice({freq: 494, type: 'sine', dur: 0.16, gain: 0.05 * b.gain, pan: b.pan});
-                setTimeout(() => oscVoice({freq: 440, type: 'sine', dur: 0.22, gain: 0.055, pan: midPan}), 90);
-            }
+            if (isAudioMuted) return;
+            try {
+                initAudio();
+                if (!audioCtx) return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(gainVal, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) { }
         }
 
         const sfx = {
@@ -4324,8 +4217,7 @@
             flipBlue: () => {playTone(523, 'sine', 0.08, 0.06); setTimeout(() => playTone(659, 'sine', 0.1, 0.06), 50);},
             flipRed: () => {playTone(280, 'sawtooth', 0.08, 0.05); setTimeout(() => playTone(200, 'sawtooth', 0.1, 0.05), 50);},
             win: () => {playTone(523, 'sine', 0.1, 0.08); setTimeout(() => playTone(659, 'sine', 0.1, 0.08), 80); setTimeout(() => playTone(783, 'sine', 0.2, 0.08), 160);},
-            lose: () => {playTone(300, 'sawtooth', 0.12, 0.08); setTimeout(() => playTone(180, 'sawtooth', 0.2, 0.08), 100);},
-            ability: sfxAbility
+            lose: () => {playTone(300, 'sawtooth', 0.12, 0.08); setTimeout(() => playTone(180, 'sawtooth', 0.2, 0.08), 100);}
         };
 
         // --- Clamped Mobile-Friendly Tooltip Engine ---
@@ -4466,7 +4358,27 @@
             {name: "Wolf", emoji: "🐺", baseStats: [6, 5, 4, 3], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, adjacent enemies are -1 to all stats. Counts for captures.'}},
             {name: "Penguin", emoji: "🐧", baseStats: [3, 4, 6, 5], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, adjacent enemies are -1 to all stats. Counts for captures.'}},
             {name: "Polar", emoji: "🐻‍❄️", baseStats: [6, 3, 7, 3], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, adjacent enemies are -1 to all stats. Counts for captures.'}},
-            {name: "Seal", emoji: "🦭", baseStats: [3, 5, 5, 5], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, adjacent enemies are -1 to all stats. Counts for captures.'}}
+            {name: "Seal", emoji: "🦭", baseStats: [3, 5, 5, 5], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, adjacent enemies are -1 to all stats. Counts for captures.'}},
+            {name: "Mimic", emoji: "🪞", baseStats: [3, 2, 4, 10], ability: {type: 'parasite', icon: '🪞', desc: 'On play, copies the ability of an adjacent enemy for the rest of the match. If that ability fires on play, it fires before this card captures.'}},
+            {name: "Leech", emoji: "🩸", baseStats: [5, 6, 3, 5], ability: {type: 'parasite', icon: '🪞', desc: 'On play, copies the ability of an adjacent enemy for the rest of the match. If that ability fires on play, it fires before this card captures.'}},
+            {name: "Cuckoo", emoji: "🐣", baseStats: [4, 7, 3, 5], ability: {type: 'parasite', icon: '🪞', desc: 'On play, copies the ability of an adjacent enemy for the rest of the match. If that ability fires on play, it fires before this card captures.'}},
+            {name: "Doppel", emoji: "👥", baseStats: [5, 5, 5, 4], ability: {type: 'parasite', icon: '🪞', desc: 'On play, copies the ability of an adjacent enemy for the rest of the match. If that ability fires on play, it fires before this card captures.'}},
+            {name: "Remora", emoji: "🐟", baseStats: [3, 6, 4, 6], ability: {type: 'parasite', icon: '🪞', desc: 'On play, copies the ability of an adjacent enemy for the rest of the match. If that ability fires on play, it fires before this card captures.'}},
+            {name: "Kraken", emoji: "🦑", baseStats: [4, 9, 3, 4], ability: {type: 'siphon', icon: '🌀', desc: 'On play, steals 1 from each adjacent enemy\'s touching stat and adds it permanently to this card\'s opposite facing.'}},
+            {name: "Drain", emoji: "💧", baseStats: [6, 4, 5, 4], ability: {type: 'siphon', icon: '🌀', desc: 'On play, steals 1 from each adjacent enemy\'s touching stat and adds it permanently to this card\'s opposite facing.'}},
+            {name: "Lamprey", emoji: "🪱", baseStats: [4, 5, 6, 4], ability: {type: 'siphon', icon: '🌀', desc: 'On play, steals 1 from each adjacent enemy\'s touching stat and adds it permanently to this card\'s opposite facing.'}},
+            {name: "Mosquito", emoji: "🦟", baseStats: [3, 7, 3, 6], ability: {type: 'siphon', icon: '🌀', desc: 'On play, steals 1 from each adjacent enemy\'s touching stat and adds it permanently to this card\'s opposite facing.'}},
+            {name: "Siphon", emoji: "🌀", baseStats: [5, 6, 4, 4], ability: {type: 'siphon', icon: '🌀', desc: 'On play, steals 1 from each adjacent enemy\'s touching stat and adds it permanently to this card\'s opposite facing.'}},
+            {name: "Pendulum", emoji: "⏳", baseStats: [8, 2, 8, 2], ability: {type: 'pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top/bottom stats with its left/right stats.'}},
+            {name: "Tide", emoji: "🌊", baseStats: [7, 3, 6, 3], ability: {type: 'pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top/bottom stats with its left/right stats.'}},
+            {name: "Moon", emoji: "🌙", baseStats: [2, 7, 2, 8], ability: {type: 'pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top/bottom stats with its left/right stats.'}},
+            {name: "Hourglass", emoji: "⌛", baseStats: [6, 3, 7, 3], ability: {type: 'pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top/bottom stats with its left/right stats.'}},
+            {name: "Gyro", emoji: "🪀", baseStats: [5, 4, 5, 5], ability: {type: 'pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top/bottom stats with its left/right stats.'}},
+            {name: "Worldtree", emoji: "🌳", baseStats: [2, 10, 3, 2], ability: {type: 'symbiosis', icon: '🌱', desc: 'Whenever a friendly card captures an enemy anywhere on the board, this card gains +1 to all stats.'}},
+            {name: "Mycelium", emoji: "🍄", baseStats: [4, 4, 4, 4], ability: {type: 'symbiosis', icon: '🌱', desc: 'Whenever a friendly card captures an enemy anywhere on the board, this card gains +1 to all stats.'}},
+            {name: "Coral", emoji: "🪸", baseStats: [5, 3, 5, 3], ability: {type: 'symbiosis', icon: '🌱', desc: 'Whenever a friendly card captures an enemy anywhere on the board, this card gains +1 to all stats.'}},
+            {name: "Lichen", emoji: "🌿", baseStats: [3, 5, 4, 4], ability: {type: 'symbiosis', icon: '🌱', desc: 'Whenever a friendly card captures an enemy anywhere on the board, this card gains +1 to all stats.'}},
+            {name: "Ivy", emoji: "🍃", baseStats: [4, 5, 3, 4], ability: {type: 'symbiosis', icon: '🌱', desc: 'Whenever a friendly card captures an enemy anywhere on the board, this card gains +1 to all stats.'}}
         ].map((card, i) => ({
             ...card,
             id: `BS-${String(i + 1).padStart(2, '0')}`,
@@ -4484,13 +4396,41 @@
             {id: 'silence', name: 'Hush', ability: 'Silence', icon: '🔇'},
             {id: 'cinder', name: 'Ember', ability: 'Cinder', icon: '🔥'},
             {id: 'bolt', name: 'Arcane', ability: 'Bolt', icon: '🔮'},
-            {id: 'chill', name: 'Frost', ability: 'Chill', icon: '❄️'}
+            {id: 'chill', name: 'Frost', ability: 'Chill', icon: '❄️'},
+            {id: 'parasite', name: 'Host', ability: 'Parasite', icon: '🪞'},
+            {id: 'siphon', name: 'Well', ability: 'Siphon', icon: '🌀'},
+            {id: 'pendulum', name: 'Tide', ability: 'Pendulum', icon: '⏳'},
+            {id: 'symbiosis', name: 'Grove', ability: 'Symbiosis', icon: '🌱'}
         ];
 
         function abilityNameOf(card) {
             if (!card || !card.ability) return '';
             const tribe = TRIBES.find(t => t.id === card.ability.type);
-            return tribe ? tribe.ability : '';
+            const base = tribe ? tribe.ability : '';
+            if (card.ability.copied) {
+                const copied = TRIBES.find(t => t.id === card.ability.copied.type);
+                const label = copied ? copied.ability : '';
+                if (label) return `${base} (${label})`;
+            }
+            return base;
+        }
+
+        function liveAbility(card) {
+            if (!card || !card.ability) return null;
+            return card.ability.copied || card.ability;
+        }
+
+        function liveAbilityType(card) {
+            const a = liveAbility(card);
+            return a ? a.type : null;
+        }
+
+        function snapshotAbility(card) {
+            const live = liveAbility(card);
+            if (!live || live.type === 'parasite') return null;
+            const snap = {type: live.type, icon: live.icon, desc: live.desc};
+            if (live.val != null) snap.val = live.val;
+            return snap;
         }
 
         function abilityTip(card, opts) {
@@ -4501,7 +4441,9 @@
             const ab = abilityNameOf(card);
             const head = ab ? `${idBit}${card.name} — ${ab}` : `${idBit}${card.name}`;
             const body = card.ability.desc || '';
-            return silenced ? `${head}: ${body} (silenced)` : `${head}: ${body}`;
+            const copied = card.ability.copied && TRIBES.find(t => t.id === card.ability.copied.type);
+            const copiedBit = copied ? ` Copied ${copied.ability}.` : '';
+            return silenced ? `${head}: ${body}${copiedBit} (silenced)` : `${head}: ${body}${copiedBit}`;
         }
 
         function nameplateHTML(card, silenced) {
@@ -5154,11 +5096,11 @@
         function leagueDraftScore(card, playerId) {
             let score = getCardDraftScore(card);
             const t = card.ability && card.ability.type;
-            if (playerId === 'ash' && (t === 'blast' || t === 'aura_buff' || t === 'cinder')) score += 3;
-            if (playerId === 'vesper' && (t === 'chill' || t === 'silence' || t === 'poison' || t === 'curse_adj')) score += 3;
+            if (playerId === 'ash' && (t === 'blast' || t === 'aura_buff' || t === 'cinder' || t === 'siphon')) score += 3;
+            if (playerId === 'vesper' && (t === 'chill' || t === 'silence' || t === 'poison' || t === 'curse_adj' || t === 'parasite')) score += 3;
             if (playerId === 'rook') {
                 score += 1;
-                if (t === 'equalizer' || t === 'blast') score += 1.5;
+                if (t === 'equalizer' || t === 'blast' || t === 'pendulum' || t === 'symbiosis') score += 1.5;
             }
             const noise = playerId === 'rook' ? Math.random() * 0.4 : Math.random() * 1.8;
             return score + noise;
@@ -5167,9 +5109,9 @@
         function personalityPlayBias(card, personality) {
             if (!personality || !card.ability) return 0;
             const t = card.ability.type;
-            if (personality === 'ash' && (t === 'blast' || t === 'aura_buff' || t === 'cinder')) return 2.5;
-            if (personality === 'vesper' && (t === 'chill' || t === 'silence' || t === 'poison' || t === 'curse_adj')) return 2.5;
-            if (personality === 'rook' && (t === 'equalizer' || t === 'blast')) return 1.5;
+            if (personality === 'ash' && (t === 'blast' || t === 'aura_buff' || t === 'cinder' || t === 'siphon')) return 2.5;
+            if (personality === 'vesper' && (t === 'chill' || t === 'silence' || t === 'poison' || t === 'curse_adj' || t === 'parasite')) return 2.5;
+            if (personality === 'rook' && (t === 'equalizer' || t === 'blast' || t === 'pendulum' || t === 'symbiosis')) return 1.5;
             return 0;
         }
 
@@ -5635,7 +5577,7 @@
             const printed = printedStatsOf(card);
             if (source !== 'board') return printed.map(clampStat);
             let stats = [...(card.stats || card.baseStats || printed)];
-            if (card.blastPreview && card.ability && card.ability.type === 'blast' && !isSilenced(index)) {
+            if (card.blastPreview && liveAbilityType(card) === 'blast' && !isSilenced(index)) {
                 stats = stats.map(s => clampStat(s + 2));
             }
             return stats.map(clampStat);
@@ -5711,7 +5653,7 @@
             try {navigator.vibrate(pattern);} catch (err) { }
         }
         function hapticForPlay(fx) {
-            const ability = fx.abilityFx || fx.buffFx || fx.silenceFx || fx.chillFx || fx.inFx || fx.psnFx;
+            const ability = fx.abilityFx || fx.buffFx || fx.silenceFx || fx.chillFx || fx.psnFx || fx.pendulumFx;
             const captured = !!(fx.capLog);
             if (ability && ability.kind === 'bolt') haptic(captured ? [10, 28, 36, 40, 18] : [10, 30, 36]);
             else if (captured) haptic([12, 28, 22]);
@@ -5729,7 +5671,7 @@
             if (!descBox) return;
             descBox.innerHTML = currentRuleset === 'classic'
                 ? "<strong>Classic Mode:</strong> Pure, tactical gameplay. All special abilities and card badges are disabled."
-                : "<strong>Ember Mode:</strong> Every card has an ability. Ten tribes share the pile: Buff, Curse, Blast, Poison, Equalizer, Spite, Silence, Cinder, Bolt, and Chill.";
+                : "<strong>Ember Mode:</strong> Every card has an ability. Fourteen tribes share the pile: Buff, Curse, Blast, Poison, Equalizer, Spite, Silence, Cinder, Bolt, Chill, Parasite, Siphon, Pendulum, and Symbiosis.";
         }
         function updateRuleset(val) {
             sfx.click();
@@ -5764,8 +5706,18 @@
             return out;
         }
 
+        function facingPairs(index) {
+            const row = Math.floor(index / 3), col = index % 3;
+            const pairs = [];
+            if (row > 0) pairs.push({idx: index - 3, mine: 0, theirs: 2});
+            if (col < 2) pairs.push({idx: index + 1, mine: 1, theirs: 3});
+            if (row < 2) pairs.push({idx: index + 3, mine: 2, theirs: 0});
+            if (col > 0) pairs.push({idx: index - 1, mine: 3, theirs: 1});
+            return pairs;
+        }
+
         function isSilenceCard(card) {
-            return !!(card && card.ability && card.ability.type === 'silence');
+            return liveAbilityType(card) === 'silence';
         }
 
         function silenceCancelled(index) {
@@ -5826,7 +5778,6 @@
             if (!el) return;
             releaseUiFocus(el);
             el.classList.add('hidden');
-            refreshTableMuffle();
         }
 
         function hideModals(ids) {
@@ -6182,7 +6133,10 @@
                 printedStats: [...(card.printedStats || master.baseStats)],
                 ...extra
             };
-            if (card.ability) copy.ability = {...card.ability};
+            if (card.ability) {
+                copy.ability = {...card.ability};
+                if (card.ability.copied) copy.ability.copied = {...card.ability.copied};
+            }
             const rs = ruleset || cloneRulesetOverride || currentRuleset;
             if (rs === 'classic') delete copy.ability;
             return copy;
@@ -6576,7 +6530,11 @@
                     case 'equalizer': baseScore += 4; break;
                     case 'spite':
                     case 'cinder':
-                    case 'bolt': baseScore += 4; break;
+                    case 'bolt':
+                    case 'parasite':
+                    case 'siphon':
+                    case 'symbiosis': baseScore += 4; break;
+                    case 'pendulum': baseScore += 3; break;
                     case 'curse_adj': baseScore += 3; break;
                     default: baseScore += 2;
                 }
@@ -6870,8 +6828,8 @@
             board.forEach(c => {if (c) c.stats = [...c.baseStats];});
             board.forEach((card, index) => {
                 if (!card || !card.ability || isSilenced(index)) return;
-                if (card.ability.type === 'aura_buff') {
-                    const val = card.ability.val;
+                if (liveAbilityType(card) === 'aura_buff') {
+                    const val = liveAbility(card).val || 1;
                     neighborIndexes(index).forEach(idx => {
                         if (board[idx] && board[idx].owner === card.owner) {
                             board[idx].stats = board[idx].stats.map(s => Math.max(1, Math.min(10, s + val)));
@@ -6881,7 +6839,7 @@
             });
             board.forEach((card, index) => {
                 if (!card || !card.ability || isSilenced(index)) return;
-                if (card.ability.type === 'chill') {
+                if (liveAbilityType(card) === 'chill') {
                     neighborIndexes(index).forEach(idx => {
                         if (board[idx] && board[idx].owner !== card.owner) {
                             board[idx].stats = board[idx].stats.map(s => Math.max(1, Math.min(10, s - 1)));
@@ -6897,16 +6855,47 @@
 
         function getEffectiveStat(card, statIndex, isPlacementTurn, silenced) {
             let val = (card.stats || card.baseStats)[statIndex];
-            if (isPlacementTurn && !silenced && card.ability && card.ability.type === 'blast') {
+            if (isPlacementTurn && !silenced && liveAbilityType(card) === 'blast') {
                 val += 2;
             }
             return val;
         }
 
-        function applyOnPlayAbilities(placedCard, index) {
-            if (!placedCard.ability || isSilenced(index)) return null;
-            const abType = placedCard.ability.type;
+        function applyParasiteCopy(placedCard, index) {
+            const enemies = facingPairs(index)
+                .map(p => board[p.idx] ? {c: board[p.idx], i: p.idx} : null)
+                .filter(x => x && x.c.owner !== placedCard.owner && snapshotAbility(x.c));
+            if (!enemies.length) return null;
+            enemies.sort((a, b) => b.c.baseStats.reduce((x, y) => x + y, 0) - a.c.baseStats.reduce((x, y) => x + y, 0));
+            const pick = enemies[0];
+            placedCard.ability.copied = snapshotAbility(pick.c);
+            placedCard.fxType = 'parasite';
+            queueMechFx('parasite', index, [pick.i]);
+            const copiedName = TRIBES.find(t => t.id === placedCard.ability.copied.type);
+            return {text: `${placedCard.name} copied ${pick.c.name}'s ${copiedName ? copiedName.ability : 'ability'}`, kind: 'parasite'};
+        }
 
+        function applySiphon(placedCard, index) {
+            const stolen = [];
+            const hits = [];
+            facingPairs(index).forEach(p => {
+                const n = board[p.idx];
+                if (!n || n.owner === placedCard.owner) return;
+                if (n.baseStats[p.theirs] <= 1) return;
+                n.baseStats[p.theirs] = Math.max(1, n.baseStats[p.theirs] - 1);
+                const opp = (p.mine + 2) % 4;
+                placedCard.baseStats[opp] = Math.min(10, placedCard.baseStats[opp] + 1);
+                n.fxType = 'siphon';
+                stolen.push(n.name);
+                hits.push(p.idx);
+            });
+            if (!hits.length) return null;
+            placedCard.fxType = placedCard.fxType || 'siphon';
+            queueMechFx('siphon', index, hits);
+            return {text: `${placedCard.name} siphoned ${listNames(stolen)}`, kind: 'siphon'};
+        }
+
+        function fireOnPlayKind(placedCard, index, abType) {
             if (abType === 'curse_adj') {
                 let enemies = board.map((c, i) => (c && c.owner !== placedCard.owner) ? {c, i} : null).filter(Boolean);
                 if (enemies.length > 0) {
@@ -6937,16 +6926,31 @@
                     const targetCard = pick.c;
                     targetCard.baseStats = targetCard.baseStats.map(s => Math.max(1, s - 2));
                     targetCard.fxType = 'bolt';
-                    placedCard.fxType = 'bolt';
+                    placedCard.fxType = placedCard.fxType || 'bolt';
                     queueMechFx('bolt', index, [pick.i]);
                     return {text: `${placedCard.name} bolted ${targetCard.name} (-2)`, kind: 'bolt'};
                 }
+            } else if (abType === 'siphon') {
+                return applySiphon(placedCard, index);
             }
             return null;
         }
 
+        function applyOnPlayAbilities(placedCard, index) {
+            if (!placedCard.ability || isSilenced(index)) return null;
+            const parts = [];
+            if (placedCard.ability.type === 'parasite') {
+                const copied = applyParasiteCopy(placedCard, index);
+                if (copied) parts.push(copied);
+            }
+            const fired = fireOnPlayKind(placedCard, index, liveAbilityType(placedCard));
+            if (fired) parts.push(fired);
+            if (!parts.length) return null;
+            return {text: parts.map(p => p.text).join(' · '), kind: parts[0].kind};
+        }
+
         function tagAuraBuffs(placedCard, index) {
-            if (!placedCard.ability || placedCard.ability.type !== 'aura_buff' || isSilenced(index)) return null;
+            if (!placedCard.ability || liveAbilityType(placedCard) !== 'aura_buff' || isSilenced(index)) return null;
             const names = [];
             const hits = [];
             neighborIndexes(index).forEach(idx => {
@@ -6978,7 +6982,7 @@
         }
 
         function tagChill(placedCard, index) {
-            if (!placedCard.ability || placedCard.ability.type !== 'chill' || isSilenced(index)) return null;
+            if (!placedCard.ability || liveAbilityType(placedCard) !== 'chill' || isSilenced(index)) return null;
             const names = [];
             const hits = [];
             neighborIndexes(index).forEach(idx => {
@@ -6993,43 +6997,10 @@
             return names.length ? {text: `${placedCard.name} chilled ${listNames(names)} (-1)`, kind: 'chill'} : null;
         }
 
-        function tagIncomingEffects(placedCard, index, satOnCinder) {
-            const parts = [];
-            const buffFrom = [];
-            const chillFrom = [];
-            const silenceFrom = [];
-            neighborIndexes(index).forEach(idx => {
-                const n = board[idx];
-                if (!n || !n.ability || isSilenced(idx)) return;
-                if (n.ability.type === 'aura_buff' && n.owner === placedCard.owner) {
-                    placedCard.fxType = placedCard.fxType || 'buff';
-                    buffFrom.push({idx, name: n.name});
-                } else if (n.ability.type === 'chill' && n.owner !== placedCard.owner) {
-                    placedCard.fxType = placedCard.fxType || 'chill';
-                    chillFrom.push({idx, name: n.name});
-                } else if (isSilenceCard(n) && n.owner !== placedCard.owner && placedCard.ability) {
-                    placedCard.fxType = placedCard.fxType || 'silence';
-                    silenceFrom.push({idx, name: n.name});
-                }
-            });
-            buffFrom.forEach(s => queueMechFx('buff', s.idx, [index]));
-            chillFrom.forEach(s => queueMechFx('chill', s.idx, [index]));
-            silenceFrom.forEach(s => queueMechFx('silence', s.idx, [index]));
-            if (buffFrom.length) parts.push(`${listNames(buffFrom.map(s => s.name))} buffed ${placedCard.name} (+1)`);
-            if (chillFrom.length) parts.push(`${listNames(chillFrom.map(s => s.name))} chilled ${placedCard.name} (-1)`);
-            if (silenceFrom.length) parts.push(`${listNames(silenceFrom.map(s => s.name))} silenced ${placedCard.name}`);
-            if (satOnCinder) {
-                placedCard.fxType = placedCard.fxType || 'cinder';
-                queueMechFx('cinder', index, [index]);
-                parts.push(`${placedCard.name} sat on Cinder (-1)`);
-            }
-            return parts.length ? {text: parts.join(' · '), kind: 'incoming'} : null;
-        }
-
         function applyEndOfTurnEffects() {
             const parts = [];
             board.forEach((card, index) => {
-                if (card && card.ability && card.ability.type === 'poison' && !isSilenced(index)) {
+                if (card && liveAbilityType(card) === 'poison' && !isSilenced(index)) {
                     const hit = [];
                     const hits = [];
                     neighborIndexes(index).forEach(idx => {
@@ -7051,6 +7022,34 @@
                 }
             });
             return parts.length ? {text: parts.join(' · '), kind: 'poison'} : null;
+        }
+
+        function tickPendulum() {
+            if (board.every(c => c)) return null;
+            const hits = [];
+            board.forEach((card, index) => {
+                if (!card || liveAbilityType(card) !== 'pendulum' || isSilenced(index)) return;
+                const b = card.baseStats;
+                card.baseStats = [b[3], b[2], b[1], b[0]];
+                card.fxType = 'pendulum';
+                hits.push(index);
+                queueMechFx('pendulum', index, []);
+            });
+            return hits.length ? {text: `${hits.length === 1 ? board[hits[0]].name : 'Pendulum cards'} swung`, kind: 'pendulum'} : null;
+        }
+
+        function applySymbiosis(placedCard, capturedCount) {
+            if (!capturedCount) return null;
+            const names = [];
+            board.forEach((card, index) => {
+                if (!card || card.owner !== placedCard.owner) return;
+                if (liveAbilityType(card) !== 'symbiosis' || isSilenced(index)) return;
+                card.baseStats = card.baseStats.map(s => Math.min(10, s + capturedCount));
+                card.fxType = 'symbiosis';
+                names.push(card.name);
+                queueMechFx('symbiosis', index, []);
+            });
+            return names.length ? {text: `${listNames(names)} grew from the capture (+${capturedCount})`, kind: 'symbiosis'} : null;
         }
 
         function hasEnemyNeighbor(placedIndex, placedCard) {
@@ -7267,11 +7266,33 @@
             placeBurst(cellFxPoint(toIdx), 'equalizer', `<div class="mech-flash equalizer"></div><div class="mech-balance"></div>`, 620);
         }
 
+        function playParasiteFx(fromIdx, toIdx) {
+            travelFx(cellFxPoint(toIdx), cellFxPoint(fromIdx), 'curse', 420);
+            placeBurst(cellFxPoint(fromIdx), 'parasite', `<div class="mech-flash parasite"></div>`, 640);
+            placeBurst(cellFxPoint(toIdx), 'parasite', `<div class="mech-flash parasite"></div>`, 560);
+        }
+
+        function playSiphonFx(fromIdx, toIdxs) {
+            placeBurst(cellFxPoint(fromIdx), 'siphon', `<div class="mech-flash siphon"></div>`, 620);
+            toIdxs.forEach(idx => {
+                travelFx(cellFxPoint(idx), cellFxPoint(fromIdx), 'cinder', 360);
+                placeBurst(cellFxPoint(idx), 'siphon', `<div class="mech-flash siphon"></div>`, 520);
+            });
+        }
+
+        function playPendulumFx(fromIdx) {
+            placeBurst(cellFxPoint(fromIdx), 'pendulum', `<div class="mech-flash pendulum"></div><div class="mech-balance"></div>`, 640);
+            tapCardFx(fromIdx, 'mech-hit-chill', 400);
+        }
+
+        function playSymbiosisFx(fromIdx) {
+            placeBurst(cellFxPoint(fromIdx), 'symbiosis', `<div class="mech-flash symbiosis"></div>`, 680);
+        }
+
         function playMechFx(events) {
             if (!events || !events.length) return;
             events.forEach(ev => {
                 const to = ev.to || [];
-                sfx.ability(ev.kind, ev.from, to);
                 if (ev.kind === 'bolt' && to[0] != null) playBoltFx(ev.from, to[0]);
                 else if (ev.kind === 'buff') playBuffFx(ev.from, to);
                 else if (ev.kind === 'curse' && to[0] != null) playCurseFx(ev.from, to[0]);
@@ -7282,6 +7303,10 @@
                 else if (ev.kind === 'cinder' && to[0] != null) playCinderFx(ev.from, to[0]);
                 else if (ev.kind === 'spite' && to[0] != null) playSpiteFx(ev.from, to[0]);
                 else if (ev.kind === 'equalizer' && to[0] != null) playEqualizerFx(ev.from, to[0]);
+                else if (ev.kind === 'parasite' && to[0] != null) playParasiteFx(ev.from, to[0]);
+                else if (ev.kind === 'siphon') playSiphonFx(ev.from, to);
+                else if (ev.kind === 'pendulum') playPendulumFx(ev.from);
+                else if (ev.kind === 'symbiosis') playSymbiosisFx(ev.from);
             });
         }
 
@@ -7600,7 +7625,7 @@
         function executeCardPlay(handIndex, boardIndex) {
             if (board[boardIndex] !== null || handIndex >= playerHand.length) return;
             resetFingerDrag();
-            hideTooltip();
+            sfx.place(); hideTooltip();
             const cardToPlay = playerHand.splice(handIndex, 1)[0];
             cardToPlay.stats = [...cardToPlay.baseStats];
             board[boardIndex] = cardToPlay; selectedCard = null;
@@ -7611,29 +7636,25 @@
         function applyPlacementCore(index, placedCard) {
             board.forEach(c => {if (c && c !== placedCard) c.blastPreview = false;});
             const enemyNeighbor = hasEnemyNeighbor(index, placedCard);
-            const satOnCinder = cellEffects[index] === 'cinder';
             const abilityFx = applyOnPlayAbilities(placedCard, index);
             recalculateDynamicStats();
             const buffFx = tagAuraBuffs(placedCard, index);
             const silenceFx = tagSilence(placedCard, index);
             const chillFx = tagChill(placedCard, index);
-            const inFx = tagIncomingEffects(placedCard, index, satOnCinder);
-            const cap = checkCaptures(index, placedCard);
+            const capLog = checkCaptures(index, placedCard);
             recalculateDynamicStats();
             const psnFx = applyEndOfTurnEffects();
             recalculateDynamicStats();
-            return {enemyNeighbor, abilityFx, buffFx, silenceFx, chillFx, inFx, capLog: cap.text, flip: cap.flip, psnFx};
+            const pendulumFx = tickPendulum();
+            recalculateDynamicStats();
+            return {enemyNeighbor, abilityFx, buffFx, silenceFx, chillFx, capLog, psnFx, pendulumFx};
         }
 
         function processCardPlacement(index, placedCard) {
             const fx = applyPlacementCore(index, placedCard);
             if (silentSim) return;
 
-            if (!pendingMechFx.length) sfx.place();
-            if (fx.flip === 'blue') sfx.flipBlue();
-            else if (fx.flip === 'red') sfx.flipRed();
-
-            const fxParts = [fx.abilityFx && fx.abilityFx.text, fx.buffFx && fx.buffFx.text, fx.silenceFx && fx.silenceFx.text, fx.chillFx && fx.chillFx.text, fx.inFx && fx.inFx.text, fx.capLog, fx.psnFx && fx.psnFx.text].filter(Boolean);
+            const fxParts = [fx.abilityFx && fx.abilityFx.text, fx.buffFx && fx.buffFx.text, fx.silenceFx && fx.silenceFx.text, fx.chillFx && fx.chillFx.text, fx.capLog, fx.psnFx && fx.psnFx.text, fx.pendulumFx && fx.pendulumFx.text].filter(Boolean);
             logAction(fxParts.length ? fxParts.join(' · ') : `${placedCard.name} played.`);
 
             const placedBy = placedCard.owner === 'blue' ? 'player' : 'ai';
@@ -7686,7 +7707,7 @@
                 captured.push(neighborCard.name);
                 if (placedCard.owner === 'blue') {blueFlipped = true; if (!silentSim && origOwner === 'red') stats.flips++;}
                 else redFlipped = true;
-                if (neighborCard.ability && neighborCard.ability.type === 'spite' && !silencedWhenHit) {
+                if (liveAbilityType(neighborCard) === 'spite' && !silencedWhenHit) {
                     placedCard.baseStats = placedCard.baseStats.map(s => Math.max(1, s - 1));
                     placedCard.stats = (placedCard.stats || placedCard.baseStats).map(s => Math.max(1, s - 1));
                     placedCard.fxType = 'spite';
@@ -7703,7 +7724,7 @@
                 const theirVal = getEffectiveStat(neighborCard, n.n, false, silencedWhenHit);
                 let captures = myVal > theirVal;
                 let equalized = false;
-                if (!captures && !placedSilenced && placedCard.ability && placedCard.ability.type === 'equalizer' && myVal === theirVal) {
+                if (!captures && !placedSilenced && liveAbilityType(placedCard) === 'equalizer' && myVal === theirVal) {
                     captures = true;
                     equalized = true;
                 }
@@ -7716,13 +7737,15 @@
                 }
             });
 
+            if (!silentSim) {
+                if (blueFlipped) sfx.flipBlue(); else if (redFlipped) sfx.flipRed();
+            }
             const parts = [];
             if (captured.length) parts.push(`${placedCard.name} captured ${listNames(captured)}`);
             if (spiteHits.length) parts.push(`Spite from ${listNames(spiteHits)} hit ${placedCard.name} (-1)`);
-            return {
-                text: parts.join(' · '),
-                flip: blueFlipped ? 'blue' : (redFlipped ? 'red' : null)
-            };
+            const sym = applySymbiosis(placedCard, captured.length);
+            if (sym) parts.push(sym.text);
+            return parts.join(' · ');
         }
 
         function currentMatchAiDifficulty() {
@@ -7749,7 +7772,7 @@
                     let score = 0, flipsCount = 0, exposureRisk = 0;
                     const row = Math.floor(cellIdx / 3), col = cellIdx % 3;
                     const silencedHere = wouldBeSilenced(owner, cellIdx);
-                    const hushCancels = card.ability && card.ability.type === 'silence' && neighborIndexes(cellIdx).some(i => isSilenceCard(board[i]) && board[i].owner === enemy);
+                    const hushCancels = liveAbilityType(card) === 'silence' && neighborIndexes(cellIdx).some(i => isSilenceCard(board[i]) && board[i].owner === enemy);
                     const neighbors = [
                         {idx: cellIdx - 3, p: 0, n: 2, c: row > 0}, {idx: cellIdx + 1, p: 1, n: 3, c: col < 2},
                         {idx: cellIdx + 3, p: 2, n: 0, c: row < 2}, {idx: cellIdx - 1, p: 3, n: 1, c: col > 0}
@@ -7761,19 +7784,21 @@
                             const myVal = getEffectiveStat(card, n.p, true, silencedHere);
                             const theirVal = getEffectiveStat(neighborCard, n.n, false, isSilenced(n.idx));
 
-                            if (neighborCard.ability && neighborCard.ability.type === 'poison' && !isSilenced(n.idx)) exposureRisk += 2;
-                            if (card.ability && card.ability.type === 'poison' && !silencedHere) {
+                            if (liveAbilityType(neighborCard) === 'poison' && !isSilenced(n.idx)) exposureRisk += 2;
+                            if (liveAbilityType(card) === 'poison' && !silencedHere) {
                                 if (neighborCard.owner === enemy) score += 3;
                             }
-                            if (card.ability && card.ability.type === 'silence' && neighborCard.owner === enemy && neighborCard.ability) {
-                                if (!hushCancels || neighborCard.ability.type === 'silence') score += 4;
+                            if (liveAbilityType(card) === 'silence' && neighborCard.owner === enemy && neighborCard.ability) {
+                                if (!hushCancels || liveAbilityType(neighborCard) === 'silence') score += 4;
                             }
-                            if (card.ability && card.ability.type === 'chill' && neighborCard.owner === enemy) score += 3;
-                            if (neighborCard.ability && neighborCard.ability.type === 'spite' && neighborCard.owner === enemy) exposureRisk += 2;
+                            if (liveAbilityType(card) === 'chill' && neighborCard.owner === enemy) score += 3;
+                            if (liveAbilityType(neighborCard) === 'spite' && neighborCard.owner === enemy) exposureRisk += 2;
+                            if (liveAbilityType(card) === 'parasite' && neighborCard.owner === enemy && snapshotAbility(neighborCard) && !silencedHere) score += 5;
+                            if (liveAbilityType(card) === 'siphon' && neighborCard.owner === enemy && !silencedHere) score += 4;
 
                             if (neighborCard.owner === enemy) {
                                 let captures = myVal > theirVal;
-                                if (!captures && !silencedHere && card.ability && card.ability.type === 'equalizer' && myVal === theirVal) captures = true;
+                                if (!captures && !silencedHere && liveAbilityType(card) === 'equalizer' && myVal === theirVal) captures = true;
                                 if (captures) flipsCount++;
                             }
                         } else if (n.c && board[n.idx] === null && difficulty === 'hard') {
@@ -7784,8 +7809,10 @@
 
                     score += flipsCount * 14 + card.baseStats.reduce((a, b) => a + b, 0) * 0.1 + (card.ability ? 3 : 0) - exposureRisk * 2.5;
                     if (cellEffects[cellIdx] === 'cinder') score -= 5;
-                    if (silencedHere && card.ability && card.ability.type !== 'silence') score -= 3;
-                    if (card.ability && card.ability.type === 'bolt' && !silencedHere && board.some(c => c && c.owner === enemy)) score += 3;
+                    if (silencedHere && liveAbilityType(card) !== 'silence') score -= 3;
+                    if (liveAbilityType(card) === 'bolt' && !silencedHere && board.some(c => c && c.owner === enemy)) score += 3;
+                    if (liveAbilityType(card) === 'symbiosis' && board.some(c => c && c.owner === owner)) score += 2;
+                    if (flipsCount && board.some(c => c && c.owner === owner && liveAbilityType(c) === 'symbiosis')) score += flipsCount * 2;
                     score += personalityPlayBias(card, personality);
                     if (score > maxScore) {maxScore = score; bestMove = {cardIndex, cellIdx};}
                 });
@@ -7803,7 +7830,7 @@
         }
 
         function executeAIMove(cardIdx, cellIdx) {
-            if (!silentSim) hideTooltip();
+            if (!silentSim) {sfx.place(); hideTooltip();}
             const chosenCard = aiHand.splice(cardIdx, 1)[0];
             chosenCard.stats = [...chosenCard.baseStats];
             board[cellIdx] = chosenCard;
@@ -7927,7 +7954,6 @@
 
         refreshRulesetDesc();
         refreshVictoryCopy();
-        watchModalMuffle();
         if (!bootSharedMatch()) showModeMenu();
         window.addEventListener('pointermove', onFingerDragMove, {passive: false});
         window.addEventListener('pointerup', onFingerDragEnd);
