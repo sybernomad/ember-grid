@@ -3166,7 +3166,7 @@
                 </div>
                 <div class="rule-detail-item">
                     <strong>Capturing:</strong> When your card touches an enemy card, compare touching values (Top,
-                    Right, Bottom, Left). If your attacking stat is strictly greater, you capture their card!
+                    Right, Bottom, Left). If your attacking stat is strictly greater, you capture their card. Equalizer cards also capture on a tie. In Classic Mode, Options can turn on Ties capture so equal facings capture too. Ember Mode never uses that knob.
                 </div>
                 <div class="rule-detail-item">
                     <strong>Victory:</strong> <span id="victory-rules">Two hands of five. After the board fills, most cards on the board wins. Leftover in hand does not count. Options can turn leftover scores on, which makes a 5-4 board a 5-5 draw.</span>
@@ -3247,6 +3247,15 @@
                 <strong>Ember Mode:</strong> Every card has an ability. Fourteen tribes share the pile: Buff, Curse, Blast,
                 Poison, Equalizer, Spite, Silence, Cinder, Bolt, Chill, Parasite, Siphon, Pendulum, and Symbiosis.
             </div>
+            <div id="classic-ties-block" hidden>
+                <label class="settings-row" for="classic-ties-check">
+                    <span>Ties capture</span>
+                    <input type="checkbox" id="classic-ties-check" class="settings-check" onchange="updateClassicTies(this.checked)">
+                </label>
+                <div id="classic-ties-desc" class="ruleset-desc-box">
+                    <strong>Off (default):</strong> Equal facings do nothing. On: you capture when touching stats match. Ember Mode ignores this so Equalizer stays unique.
+                </div>
+            </div>
             <div class="settings-stack">
                 <span>AI Difficulty</span>
                 <select id="ai-difficulty-select" class="settings-select settings-select-full" onchange="updateDifficulty(this.value)">
@@ -3274,7 +3283,7 @@
                 <strong>Off (default):</strong> No vibration. On: a short pulse when a card plays, an ability hits, or a capture lands. Phones that support it only.
             </div>
             <p id="league-options-note" class="ruleset-desc-box" hidden>
-                An Ember League is in progress. Leftover and Ember/Classic are locked for that season. Ash, Vesper, and Rook all use the AI difficulty set here.
+                An Ember League is in progress. Leftover, Ember/Classic, and Classic Ties capture are locked for that season. Ash, Vesper, and Rook all use the AI difficulty set here.
             </p>
 
             <button class="btn btn-alt btn-dismiss" onclick="closeOptionsModal()">Close</button>
@@ -3773,6 +3782,8 @@
         let leftoverThisMatch = leftoverScores;
         let matchCaptures = {blue: 0, red: 0};
         let hapticsOn = localStorage.getItem('ember_grid_haptics') === 'true';
+        let classicTies = localStorage.getItem('ember_grid_classic_ties') === 'true';
+        let classicTiesThisMatch = false;
         let pendingMechFx = [];
         let currentRuleset = 'ember';
         let deckPicks = loadDeckPicks();
@@ -4011,6 +4022,7 @@
                 createdAt: raw.createdAt || Date.now(),
                 ruleset: raw.ruleset === 'classic' ? 'classic' : 'ember',
                 leftover: !!raw.leftover,
+                classicTies: raw.ruleset === 'classic' && !!raw.classicTies,
                 players: [youSeat(), ...LEAGUE_RIVALS],
                 draftOrder: raw.draftOrder.slice(),
                 draftPickIndex: Math.max(0, Number(raw.draftPickIndex) || 0),
@@ -4157,6 +4169,7 @@
                 createdAt: Date.now(),
                 ruleset: currentRuleset === 'classic' ? 'classic' : 'ember',
                 leftover: !!leftoverScores,
+                classicTies: currentRuleset === 'classic' && !!classicTies,
                 players: [youSeat(), ...LEAGUE_RIVALS],
                 draftOrder: order,
                 draftPickIndex: 0,
@@ -4705,6 +4718,7 @@
                 aiHand: aiHand.slice(),
                 leftoverThisMatch,
                 matchCaptures: {blue: matchCaptures.blue, red: matchCaptures.red},
+                classicTiesThisMatch,
                 turn,
                 gameState,
                 selectedCard,
@@ -4719,6 +4733,7 @@
             aiHand = snap.aiHand;
             leftoverThisMatch = snap.leftoverThisMatch;
             matchCaptures = snap.matchCaptures ? {blue: snap.matchCaptures.blue, red: snap.matchCaptures.red} : {blue: 0, red: 0};
+            classicTiesThisMatch = snap.classicTiesThisMatch;
             turn = snap.turn;
             gameState = snap.gameState;
             selectedCard = snap.selectedCard;
@@ -4733,6 +4748,7 @@
             silentSim = true;
             cloneRulesetOverride = ruleset;
             leftoverThisMatch = leftover;
+            classicTiesThisMatch = ruleset === 'classic' && !!(league && league.classicTies);
             resetTable();
             playerHand = (blueIds || []).map(id => cloneForOwner(masterCards.find(c => c.id === id), 'blue', ruleset));
             aiHand = (redIds || []).map(id => cloneForOwner(masterCards.find(c => c.id === id), 'red', ruleset));
@@ -4913,12 +4929,35 @@
             localStorage.setItem('ember_grid_haptics', hapticsOn ? 'true' : 'false');
             if (hapticsOn) haptic(18);
         }
+        function refreshClassicTiesUi() {
+            const block = document.getElementById('classic-ties-block');
+            const check = document.getElementById('classic-ties-check');
+            const desc = document.getElementById('classic-ties-desc');
+            const classic = currentRuleset === 'classic';
+            if (block) block.hidden = !classic;
+            if (check) {
+                check.checked = classicTies;
+                check.disabled = isLeagueActive();
+            }
+            if (desc) {
+                desc.innerHTML = classicTies
+                    ? '<strong>On:</strong> Equal facings capture. Classic Mode only. Ember Mode never uses this, so Equalizer stays unique.'
+                    : '<strong>Off (default):</strong> Equal facings do nothing. On: you capture when touching stats match. Ember Mode ignores this so Equalizer stays unique.';
+            }
+        }
+        function updateClassicTies(checked) {
+            sfx.click();
+            classicTies = !!checked;
+            localStorage.setItem('ember_grid_classic_ties', classicTies ? 'true' : 'false');
+            refreshClassicTiesUi();
+        }
         function refreshRulesetDesc() {
             const descBox = document.getElementById('ruleset-desc');
             if (!descBox) return;
             descBox.innerHTML = currentRuleset === 'classic'
                 ? "<strong>Classic Mode:</strong> Pure, tactical gameplay. All special abilities and card badges are disabled."
                 : "<strong>Ember Mode:</strong> Every card has an ability. Fourteen tribes share the pile: Buff, Curse, Blast, Poison, Equalizer, Spite, Silence, Cinder, Bolt, Chill, Parasite, Siphon, Pendulum, and Symbiosis.";
+            refreshClassicTiesUi();
         }
         function updateRuleset(val) {
             sfx.click();
@@ -5125,6 +5164,7 @@
             if (hapticsCheck) hapticsCheck.checked = hapticsOn;
             refreshRulesetDesc();
             refreshVictoryCopy();
+            refreshClassicTiesUi();
             const leagueNote = document.getElementById('league-options-note');
             if (leagueNote) leagueNote.hidden = !isLeagueActive();
             document.getElementById('options-modal').classList.remove('hidden');
@@ -5400,6 +5440,7 @@
                 mode: activeMode,
                 ruleset: (isLeagueMatch() && league) ? league.ruleset : currentRuleset,
                 leftover: leftoverThisMatch,
+                classicTies: classicTiesThisMatch,
                 playerIds: playerHand.map(c => c.id),
                 aiIds: aiHand.map(c => c.id),
                 first
@@ -5826,6 +5867,15 @@
             leftoverThisMatch = (origin === 'rematch' && lastMatch && typeof lastMatch.leftover === 'boolean')
                 ? lastMatch.leftover
                 : (origin === 'league' && league ? league.leftover : leftoverScores);
+            const matchRuleset = (origin === 'league' && league)
+                ? league.ruleset
+                : (origin === 'rematch' && lastMatch && lastMatch.ruleset)
+                    ? lastMatch.ruleset
+                    : currentRuleset;
+            const tiesOpt = (origin === 'rematch' && lastMatch && typeof lastMatch.classicTies === 'boolean')
+                ? lastMatch.classicTies
+                : (origin === 'league' && league ? !!league.classicTies : classicTies);
+            classicTiesThisMatch = matchRuleset === 'classic' && !!tiesOpt;
             turn = first || (Math.random() < 0.5 ? 'player' : 'ai');
             snapshotMatch(turn);
             lastBlueScore = null; lastRedScore = null;
@@ -6992,6 +7042,16 @@
             }
         }
 
+        function facingCaptures(myVal, theirVal, card, silenced) {
+            if (myVal > theirVal) return {captures: true, equalized: false};
+            if (myVal !== theirVal) return {captures: false, equalized: false};
+            if (!silenced && liveAbilityType(card) === 'equalizer') {
+                return {captures: true, equalized: true};
+            }
+            if (classicTiesThisMatch) return {captures: true, equalized: false};
+            return {captures: false, equalized: false};
+        }
+
         function checkCaptures(placedIndex, placedCard, grownOut) {
             const row = Math.floor(placedIndex / 3), col = placedIndex % 3;
             const neighbors = [
@@ -7027,15 +7087,10 @@
                 const silencedWhenHit = isSilenced(n.idx);
                 const myVal = getEffectiveStat(placedCard, n.p, true, placedSilenced);
                 const theirVal = getEffectiveStat(neighborCard, n.n, false, silencedWhenHit);
-                let captures = myVal > theirVal;
-                let equalized = false;
-                if (!captures && !placedSilenced && liveAbilityType(placedCard) === 'equalizer' && myVal === theirVal) {
-                    captures = true;
-                    equalized = true;
-                }
-                if (captures) {
+                const hit = facingCaptures(myVal, theirVal, placedCard, placedSilenced);
+                if (hit.captures) {
                     flipEnemy(neighborCard, silencedWhenHit, n.idx);
-                    if (equalized) {
+                    if (hit.equalized) {
                         neighborCard.fxType = neighborCard.fxType || 'equalizer';
                         queueMechFx('equalizer', placedIndex, [n.idx]);
                     }
@@ -7102,8 +7157,8 @@
                             if (liveAbilityType(card) === 'siphon' && neighborCard.owner === enemy && !silencedHere) score += 4;
 
                             if (neighborCard.owner === enemy) {
-                                let captures = myVal > theirVal;
-                                if (!captures && !silencedHere && liveAbilityType(card) === 'equalizer' && myVal === theirVal) captures = true;
+                                const hit = facingCaptures(myVal, theirVal, card, silencedHere);
+                                let captures = hit.captures;
                                 if (!captures && liveAbilityType(card) === 'poison' && !silencedHere && myVal > Math.max(1, theirVal - 1)) captures = true;
                                 if (captures) flipsCount++;
                             }
