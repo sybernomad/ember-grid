@@ -96,28 +96,6 @@
             }
         }
 
-        [data-theme="light"] {
-            color-scheme: light;
-            --bg-color: #efe3cf;
-            --text-color: #2a1c12;
-            --panel-bg: #f7efe2;
-            --border-color: #d4b896;
-            --blue-card: #1d4ed8;
-            --red-card: #b91c1c;
-            --accent: #c47a12;
-            --accent-hot: #c2410c;
-            --gold: #a16207;
-            --stat-up-fg: #f0d078;
-            --stat-up-bg: rgba(12, 8, 6, 0.82);
-            --stat-up-border: #e8c36a;
-            --stat-down-fg: #ff5e48;
-            --stat-down-bg: rgba(12, 8, 6, 0.82);
-            --stat-down-border: #ff5e48;
-            --ink: #2a1c12;
-            --grid-bg: #e4d2b4;
-            --cell-bg: #fff8ee;
-        }
-
         * {
             box-sizing: border-box;
             user-select: none;
@@ -148,12 +126,6 @@
             overflow: hidden;
             padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
             transition: background-color 0.25s, color 0.25s;
-        }
-
-        [data-theme="light"] body {
-            background-image:
-                radial-gradient(ellipse 80% 50% at 50% -10%, rgba(232, 163, 23, 0.18), transparent 50%),
-                radial-gradient(ellipse 40% 30% at 100% 100%, rgba(180, 83, 9, 0.12), transparent 55%);
         }
 
         .embers {
@@ -202,8 +174,6 @@
             12% { opacity: 0.85; }
             100% { transform: translate3d(var(--drift, 8px), -105vh, 0) scale(0.4); opacity: 0; }
         }
-
-        [data-theme="light"] .embers { opacity: 0.45; }
 
         @media (prefers-reduced-motion: reduce) {
             .embers span { animation: none; opacity: 0; }
@@ -260,14 +230,6 @@
             background-clip: text;
             color: transparent;
             filter: drop-shadow(0 2px 10px rgba(232, 163, 23, 0.28));
-        }
-
-        [data-theme="light"] h1 {
-            background: none;
-            color: #9a4e0c;
-            filter: none;
-            -webkit-background-clip: unset;
-            background-clip: unset;
         }
 
         .nav-group {
@@ -328,8 +290,7 @@
             height: 16px;
         }
 
-        #audio-toggle-btn .icon-audio-off,
-        #theme-toggle-btn .icon-moon {
+        #audio-toggle-btn .icon-audio-off {
             display: none;
         }
 
@@ -338,14 +299,6 @@
         }
 
         #audio-toggle-btn.audio-muted .icon-audio-off {
-            display: block;
-        }
-
-        [data-theme="light"] #theme-toggle-btn .icon-sun {
-            display: none;
-        }
-
-        [data-theme="light"] #theme-toggle-btn .icon-moon {
             display: block;
         }
 
@@ -459,12 +412,6 @@
                 0 0 40px rgba(232, 163, 23, 0.08);
         }
 
-        [data-theme="light"] .grid {
-            background:
-                radial-gradient(circle at 50% 30%, rgba(232, 163, 23, 0.12), transparent 70%),
-                linear-gradient(180deg, #f3e6d0, #e0cba8);
-        }
-
         .cell {
             background:
                 linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.18)),
@@ -523,12 +470,6 @@
             border-color: #ff7a2a;
             background: rgba(255, 90, 20, 0.14);
             box-shadow: inset 0 0 12px rgba(255, 90, 20, 0.32), 0 0 14px rgba(255, 110, 30, 0.3);
-        }
-
-        [data-theme="light"] .cell.cell-cinder {
-            background:
-                linear-gradient(180deg, rgba(255, 140, 60, 0.32), rgba(255, 90, 20, 0.14)),
-                var(--cell-bg);
         }
 
         .card {
@@ -868,6 +809,18 @@
             opacity: 0.88;
         }
 
+        .battle-log-entry .log-card {
+            font-weight: 800;
+        }
+
+        .battle-log-entry .log-card.log-blue {
+            color: var(--blue-card);
+        }
+
+        .battle-log-entry .log-card.log-red {
+            color: var(--red-card);
+        }
+
         .battle-log-empty {
             opacity: 0.55;
             text-align: center;
@@ -979,10 +932,6 @@
         .modal-ember .embers {
             position: absolute;
             z-index: 0;
-        }
-
-        [data-theme="light"] .modal-ember {
-            background: rgba(239, 227, 207, 0.32);
         }
 
         #expanded-rules-modal,
@@ -1214,11 +1163,6 @@
                 border: none;
             }
 
-            [data-theme="light"] #main-menu-modal .modal-content {
-                background:
-                    radial-gradient(ellipse 90% 70% at 50% 42%, rgba(247, 239, 226, 0.5), transparent 72%);
-            }
-
             .embers span {
                 box-shadow: 0 0 16px 5px rgba(251, 191, 36, 0.82);
             }
@@ -1320,11 +1264,6 @@
             color: #f0d59a;
             position: relative;
             z-index: 1;
-        }
-
-        [data-theme="light"] .ruleset-desc-box {
-            color: #92400e;
-            background: rgba(196, 122, 18, 0.1);
         }
 
         .settings-row {
@@ -1450,10 +1389,6 @@
             padding: 8px 10px;
             font-family: var(--font-ui);
             font-size: 0.78rem;
-        }
-
-        [data-theme="light"] .match-code-box input {
-            background: rgba(255, 255, 255, 0.72);
         }
 
         .match-code-box form .btn {
@@ -3020,7 +2955,7 @@
     </style>
 </head>
 
-<body data-theme="dark">
+<body>
     <!-- Lucide-style SVG icons (ISC license, https://lucide.dev) -->
     <svg class="icon-sprite" aria-hidden="true" focusable="false">
         <symbol id="i-stats" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></symbol>
@@ -3029,8 +2964,6 @@
         <symbol id="i-sliders" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5H3"/><path d="M21 5h-7"/><path d="M21 12h-9"/><path d="M8 12H3"/><path d="M21 19h-5"/><path d="M12 19H3"/><circle cx="12" cy="5" r="2"/><circle cx="8" cy="12" r="2"/><circle cx="16" cy="19" r="2"/></symbol>
         <symbol id="i-volume" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z"/><path d="M16 9a5 5 0 0 1 0 6"/><path d="M19.364 18.364a9 9 0 0 0 0-12.728"/></symbol>
         <symbol id="i-volume-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/></symbol>
-        <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></symbol>
-        <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></symbol>
         <symbol id="i-house" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
     </svg>
 
@@ -3049,10 +2982,6 @@
                 <button type="button" class="menu-btn" id="audio-toggle-btn" onclick="toggleAudio()" title="Mute audio" aria-label="Mute audio">
                     <svg class="ui-icon icon-audio-on" aria-hidden="true"><use href="#i-volume"></use></svg>
                     <svg class="ui-icon icon-audio-off" aria-hidden="true"><use href="#i-volume-off"></use></svg>
-                </button>
-                <button type="button" class="menu-btn" id="theme-toggle-btn" onclick="toggleTheme()" title="Switch to light theme" aria-label="Switch to light theme">
-                    <svg class="ui-icon icon-sun" aria-hidden="true"><use href="#i-sun"></use></svg>
-                    <svg class="ui-icon icon-moon" aria-hidden="true"><use href="#i-moon"></use></svg>
                 </button>
                 <button type="button" class="menu-btn" onclick="showModeMenu()" title="Main Menu" aria-label="Main Menu">
                     <svg class="ui-icon" aria-hidden="true"><use href="#i-house"></use></svg>
@@ -3137,7 +3066,7 @@
             </details>
             <div class="menu-foot">
                 <!-- Bump BUILD on every PR. Still pre-1.0, so this stays Alpha until 1.0 ships. -->
-                <p class="build-stamp">0.32 Alpha</p>
+                <p class="build-stamp">0.33 Alpha</p>
                 <p class="dev-note">Still in active development. Cards and rules may change.</p>
             </div>
         </div>
@@ -3392,7 +3321,7 @@
         <div class="modal-content" onclick="event.stopPropagation()">
             <button type="button" class="modal-close" onclick="closeBattleLogModal()" aria-label="Close battle log"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
             <h2 class="modal-title">Battle log</h2>
-            <p class="battle-log-blurb">This match, in order. Captures still flash on the cards.</p>
+            <p class="battle-log-blurb">This match, in order. Card names wear the team color they had on that play. Captures still flash on the cards.</p>
             <ol class="battle-log-list" id="battle-log-list"></ol>
             <button class="btn btn-alt btn-dismiss" onclick="closeBattleLogModal()">Close</button>
         </div>
@@ -3752,24 +3681,6 @@
         let stats = JSON.parse(localStorage.getItem('ember_grid_stats')) || {played: 0, wins: 0, losses: 0, draws: 0, streak: 0, bestStreak: 0, flips: 0, cardPlays: {}};
 
         function saveStats() {localStorage.setItem('ember_grid_stats', JSON.stringify(stats));}
-
-        let currentTheme = localStorage.getItem('ember_grid_theme') || 'dark';
-        document.body.setAttribute('data-theme', currentTheme);
-        updateThemeButtonIcon();
-
-        function toggleTheme() {
-            sfx.click(); currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            document.body.setAttribute('data-theme', currentTheme);
-            localStorage.setItem('ember_grid_theme', currentTheme); updateThemeButtonIcon();
-        }
-
-        function updateThemeButtonIcon() {
-            const btn = document.getElementById('theme-toggle-btn');
-            if (!btn) return;
-            const label = currentTheme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme';
-            btn.title = label;
-            btn.setAttribute('aria-label', label);
-        }
 
         let board = Array(9).fill(null);
         let cellEffects = Array(9).fill(null);
@@ -4809,7 +4720,7 @@
                 String(msg).split(' · ').forEach(part => {
                     const row = document.createElement('div');
                     row.className = 'log-part';
-                    row.textContent = part;
+                    row.innerHTML = part;
                     li.appendChild(row);
                 });
                 list.appendChild(li);
@@ -4865,6 +4776,29 @@
             if (unique.length === 1) return unique[0];
             if (unique.length === 2) return `${unique[0]} and ${unique[1]}`;
             return `${unique.slice(0, -1).join(', ')}, and ${unique[unique.length - 1]}`;
+        }
+        function logName(name, owner) {
+            if (!name) return '';
+            const side = owner === 'red' ? 'red' : 'blue';
+            return `<span class="log-card log-${side}">${name}</span>`;
+        }
+        function logCard(card, owner) {
+            return card ? logName(card.name, owner || card.owner) : '';
+        }
+        function listLogNames(items) {
+            const parts = [];
+            const seen = new Set();
+            (items || []).forEach(item => {
+                if (!item) return;
+                const name = item.name || item;
+                const owner = item.owner;
+                if (!name || typeof name !== 'string') return;
+                const key = owner ? `${owner}:${name}` : name;
+                if (seen.has(key)) return;
+                seen.add(key);
+                parts.push(owner ? logName(name, owner) : name);
+            });
+            return listNames(parts);
         }
 
         function updateDifficulty(val) {
@@ -6194,7 +6128,7 @@
             placedCard.fxType = 'parasite';
             queueMechFx('parasite', index, [pick.i]);
             const copiedName = TRIBES.find(t => t.id === placedCard.ability.copied.type);
-            return {text: `${placedCard.name} copied ${pick.c.name}'s ${copiedName ? copiedName.ability : 'ability'}`, kind: 'parasite'};
+            return {text: `${logCard(placedCard)} copied ${logCard(pick.c)}'s ${copiedName ? copiedName.ability : 'ability'}`, kind: 'parasite'};
         }
 
         function applySiphon(placedCard, index) {
@@ -6208,13 +6142,13 @@
                 const opp = (p.mine + 2) % 4;
                 placedCard.baseStats[opp] = Math.min(10, placedCard.baseStats[opp] + 1);
                 n.fxType = 'siphon';
-                stolen.push(n.name);
+                stolen.push({name: n.name, owner: n.owner});
                 hits.push(p.idx);
             });
             if (!hits.length) return null;
             placedCard.fxType = placedCard.fxType || 'siphon';
             queueMechFx('siphon', index, hits);
-            return {text: `${placedCard.name} siphoned ${listNames(stolen)}`, kind: 'siphon'};
+            return {text: `${logCard(placedCard)} siphoned ${listLogNames(stolen)}`, kind: 'siphon'};
         }
 
         function fireOnPlayKind(placedCard, index, abType) {
@@ -6226,13 +6160,13 @@
                     targetCard.baseStats = targetCard.baseStats.map(s => Math.max(1, s - 1));
                     targetCard.fxType = 'curse';
                     queueMechFx('curse', index, [enemies[0].i]);
-                    return {text: `${placedCard.name} cursed ${targetCard.name} (-1)`, kind: 'curse'};
+                    return {text: `${logCard(placedCard)} cursed ${logCard(targetCard)} (-1)`, kind: 'curse'};
                 }
             } else if (abType === 'blast') {
                 placedCard.fxType = 'blast';
                 placedCard.blastPreview = true;
                 queueMechFx('blast', index, []);
-                return {text: `${placedCard.name} blasted (+2 this turn)`, kind: 'blast'};
+                return {text: `${logCard(placedCard)} blasted (+2 this turn)`, kind: 'blast'};
             } else if (abType === 'cinder') {
                 const fresh = board.map((c, i) => (c === null && cellEffects[i] !== 'cinder') ? i : null).filter(i => i !== null);
                 const empties = fresh.length ? fresh : board.map((c, i) => c === null ? i : null).filter(i => i !== null);
@@ -6240,7 +6174,7 @@
                 cellEffects[target] = 'cinder';
                 placedCard.fxType = 'cinder';
                 queueMechFx('cinder', index, [target]);
-                return {text: `${placedCard.name} cindered a cell`, kind: 'cinder'};
+                return {text: `${logCard(placedCard)} cindered a cell`, kind: 'cinder'};
             } else if (abType === 'bolt') {
                 const enemies = board.map((c, i) => (c && c.owner !== placedCard.owner) ? {c, i} : null).filter(Boolean);
                 if (enemies.length > 0) {
@@ -6250,7 +6184,7 @@
                     targetCard.fxType = 'bolt';
                     placedCard.fxType = placedCard.fxType || 'bolt';
                     queueMechFx('bolt', index, [pick.i]);
-                    return {text: `${placedCard.name} bolted ${targetCard.name} (-2)`, kind: 'bolt'};
+                    return {text: `${logCard(placedCard)} bolted ${logCard(targetCard)} (-2)`, kind: 'bolt'};
                 }
             } else if (abType === 'siphon') {
                 return applySiphon(placedCard, index);
@@ -6278,12 +6212,12 @@
             neighborIndexes(index).forEach(idx => {
                 if (board[idx] && board[idx].owner === placedCard.owner) {
                     board[idx].fxType = 'buff';
-                    names.push(board[idx].name);
+                    names.push({name: board[idx].name, owner: board[idx].owner});
                     hits.push(idx);
                 }
             });
             if (hits.length) queueMechFx('buff', index, hits);
-            return names.length ? {text: `${placedCard.name} buffed ${listNames(names)} (+1)`, kind: 'buff'} : null;
+            return names.length ? {text: `${logCard(placedCard)} buffed ${listLogNames(names)} (+1)`, kind: 'buff'} : null;
         }
 
         function tagSilence(placedCard, index) {
@@ -6296,11 +6230,11 @@
                 if (!n || n.owner === placedCard.owner || !n.ability) return;
                 if (cancelled && !isSilenceCard(n)) return;
                 n.fxType = 'silence';
-                names.push(n.name);
+                names.push({name: n.name, owner: n.owner});
                 hits.push(idx);
             });
             if (hits.length) queueMechFx('silence', index, hits);
-            return names.length ? {text: `${placedCard.name} silenced ${listNames(names)}`, kind: 'silence'} : null;
+            return names.length ? {text: `${logCard(placedCard)} silenced ${listLogNames(names)}`, kind: 'silence'} : null;
         }
 
         function tagChill(placedCard, index) {
@@ -6311,12 +6245,12 @@
                 const n = board[idx];
                 if (n && n.owner !== placedCard.owner) {
                     n.fxType = 'chill';
-                    names.push(n.name);
+                    names.push({name: n.name, owner: n.owner});
                     hits.push(idx);
                 }
             });
             if (hits.length) queueMechFx('chill', index, hits);
-            return names.length ? {text: `${placedCard.name} chilled ${listNames(names)} (-1)`, kind: 'chill'} : null;
+            return names.length ? {text: `${logCard(placedCard)} chilled ${listLogNames(names)} (-1)`, kind: 'chill'} : null;
         }
 
         function applyEndOfTurnEffects() {
@@ -6335,12 +6269,12 @@
                         });
                         if (reduced) {
                             n.fxType = n.fxType || 'poison';
-                            hit.push(n.name);
+                            hit.push({name: n.name, owner: n.owner});
                             hits.push(idx);
                         }
                     });
                     if (hits.length) queueMechFx('poison', index, hits);
-                    if (hit.length) parts.push(`${card.name} poisoned ${listNames(hit)} (-1)`);
+                    if (hit.length) parts.push(`${logCard(card)} poisoned ${listLogNames(hit)} (-1)`);
                 }
             });
             return parts.length ? {text: parts.join(' · '), kind: 'poison'} : null;
@@ -6357,7 +6291,7 @@
                 hits.push(index);
                 queueMechFx('pendulum', index, []);
             });
-            return hits.length ? {text: `${hits.length === 1 ? board[hits[0]].name : 'Pendulum cards'} swung`, kind: 'pendulum'} : null;
+            return hits.length ? {text: `${hits.length === 1 ? logCard(board[hits[0]]) : 'Pendulum cards'} swung`, kind: 'pendulum'} : null;
         }
 
         function applySymbiosis(placedCard, capturedCount, grownOut) {
@@ -6370,11 +6304,11 @@
                 if (!card || card.owner !== owner) return;
                 if (liveAbilityType(card) !== 'symbiosis' || isSilenced(index)) return;
                 card.fxType = 'symbiosis';
-                names.push(card.name);
+                names.push({name: card.name, owner: card.owner});
                 if (grownOut) grownOut.push(index);
                 queueMechFx('symbiosis', index, []);
             });
-            return names.length ? {text: `${listNames(names)} grew (${total} capture${total === 1 ? '' : 's'} this game)`, kind: 'symbiosis'} : null;
+            return names.length ? {text: `${listLogNames(names)} grew (${total} capture${total === 1 ? '' : 's'} this game)`, kind: 'symbiosis'} : null;
         }
 
         function poisonSourceIndexes() {
@@ -7010,7 +6944,7 @@
             if (silentSim) return;
 
             const fxParts = [fx.abilityFx && fx.abilityFx.text, fx.buffFx && fx.buffFx.text, fx.silenceFx && fx.silenceFx.text, fx.chillFx && fx.chillFx.text, fx.capLog, fx.psnFx && fx.psnFx.text, fx.psnCapLog, fx.groveCapLog, fx.pendulumFx && fx.pendulumFx.text].filter(Boolean);
-            logAction(fxParts.length ? fxParts.join(' · ') : `${placedCard.name} played.`);
+            logAction(fxParts.length ? fxParts.join(' · ') : `${logCard(placedCard)} played.`);
 
             const placedBy = placedCard.owner === 'blue' ? 'player' : 'ai';
             turn = turn === 'player' ? 'ai' : 'player';
@@ -7069,14 +7003,14 @@
                 const origOwner = neighborCard.owner;
                 neighborCard.owner = placedCard.owner;
                 neighborCard.justFlipped = true;
-                captured.push(neighborCard.name);
+                captured.push({name: neighborCard.name, owner: origOwner});
                 if (placedCard.owner === 'blue') {blueFlipped = true; if (!silentSim && origOwner === 'red') stats.flips++;}
                 else redFlipped = true;
                 if (liveAbilityType(neighborCard) === 'spite' && !silencedWhenHit) {
                     placedCard.baseStats = placedCard.baseStats.map(s => Math.max(1, s - 1));
                     placedCard.stats = (placedCard.stats || placedCard.baseStats).map(s => Math.max(1, s - 1));
                     placedCard.fxType = 'spite';
-                    spiteHits.push(neighborCard.name);
+                    spiteHits.push({name: neighborCard.name, owner: origOwner});
                     queueMechFx('spite', neighborIdx, [placedIndex]);
                 }
             };
@@ -7101,8 +7035,8 @@
                 if (blueFlipped) sfx.flipBlue(); else if (redFlipped) sfx.flipRed();
             }
             const parts = [];
-            if (captured.length) parts.push(`${placedCard.name} captured ${listNames(captured)}`);
-            if (spiteHits.length) parts.push(`Spite from ${listNames(spiteHits)} hit ${placedCard.name} (-1)`);
+            if (captured.length) parts.push(`${logCard(placedCard)} captured ${listLogNames(captured)}`);
+            if (spiteHits.length) parts.push(`Spite from ${listLogNames(spiteHits)} hit ${logCard(placedCard)} (-1)`);
             const sym = applySymbiosis(placedCard, captured.length, grownOut);
             if (sym) parts.push(sym.text);
             return parts.join(' · ');
