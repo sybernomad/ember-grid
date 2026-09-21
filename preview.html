@@ -2429,7 +2429,7 @@
         }
 
         .rematch-bar .gameover-links {
-            justify-content: space-between;
+            justify-content: flex-end;
             padding: 0 2px;
         }
 
@@ -6656,14 +6656,12 @@
                             ? `
                             <button class="btn" onclick="playNextLeagueMatch()">Next Game</button>
                             <div class="gameover-links">
-                                <button type="button" class="gameover-link" onclick="showBattleLogModal()">Battle log</button>
                                 <button type="button" class="gameover-link" onclick="showModeMenu()">Menu</button>
                             </div>
                         `
                             : `
                             <button class="btn" onclick="openLeagueHubFromGameover()">League Table</button>
                             <div class="gameover-links">
-                                <button type="button" class="gameover-link" onclick="showBattleLogModal()">Battle log</button>
                                 <button type="button" class="gameover-link" onclick="showModeMenu()">Menu</button>
                             </div>
                         `;
@@ -6675,7 +6673,6 @@
                                 <button type="button" class="btn btn-alt" id="board-share-btn" onclick="shareCurrentMatch()">Share</button>
                             </div>
                             <div class="gameover-links">
-                                <button type="button" class="gameover-link" onclick="showBattleLogModal()">Battle log</button>
                                 <button type="button" class="gameover-link" onclick="showModeMenu()">Menu</button>
                             </div>
                         `;
