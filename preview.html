@@ -945,8 +945,58 @@
             z-index: 110;
         }
 
-        #battle-log-modal {
+        #battle-log-modal,
+        #changelog-modal {
             z-index: 120;
+        }
+
+        #changelog-modal .modal-content {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            max-height: min(80dvh, 640px);
+        }
+
+        #changelog-modal .modal-title,
+        #changelog-modal .btn-dismiss {
+            text-align: center;
+        }
+
+        .changelog-list {
+            list-style: none;
+            margin: 0 0 12px;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex: 1 1 auto;
+            min-height: 8rem;
+            overflow-y: auto;
+        }
+
+        .changelog-list li {
+            padding: 8px 10px 8px 12px;
+            border-left: 2px solid rgba(232, 195, 106, 0.45);
+            background: rgba(0, 0, 0, 0.22);
+            border-radius: 0 10px 10px 0;
+        }
+
+        .changelog-list strong {
+            display: block;
+            font-family: var(--font-display);
+            font-size: 0.72rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 4px;
+        }
+
+        .changelog-list p {
+            margin: 0;
+            font-size: 0.82rem;
+            font-weight: 600;
+            line-height: 1.4;
+            opacity: 0.9;
         }
 
         body.menu-open header,
@@ -1035,6 +1085,19 @@
             letter-spacing: 0.18em;
             text-transform: uppercase;
             opacity: 0.42;
+            display: inline-block;
+            background: none;
+            border: 0;
+            color: inherit;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        button.build-stamp:hover,
+        button.build-stamp:focus-visible {
+            opacity: 0.9;
+            text-decoration: underline;
+            text-underline-offset: 3px;
         }
 
         .dev-note {
@@ -1214,7 +1277,8 @@
             #expanded-rules-modal .modal-content,
             #options-modal .modal-content,
             #stats-modal .modal-content,
-            #battle-log-modal .modal-content {
+            #battle-log-modal .modal-content,
+            #changelog-modal .modal-content {
                 max-height: min(80dvh, calc(100dvh - 24px));
                 min-height: 0;
             }
@@ -3003,7 +3067,7 @@
             <div id="bottom-area"></div>
         </div>
 
-        <div class="status-msg" id="status-msg">The Base Set is the deck. Each player is dealt a hand of five.</div>
+        <div class="status-msg" id="status-msg">The Base Set is the deck. You each get a hand of five.</div>
         <button type="button" class="battle-log-link" id="battle-log-link" onclick="showBattleLogModal()">Battle log</button>
     </div>
 
@@ -3027,10 +3091,10 @@
 
             <div class="menu-section-title">Core Rules</div>
             <div class="rules-compact">
-                <strong>🃏 The deck:</strong> Cards are dealt or drafted from a shared deck - the Base Set, 70 cards. Tribe Decks play one tribe of five. Every Ember card has an ability.<br>
-                <strong>⚔️ Capture:</strong> Play a card from your hand next to an enemy. If your touching stat is higher,
-                you capture it.<br>
-                <strong>🏆 Victory:</strong> <span id="victory-compact">Fill the 3x3. Most cards on the board wins. Leftover in hand does not count.</span>
+                <strong>🃏 The deck:</strong> You deal or draft from a shared pile — the Base Set, 70 cards. Tribe Decks give you one tribe of five. Every Ember card has an ability.<br>
+                <strong>⚔️ Capture:</strong> Play a card from your hand next to an enemy. If your touching number is higher,
+                you take their card.<br>
+                <strong>🏆 Victory:</strong> <span id="victory-compact">Fill the 3x3. Most cards on the board wins. Cards left in your hand do not count.</span>
             </div>
 
             <nav class="menu-links">
@@ -3066,8 +3130,8 @@
             </details>
             <div class="menu-foot">
                 <!-- Bump BUILD on every PR. Still pre-1.0, so this stays Alpha until 1.0 ships. -->
-                <p class="build-stamp">0.34 Alpha</p>
-                <p class="dev-note">Still in active development. Cards and rules may change.</p>
+                <button type="button" class="build-stamp" onclick="showChangelogModal()" aria-label="Open changelog">0.35 Alpha</button>
+                <p class="dev-note">We're still building. Cards and rules may change.</p>
             </div>
         </div>
     </div>
@@ -3082,46 +3146,45 @@
             <div class="menu-section-title" style="margin-top: 0;">The table</div>
             <div class="expanded-rules-list">
                 <div class="rule-detail-item">
-                    <strong>The deck:</strong> The Base Set is 70 cards in fourteen tribes. Every Ember card has an ability. Shuffle it and deal two hands of five, or spread sixteen and draft until each hand is five.
+                    <strong>The deck:</strong> The Base Set is 70 cards in fourteen tribes. Every Ember card has an ability. Shuffle it and deal two hands of five, or spread sixteen and draft until each of you holds five.
                 </div>
                 <div class="rule-detail-item">
-                    <strong>League:</strong> You plus three named AI. Snake-draft twenty cards (five each), then a six-week double round-robin. You play each rival twice. Each meeting is best of three, and first player swaps so both get an opener. Their series resolve with the same engine and land on the table. Standings break ties by series wins, then game wins, then combined board score. Leftover and Ember/Classic lock at season start. All three AI use the Options difficulty. Backing out saves the season.
+                    <strong>League:</strong> You plus three named AI. Draft twenty cards among the four of you, five each. Then six weeks so everyone plays everyone twice. You play each rival twice. Each meeting is best of three, and who goes first swaps so you both get an opener. Their matches play out and land on the table. Standings break ties by series wins, then game wins, then combined board score. Leftover scores and Ember or Classic lock when the season starts. All three AI use the difficulty you set in Options. Leave and the season waits for you.
                 </div>
                 <div class="rule-detail-item">
-                    <strong>Tribe Decks:</strong> Each deck is one tribe of five. Pick yours and the opponent's, or leave either one random. Same tribe on both sides is a mirror match.
+                    <strong>Tribe Decks:</strong> Each deck is one tribe of five. Pick yours and theirs, or leave either one random. Same tribe on both sides is a mirror match.
                 </div>
                 <div class="rule-detail-item">
-                    <strong>Placement:</strong> On your turn, play one card from your hand onto an empty cell of the 3x3 grid.
+                    <strong>Your turn:</strong> Play one card from your hand onto an empty cell of the 3x3.
                 </div>
                 <div class="rule-detail-item">
-                    <strong>Capturing:</strong> When your card touches an enemy card, compare touching values (Top,
-                    Right, Bottom, Left). If your attacking stat is strictly greater, you capture their card. Equalizer cards also capture on a tie. In Classic Mode, Options can turn on Ties capture so equal facings capture too. Ember Mode never uses that knob.
+                    <strong>Capturing:</strong> When your card sits next to an enemy, compare the touching numbers (Top,
+                    Right, Bottom, Left). If yours is higher, you take their card. Equalizer cards also take on a match. In Classic Mode, Options can turn on Ties capture so matching numbers take the card too. Ember Mode never uses that.
                 </div>
                 <div class="rule-detail-item">
-                    <strong>Victory:</strong> <span id="victory-rules">Two hands of five. After the board fills, most cards on the board wins. Leftover in hand does not count. Options can turn leftover scores on, which makes a 5-4 board a 5-5 draw.</span>
+                    <strong>Victory:</strong> <span id="victory-rules">Two hands of five. After the board fills, most cards on the board wins. Cards left in your hand do not count. Options can turn Leftover scores on, which makes a 5-4 board a 5-5 draw.</span>
                 </div>
                 <div class="rule-detail-item">
-                    <strong>Stat Cap:</strong> Stats range from 1 to 10 (represented by A). Stat boosts cannot raise
-                    a value above 10.
+                    <strong>The numbers:</strong> They run from 1 to 10 (shown as A). Nothing can push a number above 10.
                 </div>
             </div>
 
             <div class="menu-section-title">Ember Mode Abilities</div>
             <div class="expanded-rules-list">
-                <div class="rule-detail-item"><strong>⚡ Buff:</strong> While this card sits there, adjacent friendly cards get +1 to all stats. Radiance tribe - Celestial, Fairy, Unicorn, Paladin, Angel.</div>
-                <div class="rule-detail-item"><strong>💀 Curse:</strong> On play, the strongest enemy loses 1 from all stats, then this card captures. Grave tribe - Ghost, Vampire, Skull, Zombie, Bat.</div>
-                <div class="rule-detail-item"><strong>💥 Blast:</strong> +2 to all stats on the turn this card is played. Beasts tribe - Dragon, T-Rex, Lion, Shark, Eagle.</div>
-                <div class="rule-detail-item"><strong>🦠 Poison:</strong> At the end of every turn, adjacent enemies lose 1 from all stats, then this card can capture. Vermin tribe - Spider, Scorpion, Snake, Frog, Beetle.</div>
-                <div class="rule-detail-item"><strong>⚖️ Equalizer:</strong> Captures when touching stats match. Balance tribe - Monk, Titan, Robot, Owl, Alien.</div>
-                <div class="rule-detail-item"><strong>💢 Spite:</strong> When this card is captured, the captor loses 1 from all stats. Wrath tribe - Cyclops, Gorilla, Wrath, Vendetta, Oni.</div>
-                <div class="rule-detail-item"><strong>🔇 Silence:</strong> Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel - neither silences anyone else. Hush tribe - Dread, Hush, Raven, Ninja, Cat.</div>
-                <div class="rule-detail-item"><strong>🔥 Cinder:</strong> On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange. Ember tribe - Scorch, Brand, Fox, Phoenix, Lizard.</div>
-                <div class="rule-detail-item"><strong>🔮 Bolt:</strong> On play, zaps a random enemy by -2 to all stats before this card captures. The zap can help this play steal that card. Arcane tribe - Wizard, Genie, Witch, Mage, Imp.</div>
-                <div class="rule-detail-item"><strong>❄️ Chill:</strong> While this card sits there, adjacent enemies are -1 to all stats. Counts for captures. Frost tribe - Frost, Wolf, Penguin, Polar, Seal.</div>
-                <div class="rule-detail-item"><strong>🪞 Parasite:</strong> On play, copies the ability of an adjacent enemy for the rest of the match. If that ability fires on play, it fires before this card captures. Host tribe - Mimic, Leech, Cuckoo, Doppel, Remora.</div>
-                <div class="rule-detail-item"><strong>🌀 Siphon:</strong> On play, steals 1 from each adjacent enemy's touching stat and adds it permanently to this card's opposite facing. Well tribe - Kraken, Drain, Lamprey, Mosquito, Siphon.</div>
-                <div class="rule-detail-item"><strong>⏳ Pendulum:</strong> At the start of every turn, this card swaps its top/bottom stats with its left/right stats. Tide tribe - Clock, Tide, Moon, Hourglass, Gyro.</div>
-                <div class="rule-detail-item"><strong>🌱 Symbiosis:</strong> Plus 1 to all stats for each capture this card's player has made this game. The numbers update in your hand. Grove tribe - Worldtree, Mycelium, Coral, Lichen, Ivy.</div>
+                <div class="rule-detail-item"><strong>⚡ Buff:</strong> While this card sits there, your cards next to it get +1 to every number. Radiance tribe - Celestial, Fairy, Unicorn, Paladin, Angel.</div>
+                <div class="rule-detail-item"><strong>💀 Curse:</strong> When you play this, the strongest enemy card loses 1 from every number, then this card captures. Grave tribe - Ghost, Vampire, Skull, Zombie, Bat.</div>
+                <div class="rule-detail-item"><strong>💥 Blast:</strong> This turn only, every number on this card is +2. Beasts tribe - Dragon, T-Rex, Lion, Shark, Eagle.</div>
+                <div class="rule-detail-item"><strong>🦠 Poison:</strong> At the end of every turn, enemy cards next to this lose 1 from every number, then this card can capture. Vermin tribe - Spider, Scorpion, Snake, Frog, Beetle.</div>
+                <div class="rule-detail-item"><strong>⚖️ Equalizer:</strong> You capture an enemy when the touching numbers match. Balance tribe - Monk, Titan, Robot, Owl, Alien.</div>
+                <div class="rule-detail-item"><strong>💢 Spite:</strong> When someone takes this card, they lose 1 from every number. Wrath tribe - Cyclops, Gorilla, Wrath, Vendetta, Oni.</div>
+                <div class="rule-detail-item"><strong>🔇 Silence:</strong> Enemy cards next to this lose their abilities. You can still capture them. Next to an enemy Silence, both cancel — neither silences anyone else. Hush tribe - Dread, Hush, Raven, Ninja, Cat.</div>
+                <div class="rule-detail-item"><strong>🔥 Cinder:</strong> When you play this, a random empty cell burns. Whoever sits there is -1 to every number. The cell glows orange. Ember tribe - Scorch, Brand, Fox, Phoenix, Lizard.</div>
+                <div class="rule-detail-item"><strong>🔮 Bolt:</strong> When you play this, a random enemy card loses 2 from every number, then this card captures. The zap can help you take that card. Arcane tribe - Wizard, Genie, Witch, Mage, Imp.</div>
+                <div class="rule-detail-item"><strong>❄️ Chill:</strong> While this card sits there, enemy cards next to it are -1 to every number. That counts when you capture. Frost tribe - Frost, Wolf, Penguin, Polar, Seal.</div>
+                <div class="rule-detail-item"><strong>🪞 Parasite:</strong> When you play this, it copies an adjacent enemy ability for the rest of the match. If that ability fires on play, it fires before this card captures. Host tribe - Mimic, Leech, Cuckoo, Doppel, Remora.</div>
+                <div class="rule-detail-item"><strong>🌀 Siphon:</strong> When you play this, it steals 1 from each adjacent enemy's touching number and adds it to the opposite side of this card. Well tribe - Kraken, Drain, Lamprey, Mosquito, Siphon.</div>
+                <div class="rule-detail-item"><strong>⏳ Pendulum:</strong> At the start of every turn, this card swaps its top and bottom numbers with its left and right numbers. Tide tribe - Clock, Tide, Moon, Hourglass, Gyro.</div>
+                <div class="rule-detail-item"><strong>🌱 Symbiosis:</strong> Each capture its owner makes this match adds 1 to every number. Your hand shows the live numbers. Grove tribe - Worldtree, Mycelium, Coral, Lichen, Ivy.</div>
             </div>
 
             <button class="btn btn-alt btn-dismiss" onclick="closeRulesModal()">Close</button>
@@ -3134,7 +3197,7 @@
         <div class="modal-content" onclick="event.stopPropagation()">
             <button type="button" class="modal-close" onclick="closeCompendiumModal()" aria-label="Close compendium"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
             <h2 class="modal-title">Compendium</h2>
-            <p class="set-blurb">The Base Set is 70 cards in fourteen tribes. Every Ember card has an ability. Classic Mode still strips abilities and plays as pure stats.</p>
+            <p class="set-blurb">The Base Set is 70 cards in fourteen tribes. Every Ember card has an ability. Classic Mode is numbers only — no abilities fire.</p>
             <select id="compendium-filter" class="settings-select compendium-filter" onchange="renderCompendium()">
                 <option value="all">All cards</option>
                 <option value="aura_buff">Buff</option>
@@ -3182,7 +3245,7 @@
                     <input type="checkbox" id="classic-ties-check" class="settings-check" onchange="updateClassicTies(this.checked)">
                 </label>
                 <div id="classic-ties-desc" class="ruleset-desc-box">
-                    <strong>Off (default):</strong> Equal facings do nothing. On: you capture when touching stats match. Ember Mode ignores this so Equalizer stays unique.
+                    <strong>Off (default):</strong> Matching numbers do nothing. On: you take the card when the touching numbers match. Ember Mode ignores this so Equalizer stays the only way to take on a match.
                 </div>
             </div>
             <div class="settings-stack">
@@ -3202,17 +3265,17 @@
                 <input type="checkbox" id="leftover-check" class="settings-check" onchange="updateLeftoverScores(this.checked)">
             </label>
             <div id="leftover-desc" class="ruleset-desc-box">
-                <strong>Off (default):</strong> Only the board counts. Unplayed cards are choices, not points.
+                <strong>Off (default):</strong> Only the board counts. Cards you never play are choices, not points.
             </div>
             <label class="settings-row" for="haptics-check">
                 <span>Haptics</span>
                 <input type="checkbox" id="haptics-check" class="settings-check" onchange="updateHaptics(this.checked)">
             </label>
             <div class="ruleset-desc-box">
-                <strong>Off (default):</strong> No vibration. On: a short pulse when a card plays, an ability hits, or a capture lands. Phones that support it only.
+                <strong>Off (default):</strong> No vibration. On: a short pulse when you play a card, an ability hits, or you capture. Phones that support it only.
             </div>
             <p id="league-options-note" class="ruleset-desc-box" hidden>
-                An Ember League is in progress. Leftover, Ember/Classic, and Classic Ties capture are locked for that season. Ash, Vesper, and Rook all use the AI difficulty set here.
+                A League season is underway. Leftover scores, Ember or Classic, and Ties capture stay locked for that season. Ash, Vesper, and Rook all use the difficulty you set here.
             </p>
 
             <button class="btn btn-alt btn-dismiss" onclick="closeOptionsModal()">Close</button>
@@ -3245,7 +3308,7 @@
             </div>
 
             <div style="text-align: left; font-size: 0.7rem; margin-top: 6px;">
-                <strong>Most Deployed Cards:</strong>
+                <strong>Cards you play most:</strong>
                 <div id="stat-top-cards" style="margin-top: 3px; opacity: 0.8; font-size: 0.7rem; line-height: 1.3;">
                     None yet.</div>
             </div>
@@ -3259,7 +3322,7 @@
         <div class="modal-content" onclick="event.stopPropagation()">
             <button type="button" class="modal-close" onclick="cancelDraft()" aria-label="Cancel draft"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
             <h2 id="draft-title" class="modal-title">Draft Hands</h2>
-            <p id="draft-order" class="draft-order">Sixteen cards from the deck. Snake order: 1 pick, then pairs of 2, until each hand is five.</p>
+            <p id="draft-order" class="draft-order">Sixteen cards from the deck. You pick one, then they pick two, then you pick two, until each of you holds five.</p>
             <p id="draft-status" class="draft-status"></p>
             <div class="draft-seats hidden" id="draft-seats"></div>
             <div class="draft-grid" id="draft-pool-grid"></div>
@@ -3274,7 +3337,7 @@
         <div class="modal-content" onclick="event.stopPropagation()">
             <button type="button" class="modal-close" onclick="cancelDeckPicker()" aria-label="Cancel deck pick"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
             <h2 class="modal-title">Tribe Decks</h2>
-            <p class="draft-order">Each deck is one tribe of five. Pick yours and the opponent's, or leave either one random.</p>
+            <p class="draft-order">Each deck is one tribe of five. Pick yours and theirs, or leave either one random.</p>
             <div class="menu-section-title" style="margin-top: 8px;">Your deck</div>
             <div id="deck-you-picks" class="deck-picks"></div>
             <div class="menu-section-title">Opponent</div>
@@ -3321,9 +3384,66 @@
         <div class="modal-content" onclick="event.stopPropagation()">
             <button type="button" class="modal-close" onclick="closeBattleLogModal()" aria-label="Close battle log"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
             <h2 class="modal-title">Battle log</h2>
-            <p class="battle-log-blurb">This match, in order. Card names wear the team color they had on that play. Captures still flash on the cards.</p>
+            <p class="battle-log-blurb">Every play this match, in order. Names wear the color they had on that play. Captures still flash on the cards.</p>
             <ol class="battle-log-list" id="battle-log-list"></ol>
             <button class="btn btn-alt btn-dismiss" onclick="closeBattleLogModal()">Close</button>
+        </div>
+    </div>
+
+    <!-- Changelog Modal -->
+    <div id="changelog-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, closeChangelogModal)">
+        <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button type="button" class="modal-close" onclick="closeChangelogModal()" aria-label="Close changelog"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+            <h2 class="modal-title">What changed</h2>
+            <p class="battle-log-blurb">Newest first. Tap the version on the menu anytime to come back here.</p>
+            <ol class="changelog-list">
+                <li>
+                    <strong>0.35 Alpha</strong>
+                    <p>The table talks to you now. Rules, Options, card text, the coach, the Battle log, and the menu say what you do, not what the engine does. Click the version on the menu to read this list.</p>
+                </li>
+                <li>
+                    <strong>0.34 Alpha</strong>
+                    <p>Grove still grows when you capture, in your hand and on the board. It no longer takes cards on later turns — only Poison still does that. Opening a draft rebuilds the card faces so you do not keep the last window's look. The Tide card that was named Pendulum is Clock.</p>
+                </li>
+                <li>
+                    <strong>0.33 Alpha</strong>
+                    <p>Names in the Battle log wear the color they had on that play, so you can tell who held what. The table stays dark. No light theme.</p>
+                </li>
+                <li>
+                    <strong>0.32 Alpha</strong>
+                    <p>Four new tribes sit down: Host (Parasite), Well (Siphon), Tide (Pendulum), and Grove (Symbiosis). Grove grows from each capture you make this match, and you see the new numbers in your hand.</p>
+                </li>
+                <li>
+                    <strong>0.31 Alpha</strong>
+                    <p>Abilities flash on the table when they hit. Haptics lives in Options if your phone can buzz.</p>
+                </li>
+                <li>
+                    <strong>0.30 Alpha</strong>
+                    <p>League meetings are best of three. You play each rival twice, and who goes first swaps so you both get an opener.</p>
+                </li>
+                <li>
+                    <strong>0.29 Alpha</strong>
+                    <p>Ember League: you plus Ash, Vesper, and Rook. Draft twenty cards among the four of you, then a six-week season. Leave and it waits for you.</p>
+                </li>
+                <li>
+                    <strong>0.28 Alpha</strong>
+                    <p>Cards left in your hand do not count unless you turn Leftover scores on in Options. Most cards on the board wins.</p>
+                </li>
+                <li>
+                    <strong>0.27 Alpha</strong>
+                    <p>The Battle log keeps every play this match. A few card numbers shifted so the table reads cleaner.</p>
+                </li>
+                <li>
+                    <strong>0.25 Alpha</strong>
+                    <p>Numbers glow gold when they go up and red when they go down. Hold a pip to see the printed face.</p>
+                </li>
+                <li>
+                    <strong>Before that</strong>
+                    <p>Deal or draft five, play onto the 3x3, take a card when your touching number is higher. Ember abilities, Classic numbers, Tribe Decks, and match codes were already on the table.</p>
+                </li>
+            </ol>
+            <button class="btn btn-alt btn-dismiss" onclick="closeChangelogModal()">Close</button>
         </div>
     </div>
 
@@ -3492,76 +3612,76 @@
 
         // --- Card Database ---
         const masterCards = [
-            {name: "Celestial", emoji: "✨", baseStats: [10, 2, 3, 4], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.'}},
-            {name: "Fairy", emoji: "🧚", baseStats: [3, 4, 3, 6], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.'}},
-            {name: "Unicorn", emoji: "🦄", baseStats: [4, 4, 5, 7], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.'}},
-            {name: "Paladin", emoji: "🛡️", baseStats: [4, 8, 7, 2], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.'}},
-            {name: "Angel", emoji: "👼", baseStats: [4, 5, 4, 6], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.'}},
-            {name: "Ghost", emoji: "👻", baseStats: [3, 7, 2, 5], ability: {type: 'curse_adj', icon: '💀', desc: 'On play, the strongest enemy loses 1 from all stats, then this card captures.'}},
-            {name: "Vampire", emoji: "🧛", baseStats: [7, 3, 3, 6], ability: {type: 'curse_adj', icon: '💀', desc: 'On play, the strongest enemy loses 1 from all stats, then this card captures.'}},
-            {name: "Skull", emoji: "💀", baseStats: [8, 2, 4, 3], ability: {type: 'curse_adj', icon: '💀', desc: 'On play, the strongest enemy loses 1 from all stats, then this card captures.'}},
-            {name: "Zombie", emoji: "🧟", baseStats: [4, 2, 6, 4], ability: {type: 'curse_adj', icon: '💀', desc: 'On play, the strongest enemy loses 1 from all stats, then this card captures.'}},
-            {name: "Bat", emoji: "🦇", baseStats: [5, 6, 3, 4], ability: {type: 'curse_adj', icon: '💀', desc: 'On play, the strongest enemy loses 1 from all stats, then this card captures.'}},
-            {name: "Dragon", emoji: "🐲", baseStats: [9, 7, 4, 2], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
-            {name: "T-Rex", emoji: "🦖", baseStats: [8, 5, 6, 2], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
-            {name: "Lion", emoji: "🦁", baseStats: [7, 6, 4, 2], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
-            {name: "Shark", emoji: "🦈", baseStats: [7, 4, 5, 4], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
-            {name: "Eagle", emoji: "🦅", baseStats: [6, 6, 3, 3], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
-            {name: "Spider", emoji: "🕷️", baseStats: [4, 6, 5, 3], ability: {type: 'poison', icon: '🦠', desc: 'At the end of every turn, adjacent enemies lose 1 from all stats, then this card can capture.'}},
-            {name: "Scorpion", emoji: "🦂", baseStats: [6, 4, 7, 2], ability: {type: 'poison', icon: '🦠', desc: 'At the end of every turn, adjacent enemies lose 1 from all stats, then this card can capture.'}},
-            {name: "Snake", emoji: "🐍", baseStats: [5, 4, 4, 5], ability: {type: 'poison', icon: '🦠', desc: 'At the end of every turn, adjacent enemies lose 1 from all stats, then this card can capture.'}},
-            {name: "Frog", emoji: "🐸", baseStats: [2, 4, 5, 3], ability: {type: 'poison', icon: '🦠', desc: 'At the end of every turn, adjacent enemies lose 1 from all stats, then this card can capture.'}},
-            {name: "Beetle", emoji: "🪲", baseStats: [4, 5, 5, 3], ability: {type: 'poison', icon: '🦠', desc: 'At the end of every turn, adjacent enemies lose 1 from all stats, then this card can capture.'}},
-            {name: "Monk", emoji: "☯️", baseStats: [5, 5, 5, 5], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
-            {name: "Titan", emoji: "🗿", baseStats: [10, 3, 4, 2], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
-            {name: "Robot", emoji: "🤖", baseStats: [5, 5, 5, 2], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
-            {name: "Owl", emoji: "🦉", baseStats: [5, 3, 2, 6], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
-            {name: "Alien", emoji: "👽", baseStats: [7, 3, 5, 2], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
-            {name: "Cyclops", emoji: "👹", baseStats: [8, 4, 7, 1], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
-            {name: "Gorilla", emoji: "🦍", baseStats: [7, 5, 6, 3], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
-            {name: "Wrath", emoji: "😡", baseStats: [6, 4, 3, 5], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
-            {name: "Vendetta", emoji: "😤", baseStats: [4, 6, 5, 3], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
-            {name: "Oni", emoji: "👺", baseStats: [6, 5, 4, 4], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
-            {name: "Dread", emoji: "😱", baseStats: [3, 6, 5, 4], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel.'}},
-            {name: "Hush", emoji: "🤫", baseStats: [5, 4, 5, 4], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel.'}},
-            {name: "Raven", emoji: "🐦‍⬛", baseStats: [4, 6, 4, 5], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel.'}},
-            {name: "Ninja", emoji: "🥷", baseStats: [5, 6, 3, 5], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel.'}},
-            {name: "Cat", emoji: "🐱", baseStats: [2, 5, 7, 3], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel.'}},
-            {name: "Scorch", emoji: "🥵", baseStats: [5, 5, 3, 5], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
-            {name: "Brand", emoji: "🫠", baseStats: [4, 5, 6, 3], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
-            {name: "Fox", emoji: "🦊", baseStats: [6, 5, 2, 3], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
-            {name: "Phoenix", emoji: "🐦‍🔥", baseStats: [5, 4, 6, 4], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
-            {name: "Lizard", emoji: "🦎", baseStats: [5, 4, 5, 4], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
-            {name: "Wizard", emoji: "🧙", baseStats: [5, 7, 3, 5], ability: {type: 'bolt', icon: '🔮', desc: 'On play, zaps a random enemy by -2 to all stats before this card captures. The zap can help this play steal that card.'}},
-            {name: "Genie", emoji: "🧞", baseStats: [6, 5, 5, 5], ability: {type: 'bolt', icon: '🔮', desc: 'On play, zaps a random enemy by -2 to all stats before this card captures. The zap can help this play steal that card.'}},
-            {name: "Witch", emoji: "🧙‍♀️", baseStats: [4, 6, 5, 4], ability: {type: 'bolt', icon: '🔮', desc: 'On play, zaps a random enemy by -2 to all stats before this card captures. The zap can help this play steal that card.'}},
-            {name: "Mage", emoji: "🪄", baseStats: [6, 3, 6, 4], ability: {type: 'bolt', icon: '🔮', desc: 'On play, zaps a random enemy by -2 to all stats before this card captures. The zap can help this play steal that card.'}},
-            {name: "Imp", emoji: "👿", baseStats: [3, 6, 4, 5], ability: {type: 'bolt', icon: '🔮', desc: 'On play, zaps a random enemy by -2 to all stats before this card captures. The zap can help this play steal that card.'}},
-            {name: "Frost", emoji: "🥶", baseStats: [4, 5, 4, 6], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, adjacent enemies are -1 to all stats. Counts for captures.'}},
-            {name: "Wolf", emoji: "🐺", baseStats: [6, 5, 4, 3], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, adjacent enemies are -1 to all stats. Counts for captures.'}},
-            {name: "Penguin", emoji: "🐧", baseStats: [3, 4, 6, 5], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, adjacent enemies are -1 to all stats. Counts for captures.'}},
-            {name: "Polar", emoji: "🐻‍❄️", baseStats: [6, 3, 7, 3], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, adjacent enemies are -1 to all stats. Counts for captures.'}},
-            {name: "Seal", emoji: "🦭", baseStats: [3, 5, 5, 5], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, adjacent enemies are -1 to all stats. Counts for captures.'}},
-            {name: "Mimic", emoji: "🪞", baseStats: [3, 2, 4, 10], ability: {type: 'parasite', icon: '🪞', desc: 'On play, copies the ability of an adjacent enemy for the rest of the match. If that ability fires on play, it fires before this card captures.'}},
-            {name: "Leech", emoji: "🩸", baseStats: [5, 6, 3, 5], ability: {type: 'parasite', icon: '🪞', desc: 'On play, copies the ability of an adjacent enemy for the rest of the match. If that ability fires on play, it fires before this card captures.'}},
-            {name: "Cuckoo", emoji: "🐣", baseStats: [4, 7, 3, 5], ability: {type: 'parasite', icon: '🪞', desc: 'On play, copies the ability of an adjacent enemy for the rest of the match. If that ability fires on play, it fires before this card captures.'}},
-            {name: "Doppel", emoji: "👥", baseStats: [5, 5, 5, 4], ability: {type: 'parasite', icon: '🪞', desc: 'On play, copies the ability of an adjacent enemy for the rest of the match. If that ability fires on play, it fires before this card captures.'}},
-            {name: "Remora", emoji: "🐟", baseStats: [3, 6, 4, 6], ability: {type: 'parasite', icon: '🪞', desc: 'On play, copies the ability of an adjacent enemy for the rest of the match. If that ability fires on play, it fires before this card captures.'}},
-            {name: "Kraken", emoji: "🦑", baseStats: [4, 9, 3, 4], ability: {type: 'siphon', icon: '🌀', desc: 'On play, steals 1 from each adjacent enemy\'s touching stat and adds it permanently to this card\'s opposite facing.'}},
-            {name: "Drain", emoji: "💧", baseStats: [6, 4, 5, 4], ability: {type: 'siphon', icon: '🌀', desc: 'On play, steals 1 from each adjacent enemy\'s touching stat and adds it permanently to this card\'s opposite facing.'}},
-            {name: "Lamprey", emoji: "🪱", baseStats: [4, 5, 6, 4], ability: {type: 'siphon', icon: '🌀', desc: 'On play, steals 1 from each adjacent enemy\'s touching stat and adds it permanently to this card\'s opposite facing.'}},
-            {name: "Mosquito", emoji: "🦟", baseStats: [3, 7, 3, 6], ability: {type: 'siphon', icon: '🌀', desc: 'On play, steals 1 from each adjacent enemy\'s touching stat and adds it permanently to this card\'s opposite facing.'}},
-            {name: "Siphon", emoji: "🌀", baseStats: [5, 6, 4, 4], ability: {type: 'siphon', icon: '🌀', desc: 'On play, steals 1 from each adjacent enemy\'s touching stat and adds it permanently to this card\'s opposite facing.'}},
-            {name: "Clock", emoji: "🕰️", baseStats: [8, 2, 8, 2], ability: {type: 'pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top/bottom stats with its left/right stats.'}},
-            {name: "Tide", emoji: "🌊", baseStats: [7, 3, 6, 3], ability: {type: 'pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top/bottom stats with its left/right stats.'}},
-            {name: "Moon", emoji: "🌙", baseStats: [2, 7, 2, 8], ability: {type: 'pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top/bottom stats with its left/right stats.'}},
-            {name: "Hourglass", emoji: "⌛", baseStats: [6, 3, 7, 3], ability: {type: 'pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top/bottom stats with its left/right stats.'}},
-            {name: "Gyro", emoji: "🪀", baseStats: [7, 2, 6, 4], ability: {type: 'pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top/bottom stats with its left/right stats.'}},
-            {name: "Worldtree", emoji: "🌳", baseStats: [2, 10, 3, 2], ability: {type: 'symbiosis', icon: '🌱', desc: 'Plus 1 to all stats for each capture this card\'s player has made this game. The numbers update in your hand.'}},
-            {name: "Mycelium", emoji: "🍄", baseStats: [4, 4, 4, 4], ability: {type: 'symbiosis', icon: '🌱', desc: 'Plus 1 to all stats for each capture this card\'s player has made this game. The numbers update in your hand.'}},
-            {name: "Coral", emoji: "🪸", baseStats: [5, 3, 5, 3], ability: {type: 'symbiosis', icon: '🌱', desc: 'Plus 1 to all stats for each capture this card\'s player has made this game. The numbers update in your hand.'}},
-            {name: "Lichen", emoji: "🌿", baseStats: [3, 5, 4, 4], ability: {type: 'symbiosis', icon: '🌱', desc: 'Plus 1 to all stats for each capture this card\'s player has made this game. The numbers update in your hand.'}},
-            {name: "Ivy", emoji: "🍃", baseStats: [4, 5, 3, 4], ability: {type: 'symbiosis', icon: '🌱', desc: 'Plus 1 to all stats for each capture this card\'s player has made this game. The numbers update in your hand.'}}
+            {name: "Celestial", emoji: "✨", baseStats: [10, 2, 3, 4], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, your cards next to it get +1 to every number.'}},
+            {name: "Fairy", emoji: "🧚", baseStats: [3, 4, 3, 6], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, your cards next to it get +1 to every number.'}},
+            {name: "Unicorn", emoji: "🦄", baseStats: [4, 4, 5, 7], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, your cards next to it get +1 to every number.'}},
+            {name: "Paladin", emoji: "🛡️", baseStats: [4, 8, 7, 2], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, your cards next to it get +1 to every number.'}},
+            {name: "Angel", emoji: "👼", baseStats: [4, 5, 4, 6], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, your cards next to it get +1 to every number.'}},
+            {name: "Ghost", emoji: "👻", baseStats: [3, 7, 2, 5], ability: {type: 'curse_adj', icon: '💀', desc: 'When you play this, the strongest enemy card loses 1 from every number, then this card captures.'}},
+            {name: "Vampire", emoji: "🧛", baseStats: [7, 3, 3, 6], ability: {type: 'curse_adj', icon: '💀', desc: 'When you play this, the strongest enemy card loses 1 from every number, then this card captures.'}},
+            {name: "Skull", emoji: "💀", baseStats: [8, 2, 4, 3], ability: {type: 'curse_adj', icon: '💀', desc: 'When you play this, the strongest enemy card loses 1 from every number, then this card captures.'}},
+            {name: "Zombie", emoji: "🧟", baseStats: [4, 2, 6, 4], ability: {type: 'curse_adj', icon: '💀', desc: 'When you play this, the strongest enemy card loses 1 from every number, then this card captures.'}},
+            {name: "Bat", emoji: "🦇", baseStats: [5, 6, 3, 4], ability: {type: 'curse_adj', icon: '💀', desc: 'When you play this, the strongest enemy card loses 1 from every number, then this card captures.'}},
+            {name: "Dragon", emoji: "🐲", baseStats: [9, 7, 4, 2], ability: {type: 'blast', icon: '💥', desc: 'This turn only, every number on this card is +2.'}},
+            {name: "T-Rex", emoji: "🦖", baseStats: [8, 5, 6, 2], ability: {type: 'blast', icon: '💥', desc: 'This turn only, every number on this card is +2.'}},
+            {name: "Lion", emoji: "🦁", baseStats: [7, 6, 4, 2], ability: {type: 'blast', icon: '💥', desc: 'This turn only, every number on this card is +2.'}},
+            {name: "Shark", emoji: "🦈", baseStats: [7, 4, 5, 4], ability: {type: 'blast', icon: '💥', desc: 'This turn only, every number on this card is +2.'}},
+            {name: "Eagle", emoji: "🦅", baseStats: [6, 6, 3, 3], ability: {type: 'blast', icon: '💥', desc: 'This turn only, every number on this card is +2.'}},
+            {name: "Spider", emoji: "🕷️", baseStats: [4, 6, 5, 3], ability: {type: 'poison', icon: '🦠', desc: 'At the end of every turn, enemy cards next to this lose 1 from every number, then this card can capture.'}},
+            {name: "Scorpion", emoji: "🦂", baseStats: [6, 4, 7, 2], ability: {type: 'poison', icon: '🦠', desc: 'At the end of every turn, enemy cards next to this lose 1 from every number, then this card can capture.'}},
+            {name: "Snake", emoji: "🐍", baseStats: [5, 4, 4, 5], ability: {type: 'poison', icon: '🦠', desc: 'At the end of every turn, enemy cards next to this lose 1 from every number, then this card can capture.'}},
+            {name: "Frog", emoji: "🐸", baseStats: [2, 4, 5, 3], ability: {type: 'poison', icon: '🦠', desc: 'At the end of every turn, enemy cards next to this lose 1 from every number, then this card can capture.'}},
+            {name: "Beetle", emoji: "🪲", baseStats: [4, 5, 5, 3], ability: {type: 'poison', icon: '🦠', desc: 'At the end of every turn, enemy cards next to this lose 1 from every number, then this card can capture.'}},
+            {name: "Monk", emoji: "☯️", baseStats: [5, 5, 5, 5], ability: {type: 'equalizer', icon: '⚖️', desc: 'You capture an enemy when the touching numbers match.'}},
+            {name: "Titan", emoji: "🗿", baseStats: [10, 3, 4, 2], ability: {type: 'equalizer', icon: '⚖️', desc: 'You capture an enemy when the touching numbers match.'}},
+            {name: "Robot", emoji: "🤖", baseStats: [5, 5, 5, 2], ability: {type: 'equalizer', icon: '⚖️', desc: 'You capture an enemy when the touching numbers match.'}},
+            {name: "Owl", emoji: "🦉", baseStats: [5, 3, 2, 6], ability: {type: 'equalizer', icon: '⚖️', desc: 'You capture an enemy when the touching numbers match.'}},
+            {name: "Alien", emoji: "👽", baseStats: [7, 3, 5, 2], ability: {type: 'equalizer', icon: '⚖️', desc: 'You capture an enemy when the touching numbers match.'}},
+            {name: "Cyclops", emoji: "👹", baseStats: [8, 4, 7, 1], ability: {type: 'spite', icon: '💢', desc: 'When someone takes this card, they lose 1 from every number.'}},
+            {name: "Gorilla", emoji: "🦍", baseStats: [7, 5, 6, 3], ability: {type: 'spite', icon: '💢', desc: 'When someone takes this card, they lose 1 from every number.'}},
+            {name: "Wrath", emoji: "😡", baseStats: [6, 4, 3, 5], ability: {type: 'spite', icon: '💢', desc: 'When someone takes this card, they lose 1 from every number.'}},
+            {name: "Vendetta", emoji: "😤", baseStats: [4, 6, 5, 3], ability: {type: 'spite', icon: '💢', desc: 'When someone takes this card, they lose 1 from every number.'}},
+            {name: "Oni", emoji: "👺", baseStats: [6, 5, 4, 4], ability: {type: 'spite', icon: '💢', desc: 'When someone takes this card, they lose 1 from every number.'}},
+            {name: "Dread", emoji: "😱", baseStats: [3, 6, 5, 4], ability: {type: 'silence', icon: '🔇', desc: 'Enemy cards next to this lose their abilities. You can still capture them. Next to an enemy Silence, both cancel.'}},
+            {name: "Hush", emoji: "🤫", baseStats: [5, 4, 5, 4], ability: {type: 'silence', icon: '🔇', desc: 'Enemy cards next to this lose their abilities. You can still capture them. Next to an enemy Silence, both cancel.'}},
+            {name: "Raven", emoji: "🐦‍⬛", baseStats: [4, 6, 4, 5], ability: {type: 'silence', icon: '🔇', desc: 'Enemy cards next to this lose their abilities. You can still capture them. Next to an enemy Silence, both cancel.'}},
+            {name: "Ninja", emoji: "🥷", baseStats: [5, 6, 3, 5], ability: {type: 'silence', icon: '🔇', desc: 'Enemy cards next to this lose their abilities. You can still capture them. Next to an enemy Silence, both cancel.'}},
+            {name: "Cat", emoji: "🐱", baseStats: [2, 5, 7, 3], ability: {type: 'silence', icon: '🔇', desc: 'Enemy cards next to this lose their abilities. You can still capture them. Next to an enemy Silence, both cancel.'}},
+            {name: "Scorch", emoji: "🥵", baseStats: [5, 5, 3, 5], ability: {type: 'cinder', icon: '🔥', desc: 'When you play this, a random empty cell burns. Whoever sits there is -1 to every number. The cell glows orange.'}},
+            {name: "Brand", emoji: "🫠", baseStats: [4, 5, 6, 3], ability: {type: 'cinder', icon: '🔥', desc: 'When you play this, a random empty cell burns. Whoever sits there is -1 to every number. The cell glows orange.'}},
+            {name: "Fox", emoji: "🦊", baseStats: [6, 5, 2, 3], ability: {type: 'cinder', icon: '🔥', desc: 'When you play this, a random empty cell burns. Whoever sits there is -1 to every number. The cell glows orange.'}},
+            {name: "Phoenix", emoji: "🐦‍🔥", baseStats: [5, 4, 6, 4], ability: {type: 'cinder', icon: '🔥', desc: 'When you play this, a random empty cell burns. Whoever sits there is -1 to every number. The cell glows orange.'}},
+            {name: "Lizard", emoji: "🦎", baseStats: [5, 4, 5, 4], ability: {type: 'cinder', icon: '🔥', desc: 'When you play this, a random empty cell burns. Whoever sits there is -1 to every number. The cell glows orange.'}},
+            {name: "Wizard", emoji: "🧙", baseStats: [5, 7, 3, 5], ability: {type: 'bolt', icon: '🔮', desc: 'When you play this, a random enemy card loses 2 from every number, then this card captures. The zap can help you take that card.'}},
+            {name: "Genie", emoji: "🧞", baseStats: [6, 5, 5, 5], ability: {type: 'bolt', icon: '🔮', desc: 'When you play this, a random enemy card loses 2 from every number, then this card captures. The zap can help you take that card.'}},
+            {name: "Witch", emoji: "🧙‍♀️", baseStats: [4, 6, 5, 4], ability: {type: 'bolt', icon: '🔮', desc: 'When you play this, a random enemy card loses 2 from every number, then this card captures. The zap can help you take that card.'}},
+            {name: "Mage", emoji: "🪄", baseStats: [6, 3, 6, 4], ability: {type: 'bolt', icon: '🔮', desc: 'When you play this, a random enemy card loses 2 from every number, then this card captures. The zap can help you take that card.'}},
+            {name: "Imp", emoji: "👿", baseStats: [3, 6, 4, 5], ability: {type: 'bolt', icon: '🔮', desc: 'When you play this, a random enemy card loses 2 from every number, then this card captures. The zap can help you take that card.'}},
+            {name: "Frost", emoji: "🥶", baseStats: [4, 5, 4, 6], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, enemy cards next to it are -1 to every number. That counts when you capture.'}},
+            {name: "Wolf", emoji: "🐺", baseStats: [6, 5, 4, 3], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, enemy cards next to it are -1 to every number. That counts when you capture.'}},
+            {name: "Penguin", emoji: "🐧", baseStats: [3, 4, 6, 5], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, enemy cards next to it are -1 to every number. That counts when you capture.'}},
+            {name: "Polar", emoji: "🐻‍❄️", baseStats: [6, 3, 7, 3], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, enemy cards next to it are -1 to every number. That counts when you capture.'}},
+            {name: "Seal", emoji: "🦭", baseStats: [3, 5, 5, 5], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, enemy cards next to it are -1 to every number. That counts when you capture.'}},
+            {name: "Mimic", emoji: "🪞", baseStats: [3, 2, 4, 10], ability: {type: 'parasite', icon: '🪞', desc: 'When you play this, it copies an adjacent enemy ability for the rest of the match. If that ability fires on play, it fires before this card captures.'}},
+            {name: "Leech", emoji: "🩸", baseStats: [5, 6, 3, 5], ability: {type: 'parasite', icon: '🪞', desc: 'When you play this, it copies an adjacent enemy ability for the rest of the match. If that ability fires on play, it fires before this card captures.'}},
+            {name: "Cuckoo", emoji: "🐣", baseStats: [4, 7, 3, 5], ability: {type: 'parasite', icon: '🪞', desc: 'When you play this, it copies an adjacent enemy ability for the rest of the match. If that ability fires on play, it fires before this card captures.'}},
+            {name: "Doppel", emoji: "👥", baseStats: [5, 5, 5, 4], ability: {type: 'parasite', icon: '🪞', desc: 'When you play this, it copies an adjacent enemy ability for the rest of the match. If that ability fires on play, it fires before this card captures.'}},
+            {name: "Remora", emoji: "🐟", baseStats: [3, 6, 4, 6], ability: {type: 'parasite', icon: '🪞', desc: 'When you play this, it copies an adjacent enemy ability for the rest of the match. If that ability fires on play, it fires before this card captures.'}},
+            {name: "Kraken", emoji: "🦑", baseStats: [4, 9, 3, 4], ability: {type: 'siphon', icon: '🌀', desc: 'When you play this, it steals 1 from each adjacent enemy\'s touching number and adds it to the opposite side of this card.'}},
+            {name: "Drain", emoji: "💧", baseStats: [6, 4, 5, 4], ability: {type: 'siphon', icon: '🌀', desc: 'When you play this, it steals 1 from each adjacent enemy\'s touching number and adds it to the opposite side of this card.'}},
+            {name: "Lamprey", emoji: "🪱", baseStats: [4, 5, 6, 4], ability: {type: 'siphon', icon: '🌀', desc: 'When you play this, it steals 1 from each adjacent enemy\'s touching number and adds it to the opposite side of this card.'}},
+            {name: "Mosquito", emoji: "🦟", baseStats: [3, 7, 3, 6], ability: {type: 'siphon', icon: '🌀', desc: 'When you play this, it steals 1 from each adjacent enemy\'s touching number and adds it to the opposite side of this card.'}},
+            {name: "Siphon", emoji: "🌀", baseStats: [5, 6, 4, 4], ability: {type: 'siphon', icon: '🌀', desc: 'When you play this, it steals 1 from each adjacent enemy\'s touching number and adds it to the opposite side of this card.'}},
+            {name: "Clock", emoji: "🕰️", baseStats: [8, 2, 8, 2], ability: {type: 'pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top and bottom numbers with its left and right numbers.'}},
+            {name: "Tide", emoji: "🌊", baseStats: [7, 3, 6, 3], ability: {type: 'pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top and bottom numbers with its left and right numbers.'}},
+            {name: "Moon", emoji: "🌙", baseStats: [2, 7, 2, 8], ability: {type: 'pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top and bottom numbers with its left and right numbers.'}},
+            {name: "Hourglass", emoji: "⌛", baseStats: [6, 3, 7, 3], ability: {type: 'pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top and bottom numbers with its left and right numbers.'}},
+            {name: "Gyro", emoji: "🪀", baseStats: [7, 2, 6, 4], ability: {type: 'pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top and bottom numbers with its left and right numbers.'}},
+            {name: "Worldtree", emoji: "🌳", baseStats: [2, 10, 3, 2], ability: {type: 'symbiosis', icon: '🌱', desc: 'Each capture its owner makes this match adds 1 to every number. Your hand shows the live numbers.'}},
+            {name: "Mycelium", emoji: "🍄", baseStats: [4, 4, 4, 4], ability: {type: 'symbiosis', icon: '🌱', desc: 'Each capture its owner makes this match adds 1 to every number. Your hand shows the live numbers.'}},
+            {name: "Coral", emoji: "🪸", baseStats: [5, 3, 5, 3], ability: {type: 'symbiosis', icon: '🌱', desc: 'Each capture its owner makes this match adds 1 to every number. Your hand shows the live numbers.'}},
+            {name: "Lichen", emoji: "🌿", baseStats: [3, 5, 4, 4], ability: {type: 'symbiosis', icon: '🌱', desc: 'Each capture its owner makes this match adds 1 to every number. Your hand shows the live numbers.'}},
+            {name: "Ivy", emoji: "🍃", baseStats: [4, 5, 3, 4], ability: {type: 'symbiosis', icon: '🌱', desc: 'Each capture its owner makes this match adds 1 to every number. Your hand shows the live numbers.'}}
         ].map((card, i) => ({
             ...card,
             id: `BS-${String(i + 1).padStart(2, '0')}`,
@@ -4199,7 +4319,7 @@
 
         function startLeagueDraft() {
             hideTooltip();
-            hideModals(['main-menu-modal', 'league-modal', 'deck-modal', 'gameover-modal', 'battle-log-modal']);
+            hideModals(['main-menu-modal', 'league-modal', 'deck-modal', 'gameover-modal', 'battle-log-modal', 'changelog-modal']);
             document.body.classList.add('menu-open');
             hydrateLeagueDraft();
             const draftedOut = ['you', 'ash', 'vesper', 'rook'].every(id => (leagueHandsLive[id] || []).length >= LEAGUE_HAND_SIZE);
@@ -4234,7 +4354,7 @@
             } else {
                 title.textContent = 'Draft Hands';
                 order.hidden = false;
-                order.textContent = 'Sixteen cards from the deck. Snake order: 1 pick, then pairs of 2, until each hand is five.';
+                order.textContent = 'Sixteen cards from the deck. You pick one, then they pick two, then you pick two, until each of you holds five.';
                 cancel.textContent = 'Cancel Draft';
                 seats.classList.add('hidden');
                 rosters.classList.remove('hidden');
@@ -4457,7 +4577,7 @@
 
         function showLeagueHub() {
             hideTooltip();
-            hideModals(['main-menu-modal', 'draft-modal', 'deck-modal', 'gameover-modal', 'battle-log-modal']);
+            hideModals(['main-menu-modal', 'draft-modal', 'deck-modal', 'gameover-modal', 'battle-log-modal', 'changelog-modal']);
             document.body.classList.add('menu-open');
             renderLeagueHub();
             document.getElementById('league-modal').classList.remove('hidden');
@@ -4560,7 +4680,7 @@
             leftoverThisMatch = league.leftover;
             skipCoachOnce = true;
             activeMode = 'league';
-            hideModals(['league-modal', 'main-menu-modal', 'draft-modal', 'deck-modal', 'gameover-modal', 'battle-log-modal']);
+            hideModals(['league-modal', 'main-menu-modal', 'draft-modal', 'deck-modal', 'gameover-modal', 'battle-log-modal', 'changelog-modal']);
             resetTable();
             gameState = 'playing';
             const youIds = league.hands.you;
@@ -4741,6 +4861,16 @@
             hideModal('battle-log-modal');
         }
 
+        function showChangelogModal() {
+            sfx.click(); hideTooltip();
+            document.getElementById('changelog-modal').classList.remove('hidden');
+        }
+
+        function closeChangelogModal() {
+            sfx.click(); hideTooltip();
+            hideModal('changelog-modal');
+        }
+
         function formatStat(val) {let clamped = Math.max(1, Math.min(10, val)); return clamped === 10 ? 'A' : clamped;}
         function clampStat(val) {return Math.max(1, Math.min(10, val));}
         function printedStatsOf(card) {
@@ -4816,15 +4946,15 @@
         function leftoverVictoryCopy() {
             if (leftoverScores) {
                 return {
-                    compact: "Fill the 3x3. Most cards wins - leftover in hand still counts.",
-                    rules: "Two hands of five is ten cards. After the board fills, leftover in hand still counts, so 6+ wins and 5-5 is a draw.",
-                    option: "<strong>On:</strong> Unplayed cards count. A 5-4 board is a 5-5 draw."
+                    compact: "Fill the 3x3. Most cards wins — cards left in your hand still count.",
+                    rules: "Two hands of five is ten cards. After the board fills, cards left in your hand still count, so 6+ wins and 5-5 is a draw.",
+                    option: "<strong>On:</strong> Cards you never play still count. A 5-4 board is a 5-5 draw."
                 };
             }
             return {
-                compact: "Fill the 3x3. Most cards on the board wins. Leftover in hand does not count.",
-                rules: "Two hands of five. After the board fills, most cards on the board wins. Leftover in hand does not count. Options can turn leftover scores on, which makes a 5-4 board a 5-5 draw.",
-                option: "<strong>Off (default):</strong> Only the board counts. Unplayed cards are choices, not points."
+                compact: "Fill the 3x3. Most cards on the board wins. Cards left in your hand do not count.",
+                rules: "Two hands of five. After the board fills, most cards on the board wins. Cards left in your hand do not count. Options can turn Leftover scores on, which makes a 5-4 board a 5-5 draw.",
+                option: "<strong>Off (default):</strong> Only the board counts. Cards you never play are choices, not points."
             };
         }
         function refreshVictoryCopy() {
@@ -4875,8 +5005,8 @@
             }
             if (desc) {
                 desc.innerHTML = classicTies
-                    ? '<strong>On:</strong> Equal facings capture. Classic Mode only. Ember Mode never uses this, so Equalizer stays unique.'
-                    : '<strong>Off (default):</strong> Equal facings do nothing. On: you capture when touching stats match. Ember Mode ignores this so Equalizer stays unique.';
+                    ? '<strong>On:</strong> Matching numbers take the card. Classic Mode only. Ember Mode never uses this, so Equalizer stays the only way to take on a match.'
+                    : '<strong>Off (default):</strong> Matching numbers do nothing. On: you take the card when the touching numbers match. Ember Mode ignores this so Equalizer stays the only way to take on a match.';
             }
         }
         function updateClassicTies(checked) {
@@ -4889,7 +5019,7 @@
             const descBox = document.getElementById('ruleset-desc');
             if (!descBox) return;
             descBox.innerHTML = currentRuleset === 'classic'
-                ? "<strong>Classic Mode:</strong> Pure, tactical gameplay. All special abilities and card badges are disabled."
+                ? "<strong>Classic Mode:</strong> Just the numbers. Cards keep their faces, but no abilities fire."
                 : "<strong>Ember Mode:</strong> Every card has an ability. Fourteen tribes share the pile: Buff, Curse, Blast, Poison, Equalizer, Spite, Silence, Cinder, Bolt, Chill, Parasite, Siphon, Pendulum, and Symbiosis.";
             refreshClassicTiesUi();
         }
@@ -5049,7 +5179,7 @@
             resetFingerDrag();
             hideTurnBanner();
             document.body.classList.add('menu-open');
-            hideModals(['draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal', 'battle-log-modal', 'league-modal', 'league-roster']);
+            hideModals(['draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal', 'battle-log-modal', 'changelog-modal', 'league-modal', 'league-roster']);
             closeLeagueRoster();
             document.getElementById('main-menu-modal').classList.remove('hidden');
             gameState = 'menu'; resetTable(); playerHand = []; aiHand = [];
@@ -5218,7 +5348,7 @@
             clearAiPlayTimer();
             hideTurnBanner();
             clearShareHash();
-            hideModals(['main-menu-modal', 'draft-modal', 'deck-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal', 'battle-log-modal', 'league-modal']);
+            hideModals(['main-menu-modal', 'draft-modal', 'deck-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal', 'battle-log-modal', 'changelog-modal', 'league-modal']);
 
             if (mode === 'random') {
                 resetTable(); gameState = 'playing';
@@ -5318,7 +5448,7 @@
             playerHand = dealTribeHand(resolvedDecks.player, 'blue');
             aiHand = dealTribeHand(resolvedDecks.ai, 'red');
             if (playerHand.length !== 5 || aiHand.length !== 5) {
-                logAction('That tribe deck is missing cards.');
+                logAction('That tribe is short a card.');
                 showModeMenu();
                 return;
             }
@@ -5500,7 +5630,7 @@
             hideTooltip();
             clearAiPlayTimer();
             hideTurnBanner();
-            hideModals(['main-menu-modal', 'draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal', 'battle-log-modal', 'league-modal']);
+            hideModals(['main-menu-modal', 'draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal', 'battle-log-modal', 'changelog-modal', 'league-modal']);
             currentRuleset = decoded.ruleset;
             const sel = document.getElementById('ruleset-select');
             if (sel) sel.value = currentRuleset;
@@ -5830,7 +5960,7 @@
                 statusMsg.textContent = vs
                     ? (turn === 'player' ? `${vs}. Your turn - play a card.` : `${vs}. AI plays first.`)
                     : (turn === 'player' ? `${shared}Hands dealt. Your turn - play a card.` : `${shared}Hands dealt. AI plays first.`);
-                logAction(vs || (origin === 'share' ? "Shared hands of five." : "Hands of five."));
+                logAction(vs || (origin === 'share' ? "Same ten cards as the shared match." : "You each got five cards."));
             }
             recalculateDynamicStats(); render();
             maybeStartCoach();
@@ -5920,9 +6050,9 @@
             else if (coach.step === 'cell') text.textContent = coach.pendingCapture
                 ? "Play it next to an enemy. The touching number must be higher to capture."
                 : "Now play it onto an empty cell.";
-            else if (coach.step === 'capture') text.textContent = "Play next to an enemy. If your touching stat is higher, you steal their card.";
-            else if (coach.step === 'captured') text.textContent = "That's a capture - the card is yours now.";
-            else if (coach.step === 'missed') text.textContent = "No capture that time. You need a strictly higher touching stat.";
+            else if (coach.step === 'capture') text.textContent = "Play next to an enemy. If your touching number is higher, you take their card.";
+            else if (coach.step === 'captured') text.textContent = "That's a capture — the card is yours now.";
+            else if (coach.step === 'missed') text.textContent = "No capture that time. You need a higher touching number.";
         }
 
         function firstEmptyCell() {
@@ -6289,7 +6419,7 @@
                 hits.push(index);
                 queueMechFx('pendulum', index, []);
             });
-            return hits.length ? {text: `${hits.length === 1 ? logCard(board[hits[0]]) : 'Pendulum cards'} swung`, kind: 'pendulum'} : null;
+            return hits.length ? {text: `${hits.length === 1 ? logCard(board[hits[0]]) : 'Tide cards'} swung`, kind: 'pendulum'} : null;
         }
 
         function applySymbiosis(placedCard, capturedCount) {
@@ -6305,7 +6435,7 @@
                 names.push({name: card.name, owner: card.owner});
                 queueMechFx('symbiosis', index, []);
             });
-            return names.length ? {text: `${listLogNames(names)} grew (${total} capture${total === 1 ? '' : 's'} this game)`, kind: 'symbiosis'} : null;
+            return names.length ? {text: `${listLogNames(names)} grew (${total} capture${total === 1 ? '' : 's'} this match)`, kind: 'symbiosis'} : null;
         }
 
         function poisonSourceIndexes() {
@@ -6684,7 +6814,7 @@
                 const cellEl = document.createElement('div'); cellEl.className = 'cell';
                 if (cellEffects[index] === 'cinder') {
                     cellEl.classList.add('cell-cinder');
-                    const cinderTip = 'Cindered: whoever sits here is -1 to all stats.';
+                    const cinderTip = 'Cindered: whoever sits here is -1 to every number.';
                     cellEl.setAttribute('aria-label', cinderTip);
                     if (!cell) addTooltipListeners(cellEl, cinderTip);
                 }
@@ -6823,7 +6953,7 @@
             pointerDrag.ghost = ghost;
             moveDragGhost(e.clientX, e.clientY);
             try {pointerDrag.sourceEl.setPointerCapture(e.pointerId);} catch (err) {}
-            statusMsg.textContent = "Drop on an empty cell.";
+            statusMsg.textContent = "Drop it on an empty cell.";
         }
 
         function endFingerDrag() {
@@ -7154,9 +7284,9 @@
             board.forEach(c => { if (c) c.blastPreview = false; });
             let blueCount = ownedCount('blue'), redCount = ownedCount('red');
             stats.played++;
-            if (blueCount > redCount) {stats.wins++; stats.streak++; if (stats.streak > stats.bestStreak) stats.bestStreak = stats.streak; if (!silentSim) sfx.win(); logAction("Victory achieved!");}
-            else if (redCount > blueCount) {stats.losses++; stats.streak = 0; if (!silentSim) sfx.lose(); logAction("Defeat suffered.");}
-            else {stats.draws++; stats.streak = 0; if (!silentSim) sfx.click(); logAction("Match ended in a draw.");}
+            if (blueCount > redCount) {stats.wins++; stats.streak++; if (stats.streak > stats.bestStreak) stats.bestStreak = stats.streak; if (!silentSim) sfx.win(); logAction("You won.");}
+            else if (redCount > blueCount) {stats.losses++; stats.streak = 0; if (!silentSim) sfx.lose(); logAction("You lost.");}
+            else {stats.draws++; stats.streak = 0; if (!silentSim) sfx.click(); logAction("You drew.");}
             saveStats();
             if (isLeagueMatch()) recordUserLeagueResult(blueCount, redCount);
 
@@ -7263,13 +7393,14 @@
         window.addEventListener('pageshow', (e) => {
             if (!e.persisted) return;
             clearDraftTimer();
-            hideModals(['draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'battle-log-modal', 'league-modal', 'league-roster']);
+            hideModals(['draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'battle-log-modal', 'changelog-modal', 'league-modal', 'league-roster']);
             if (gameState !== 'playing' && gameState !== 'gameover') showModeMenu();
         });
         window.addEventListener('keydown', (e) => {
             if (e.key !== 'Escape') return;
             if (tooltipPinned) {hideTooltip(); return;}
             if (!document.getElementById('league-roster').classList.contains('hidden')) {closeLeagueRoster(); return;}
+            if (!document.getElementById('changelog-modal').classList.contains('hidden')) {closeChangelogModal(); return;}
             if (!document.getElementById('battle-log-modal').classList.contains('hidden')) {closeBattleLogModal(); return;}
             if (!document.getElementById('expanded-rules-modal').classList.contains('hidden')) {closeRulesModal(); return;}
             if (!document.getElementById('compendium-modal').classList.contains('hidden')) {closeCompendiumModal(); return;}
