@@ -3066,7 +3066,7 @@
             </details>
             <div class="menu-foot">
                 <!-- Bump BUILD on every PR. Still pre-1.0, so this stays Alpha until 1.0 ships. -->
-                <p class="build-stamp">0.33 Alpha</p>
+                <p class="build-stamp">0.34 Alpha</p>
                 <p class="dev-note">Still in active development. Cards and rules may change.</p>
             </div>
         </div>
@@ -3120,8 +3120,8 @@
                 <div class="rule-detail-item"><strong>❄️ Chill:</strong> While this card sits there, adjacent enemies are -1 to all stats. Counts for captures. Frost tribe - Frost, Wolf, Penguin, Polar, Seal.</div>
                 <div class="rule-detail-item"><strong>🪞 Parasite:</strong> On play, copies the ability of an adjacent enemy for the rest of the match. If that ability fires on play, it fires before this card captures. Host tribe - Mimic, Leech, Cuckoo, Doppel, Remora.</div>
                 <div class="rule-detail-item"><strong>🌀 Siphon:</strong> On play, steals 1 from each adjacent enemy's touching stat and adds it permanently to this card's opposite facing. Well tribe - Kraken, Drain, Lamprey, Mosquito, Siphon.</div>
-                <div class="rule-detail-item"><strong>⏳ Pendulum:</strong> At the start of every turn, this card swaps its top/bottom stats with its left/right stats. Tide tribe - Pendulum, Tide, Moon, Hourglass, Gyro.</div>
-                <div class="rule-detail-item"><strong>🌱 Symbiosis:</strong> Plus 1 to all stats for each capture this card's player has made this game. The numbers update in your hand. After it grows, this card can capture. Grove tribe - Worldtree, Mycelium, Coral, Lichen, Ivy.</div>
+                <div class="rule-detail-item"><strong>⏳ Pendulum:</strong> At the start of every turn, this card swaps its top/bottom stats with its left/right stats. Tide tribe - Clock, Tide, Moon, Hourglass, Gyro.</div>
+                <div class="rule-detail-item"><strong>🌱 Symbiosis:</strong> Plus 1 to all stats for each capture this card's player has made this game. The numbers update in your hand. Grove tribe - Worldtree, Mycelium, Coral, Lichen, Ivy.</div>
             </div>
 
             <button class="btn btn-alt btn-dismiss" onclick="closeRulesModal()">Close</button>
@@ -3552,16 +3552,16 @@
             {name: "Lamprey", emoji: "🪱", baseStats: [4, 5, 6, 4], ability: {type: 'siphon', icon: '🌀', desc: 'On play, steals 1 from each adjacent enemy\'s touching stat and adds it permanently to this card\'s opposite facing.'}},
             {name: "Mosquito", emoji: "🦟", baseStats: [3, 7, 3, 6], ability: {type: 'siphon', icon: '🌀', desc: 'On play, steals 1 from each adjacent enemy\'s touching stat and adds it permanently to this card\'s opposite facing.'}},
             {name: "Siphon", emoji: "🌀", baseStats: [5, 6, 4, 4], ability: {type: 'siphon', icon: '🌀', desc: 'On play, steals 1 from each adjacent enemy\'s touching stat and adds it permanently to this card\'s opposite facing.'}},
-            {name: "Pendulum", emoji: "⏳", baseStats: [8, 2, 8, 2], ability: {type: 'pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top/bottom stats with its left/right stats.'}},
+            {name: "Clock", emoji: "🕰️", baseStats: [8, 2, 8, 2], ability: {type: 'pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top/bottom stats with its left/right stats.'}},
             {name: "Tide", emoji: "🌊", baseStats: [7, 3, 6, 3], ability: {type: 'pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top/bottom stats with its left/right stats.'}},
             {name: "Moon", emoji: "🌙", baseStats: [2, 7, 2, 8], ability: {type: 'pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top/bottom stats with its left/right stats.'}},
             {name: "Hourglass", emoji: "⌛", baseStats: [6, 3, 7, 3], ability: {type: 'pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top/bottom stats with its left/right stats.'}},
             {name: "Gyro", emoji: "🪀", baseStats: [7, 2, 6, 4], ability: {type: 'pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top/bottom stats with its left/right stats.'}},
-            {name: "Worldtree", emoji: "🌳", baseStats: [2, 10, 3, 2], ability: {type: 'symbiosis', icon: '🌱', desc: 'Plus 1 to all stats for each capture this card\'s player has made this game. The numbers update in your hand. After it grows, this card can capture.'}},
-            {name: "Mycelium", emoji: "🍄", baseStats: [4, 4, 4, 4], ability: {type: 'symbiosis', icon: '🌱', desc: 'Plus 1 to all stats for each capture this card\'s player has made this game. The numbers update in your hand. After it grows, this card can capture.'}},
-            {name: "Coral", emoji: "🪸", baseStats: [5, 3, 5, 3], ability: {type: 'symbiosis', icon: '🌱', desc: 'Plus 1 to all stats for each capture this card\'s player has made this game. The numbers update in your hand. After it grows, this card can capture.'}},
-            {name: "Lichen", emoji: "🌿", baseStats: [3, 5, 4, 4], ability: {type: 'symbiosis', icon: '🌱', desc: 'Plus 1 to all stats for each capture this card\'s player has made this game. The numbers update in your hand. After it grows, this card can capture.'}},
-            {name: "Ivy", emoji: "🍃", baseStats: [4, 5, 3, 4], ability: {type: 'symbiosis', icon: '🌱', desc: 'Plus 1 to all stats for each capture this card\'s player has made this game. The numbers update in your hand. After it grows, this card can capture.'}}
+            {name: "Worldtree", emoji: "🌳", baseStats: [2, 10, 3, 2], ability: {type: 'symbiosis', icon: '🌱', desc: 'Plus 1 to all stats for each capture this card\'s player has made this game. The numbers update in your hand.'}},
+            {name: "Mycelium", emoji: "🍄", baseStats: [4, 4, 4, 4], ability: {type: 'symbiosis', icon: '🌱', desc: 'Plus 1 to all stats for each capture this card\'s player has made this game. The numbers update in your hand.'}},
+            {name: "Coral", emoji: "🪸", baseStats: [5, 3, 5, 3], ability: {type: 'symbiosis', icon: '🌱', desc: 'Plus 1 to all stats for each capture this card\'s player has made this game. The numbers update in your hand.'}},
+            {name: "Lichen", emoji: "🌿", baseStats: [3, 5, 4, 4], ability: {type: 'symbiosis', icon: '🌱', desc: 'Plus 1 to all stats for each capture this card\'s player has made this game. The numbers update in your hand.'}},
+            {name: "Ivy", emoji: "🍃", baseStats: [4, 5, 3, 4], ability: {type: 'symbiosis', icon: '🌱', desc: 'Plus 1 to all stats for each capture this card\'s player has made this game. The numbers update in your hand.'}}
         ].map((card, i) => ({
             ...card,
             id: `BS-${String(i + 1).padStart(2, '0')}`,
@@ -4851,7 +4851,7 @@
         }
         function hapticForPlay(fx) {
             const ability = fx.abilityFx || fx.buffFx || fx.silenceFx || fx.chillFx || fx.psnFx || fx.pendulumFx;
-            const captured = !!(fx.capLog || fx.psnCapLog || fx.groveCapLog);
+            const captured = !!(fx.capLog || fx.psnCapLog);
             if (ability && ability.kind === 'bolt') haptic(captured ? [10, 28, 36, 40, 18] : [10, 30, 36]);
             else if (captured) haptic([12, 28, 22]);
             else if (ability) haptic([16, 24, 20]);
@@ -5676,12 +5676,10 @@
         function renderDraftPool() {
             const grid = document.getElementById('draft-pool-grid');
             bindDraftGridClicks();
-            const reuse = grid.childElementCount === draftPool.length;
-            if (!reuse) grid.innerHTML = '';
-            draftPool.forEach((card, i) => {
-                let el = reuse ? grid.children[i] : document.createElement('div');
+            grid.innerHTML = '';
+            draftPool.forEach((card) => {
+                const el = document.createElement('div');
                 el.className = draftCardClass(card);
-                if (reuse) return;
                 el.innerHTML = draftCardFaceHTML(card);
                 addTooltipListeners(el, abilityTip(card));
                 paintCardFaces(el);
@@ -6294,7 +6292,7 @@
             return hits.length ? {text: `${hits.length === 1 ? logCard(board[hits[0]]) : 'Pendulum cards'} swung`, kind: 'pendulum'} : null;
         }
 
-        function applySymbiosis(placedCard, capturedCount, grownOut) {
+        function applySymbiosis(placedCard, capturedCount) {
             if (!capturedCount) return null;
             const owner = placedCard.owner;
             matchCaptures[owner] = (matchCaptures[owner] || 0) + capturedCount;
@@ -6305,7 +6303,6 @@
                 if (liveAbilityType(card) !== 'symbiosis' || isSilenced(index)) return;
                 card.fxType = 'symbiosis';
                 names.push({name: card.name, owner: card.owner});
-                if (grownOut) grownOut.push(index);
                 queueMechFx('symbiosis', index, []);
             });
             return names.length ? {text: `${listLogNames(names)} grew (${total} capture${total === 1 ? '' : 's'} this game)`, kind: 'symbiosis'} : null;
@@ -6319,7 +6316,7 @@
             return out;
         }
 
-        function resolveTickCaptures(indexes, grownOut) {
+        function resolveTickCaptures(indexes) {
             const sources = [];
             (indexes || []).forEach(index => {
                 const card = board[index];
@@ -6329,7 +6326,7 @@
             sources.forEach(({index, owner, card}) => {
                 const now = board[index];
                 if (!now || now !== card || now.owner !== owner || isSilenced(index)) return;
-                const log = checkCaptures(index, now, grownOut);
+                const log = checkCaptures(index, now);
                 if (log) parts.push(log);
             });
             return parts.join(' · ');
@@ -6921,26 +6918,22 @@
             const buffFx = tagAuraBuffs(placedCard, index);
             const silenceFx = tagSilence(placedCard, index);
             const chillFx = tagChill(placedCard, index);
-            const grownThisTurn = [];
-            const capLog = checkCaptures(index, placedCard, grownThisTurn);
+            const capLog = checkCaptures(index, placedCard);
             recalculateDynamicStats();
             const psnFx = applyEndOfTurnEffects();
             recalculateDynamicStats();
-            const psnCapLog = resolveTickCaptures(poisonSourceIndexes(), grownThisTurn);
-            recalculateDynamicStats();
-            const groveWave = [...new Set(grownThisTurn)];
-            const groveCapLog = resolveTickCaptures(groveWave, null);
+            const psnCapLog = resolveTickCaptures(poisonSourceIndexes());
             recalculateDynamicStats();
             const pendulumFx = tickPendulum();
             recalculateDynamicStats();
-            return {enemyNeighbor, abilityFx, buffFx, silenceFx, chillFx, capLog, psnFx, psnCapLog, groveCapLog, pendulumFx};
+            return {enemyNeighbor, abilityFx, buffFx, silenceFx, chillFx, capLog, psnFx, psnCapLog, pendulumFx};
         }
 
         function processCardPlacement(index, placedCard) {
             const fx = applyPlacementCore(index, placedCard);
             if (silentSim) return;
 
-            const fxParts = [fx.abilityFx && fx.abilityFx.text, fx.buffFx && fx.buffFx.text, fx.silenceFx && fx.silenceFx.text, fx.chillFx && fx.chillFx.text, fx.capLog, fx.psnFx && fx.psnFx.text, fx.psnCapLog, fx.groveCapLog, fx.pendulumFx && fx.pendulumFx.text].filter(Boolean);
+            const fxParts = [fx.abilityFx && fx.abilityFx.text, fx.buffFx && fx.buffFx.text, fx.silenceFx && fx.silenceFx.text, fx.chillFx && fx.chillFx.text, fx.capLog, fx.psnFx && fx.psnFx.text, fx.psnCapLog, fx.pendulumFx && fx.pendulumFx.text].filter(Boolean);
             logAction(fxParts.length ? fxParts.join(' · ') : `${logCard(placedCard)} played.`);
 
             const placedBy = placedCard.owner === 'blue' ? 'player' : 'ai';
@@ -6950,7 +6943,7 @@
             hapticForPlay(fx);
             requestAnimationFrame(updateCoach);
 
-            if (placedBy === 'player') onCoachPlaced(!!(fx.capLog || fx.psnCapLog || fx.groveCapLog), fx.enemyNeighbor);
+            if (placedBy === 'player') onCoachPlaced(!!(fx.capLog || fx.psnCapLog), fx.enemyNeighbor);
 
             if (placedCard.blastPreview) {
                 if (blastPreviewTimer) clearTimeout(blastPreviewTimer);
@@ -6983,7 +6976,7 @@
             return {captures: false, equalized: false};
         }
 
-        function checkCaptures(placedIndex, placedCard, grownOut) {
+        function checkCaptures(placedIndex, placedCard) {
             const row = Math.floor(placedIndex / 3), col = placedIndex % 3;
             const neighbors = [
                 {idx: placedIndex - 3, p: 0, n: 2, ok: row > 0}, {idx: placedIndex + 1, p: 1, n: 3, ok: col < 2},
@@ -7034,7 +7027,7 @@
             const parts = [];
             if (captured.length) parts.push(`${logCard(placedCard)} captured ${listLogNames(captured)}`);
             if (spiteHits.length) parts.push(`Spite from ${listLogNames(spiteHits)} hit ${logCard(placedCard)} (-1)`);
-            const sym = applySymbiosis(placedCard, captured.length, grownOut);
+            const sym = applySymbiosis(placedCard, captured.length);
             if (sym) parts.push(sym.text);
             return parts.join(' · ');
         }
