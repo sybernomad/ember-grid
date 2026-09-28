@@ -1648,7 +1648,7 @@
                 min-height: 100dvh;
                 max-height: 100dvh;
                 border-radius: 0;
-                justify-content: center;
+                justify-content: safe center;
                 padding: calc(22px + env(safe-area-inset-top)) 18px calc(72px + env(safe-area-inset-bottom));
                 align-self: stretch;
                 background:
@@ -1975,6 +1975,124 @@
             color: var(--accent);
             background: rgba(232, 163, 23, 0.2);
             box-shadow: 0 0 0 1px rgba(232, 195, 106, 0.45);
+        }
+
+        .grid-choices {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 6px;
+            margin: 0 0 8px;
+        }
+
+        .grid-choice {
+            appearance: none;
+            background: var(--cell-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            min-height: 42px;
+            padding: 8px 4px;
+            font-family: var(--font-ui);
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.01em;
+            cursor: pointer;
+            line-height: 1.15;
+        }
+
+        .grid-choice:hover,
+        .grid-choice:focus-visible {
+            border-color: var(--gold);
+        }
+
+        .grid-choice.selected {
+            border-color: var(--gold);
+            color: var(--accent);
+            background: rgba(232, 163, 23, 0.2);
+            box-shadow: 0 0 0 1px rgba(232, 195, 106, 0.45);
+        }
+
+        .grid-choice-note {
+            margin: 0 0 10px;
+            text-align: left;
+            font-size: 0.78rem;
+            line-height: 1.35;
+            opacity: 0.88;
+        }
+
+        @media (max-width: 420px) {
+            .grid-choices {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 640px) and (max-height: 820px) {
+            #main-menu-modal .modal-content {
+                justify-content: flex-start;
+                padding: calc(12px + env(safe-area-inset-top)) 18px calc(12px + env(safe-area-inset-bottom));
+            }
+
+            #main-menu-modal .modal-title {
+                margin-bottom: 2px;
+                font-size: 1.12rem;
+            }
+
+            #main-menu-modal .brand-tag {
+                margin-bottom: 8px;
+            }
+
+            #main-menu-modal .rules-compact {
+                padding: 8px 10px;
+                margin-bottom: 8px;
+            }
+
+            #main-menu-modal .how-to-play {
+                gap: 4px;
+            }
+
+            #main-menu-modal .how-to-play-hint {
+                margin-top: 6px;
+            }
+
+            #main-menu-modal .menu-links .btn {
+                padding: 8px 4px 7px;
+            }
+
+            #main-menu-modal .menu-section-title {
+                margin: 8px 0 6px;
+            }
+
+            #main-menu-modal .menu-rule {
+                margin: 8px 4px;
+            }
+
+            #main-menu-modal .grid-choices {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+            }
+
+            #main-menu-modal .grid-choice {
+                min-height: 36px;
+                padding: 6px 2px;
+                font-size: 0.62rem;
+            }
+
+            #main-menu-modal .grid-choice-note {
+                margin-bottom: 6px;
+            }
+
+            #main-menu-modal .menu-play-actions .btn {
+                padding: 10px 8px;
+            }
+
+            #main-menu-modal .menu-foot {
+                position: sticky;
+                left: auto;
+                right: auto;
+                bottom: 0;
+                margin-top: 8px;
+                z-index: 2;
+                background: linear-gradient(180deg, transparent, var(--bg-color) 36%);
+            }
         }
 
         .btn.btn-dismiss {
@@ -3900,7 +4018,7 @@
                     <li><strong>Capture.</strong> If your touching number is higher, you take that card.</li>
                     <li><strong>Win.</strong> <span id="victory-compact">When the grid fills, most cards on the grid wins.</span></li>
                 </ul>
-                <p class="how-to-play-hint">Rules is the full book. Options lets you change the grid and extra rules.</p>
+                <p class="how-to-play-hint">Rules is the full book. Pick a grid here. Options holds the extra rules.</p>
             </div>
 
             <nav class="menu-links">
@@ -3918,6 +4036,14 @@
                 </button>
             </nav>
             <div class="menu-rule" aria-hidden="true"></div>
+            <div class="menu-section-title">Grid</div>
+            <div class="grid-choices" role="group" aria-label="Grid">
+                <button type="button" class="grid-choice" data-grid-choice="3" onclick="updatePreferredGrid('3')">3×3</button>
+                <button type="button" class="grid-choice" data-grid-choice="4" onclick="updatePreferredGrid('4')">4×4</button>
+                <button type="button" class="grid-choice" data-grid-choice="5" onclick="updatePreferredGrid('5')">5×5</button>
+                <button type="button" class="grid-choice" data-grid-choice="hex" onclick="updatePreferredGrid('hex')">Honeycomb</button>
+            </div>
+            <p class="grid-choice-note" id="menu-grid-note">3×3 is five each. Honeycomb is nineteen cells.</p>
             <div class="menu-play-actions">
                 <button class="btn" onclick="startGame('random')">Deal Hands</button>
                 <button class="btn btn-alt" onclick="startGame('draft')">Draft Hands</button>
@@ -4033,7 +4159,7 @@
                 <section class="changelog-ver">
                     <h3>0.34 Alpha</h3>
                     <ul>
-                        <li>Honeycomb in Options. Nineteen cells. Ten dealt, open five, draw after you play. League and Tribe Decks stay 3×3.</li>
+                        <li>Honeycomb is a button on the menu and in Options, beside 3×3, 4×4, and 5×5. Nineteen cells. Ten dealt, open five, draw after you play. League and Tribe Decks stay 3×3.</li>
                         <li>Each card gains an upper-left and upper-right number, so every side of a hex has a facing. Square grids still use the original four.</li>
                     </ul>
                 </section>
@@ -4248,12 +4374,12 @@
             </div>
             <div class="settings-stack">
                 <span>Grid</span>
-                <select id="grid-size-select" class="settings-select settings-select-full" onchange="updatePreferredGrid(this.value)">
-                    <option value="3" selected>3×3 · five each</option>
-                    <option value="4">4×4 · eight dealt</option>
-                    <option value="5">5×5 · thirteen dealt</option>
-                    <option value="hex">Honeycomb · ten dealt</option>
-                </select>
+                <div class="grid-choices" role="group" aria-label="Grid">
+                    <button type="button" class="grid-choice" data-grid-choice="3" onclick="updatePreferredGrid('3')">3×3</button>
+                    <button type="button" class="grid-choice" data-grid-choice="4" onclick="updatePreferredGrid('4')">4×4</button>
+                    <button type="button" class="grid-choice" data-grid-choice="5" onclick="updatePreferredGrid('5')">5×5</button>
+                    <button type="button" class="grid-choice" data-grid-choice="hex" onclick="updatePreferredGrid('hex')">Honeycomb</button>
+                </div>
             </div>
             <div id="grid-size-desc" class="ruleset-desc-box">
                 <strong>3×3 (default):</strong> Five each. League and Tribe Decks always use this size.
@@ -5979,17 +6105,27 @@
             const desc = document.getElementById('leftover-desc');
             if (desc) desc.innerHTML = leftoverVictoryCopy();
         }
+        function gridChoiceCopy(n) {
+            if (n === 'hex') return {long: "<strong>Honeycomb:</strong> Nineteen cells. Ten dealt. Open five, draw after you play. Each card shows an upper-left and upper-right number. League and Tribe Decks stay 3×3.", short: "Nineteen cells. Ten dealt, five in hand. League and Tribe Decks stay 3×3."};
+            if (n === 4) return {long: "<strong>4×4:</strong> Eight dealt. Open five, draw after you play. League and Tribe Decks stay 3×3.", short: "Eight dealt. Open five, draw after you play."};
+            if (n === 5) return {long: "<strong>5×5:</strong> Thirteen dealt. Open five, draw after you play. League and Tribe Decks stay 3×3.", short: "Thirteen dealt. Open five, draw after you play."};
+            return {long: "<strong>3×3 (default):</strong> Five each. League and Tribe Decks always use this size.", short: "Five each. The usual table."};
+        }
+        function paintGridChoices() {
+            const current = String(preferredGridSize);
+            document.querySelectorAll('[data-grid-choice]').forEach(btn => {
+                const on = btn.dataset.gridChoice === current;
+                btn.classList.toggle('selected', on);
+                btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+            });
+        }
         function refreshGridSizeDesc() {
+            const copy = gridChoiceCopy(preferredGridSize);
             const el = document.getElementById('grid-size-desc');
-            if (!el) return;
-            const n = preferredGridSize;
-            el.innerHTML = n === 'hex'
-                ? "<strong>Honeycomb:</strong> Nineteen cells. Ten dealt. Open five, draw after you play. Each card shows an upper-left and upper-right number. League and Tribe Decks stay 3×3."
-                : n === 3
-                ? "<strong>3×3 (default):</strong> Five each. League and Tribe Decks always use this size."
-                : n === 4
-                    ? "<strong>4×4:</strong> Eight dealt. Open five, draw after you play. League and Tribe Decks stay 3×3."
-                    : "<strong>5×5:</strong> Thirteen dealt. Open five, draw after you play. League and Tribe Decks stay 3×3.";
+            if (el) el.innerHTML = copy.long;
+            const menu = document.getElementById('menu-grid-note');
+            if (menu) menu.textContent = copy.short;
+            paintGridChoices();
         }
         function updatePreferredGrid(val) {
             sfx.click();
@@ -6273,7 +6409,7 @@
             document.getElementById('leftover-check').checked = leftoverScores;
             const hapticsCheck = document.getElementById('haptics-check');
             if (hapticsCheck) hapticsCheck.checked = hapticsOn;
-            document.getElementById('grid-size-select').value = String(preferredGridSize);
+            paintGridChoices();
             refreshRulesetDesc();
             refreshGridSizeDesc();
             refreshVictoryCopy();
