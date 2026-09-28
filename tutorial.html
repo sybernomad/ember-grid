@@ -179,6 +179,7 @@
             .embers span { animation: none; opacity: 0; }
             .card.flipped { animation: none; }
             .card.selected { animation: none; }
+            .card.draw-in { animation: none !important; opacity: 1; transform: none; filter: none; }
             .turn-banner, .capture-pop, .fx-ring,
             .score-pill.score-tick, .turn-indicator.pulse,
             .stat-flash, .mech-burst, .mech-travel, .mech-bolt-svg { animation: none; }
@@ -364,6 +365,10 @@
             width: 100%;
         }
 
+        .board-stage {
+            position: relative;
+        }
+
         .board-wrap {
             position: relative;
             flex-shrink: 0;
@@ -410,6 +415,352 @@
                 inset 0 0 30px rgba(0, 0, 0, 0.45),
                 0 16px 40px rgba(0, 0, 0, 0.5),
                 0 0 40px rgba(232, 163, 23, 0.08);
+        }
+
+        .match-chrome {
+            display: contents;
+        }
+
+        body.grid-4,
+        body.grid-5 {
+            --grid-gap: 4px;
+            --board-pad: 5px;
+            --hand-min: 0;
+            --fan-w: 74px;
+            --fan-h: 92px;
+            --fan-gap: 6px;
+        }
+
+        body.grid-4 {
+            --font-main: 0.62rem;
+            --font-name: 0.38rem;
+            --nameplate-h: 16px;
+        }
+
+        body.grid-5 {
+            --font-main: 0.52rem;
+            --font-name: 0.32rem;
+            --nameplate-h: 15px;
+            --grid-gap: 3px;
+            --fan-w: 64px;
+            --fan-h: 80px;
+            --fan-gap: 5px;
+        }
+
+        @media (min-width: 768px) {
+            body.grid-4 {
+                --container-max: 680px;
+                --fan-w: 88px;
+                --fan-h: 110px;
+                --font-main: 0.8rem;
+                --font-name: 0.5rem;
+                --nameplate-h: 22px;
+            }
+            body.grid-5 {
+                --container-max: 760px;
+                --fan-w: 82px;
+                --fan-h: 102px;
+                --font-main: 0.74rem;
+                --font-name: 0.44rem;
+                --nameplate-h: 20px;
+            }
+
+            body.grid-4 .card-emoji,
+            body.grid-5 .card-emoji {
+                width: 2.1em;
+                height: 2.1em;
+                font-size: 1.1rem;
+            }
+
+            body.grid-4 .cell .card,
+            body.grid-5 .cell .card {
+                container-type: size;
+            }
+
+            body.grid-4 .cell .card-emoji,
+            body.grid-5 .cell .card-emoji {
+                font-size: clamp(1.1rem, 22cqh, 2rem);
+                width: 2.1em;
+                height: 2.1em;
+            }
+
+            body.grid-4 .cell .card-emoji img.twemoji,
+            body.grid-5 .cell .card-emoji img.twemoji {
+                width: 1.15em;
+                height: 1.15em;
+            }
+
+            body.grid-4 #top-area .hand,
+            body.grid-5 #top-area .hand {
+                --fan-w: 66px;
+                --fan-h: 82px;
+            }
+
+            body.grid-4 .ability-badge {
+                font-size: 0.52rem;
+                padding: 2px 5px;
+            }
+
+            body.grid-5 .ability-badge {
+                font-size: 0.48rem;
+                padding: 2px 4px;
+            }
+        }
+
+        body.grid-4 .container,
+        body.grid-5 .container {
+            justify-content: flex-start;
+            overflow: hidden;
+            gap: 3px;
+            padding-top: 4px;
+            padding-bottom: 6px;
+        }
+
+        body.grid-4 .match-chrome,
+        body.grid-5 .match-chrome {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-shrink: 0;
+            width: 100%;
+            gap: 6px;
+            position: relative;
+            z-index: 12;
+            background: var(--bg-color);
+            padding: 0 0 2px;
+        }
+
+        body.grid-4 header,
+        body.grid-5 header {
+            position: relative;
+            z-index: auto;
+            flex-shrink: 0;
+            width: 100%;
+        }
+
+        body.grid-4 .score-board,
+        body.grid-5 .score-board {
+            position: relative;
+            z-index: auto;
+            flex-shrink: 0;
+            max-width: 100%;
+        }
+
+        body.grid-4 .score-pill,
+        body.grid-5 .score-pill {
+            font-size: 0.72rem;
+            padding: 2px 8px;
+        }
+
+        body.grid-4 .turn-indicator,
+        body.grid-5 .turn-indicator {
+            font-size: 0.68rem;
+            letter-spacing: 0.1em;
+        }
+
+        body.grid-4 .status-msg,
+        body.grid-5 .status-msg {
+            flex-shrink: 0;
+            font-size: 0.7rem;
+            min-height: 0;
+            position: relative;
+            z-index: 9;
+        }
+
+        body.grid-5 .status-msg { font-size: 0.64rem; }
+
+        body.grid-4 .battle-log-link,
+        body.grid-5 .battle-log-link {
+            flex-shrink: 0;
+            min-height: 20px;
+            font-size: 0.52rem;
+            position: relative;
+            z-index: 9;
+        }
+
+        body.grid-4 .battlefield,
+        body.grid-5 .battlefield {
+            flex: 1 1 auto;
+            min-height: 0;
+            width: 100%;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            justify-content: flex-start;
+            gap: 4px;
+        }
+
+        body.grid-4 #top-area,
+        body.grid-4 #bottom-area,
+        body.grid-5 #top-area,
+        body.grid-5 #bottom-area {
+            width: 100%;
+            flex: 0 0 auto;
+            min-height: 0;
+            position: relative;
+            z-index: 20;
+            overflow: visible;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            isolation: isolate;
+        }
+
+        body.grid-4 .board-stage,
+        body.grid-5 .board-stage {
+            flex: 1 1 auto;
+            min-height: 80px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            container-type: size;
+            position: relative;
+            z-index: 1;
+        }
+
+        body.grid-4 .grid,
+        body.grid-5 .grid {
+            width: min(100cqw, calc(100cqh * 0.82));
+            height: min(100cqh, calc(100cqw / 0.82));
+            max-width: 100%;
+            max-height: 100%;
+            gap: var(--grid-gap);
+            padding: var(--board-pad);
+            box-sizing: border-box;
+        }
+
+        body.grid-4 .grid {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            grid-template-rows: repeat(4, minmax(0, 1fr));
+        }
+
+        body.grid-5 .grid {
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            grid-template-rows: repeat(5, minmax(0, 1fr));
+        }
+
+        body.grid-4 .cell,
+        body.grid-5 .cell {
+            aspect-ratio: auto;
+            width: 100%;
+            height: 100%;
+            min-width: 0;
+            min-height: 0;
+        }
+
+        body.grid-4 .cell .card,
+        body.grid-5 .cell .card {
+            width: 100%;
+            height: 100%;
+            max-width: none;
+        }
+
+        body.grid-4 .hand,
+        body.grid-5 .hand {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: center;
+            align-items: flex-end;
+            gap: var(--fan-gap);
+            overflow: visible;
+            padding: 16px 8px 6px;
+            min-height: calc(var(--fan-h) + 22px);
+            width: 100%;
+            position: relative;
+            z-index: 8;
+        }
+
+        body.grid-4 .hand .card,
+        body.grid-5 .hand .card {
+            flex: 0 0 var(--fan-w);
+            width: var(--fan-w);
+            height: var(--fan-h);
+            margin-right: 0;
+            aspect-ratio: auto;
+            z-index: 1;
+            transform: translateY(0) scale(1);
+            transform-origin: center bottom;
+            transition:
+                transform 0.22s cubic-bezier(0.22, 1.45, 0.36, 1),
+                box-shadow 0.22s ease,
+                border-color 0.22s ease,
+                filter 0.22s ease;
+        }
+
+        body.grid-4 .hand .card.selected,
+        body.grid-5 .hand .card.selected {
+            transform: translateY(-32px) scale(1.1);
+            z-index: 16;
+            box-shadow: 0 18px 30px rgba(232, 163, 23, 0.42), 0 0 0 2px var(--gold);
+            border-color: var(--gold);
+            filter: brightness(1.06);
+        }
+
+        body.grid-4 .hand .card.draw-in,
+        body.grid-5 .hand .card.draw-in {
+            z-index: 18;
+        }
+
+        body.grid-4 #top-area .hand,
+        body.grid-5 #top-area .hand {
+            align-items: flex-start;
+            padding: 8px 12px 18px;
+            min-height: calc(var(--fan-h) + 20px);
+            --fan-w: 56px;
+            --fan-h: 70px;
+            --fan-gap: 5px;
+        }
+
+        body.grid-4 #top-area .hand .card,
+        body.grid-5 #top-area .hand .card {
+            transform-origin: center top;
+        }
+
+        body.grid-4 #top-area .hand .card.selected,
+        body.grid-5 #top-area .hand .card.selected {
+            transform: translateY(10px) scale(1.05);
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            body.grid-4 .hand .card:hover:not(.selected),
+            body.grid-5 .hand .card:hover:not(.selected) {
+                transform: translateY(-8px) scale(1.03);
+                z-index: 5;
+            }
+
+            body.grid-4 #top-area .hand .card:hover:not(.selected),
+            body.grid-5 #top-area .hand .card:hover:not(.selected) {
+                transform: translateY(6px) scale(1.03);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            body.grid-4 .hand .card,
+            body.grid-5 .hand .card {
+                transition: transform 0.15s ease, box-shadow 0.15s ease;
+            }
+        }
+
+        body.grid-4 .ability-badge {
+            font-size: 0.48rem;
+            padding: 2px 4px;
+        }
+
+        body.grid-5 .ability-badge {
+            top: 2px;
+            left: 2px;
+            font-size: 0.4rem;
+            padding: 1px 3px;
+        }
+
+        @media (max-width: 767px) {
+            body.grid-5 .card-emoji {
+                width: 1.35em;
+                height: 1.35em;
+                font-size: 0.9em;
+            }
         }
 
         .cell {
@@ -573,6 +924,54 @@
             z-index: 4;
         }
 
+        .card.draw-in {
+            animation: cardDrawIn 0.58s cubic-bezier(0.16, 1.18, 0.32, 1) both;
+            z-index: 10;
+            transform-origin: center bottom;
+            pointer-events: none;
+        }
+
+        #top-area .card.draw-in {
+            animation-name: cardDrawInTop;
+            transform-origin: center top;
+        }
+
+        @keyframes cardDrawIn {
+            0% {
+                opacity: 0;
+                transform: translate3d(36px, 42px, 0) rotate(-16deg) scale(0.55);
+                filter: brightness(1.55) drop-shadow(0 0 12px rgba(232, 163, 23, 0.85));
+            }
+            58% {
+                opacity: 1;
+                transform: translate3d(-4px, -14px, 0) rotate(4deg) scale(1.1);
+                filter: brightness(1.18) drop-shadow(0 10px 16px rgba(232, 163, 23, 0.45));
+            }
+            100% {
+                opacity: 1;
+                transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+                filter: brightness(1) drop-shadow(0 0 0 transparent);
+            }
+        }
+
+        @keyframes cardDrawInTop {
+            0% {
+                opacity: 0;
+                transform: translate3d(28px, -36px, 0) rotate(14deg) scale(0.55);
+                filter: brightness(1.55) drop-shadow(0 0 12px rgba(232, 163, 23, 0.85));
+            }
+            58% {
+                opacity: 1;
+                transform: translate3d(-4px, 12px, 0) rotate(-3deg) scale(1.08);
+                filter: brightness(1.18) drop-shadow(0 8px 14px rgba(232, 163, 23, 0.4));
+            }
+            100% {
+                opacity: 1;
+                transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+                filter: brightness(1) drop-shadow(0 0 0 transparent);
+            }
+        }
+
         .ability-badge {
             position: absolute;
             top: 4px;
@@ -668,7 +1067,9 @@
         .stat-top,
         .stat-right,
         .stat-bottom,
-        .stat-left {
+        .stat-left,
+        .stat-ne,
+        .stat-nw {
             z-index: 5;
             width: 1.15em;
             height: 1.15em;
@@ -706,6 +1107,25 @@
             left: 4px;
             top: calc((100% - var(--nameplate-h)) / 2);
             transform: translateY(-50%);
+        }
+
+        .stat-ne {
+            top: 22%;
+            right: 5px;
+        }
+
+        .stat-nw {
+            top: 22%;
+            left: 5px;
+        }
+
+        .has-hex-faces .stat-right,
+        .has-hex-faces .stat-left {
+            top: 64%;
+        }
+
+        .has-hex-faces .stat-bottom {
+            bottom: calc(var(--nameplate-h) + 6px);
         }
 
         .stat-up {
@@ -941,7 +1361,8 @@
         #draft-modal,
         #deck-modal,
         #gameover-modal,
-        #league-modal {
+        #league-modal,
+        #changelog-modal {
             z-index: 110;
         }
 
@@ -1035,6 +1456,21 @@
             letter-spacing: 0.18em;
             text-transform: uppercase;
             opacity: 0.42;
+            background: none;
+            border: none;
+            color: inherit;
+            display: block;
+            width: 100%;
+            padding: 10px 8px 6px;
+            min-height: 32px;
+            cursor: pointer;
+            transition: opacity 0.15s ease, color 0.15s ease;
+        }
+
+        button.build-stamp:hover,
+        button.build-stamp:focus-visible {
+            opacity: 0.95;
+            color: var(--gold);
         }
 
         .dev-note {
@@ -1214,7 +1650,8 @@
             #expanded-rules-modal .modal-content,
             #options-modal .modal-content,
             #stats-modal .modal-content,
-            #battle-log-modal .modal-content {
+            #battle-log-modal .modal-content,
+            #changelog-modal .modal-content {
                 max-height: min(80dvh, calc(100dvh - 24px));
                 min-height: 0;
             }
@@ -1239,10 +1676,11 @@
 
         .rules-compact {
             background: rgba(0, 0, 0, 0.22);
-            padding: 14px 14px;
+            padding: 14px 14px 12px;
             border-radius: 12px;
+            font-family: var(--font-ui);
             font-size: var(--type-body);
-            line-height: 1.5;
+            line-height: 1.45;
             border: 1px solid var(--border-color);
             text-align: left;
             margin-bottom: 14px;
@@ -1250,6 +1688,37 @@
 
         .rules-compact strong {
             color: var(--accent);
+        }
+
+        .how-to-play {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-family: var(--font-ui);
+        }
+
+        .how-to-play li {
+            padding: 0;
+        }
+
+        .how-to-play strong {
+            font-family: var(--font-ui);
+            font-weight: 700;
+        }
+
+        .how-to-play-hint {
+            margin: 10px 0 0;
+            font-size: 0.72rem;
+            line-height: 1.35;
+            opacity: 0.68;
+        }
+
+        #expanded-rules-modal .set-blurb {
+            text-align: left;
+            margin: 0 0 4px;
         }
 
         .ruleset-desc-box {
@@ -1436,6 +1905,55 @@
             box-shadow: 0 0 0 1px rgba(232, 195, 106, 0.45);
         }
 
+        .grid-choices {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 6px;
+            margin: 0 0 8px;
+        }
+
+        .grid-choice {
+            appearance: none;
+            background: var(--cell-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            min-height: 42px;
+            padding: 8px 4px;
+            font-family: var(--font-ui);
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.01em;
+            cursor: pointer;
+            line-height: 1.15;
+        }
+
+        .grid-choice:hover,
+        .grid-choice:focus-visible {
+            border-color: var(--gold);
+        }
+
+        .grid-choice.selected {
+            border-color: var(--gold);
+            color: var(--accent);
+            background: rgba(232, 163, 23, 0.2);
+            box-shadow: 0 0 0 1px rgba(232, 195, 106, 0.45);
+        }
+
+        .grid-choice-note {
+            margin: 0 0 10px;
+            text-align: left;
+            font-size: 0.78rem;
+            line-height: 1.35;
+            opacity: 0.88;
+        }
+
+        @media (max-width: 420px) {
+            .grid-choices {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
         .btn.btn-dismiss {
             width: auto;
             min-width: 92px;
@@ -1452,6 +1970,7 @@
             text-align: left;
             margin: 6px 0 10px 0;
             font-size: 0.88rem;
+            font-family: var(--font-ui);
         }
 
         .rule-detail-item {
@@ -1460,12 +1979,69 @@
             border-radius: 10px;
             border: 1px solid var(--border-color);
             line-height: 1.45;
+            font-family: var(--font-ui);
         }
 
         .rule-detail-item strong {
             color: var(--accent);
-            display: inline-block;
-            margin-bottom: 2px;
+            display: inline;
+            font-family: var(--font-ui);
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+
+        .changelog-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            text-align: left;
+            margin: 4px 0 12px;
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: auto;
+            padding-right: 2px;
+        }
+
+        .changelog-ver {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 10px 12px 8px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .changelog-ver h3 {
+            font-family: var(--font-display);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin: 0 0 6px;
+        }
+
+        .changelog-ver ul {
+            margin: 0;
+            padding: 0 0 0 1.1em;
+            font-size: 0.82rem;
+            line-height: 1.45;
+        }
+
+        .changelog-ver li + li {
+            margin-top: 3px;
+        }
+
+        #changelog-modal .modal-content {
+            max-width: 440px;
+            display: flex;
+            flex-direction: column;
+            max-height: min(80dvh, 640px);
+            overflow: hidden;
+        }
+
+        #changelog-modal .modal-title,
+        #changelog-modal .set-blurb,
+        #changelog-modal .modal-content > .btn {
+            flex-shrink: 0;
         }
 
         .compendium-filter {
@@ -1531,6 +2107,89 @@
             align-content: center;
             flex: 1 1 auto;
             min-height: 0;
+        }
+
+        #draft-modal.draft-dense .modal-content {
+            max-width: 680px;
+            height: min(90dvh, calc(100dvh - 16px));
+            max-height: min(90dvh, calc(100dvh - 16px));
+            overflow: hidden;
+        }
+
+        #draft-modal.draft-dense .draft-grid {
+            --draft-gap: 4px;
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow: hidden;
+            container-type: size;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            grid-template-rows: repeat(6, minmax(0, 1fr));
+            gap: var(--draft-gap);
+            align-content: stretch;
+            justify-items: center;
+            align-items: center;
+            margin: 6px 0 8px;
+        }
+
+        #draft-modal.draft-dense .draft-card {
+            box-sizing: border-box;
+            aspect-ratio: 4 / 5;
+            width: min(100%, calc((100cqh - 5 * var(--draft-gap)) / 6 * 4 / 5));
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+            min-width: 0;
+            min-height: 0;
+            overflow: hidden;
+            contain: layout paint;
+            --nameplate-h: 16px;
+            --draft-font-main: 0.52rem;
+            --draft-font-name: 0.32rem;
+        }
+
+        #draft-modal.draft-dense .draft-card .card-emoji {
+            width: 1.35em;
+            height: 1.35em;
+            font-size: 0.95em;
+        }
+
+        #draft-modal.draft-dense .draft-card:hover {
+            transform: none;
+        }
+
+        #draft-modal.draft-dense .draft-order {
+            font-size: 0.78rem;
+            margin-bottom: 4px;
+            flex: 0 0 auto;
+        }
+
+        #draft-modal.draft-dense .draft-status,
+        #draft-modal.draft-dense .draft-rosters,
+        #draft-modal.draft-dense .btn-dismiss {
+            flex: 0 0 auto;
+        }
+
+        #draft-modal.draft-hex .draft-grid {
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            grid-template-rows: repeat(4, minmax(0, 1fr));
+        }
+
+        #draft-modal.draft-dense.draft-hex .draft-card {
+            width: min(100%, calc((100cqh - 3 * var(--draft-gap)) / 4 * 4 / 5));
+            --nameplate-h: 14px;
+            --draft-font-main: 0.46rem;
+            --draft-font-name: 0.28rem;
+        }
+
+        #draft-modal.draft-hex .draft-card .stat-ne,
+        #draft-modal.draft-hex .draft-card .stat-nw {
+            top: 16%;
+        }
+
+        .draft-order,
+        .draft-status,
+        .draft-rosters {
+            overflow-wrap: anywhere;
         }
 
         .compendium-card,
@@ -2516,6 +3175,14 @@
             align-items: stretch;
             justify-content: center;
             padding: 2px 2px 4px;
+            margin-inline: auto;
+            align-self: center;
+            box-sizing: border-box;
+        }
+
+        body.grid-4 .rematch-bar,
+        body.grid-5 .rematch-bar {
+            width: min(100%, calc(var(--grid-w) * 3 + 18px));
         }
 
         .rematch-secondary {
@@ -3058,6 +3725,12 @@
                 min-width: 0;
             }
 
+            #draft-modal.draft-dense .modal-content {
+                max-width: min(680px, 100%);
+                height: min(90dvh, calc(100dvh - 16px));
+                max-height: min(90dvh, calc(100dvh - 16px));
+            }
+
             .league-roster-grid {
                 grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
                 gap: 6px;
@@ -3067,6 +3740,193 @@
         @media (max-width: 420px) {
             .league-rivals {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        /* Honeycomb: flat-top hexes. Body also carries grid-4 so the five-card hand chrome stays. */
+        body.grid-hex .grid {
+            display: block;
+            position: relative;
+            aspect-ratio: var(--hex-aspect, 0.9238);
+            width: min(100cqw, calc(100cqh * var(--hex-aspect, 0.9238)));
+            height: min(100cqh, calc(100cqw / var(--hex-aspect, 0.9238)));
+            max-width: 100%;
+            max-height: 100%;
+            padding: 0;
+            gap: 0;
+            grid-template-columns: none;
+            grid-template-rows: none;
+            overflow: visible;
+        }
+
+        body.grid-hex .cell {
+            position: absolute;
+            display: block;
+            border: none;
+            border-radius: 0;
+            aspect-ratio: auto;
+            box-shadow: none;
+            container-type: size;
+            background:
+                linear-gradient(165deg, rgba(255, 255, 255, 0.07), rgba(0, 0, 0, 0.28) 62%),
+                var(--cell-bg);
+            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+            filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 0.6px rgba(232, 195, 106, 0.55));
+            z-index: 1;
+        }
+
+        body.grid-hex .cell::after {
+            inset: 0;
+            border: 0;
+            border-radius: 0;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 86.6'%3E%3Cpolygon points='30,9 70,9 90,43.3 70,77.6 30,77.6 10,43.3' fill='none' stroke='%23e8c36a' stroke-opacity='0.42' stroke-width='1.15' stroke-dasharray='2.5 2.3' stroke-linejoin='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+        }
+
+        body.grid-hex .cell:hover:not(:has(.card)),
+        body.grid-hex .cell.drag-over {
+            z-index: 4;
+            background:
+                linear-gradient(165deg, rgba(232, 163, 23, 0.28), rgba(232, 163, 23, 0.08) 70%),
+                var(--cell-bg);
+            filter: drop-shadow(0 0 7px rgba(232, 163, 23, 0.72)) drop-shadow(0 0 0.8px rgba(232, 195, 106, 0.9));
+        }
+
+        body.grid-hex .cell.cell-cinder {
+            border: none;
+            background:
+                linear-gradient(165deg, rgba(255, 150, 60, 0.42), rgba(140, 32, 0, 0.28)),
+                var(--cell-bg);
+            filter: drop-shadow(0 0 8px rgba(255, 110, 30, 0.8));
+        }
+
+        body.grid-hex .cell.cell-cinder::after {
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 86.6'%3E%3Cpolygon points='30,9 70,9 90,43.3 70,77.6 30,77.6 10,43.3' fill='none' stroke='%23ffb068' stroke-opacity='0.8' stroke-width='1.2' stroke-linejoin='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+        }
+
+        body.grid-hex .cell:has(.card) {
+            background: transparent;
+            filter: drop-shadow(0 7px 9px rgba(0, 0, 0, 0.42));
+            z-index: 2;
+        }
+
+        body.grid-hex .cell:has(.card.blue) {
+            filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.46)) drop-shadow(0 0 0.85px rgba(147, 197, 253, 0.95));
+        }
+
+        body.grid-hex .cell:has(.card.red) {
+            filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.46)) drop-shadow(0 0 0.85px rgba(253, 164, 175, 0.95));
+        }
+
+        body.grid-hex .cell.cell-cinder:has(.card) {
+            background: transparent;
+            filter: drop-shadow(0 0 8px rgba(255, 110, 30, 0.85)) drop-shadow(0 6px 8px rgba(0, 0, 0, 0.4));
+        }
+
+        body.grid-hex .cell.coach-target {
+            z-index: 5;
+            filter: drop-shadow(0 0 8px rgba(232, 163, 23, 0.85)) drop-shadow(0 0 0.8px rgba(232, 195, 106, 1));
+        }
+
+        body.grid-hex .cell .card {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            max-width: none;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            font-size: clamp(7px, 16cqh, 15px);
+        }
+
+        body.grid-hex .cell .card::before {
+            inset: 0;
+            border: none;
+            border-radius: 0;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 86.6'%3E%3Cpolygon points='27,5 73,5 95,43.3 73,81.6 27,81.6 5,43.3' fill='none' stroke='%23fff1c2' stroke-opacity='0.4' stroke-width='1.35' stroke-linejoin='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+        }
+
+        body.grid-hex .cell .card::after {
+            border-radius: 0;
+        }
+
+        body.grid-hex .cell .ability-badge {
+            top: 6%;
+            left: 60%;
+            transform: none;
+            font-size: 0.42rem;
+            padding: 0 2px;
+            z-index: 6;
+        }
+
+        body.grid-hex .cell .card-emoji {
+            top: 40%;
+            width: 1.45em;
+            height: 1.45em;
+            font-size: clamp(11px, 20cqh, 20px);
+        }
+
+        body.grid-hex .cell .card-name {
+            bottom: 4%;
+            width: 52%;
+            font-size: clamp(6px, 8.5cqh, 8px);
+            line-height: 1.02;
+            padding: 0 2px 1px;
+        }
+
+        body.grid-hex .cell .stat-top,
+        body.grid-hex .cell .stat-right,
+        body.grid-hex .cell .stat-bottom,
+        body.grid-hex .cell .stat-left,
+        body.grid-hex .cell .stat-ne,
+        body.grid-hex .cell .stat-nw {
+            width: 1.05em;
+            height: 1.05em;
+        }
+
+        body.grid-hex .cell .stat-top {
+            top: 3%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        body.grid-hex .cell .stat-ne {
+            top: 27%;
+            right: auto;
+            left: 76%;
+            transform: translate(-50%, -50%);
+        }
+
+        body.grid-hex .cell .stat-right {
+            top: 60%;
+            right: auto;
+            left: 76%;
+            transform: translate(-50%, -50%);
+        }
+
+        body.grid-hex .cell .stat-bottom {
+            top: auto;
+            bottom: 26%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        body.grid-hex .cell .stat-left {
+            top: 60%;
+            left: 24%;
+            transform: translate(-50%, -50%);
+        }
+
+        body.grid-hex .cell .stat-nw {
+            top: 27%;
+            left: 24%;
+            transform: translate(-50%, -50%);
+        }
+
+        @media (min-width: 768px) {
+            body.grid-hex .cell .card-emoji {
+                width: 1.85em;
+                height: 1.85em;
             }
         }
     </style>
@@ -3087,34 +3947,36 @@
     <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
 
     <div class="container">
-        <header>
-            <h1>EMBER GRID</h1>
-            <div class="nav-group">
-                <button type="button" class="menu-btn" onclick="showStatsModal()" title="Stats" aria-label="Stats">
-                    <svg class="ui-icon" aria-hidden="true"><use href="#i-stats"></use></svg>
-                </button>
-                <button type="button" class="menu-btn" onclick="showRulesModal()" title="Rules" aria-label="Rules">
-                    <svg class="ui-icon" aria-hidden="true"><use href="#i-book"></use></svg>
-                </button>
-                <button type="button" class="menu-btn" id="audio-toggle-btn" onclick="toggleAudio()" title="Mute audio" aria-label="Mute audio">
-                    <svg class="ui-icon icon-audio-on" aria-hidden="true"><use href="#i-volume"></use></svg>
-                    <svg class="ui-icon icon-audio-off" aria-hidden="true"><use href="#i-volume-off"></use></svg>
-                </button>
-                <button type="button" class="menu-btn" onclick="showModeMenu()" title="Main Menu" aria-label="Main Menu">
-                    <svg class="ui-icon" aria-hidden="true"><use href="#i-house"></use></svg>
-                </button>
-            </div>
-        </header>
+        <div class="match-chrome">
+            <header>
+                <h1>EMBER GRID</h1>
+                <div class="nav-group">
+                    <button type="button" class="menu-btn" onclick="showStatsModal()" title="Stats" aria-label="Stats">
+                        <svg class="ui-icon" aria-hidden="true"><use href="#i-stats"></use></svg>
+                    </button>
+                    <button type="button" class="menu-btn" onclick="showRulesModal()" title="Rules" aria-label="Rules">
+                        <svg class="ui-icon" aria-hidden="true"><use href="#i-book"></use></svg>
+                    </button>
+                    <button type="button" class="menu-btn" id="audio-toggle-btn" onclick="toggleAudio()" title="Mute audio" aria-label="Mute audio">
+                        <svg class="ui-icon icon-audio-on" aria-hidden="true"><use href="#i-volume"></use></svg>
+                        <svg class="ui-icon icon-audio-off" aria-hidden="true"><use href="#i-volume-off"></use></svg>
+                    </button>
+                    <button type="button" class="menu-btn" onclick="showModeMenu()" title="Main Menu" aria-label="Main Menu">
+                        <svg class="ui-icon" aria-hidden="true"><use href="#i-house"></use></svg>
+                    </button>
+                </div>
+            </header>
 
-        <div class="score-board">
-            <div class="score-pill score-blue" id="score-blue">Blue: -</div>
-            <div class="turn-indicator" id="turn-indicator">BATTLE</div>
-            <div class="score-pill score-red" id="score-red">Red: -</div>
+            <div class="score-board">
+                <div class="score-pill score-blue" id="score-blue">Blue: -</div>
+                <div class="turn-indicator" id="turn-indicator">BATTLE</div>
+                <div class="score-pill score-red" id="score-red">Red: -</div>
+            </div>
         </div>
 
         <div class="battlefield">
             <div id="top-area"></div>
-            <div class="board-wrap">
+            <div class="board-stage" id="board-stage">
                 <div class="grid" id="board-grid"></div>
             </div>
             <div id="bottom-area"></div>
@@ -3147,12 +4009,14 @@
             <h2 class="modal-title">Ember Grid</h2>
             <p class="brand-tag">The Base Set</p>
 
-            <div class="menu-section-title">Core Rules</div>
+            <div class="menu-section-title">How to Play</div>
             <div class="rules-compact">
-                <strong>🃏 The deck:</strong> Cards are dealt or drafted from a shared deck - the Base Set, 70 cards. Tribe Decks play one tribe of five. Every Ember card has an ability.<br>
-                <strong>⚔️ Capture:</strong> Play a card from your hand next to an enemy. If your touching stat is higher,
-                you capture it.<br>
-                <strong>🏆 Victory:</strong> <span id="victory-compact">Fill the 3x3. Most cards on the board wins. Leftover in hand does not count.</span>
+                <ul class="how-to-play">
+                    <li><strong>Play.</strong> Put a card from your hand onto an empty cell.</li>
+                    <li><strong>Capture.</strong> If your touching number is higher, you take that card.</li>
+                    <li><strong>Win.</strong> <span id="victory-compact">When the grid fills, most cards on the grid wins.</span></li>
+                </ul>
+                <p class="how-to-play-hint">Rules is the full book. Options holds the extra rules.</p>
             </div>
 
             <nav class="menu-links">
@@ -3191,7 +4055,7 @@
             </details>
             <div class="menu-foot">
                 <!-- Bump BUILD on every PR. Still pre-1.0, so this stays Alpha until 1.0 ships. -->
-                <p class="build-stamp">0.34 Alpha</p>
+                <button type="button" class="build-stamp" onclick="showChangelogModal()" title="Changelog">0.36 Alpha</button>
                 <p class="dev-note">Still in active development. Cards and rules may change.</p>
             </div>
         </div>
@@ -3204,52 +4068,262 @@
             <button type="button" class="modal-close" onclick="closeRulesModal()" aria-label="Close rules"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
             <h2 class="modal-title">Rules</h2>
 
-            <div class="menu-section-title" style="margin-top: 0;">The table</div>
+            <div class="menu-section-title" style="margin-top: 8px;">How to Play</div>
             <div class="expanded-rules-list">
                 <div class="rule-detail-item">
-                    <strong>The deck:</strong> The Base Set is 70 cards in fourteen tribes. Every Ember card has an ability. Shuffle it and deal two hands of five, or spread sixteen and draft until each hand is five.
+                    <strong>Your turn:</strong> Play one card from your hand onto an empty cell. Drag it, or tap the card then the cell.
                 </div>
                 <div class="rule-detail-item">
-                    <strong>League:</strong> You plus three named AI. Snake-draft twenty cards (five each), then a six-week double round-robin. You play each rival twice. Each meeting is best of three, and first player swaps so both get an opener. Their series resolve with the same engine and land on the table. Standings break ties by series wins, then game wins, then combined board score. Leftover and Ember/Classic lock at season start. All three AI use the Options difficulty. Backing out saves the season.
+                    <strong>Capture:</strong> Compare the touching sides. On a square grid that is top, right, bottom, and left. On a honeycomb, each card also has an upper-right and upper-left number, and you compare whichever sides touch. Strictly higher takes the enemy card.
                 </div>
                 <div class="rule-detail-item">
-                    <strong>Tribe Decks:</strong> Each deck is one tribe of five. Pick yours and the opponent's, or leave either one random. Same tribe on both sides is a mirror match.
+                    <strong>Ties:</strong> If the touching numbers are equal, nothing happens. Equalizer still captures on a tie. In Classic Mode, you can turn on Ties capture in Options so equal numbers capture too. Ember Mode never uses that setting.
                 </div>
                 <div class="rule-detail-item">
-                    <strong>Placement:</strong> On your turn, play one card from your hand onto an empty cell of the 3x3 grid.
-                </div>
-                <div class="rule-detail-item">
-                    <strong>Capturing:</strong> When your card touches an enemy card, compare touching values (Top,
-                    Right, Bottom, Left). If your attacking stat is strictly greater, you capture their card. Equalizer cards also capture on a tie. In Classic Mode, Options can turn on Ties capture so equal facings capture too. Ember Mode never uses that knob.
-                </div>
-                <div class="rule-detail-item">
-                    <strong>Victory:</strong> <span id="victory-rules">Two hands of five. After the board fills, most cards on the board wins. Leftover in hand does not count. Options can turn leftover scores on, which makes a 5-4 board a 5-5 draw.</span>
-                </div>
-                <div class="rule-detail-item">
-                    <strong>Stat Cap:</strong> Stats range from 1 to 10 (represented by A). Stat boosts cannot raise
-                    a value above 10.
+                    <strong>Hand:</strong> You always hold five cards. On a bigger grid, you draw another card after you play so you stay at five.
                 </div>
             </div>
 
-            <div class="menu-section-title">Ember Mode Abilities</div>
+            <div class="menu-section-title">How to Win</div>
             <div class="expanded-rules-list">
-                <div class="rule-detail-item"><strong>⚡ Buff:</strong> While this card sits there, adjacent friendly cards get +1 to all stats. Radiance tribe - Celestial, Fairy, Unicorn, Paladin, Angel.</div>
-                <div class="rule-detail-item"><strong>💀 Curse:</strong> On play, the strongest enemy loses 1 from all stats, then this card captures. Grave tribe - Ghost, Vampire, Skull, Zombie, Bat.</div>
-                <div class="rule-detail-item"><strong>💥 Blast:</strong> +2 to all stats on the turn this card is played. Beasts tribe - Dragon, T-Rex, Lion, Shark, Eagle.</div>
-                <div class="rule-detail-item"><strong>🦠 Poison:</strong> At the end of every turn, adjacent enemies lose 1 from all stats, then this card can capture. Vermin tribe - Spider, Scorpion, Snake, Frog, Beetle.</div>
-                <div class="rule-detail-item"><strong>⚖️ Equalizer:</strong> Captures when touching stats match. Balance tribe - Monk, Titan, Robot, Owl, Alien.</div>
-                <div class="rule-detail-item"><strong>💢 Spite:</strong> When this card is captured, the captor loses 1 from all stats. Wrath tribe - Cyclops, Gorilla, Wrath, Vendetta, Oni.</div>
-                <div class="rule-detail-item"><strong>🔇 Silence:</strong> Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel - neither silences anyone else. Hush tribe - Dread, Hush, Raven, Ninja, Cat.</div>
-                <div class="rule-detail-item"><strong>🔥 Cinder:</strong> On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange. Ember tribe - Scorch, Brand, Fox, Phoenix, Lizard.</div>
-                <div class="rule-detail-item"><strong>🔮 Bolt:</strong> On play, zaps a random enemy by -2 to all stats before this card captures. The zap can help this play steal that card. Arcane tribe - Wizard, Genie, Witch, Mage, Imp.</div>
-                <div class="rule-detail-item"><strong>❄️ Chill:</strong> While this card sits there, adjacent enemies are -1 to all stats. Counts for captures. Frost tribe - Frost, Wolf, Penguin, Polar, Seal.</div>
-                <div class="rule-detail-item"><strong>🪞 Parasite:</strong> On play, copies the ability of an adjacent enemy for the rest of the match. If that ability fires on play, it fires before this card captures. Host tribe - Mimic, Leech, Cuckoo, Doppel, Remora.</div>
-                <div class="rule-detail-item"><strong>🌀 Siphon:</strong> On play, steals 1 from each adjacent enemy's touching stat and adds it permanently to this card's opposite facing. Well tribe - Kraken, Drain, Lamprey, Mosquito, Siphon.</div>
-                <div class="rule-detail-item"><strong>⏳ Pendulum:</strong> At the start of every turn, this card swaps its top/bottom stats with its left/right stats. Tide tribe - Pendulum, Tide, Moon, Hourglass, Gyro.</div>
-                <div class="rule-detail-item"><strong>🌱 Symbiosis:</strong> Plus 1 to all stats for each capture this card's player has made this game. The numbers update in your hand. After it grows, this card can capture. Grove tribe - Worldtree, Mycelium, Coral, Lichen, Ivy.</div>
+                <div class="rule-detail-item">
+                    <strong>The grid:</strong> When every cell is filled, whoever owns more cards on the grid wins. Cards still in your hand do not count unless Leftover scores is on in Options.
+                </div>
+                <div class="rule-detail-item">
+                    <strong>Stats:</strong> Numbers run from 1 to 10 (shown as A). Boosts cannot go above 10. Live numbers turn gold when they go up and red when they go down.
+                </div>
+            </div>
+
+            <div class="menu-section-title">The Table</div>
+            <div class="expanded-rules-list">
+                <div class="rule-detail-item">
+                    <strong>Grid:</strong> The usual grid is 3×3, five cards each. In Options you can play 4×4 (eight dealt), 5×5 (thirteen dealt), or a Honeycomb of nineteen cells (ten dealt). You still start with five in hand. League and Tribe Decks always use 3×3.
+                </div>
+                <div class="rule-detail-item">
+                    <strong>The deck:</strong> The Base Set is 70 cards in fourteen tribes. Every Ember card has an ability. Classic Mode turns abilities off.
+                </div>
+            </div>
+
+            <div class="menu-section-title">Game Modes</div>
+            <div class="expanded-rules-list">
+                <div class="rule-detail-item">
+                    <strong>Deal Hands:</strong> Shuffle the Base Set and deal cards for the grid size in Options.
+                </div>
+                <div class="rule-detail-item">
+                    <strong>Draft Hands:</strong> Take turns picking cards, back and forth, until both sides have a full deal. Five each on 3×3, eight each on 4×4, thirteen each on 5×5, ten each on Honeycomb.
+                </div>
+                <div class="rule-detail-item">
+                    <strong>Tribe Decks:</strong> Each side gets one tribe of five on 3×3. Pick both decks, or leave either one random. Same tribe is a mirror match.
+                </div>
+                <div class="rule-detail-item">
+                    <strong>League:</strong> You plus Ash, Vesper, and Rook. Draft twenty cards (five each), then play a season on 3×3 where everyone plays everyone twice. Each meeting is best of three. Rankings use series wins, then game wins, then grid score. Leftover scores and Ember/Classic stay locked for the season.
+                </div>
+                <div class="rule-detail-item">
+                    <strong>Ember / Classic:</strong> Ember Mode uses abilities. Classic Mode is numbers only. Set this in Options before you deal.
+                </div>
+            </div>
+
+            <div class="menu-section-title">Abilities</div>
+            <div class="expanded-rules-list">
+                <div class="rule-detail-item"><strong>⚡ Buff:</strong> Adjacent allies +1 while this sits.</div>
+                <div class="rule-detail-item"><strong>💀 Curse:</strong> On play, the strongest enemy -1, then this card captures.</div>
+                <div class="rule-detail-item"><strong>💥 Blast:</strong> +2 to all stats on the play turn.</div>
+                <div class="rule-detail-item"><strong>🦠 Poison:</strong> At the end of every turn, neighboring enemies -1, then this card can capture.</div>
+                <div class="rule-detail-item"><strong>⚖️ Equalizer:</strong> Captures when touching stats match.</div>
+                <div class="rule-detail-item"><strong>💢 Spite:</strong> When this is captured, the captor -1 to all stats.</div>
+                <div class="rule-detail-item"><strong>🔇 Silence:</strong> Adjacent enemies lose their abilities. Two Silence next to each other cancel.</div>
+                <div class="rule-detail-item"><strong>🔥 Cinder:</strong> On play, a random empty cell becomes Cindered (-1). The cell glows orange.</div>
+                <div class="rule-detail-item"><strong>🔮 Bolt:</strong> On play, a random enemy -2, then this card captures.</div>
+                <div class="rule-detail-item"><strong>❄️ Chill:</strong> Adjacent enemies -1 while this sits. Counts for captures.</div>
+                <div class="rule-detail-item"><strong>🪞 Parasite:</strong> On play, copies an adjacent enemy's ability. If that ability fires on play, it fires before this card captures.</div>
+                <div class="rule-detail-item"><strong>🌀 Siphon:</strong> On play, steals 1 from each adjacent enemy's touching number onto the opposite side of this card.</div>
+                <div class="rule-detail-item"><strong>⏳ Pendulum:</strong> At the start of every turn, swaps top and bottom with left and right.</div>
+                <div class="rule-detail-item"><strong>🌱 Symbiosis:</strong> +1 to all stats for each capture this player has made this game. The numbers update in your hand.</div>
             </div>
 
             <button class="btn btn-alt btn-dismiss" onclick="closeRulesModal()">Close</button>
+        </div>
+    </div>
+
+    <!-- Changelog Modal -->
+    <div id="changelog-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, closeChangelogModal)">
+        <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button type="button" class="modal-close" onclick="closeChangelogModal()" aria-label="Close changelog"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+            <h2 class="modal-title">Changelog</h2>
+            <p class="set-blurb">Alpha stamps. Newest first. Tap the version on the menu anytime.</p>
+            <div class="changelog-list">
+                <section class="changelog-ver">
+                    <h3>0.36 Alpha</h3>
+                    <ul>
+                        <li>Tutorial on the menu is three replayable lessons. Each turn shows you which card to play and where.</li>
+                        <li>Capture is the fight, ties, and the Battle log. On play is abilities that fire when you play a card. On the board is abilities that keep working.</li>
+                        <li>Tutorial matches are not added to your record.</li>
+                    </ul>
+                </section>
+                <section class="changelog-ver">
+                    <h3>0.35 Alpha</h3>
+                    <ul>
+                        <li>Honeycomb stays in Options, with 3×3, 4×4, and 5×5. The title screen is just the menu again, centered.</li>
+                        <li>The grid stays put when the other hand runs out.</li>
+                        <li>Viewing the final board shows Battle log once.</li>
+                        <li>Honeycomb draft cards fit inside the draft window.</li>
+                    </ul>
+                </section>
+                <section class="changelog-ver">
+                    <h3>0.34 Alpha</h3>
+                    <ul>
+                        <li>Honeycomb in Options. Nineteen cells. Ten dealt, open five, draw after you play. League and Tribe Decks stay 3×3.</li>
+                        <li>Each card gains an upper-left and upper-right number, so every side of a hex has a facing. Square grids still use the original four.</li>
+                        <li>Base Set is 70 cards in fourteen tribes. Poison can capture after it lowers neighbors. Grove grows with captures. The Tide card is Clock.</li>
+                    </ul>
+                </section>
+                <section class="changelog-ver">
+                    <h3>0.33 Alpha</h3>
+                    <ul>
+                        <li>4×4 and 5×5 in Options. League and Tribe Decks stay 3×3.</li>
+                        <li>Hands stay five. Bigger deals start with five in hand and draw after each play. 3×3 still deals five with no draw.</li>
+                        <li>A drawn card flies into the hand so the refill is obvious.</li>
+                        <li>Selected hand cards on 4×4 and 5×5 sit above the grid so the top number stays readable.</li>
+                        <li>Replay / New Hands on the final grid stay centered on the bigger tables.</li>
+                        <li>Menu How to Play is three steps with no numbers. Rules is grouped: How to Play, How to Win, The Table, Game Modes, and Abilities.</li>
+                        <li>4×4 and 5×5 card faces on desktop use larger glyphs so the art matches the bigger cells. Phone layout is unchanged.</li>
+                        <li>The 5×5 draft pool stays inside the window. Ability rules keep the mechanic icon and description.</li>
+                    </ul>
+                </section>
+                <section class="changelog-ver">
+                    <h3>0.32 Alpha</h3>
+                    <ul>
+                        <li>Classic Mode can turn on Ties capture, off by default.</li>
+                        <li>Ember Mode never uses Ties capture, so Equalizer stays the only tie capture.</li>
+                    </ul>
+                </section>
+                <section class="changelog-ver">
+                    <h3>0.31 Alpha</h3>
+                    <ul>
+                        <li>Each ability has a short table effect when it actually lands.</li>
+                        <li>Haptics in Options, off by default. Short pulses on play, ability hits, and captures.</li>
+                    </ul>
+                </section>
+                <section class="changelog-ver">
+                    <h3>0.30 Alpha</h3>
+                    <ul>
+                        <li>Ember League is a six-week double round-robin. Each meeting is best of three.</li>
+                    </ul>
+                </section>
+                <section class="changelog-ver">
+                    <h3>0.29 Alpha</h3>
+                    <ul>
+                        <li>Ember League: you plus Ash, Vesper, and Rook. Snake-draft twenty, then a season on 3×3.</li>
+                    </ul>
+                </section>
+                <section class="changelog-ver">
+                    <h3>0.28 Alpha</h3>
+                    <ul>
+                        <li>Leftover-off by default. Most cards on the board wins.</li>
+                        <li>Leftover scores lives in Options if you want the unplayed card to count.</li>
+                    </ul>
+                </section>
+                <section class="changelog-ver">
+                    <h3>0.27 Alpha</h3>
+                    <ul>
+                        <li>Battle log window. Captures still flash on the cards.</li>
+                        <li>Facing pass: Paladin, Celestial, and Dragon retuned.</li>
+                    </ul>
+                </section>
+                <section class="changelog-ver">
+                    <h3>0.26 Alpha</h3>
+                    <ul>
+                        <li>Hush vs Hush cancel. Two Silence cards next to each other no longer strip the rest of the board.</li>
+                    </ul>
+                </section>
+                <section class="changelog-ver">
+                    <h3>0.25 Alpha</h3>
+                    <ul>
+                        <li>Live numbers tint gold when they sit above the printed face and red when they sit below.</li>
+                    </ul>
+                </section>
+                <section class="changelog-ver">
+                    <h3>0.24 Alpha</h3>
+                    <ul>
+                        <li>Share stays on the final-board bar with Replay and New Hands.</li>
+                    </ul>
+                </section>
+                <section class="changelog-ver">
+                    <h3>0.23 Alpha</h3>
+                    <ul>
+                        <li>Public roadmap for what ships next.</li>
+                    </ul>
+                </section>
+                <section class="changelog-ver">
+                    <h3>0.22 Alpha</h3>
+                    <ul>
+                        <li>Match Over is a compact card so the result does not wrap under the close control.</li>
+                    </ul>
+                </section>
+                <section class="changelog-ver">
+                    <h3>0.21 Alpha</h3>
+                    <ul>
+                        <li>Slimmer Share on Match Over. Copy the code; no native share sheet.</li>
+                    </ul>
+                </section>
+                <section class="changelog-ver">
+                    <h3>0.20 Alpha</h3>
+                    <ul>
+                        <li>Share a match code or link so someone else can play the same deal.</li>
+                    </ul>
+                </section>
+                <section class="changelog-ver">
+                    <h3>0.19 Alpha</h3>
+                    <ul>
+                        <li>Fix the ghost close button that lingered after a window faded out on phones.</li>
+                    </ul>
+                </section>
+                <section class="changelog-ver">
+                    <h3>0.18 Alpha</h3>
+                    <ul>
+                        <li>Toolbar SVG icons, modal motion, and ember particles on the mobile menu.</li>
+                    </ul>
+                </section>
+                <section class="changelog-ver">
+                    <h3>0.17 Alpha</h3>
+                    <ul>
+                        <li>Ability names on cards in play. Windows card faces no longer go missing.</li>
+                    </ul>
+                </section>
+                <section class="changelog-ver">
+                    <h3>0.16 Alpha</h3>
+                    <ul>
+                        <li>Ignore the leftover tap that used to land on Match Over.</li>
+                    </ul>
+                </section>
+                <section class="changelog-ver">
+                    <h3>0.15 Alpha</h3>
+                    <ul>
+                        <li>Poison now only hurts neighboring enemies.</li>
+                    </ul>
+                </section>
+                <section class="changelog-ver">
+                    <h3>0.14 Alpha</h3>
+                    <ul>
+                        <li>Bolt restored. Cinder stays a five-card tribe.</li>
+                    </ul>
+                </section>
+                <section class="changelog-ver">
+                    <h3>0.13 Alpha</h3>
+                    <ul>
+                        <li>Tribe Decks: pick a tribe for you and the opponent, or leave either one random.</li>
+                        <li>Tap a played card to pin its ability tip on mobile.</li>
+                    </ul>
+                </section>
+                <section class="changelog-ver">
+                    <h3>0.12 Alpha</h3>
+                    <ul>
+                        <li>Alpha build stamp on the main menu. Pre-1.0, so the number moves on every PR.</li>
+                    </ul>
+                </section>
+            </div>
+            <button class="btn btn-alt btn-dismiss" onclick="closeChangelogModal()">Close</button>
         </div>
     </div>
 
@@ -3298,8 +4372,7 @@
                 </select>
             </div>
             <div id="ruleset-desc" class="ruleset-desc-box">
-                <strong>Ember Mode:</strong> Every card has an ability. Fourteen tribes share the pile: Buff, Curse, Blast,
-                Poison, Equalizer, Spite, Silence, Cinder, Bolt, Chill, Parasite, Siphon, Pendulum, and Symbiosis.
+                <strong>Ember Mode:</strong> Every card has an ability. Fourteen tribes.
             </div>
             <div id="classic-ties-block" hidden>
                 <label class="settings-row" for="classic-ties-check">
@@ -3307,7 +4380,7 @@
                     <input type="checkbox" id="classic-ties-check" class="settings-check" onchange="updateClassicTies(this.checked)">
                 </label>
                 <div id="classic-ties-desc" class="ruleset-desc-box">
-                    <strong>Off (default):</strong> Equal facings do nothing. On: you capture when touching stats match. Ember Mode ignores this so Equalizer stays unique.
+                    <strong>Off (default):</strong> Equal numbers do nothing.
                 </div>
             </div>
             <div class="settings-stack">
@@ -3318,6 +4391,18 @@
                     <option value="hard">Hard</option>
                 </select>
             </div>
+            <div class="settings-stack">
+                <span>Grid</span>
+                <div class="grid-choices" role="group" aria-label="Grid">
+                    <button type="button" class="grid-choice" data-grid-choice="3" onclick="updatePreferredGrid('3')">3×3</button>
+                    <button type="button" class="grid-choice" data-grid-choice="4" onclick="updatePreferredGrid('4')">4×4</button>
+                    <button type="button" class="grid-choice" data-grid-choice="5" onclick="updatePreferredGrid('5')">5×5</button>
+                    <button type="button" class="grid-choice" data-grid-choice="hex" onclick="updatePreferredGrid('hex')">Honeycomb</button>
+                </div>
+            </div>
+            <div id="grid-size-desc" class="ruleset-desc-box">
+                <strong>3×3 (default):</strong> Five each. League and Tribe Decks always use this size.
+            </div>
             <label class="settings-row" for="open-hands-check">
                 <span>Show Hands</span>
                 <input type="checkbox" id="open-hands-check" class="settings-check" onchange="updateOpenHands(this.checked)">
@@ -3327,14 +4412,14 @@
                 <input type="checkbox" id="leftover-check" class="settings-check" onchange="updateLeftoverScores(this.checked)">
             </label>
             <div id="leftover-desc" class="ruleset-desc-box">
-                <strong>Off (default):</strong> Only the board counts. Unplayed cards are choices, not points.
+                <strong>Off (default):</strong> Only cards on the grid count. Cards left in hand are choices, not points.
             </div>
             <label class="settings-row" for="haptics-check">
                 <span>Haptics</span>
                 <input type="checkbox" id="haptics-check" class="settings-check" onchange="updateHaptics(this.checked)">
             </label>
             <div class="ruleset-desc-box">
-                <strong>Off (default):</strong> No vibration. On: a short pulse when a card plays, an ability hits, or a capture lands. Phones that support it only.
+                <strong>Off (default):</strong> No vibration. On: a short pulse on play, ability hits, and captures. Phones that support it only.
             </div>
             <p id="league-options-note" class="ruleset-desc-box" hidden>
                 An Ember League is in progress. Leftover, Ember/Classic, and Classic Ties capture are locked for that season. Ash, Vesper, and Rook all use the AI difficulty set here.
@@ -3399,7 +4484,7 @@
         <div class="modal-content" onclick="event.stopPropagation()">
             <button type="button" class="modal-close" onclick="cancelDeckPicker()" aria-label="Cancel deck pick"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
             <h2 class="modal-title">Tribe Decks</h2>
-            <p class="draft-order">Each deck is one tribe of five. Pick yours and the opponent's, or leave either one random.</p>
+            <p class="draft-order">Each deck is one tribe of five on the 3×3 table. Pick yours and the opponent's, or leave either one random.</p>
             <div class="menu-section-title" style="margin-top: 8px;">Your deck</div>
             <div id="deck-you-picks" class="deck-picks"></div>
             <div class="menu-section-title">Opponent</div>
@@ -3413,7 +4498,7 @@
     <div id="gameover-modal" class="modal modal-ember hidden" onclick="onGameoverBackdrop(event)">
         <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="viewFinalBoard()" aria-label="View board"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+            <button type="button" class="modal-close" onclick="viewFinalBoard()" aria-label="View grid"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
             <h2 id="gameover-title" class="modal-title">Match Over</h2>
             <div class="gameover-score" aria-live="polite">
                 <div class="score-pill score-blue"><span id="gameover-blue-label">Blue</span> <strong id="gameover-blue">-</strong></div>
@@ -3441,7 +4526,7 @@
                 <button class="btn btn-alt" id="gameover-league-table" onclick="openLeagueHubFromGameover()">League Table</button>
             </div>
             <div class="gameover-links">
-                <button type="button" class="gameover-link" onclick="viewFinalBoard()">View board</button>
+                <button type="button" class="gameover-link" onclick="viewFinalBoard()">View grid</button>
                 <button type="button" class="gameover-link" onclick="showBattleLogModal()">Battle log</button>
                 <button type="button" class="gameover-link" onclick="closeGameoverToMenu()">Menu</button>
             </div>
@@ -3466,7 +4551,7 @@
         <div class="modal-content" onclick="event.stopPropagation()">
             <button type="button" class="modal-close" onclick="closeTutorialMenu()" aria-label="Close tutorial"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
             <h2 class="modal-title">Tutorial</h2>
-            <p class="tutorial-blurb">Three short matches you can replay. Each turn tells you which card to play and where. Their deck is weak, so the scripted spots win. These matches are not added to your record.</p>
+            <p class="tutorial-blurb">Three short matches you can replay. Each turn shows you which card to play and where. Their deck is weak, so those plays win. These matches are not added to your record.</p>
             <div id="tutorial-lessons"></div>
             <button class="btn btn-muted btn-dismiss" onclick="closeTutorialMenu()">Back</button>
         </div>
@@ -3637,76 +4722,76 @@
 
         // --- Card Database ---
         const masterCards = [
-            {name: "Celestial", emoji: "✨", baseStats: [10, 2, 3, 4], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.'}},
-            {name: "Fairy", emoji: "🧚", baseStats: [3, 4, 3, 6], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.'}},
-            {name: "Unicorn", emoji: "🦄", baseStats: [4, 4, 5, 7], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.'}},
-            {name: "Paladin", emoji: "🛡️", baseStats: [4, 8, 7, 2], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.'}},
-            {name: "Angel", emoji: "👼", baseStats: [4, 5, 4, 6], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.'}},
-            {name: "Ghost", emoji: "👻", baseStats: [3, 7, 2, 5], ability: {type: 'curse_adj', icon: '💀', desc: 'On play, the strongest enemy loses 1 from all stats, then this card captures.'}},
-            {name: "Vampire", emoji: "🧛", baseStats: [7, 3, 3, 6], ability: {type: 'curse_adj', icon: '💀', desc: 'On play, the strongest enemy loses 1 from all stats, then this card captures.'}},
-            {name: "Skull", emoji: "💀", baseStats: [8, 2, 4, 3], ability: {type: 'curse_adj', icon: '💀', desc: 'On play, the strongest enemy loses 1 from all stats, then this card captures.'}},
-            {name: "Zombie", emoji: "🧟", baseStats: [4, 2, 6, 4], ability: {type: 'curse_adj', icon: '💀', desc: 'On play, the strongest enemy loses 1 from all stats, then this card captures.'}},
-            {name: "Bat", emoji: "🦇", baseStats: [5, 6, 3, 4], ability: {type: 'curse_adj', icon: '💀', desc: 'On play, the strongest enemy loses 1 from all stats, then this card captures.'}},
-            {name: "Dragon", emoji: "🐲", baseStats: [9, 7, 4, 2], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
-            {name: "T-Rex", emoji: "🦖", baseStats: [8, 5, 6, 2], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
-            {name: "Lion", emoji: "🦁", baseStats: [7, 6, 4, 2], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
-            {name: "Shark", emoji: "🦈", baseStats: [7, 4, 5, 4], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
-            {name: "Eagle", emoji: "🦅", baseStats: [6, 6, 3, 3], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
-            {name: "Spider", emoji: "🕷️", baseStats: [4, 6, 5, 3], ability: {type: 'poison', icon: '🦠', desc: 'At the end of every turn, adjacent enemies lose 1 from all stats, then this card can capture.'}},
-            {name: "Scorpion", emoji: "🦂", baseStats: [6, 4, 7, 2], ability: {type: 'poison', icon: '🦠', desc: 'At the end of every turn, adjacent enemies lose 1 from all stats, then this card can capture.'}},
-            {name: "Snake", emoji: "🐍", baseStats: [5, 4, 4, 5], ability: {type: 'poison', icon: '🦠', desc: 'At the end of every turn, adjacent enemies lose 1 from all stats, then this card can capture.'}},
-            {name: "Frog", emoji: "🐸", baseStats: [2, 4, 5, 3], ability: {type: 'poison', icon: '🦠', desc: 'At the end of every turn, adjacent enemies lose 1 from all stats, then this card can capture.'}},
-            {name: "Beetle", emoji: "🪲", baseStats: [4, 5, 5, 3], ability: {type: 'poison', icon: '🦠', desc: 'At the end of every turn, adjacent enemies lose 1 from all stats, then this card can capture.'}},
-            {name: "Monk", emoji: "☯️", baseStats: [5, 5, 5, 5], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
-            {name: "Titan", emoji: "🗿", baseStats: [10, 3, 4, 2], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
-            {name: "Robot", emoji: "🤖", baseStats: [5, 5, 5, 2], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
-            {name: "Owl", emoji: "🦉", baseStats: [5, 3, 2, 6], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
-            {name: "Alien", emoji: "👽", baseStats: [7, 3, 5, 2], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
-            {name: "Cyclops", emoji: "👹", baseStats: [8, 4, 7, 1], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
-            {name: "Gorilla", emoji: "🦍", baseStats: [7, 5, 6, 3], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
-            {name: "Wrath", emoji: "😡", baseStats: [6, 4, 3, 5], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
-            {name: "Vendetta", emoji: "😤", baseStats: [4, 6, 5, 3], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
-            {name: "Oni", emoji: "👺", baseStats: [6, 5, 4, 4], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
-            {name: "Dread", emoji: "😱", baseStats: [3, 6, 5, 4], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel.'}},
-            {name: "Hush", emoji: "🤫", baseStats: [5, 4, 5, 4], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel.'}},
-            {name: "Raven", emoji: "🐦‍⬛", baseStats: [4, 6, 4, 5], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel.'}},
-            {name: "Ninja", emoji: "🥷", baseStats: [5, 6, 3, 5], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel.'}},
-            {name: "Cat", emoji: "🐱", baseStats: [2, 5, 7, 3], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel.'}},
-            {name: "Scorch", emoji: "🥵", baseStats: [5, 5, 3, 5], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
-            {name: "Brand", emoji: "🫠", baseStats: [4, 5, 6, 3], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
-            {name: "Fox", emoji: "🦊", baseStats: [6, 5, 2, 3], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
-            {name: "Phoenix", emoji: "🐦‍🔥", baseStats: [5, 4, 6, 4], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
-            {name: "Lizard", emoji: "🦎", baseStats: [5, 4, 5, 4], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
-            {name: "Wizard", emoji: "🧙", baseStats: [5, 7, 3, 5], ability: {type: 'bolt', icon: '🔮', desc: 'On play, zaps a random enemy by -2 to all stats before this card captures. The zap can help this play steal that card.'}},
-            {name: "Genie", emoji: "🧞", baseStats: [6, 5, 5, 5], ability: {type: 'bolt', icon: '🔮', desc: 'On play, zaps a random enemy by -2 to all stats before this card captures. The zap can help this play steal that card.'}},
-            {name: "Witch", emoji: "🧙‍♀️", baseStats: [4, 6, 5, 4], ability: {type: 'bolt', icon: '🔮', desc: 'On play, zaps a random enemy by -2 to all stats before this card captures. The zap can help this play steal that card.'}},
-            {name: "Mage", emoji: "🪄", baseStats: [6, 3, 6, 4], ability: {type: 'bolt', icon: '🔮', desc: 'On play, zaps a random enemy by -2 to all stats before this card captures. The zap can help this play steal that card.'}},
-            {name: "Imp", emoji: "👿", baseStats: [3, 6, 4, 5], ability: {type: 'bolt', icon: '🔮', desc: 'On play, zaps a random enemy by -2 to all stats before this card captures. The zap can help this play steal that card.'}},
-            {name: "Frost", emoji: "🥶", baseStats: [4, 5, 4, 6], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, adjacent enemies are -1 to all stats. Counts for captures.'}},
-            {name: "Wolf", emoji: "🐺", baseStats: [6, 5, 4, 3], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, adjacent enemies are -1 to all stats. Counts for captures.'}},
-            {name: "Penguin", emoji: "🐧", baseStats: [3, 4, 6, 5], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, adjacent enemies are -1 to all stats. Counts for captures.'}},
-            {name: "Polar", emoji: "🐻‍❄️", baseStats: [6, 3, 7, 3], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, adjacent enemies are -1 to all stats. Counts for captures.'}},
-            {name: "Seal", emoji: "🦭", baseStats: [3, 5, 5, 5], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, adjacent enemies are -1 to all stats. Counts for captures.'}},
-            {name: "Mimic", emoji: "🪞", baseStats: [3, 2, 4, 10], ability: {type: 'parasite', icon: '🪞', desc: 'On play, copies the ability of an adjacent enemy for the rest of the match. If that ability fires on play, it fires before this card captures.'}},
-            {name: "Leech", emoji: "🩸", baseStats: [5, 6, 3, 5], ability: {type: 'parasite', icon: '🪞', desc: 'On play, copies the ability of an adjacent enemy for the rest of the match. If that ability fires on play, it fires before this card captures.'}},
-            {name: "Cuckoo", emoji: "🐣", baseStats: [4, 7, 3, 5], ability: {type: 'parasite', icon: '🪞', desc: 'On play, copies the ability of an adjacent enemy for the rest of the match. If that ability fires on play, it fires before this card captures.'}},
-            {name: "Doppel", emoji: "👥", baseStats: [5, 5, 5, 4], ability: {type: 'parasite', icon: '🪞', desc: 'On play, copies the ability of an adjacent enemy for the rest of the match. If that ability fires on play, it fires before this card captures.'}},
-            {name: "Remora", emoji: "🐟", baseStats: [3, 6, 4, 6], ability: {type: 'parasite', icon: '🪞', desc: 'On play, copies the ability of an adjacent enemy for the rest of the match. If that ability fires on play, it fires before this card captures.'}},
-            {name: "Kraken", emoji: "🦑", baseStats: [4, 9, 3, 4], ability: {type: 'siphon', icon: '🌀', desc: 'On play, steals 1 from each adjacent enemy\'s touching stat and adds it permanently to this card\'s opposite facing.'}},
-            {name: "Drain", emoji: "💧", baseStats: [6, 4, 5, 4], ability: {type: 'siphon', icon: '🌀', desc: 'On play, steals 1 from each adjacent enemy\'s touching stat and adds it permanently to this card\'s opposite facing.'}},
-            {name: "Lamprey", emoji: "🪱", baseStats: [4, 5, 6, 4], ability: {type: 'siphon', icon: '🌀', desc: 'On play, steals 1 from each adjacent enemy\'s touching stat and adds it permanently to this card\'s opposite facing.'}},
-            {name: "Mosquito", emoji: "🦟", baseStats: [3, 7, 3, 6], ability: {type: 'siphon', icon: '🌀', desc: 'On play, steals 1 from each adjacent enemy\'s touching stat and adds it permanently to this card\'s opposite facing.'}},
-            {name: "Siphon", emoji: "🌀", baseStats: [5, 6, 4, 4], ability: {type: 'siphon', icon: '🌀', desc: 'On play, steals 1 from each adjacent enemy\'s touching stat and adds it permanently to this card\'s opposite facing.'}},
-            {name: "Pendulum", emoji: "⏳", baseStats: [8, 2, 8, 2], ability: {type: 'pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top/bottom stats with its left/right stats.'}},
-            {name: "Tide", emoji: "🌊", baseStats: [7, 3, 6, 3], ability: {type: 'pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top/bottom stats with its left/right stats.'}},
-            {name: "Moon", emoji: "🌙", baseStats: [2, 7, 2, 8], ability: {type: 'pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top/bottom stats with its left/right stats.'}},
-            {name: "Hourglass", emoji: "⌛", baseStats: [6, 3, 7, 3], ability: {type: 'pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top/bottom stats with its left/right stats.'}},
-            {name: "Gyro", emoji: "🪀", baseStats: [7, 2, 6, 4], ability: {type: 'pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top/bottom stats with its left/right stats.'}},
-            {name: "Worldtree", emoji: "🌳", baseStats: [2, 10, 3, 2], ability: {type: 'symbiosis', icon: '🌱', desc: 'Plus 1 to all stats for each capture this card\'s player has made this game. The numbers update in your hand. After it grows, this card can capture.'}},
-            {name: "Mycelium", emoji: "🍄", baseStats: [4, 4, 4, 4], ability: {type: 'symbiosis', icon: '🌱', desc: 'Plus 1 to all stats for each capture this card\'s player has made this game. The numbers update in your hand. After it grows, this card can capture.'}},
-            {name: "Coral", emoji: "🪸", baseStats: [5, 3, 5, 3], ability: {type: 'symbiosis', icon: '🌱', desc: 'Plus 1 to all stats for each capture this card\'s player has made this game. The numbers update in your hand. After it grows, this card can capture.'}},
-            {name: "Lichen", emoji: "🌿", baseStats: [3, 5, 4, 4], ability: {type: 'symbiosis', icon: '🌱', desc: 'Plus 1 to all stats for each capture this card\'s player has made this game. The numbers update in your hand. After it grows, this card can capture.'}},
-            {name: "Ivy", emoji: "🍃", baseStats: [4, 5, 3, 4], ability: {type: 'symbiosis', icon: '🌱', desc: 'Plus 1 to all stats for each capture this card\'s player has made this game. The numbers update in your hand. After it grows, this card can capture.'}}
+            {name: "Celestial", emoji: "✨", baseStats: [10, 2, 3, 4], hexStats: [8, 7], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.'}},
+            {name: "Fairy", emoji: "🧚", baseStats: [3, 4, 3, 6], hexStats: [3, 4], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.'}},
+            {name: "Unicorn", emoji: "🦄", baseStats: [4, 4, 5, 7], hexStats: [4, 3], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.'}},
+            {name: "Paladin", emoji: "🛡️", baseStats: [4, 8, 7, 2], hexStats: [5, 6], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.'}},
+            {name: "Angel", emoji: "👼", baseStats: [4, 5, 4, 6], hexStats: [6, 6], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.'}},
+            {name: "Ghost", emoji: "👻", baseStats: [3, 7, 2, 5], hexStats: [7, 6], ability: {type: 'curse_adj', icon: '💀', desc: 'On play, the strongest enemy loses 1 from all stats, then this card captures.'}},
+            {name: "Vampire", emoji: "🧛", baseStats: [7, 3, 3, 6], hexStats: [7, 5], ability: {type: 'curse_adj', icon: '💀', desc: 'On play, the strongest enemy loses 1 from all stats, then this card captures.'}},
+            {name: "Skull", emoji: "💀", baseStats: [8, 2, 4, 3], hexStats: [4, 4], ability: {type: 'curse_adj', icon: '💀', desc: 'On play, the strongest enemy loses 1 from all stats, then this card captures.'}},
+            {name: "Zombie", emoji: "🧟", baseStats: [4, 2, 6, 4], hexStats: [1, 2], ability: {type: 'curse_adj', icon: '💀', desc: 'On play, the strongest enemy loses 1 from all stats, then this card captures.'}},
+            {name: "Bat", emoji: "🦇", baseStats: [5, 6, 3, 4], hexStats: [7, 4], ability: {type: 'curse_adj', icon: '💀', desc: 'On play, the strongest enemy loses 1 from all stats, then this card captures.'}},
+            {name: "Dragon", emoji: "🐲", baseStats: [9, 7, 4, 2], hexStats: [6, 6], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
+            {name: "T-Rex", emoji: "🦖", baseStats: [8, 5, 6, 2], hexStats: [8, 4], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
+            {name: "Lion", emoji: "🦁", baseStats: [7, 6, 4, 2], hexStats: [7, 6], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
+            {name: "Shark", emoji: "🦈", baseStats: [7, 4, 5, 4], hexStats: [7, 5], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
+            {name: "Eagle", emoji: "🦅", baseStats: [6, 6, 3, 3], hexStats: [3, 3], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
+            {name: "Spider", emoji: "🕷️", baseStats: [4, 6, 5, 3], hexStats: [7, 3], ability: {type: 'poison', icon: '🦠', desc: 'At the end of every turn, adjacent enemies lose 1 from all stats, then this card can capture.'}},
+            {name: "Scorpion", emoji: "🦂", baseStats: [6, 4, 7, 2], hexStats: [5, 6], ability: {type: 'poison', icon: '🦠', desc: 'At the end of every turn, adjacent enemies lose 1 from all stats, then this card can capture.'}},
+            {name: "Snake", emoji: "🐍", baseStats: [5, 4, 4, 5], hexStats: [6, 5], ability: {type: 'poison', icon: '🦠', desc: 'At the end of every turn, adjacent enemies lose 1 from all stats, then this card can capture.'}},
+            {name: "Frog", emoji: "🐸", baseStats: [2, 4, 5, 3], hexStats: [2, 5], ability: {type: 'poison', icon: '🦠', desc: 'At the end of every turn, adjacent enemies lose 1 from all stats, then this card can capture.'}},
+            {name: "Beetle", emoji: "🪲", baseStats: [4, 5, 5, 3], hexStats: [4, 3], ability: {type: 'poison', icon: '🦠', desc: 'At the end of every turn, adjacent enemies lose 1 from all stats, then this card can capture.'}},
+            {name: "Monk", emoji: "☯️", baseStats: [5, 5, 5, 5], hexStats: [4, 5], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
+            {name: "Titan", emoji: "🗿", baseStats: [10, 3, 4, 2], hexStats: [5, 6], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
+            {name: "Robot", emoji: "🤖", baseStats: [5, 5, 5, 2], hexStats: [7, 6], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
+            {name: "Owl", emoji: "🦉", baseStats: [5, 3, 2, 6], hexStats: [3, 4], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
+            {name: "Alien", emoji: "👽", baseStats: [7, 3, 5, 2], hexStats: [3, 5], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
+            {name: "Cyclops", emoji: "👹", baseStats: [8, 4, 7, 1], hexStats: [7, 7], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
+            {name: "Gorilla", emoji: "🦍", baseStats: [7, 5, 6, 3], hexStats: [8, 7], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
+            {name: "Wrath", emoji: "😡", baseStats: [6, 4, 3, 5], hexStats: [4, 6], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
+            {name: "Vendetta", emoji: "😤", baseStats: [4, 6, 5, 3], hexStats: [3, 2], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
+            {name: "Oni", emoji: "👺", baseStats: [6, 5, 4, 4], hexStats: [4, 3], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
+            {name: "Dread", emoji: "😱", baseStats: [3, 6, 5, 4], hexStats: [7, 4], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel.'}},
+            {name: "Hush", emoji: "🤫", baseStats: [5, 4, 5, 4], hexStats: [6, 6], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel.'}},
+            {name: "Raven", emoji: "🐦‍⬛", baseStats: [4, 6, 4, 5], hexStats: [6, 3], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel.'}},
+            {name: "Ninja", emoji: "🥷", baseStats: [5, 6, 3, 5], hexStats: [6, 5], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel.'}},
+            {name: "Cat", emoji: "🐱", baseStats: [2, 5, 7, 3], hexStats: [5, 2], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel.'}},
+            {name: "Scorch", emoji: "🥵", baseStats: [5, 5, 3, 5], hexStats: [3, 7], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
+            {name: "Brand", emoji: "🫠", baseStats: [4, 5, 6, 3], hexStats: [6, 4], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
+            {name: "Fox", emoji: "🦊", baseStats: [6, 5, 2, 3], hexStats: [4, 4], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
+            {name: "Phoenix", emoji: "🐦‍🔥", baseStats: [5, 4, 6, 4], hexStats: [4, 7], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
+            {name: "Lizard", emoji: "🦎", baseStats: [5, 4, 5, 4], hexStats: [4, 5], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
+            {name: "Wizard", emoji: "🧙", baseStats: [5, 7, 3, 5], hexStats: [4, 3], ability: {type: 'bolt', icon: '🔮', desc: 'On play, zaps a random enemy by -2 to all stats before this card captures. The zap can help this play steal that card.'}},
+            {name: "Genie", emoji: "🧞", baseStats: [6, 5, 5, 5], hexStats: [3, 5], ability: {type: 'bolt', icon: '🔮', desc: 'On play, zaps a random enemy by -2 to all stats before this card captures. The zap can help this play steal that card.'}},
+            {name: "Witch", emoji: "🧙‍♀️", baseStats: [4, 6, 5, 4], hexStats: [6, 5], ability: {type: 'bolt', icon: '🔮', desc: 'On play, zaps a random enemy by -2 to all stats before this card captures. The zap can help this play steal that card.'}},
+            {name: "Mage", emoji: "🪄", baseStats: [6, 3, 6, 4], hexStats: [7, 4], ability: {type: 'bolt', icon: '🔮', desc: 'On play, zaps a random enemy by -2 to all stats before this card captures. The zap can help this play steal that card.'}},
+            {name: "Imp", emoji: "👿", baseStats: [3, 6, 4, 5], hexStats: [4, 2], ability: {type: 'bolt', icon: '🔮', desc: 'On play, zaps a random enemy by -2 to all stats before this card captures. The zap can help this play steal that card.'}},
+            {name: "Frost", emoji: "🥶", baseStats: [4, 5, 4, 6], hexStats: [7, 4], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, adjacent enemies are -1 to all stats. Counts for captures.'}},
+            {name: "Wolf", emoji: "🐺", baseStats: [6, 5, 4, 3], hexStats: [4, 5], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, adjacent enemies are -1 to all stats. Counts for captures.'}},
+            {name: "Penguin", emoji: "🐧", baseStats: [3, 4, 6, 5], hexStats: [3, 3], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, adjacent enemies are -1 to all stats. Counts for captures.'}},
+            {name: "Polar", emoji: "🐻‍❄️", baseStats: [6, 3, 7, 3], hexStats: [4, 7], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, adjacent enemies are -1 to all stats. Counts for captures.'}},
+            {name: "Seal", emoji: "🦭", baseStats: [3, 5, 5, 5], hexStats: [6, 6], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, adjacent enemies are -1 to all stats. Counts for captures.'}},
+            {name: "Mimic", emoji: "🪞", baseStats: [3, 2, 4, 10], hexStats: [3, 6], ability: {type: 'parasite', icon: '🪞', desc: 'On play, copies the ability of an adjacent enemy for the rest of the match. If that ability fires on play, it fires before this card captures.'}},
+            {name: "Leech", emoji: "🩸", baseStats: [5, 6, 3, 5], hexStats: [6, 5], ability: {type: 'parasite', icon: '🪞', desc: 'On play, copies the ability of an adjacent enemy for the rest of the match. If that ability fires on play, it fires before this card captures.'}},
+            {name: "Cuckoo", emoji: "🐣", baseStats: [4, 7, 3, 5], hexStats: [6, 6], ability: {type: 'parasite', icon: '🪞', desc: 'On play, copies the ability of an adjacent enemy for the rest of the match. If that ability fires on play, it fires before this card captures.'}},
+            {name: "Doppel", emoji: "👥", baseStats: [5, 5, 5, 4], hexStats: [6, 3], ability: {type: 'parasite', icon: '🪞', desc: 'On play, copies the ability of an adjacent enemy for the rest of the match. If that ability fires on play, it fires before this card captures.'}},
+            {name: "Remora", emoji: "🐟", baseStats: [3, 6, 4, 6], hexStats: [6, 4], ability: {type: 'parasite', icon: '🪞', desc: 'On play, copies the ability of an adjacent enemy for the rest of the match. If that ability fires on play, it fires before this card captures.'}},
+            {name: "Kraken", emoji: "🦑", baseStats: [4, 9, 3, 4], hexStats: [8, 6], ability: {type: 'siphon', icon: '🌀', desc: 'On play, steals 1 from each adjacent enemy\'s touching stat and adds it permanently to this card\'s opposite facing.'}},
+            {name: "Drain", emoji: "💧", baseStats: [6, 4, 5, 4], hexStats: [7, 4], ability: {type: 'siphon', icon: '🌀', desc: 'On play, steals 1 from each adjacent enemy\'s touching stat and adds it permanently to this card\'s opposite facing.'}},
+            {name: "Lamprey", emoji: "🪱", baseStats: [4, 5, 6, 4], hexStats: [3, 2], ability: {type: 'siphon', icon: '🌀', desc: 'On play, steals 1 from each adjacent enemy\'s touching stat and adds it permanently to this card\'s opposite facing.'}},
+            {name: "Mosquito", emoji: "🦟", baseStats: [3, 7, 3, 6], hexStats: [4, 7], ability: {type: 'siphon', icon: '🌀', desc: 'On play, steals 1 from each adjacent enemy\'s touching stat and adds it permanently to this card\'s opposite facing.'}},
+            {name: "Siphon", emoji: "🌀", baseStats: [5, 6, 4, 4], hexStats: [5, 4], ability: {type: 'siphon', icon: '🌀', desc: 'On play, steals 1 from each adjacent enemy\'s touching stat and adds it permanently to this card\'s opposite facing.'}},
+            {name: "Clock", emoji: "🕰️", baseStats: [8, 2, 8, 2], hexStats: [4, 3], ability: {type: 'pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top/bottom stats with its left/right stats.'}},
+            {name: "Tide", emoji: "🌊", baseStats: [7, 3, 6, 3], hexStats: [7, 7], ability: {type: 'pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top/bottom stats with its left/right stats.'}},
+            {name: "Moon", emoji: "🌙", baseStats: [2, 7, 2, 8], hexStats: [4, 7], ability: {type: 'pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top/bottom stats with its left/right stats.'}},
+            {name: "Hourglass", emoji: "⌛", baseStats: [6, 3, 7, 3], hexStats: [5, 4], ability: {type: 'pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top/bottom stats with its left/right stats.'}},
+            {name: "Gyro", emoji: "🪀", baseStats: [7, 2, 6, 4], hexStats: [7, 4], ability: {type: 'pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top/bottom stats with its left/right stats.'}},
+            {name: "Worldtree", emoji: "🌳", baseStats: [2, 10, 3, 2], hexStats: [4, 4], ability: {type: 'symbiosis', icon: '🌱', desc: 'Plus 1 to all stats for each capture this card\'s player has made this game. The numbers update in your hand.'}},
+            {name: "Mycelium", emoji: "🍄", baseStats: [4, 4, 4, 4], hexStats: [3, 3], ability: {type: 'symbiosis', icon: '🌱', desc: 'Plus 1 to all stats for each capture this card\'s player has made this game. The numbers update in your hand.'}},
+            {name: "Coral", emoji: "🪸", baseStats: [5, 3, 5, 3], hexStats: [6, 6], ability: {type: 'symbiosis', icon: '🌱', desc: 'Plus 1 to all stats for each capture this card\'s player has made this game. The numbers update in your hand.'}},
+            {name: "Lichen", emoji: "🌿", baseStats: [3, 5, 4, 4], hexStats: [2, 2], ability: {type: 'symbiosis', icon: '🌱', desc: 'Plus 1 to all stats for each capture this card\'s player has made this game. The numbers update in your hand.'}},
+            {name: "Ivy", emoji: "🍃", baseStats: [4, 5, 3, 4], hexStats: [4, 2], ability: {type: 'symbiosis', icon: '🌱', desc: 'Plus 1 to all stats for each capture this card\'s player has made this game. The numbers update in your hand.'}}
         ].map((card, i) => ({
             ...card,
             id: `BS-${String(i + 1).padStart(2, '0')}`,
@@ -3829,7 +4914,8 @@
 
         let board = Array(9).fill(null);
         let cellEffects = Array(9).fill(null);
-        let playerHand = [], aiHand = [], draftPool = [], draftedPlayerCards = [], draftedAICards = [];
+        let playerHand = [], aiHand = [], playerDeck = [], aiDeck = [];
+        let draftPool = [], draftedPlayerCards = [], draftedAICards = [];
         let selectedCard = null, turn = 'player', gameState = 'menu', activeMode = 'random', draftTurn = 'player';
         let aiDifficulty = localStorage.getItem('ember_grid_ai') || 'normal';
         if (!['easy', 'normal', 'hard'].includes(aiDifficulty)) aiDifficulty = 'normal';
@@ -3841,6 +4927,115 @@
         let classicTies = localStorage.getItem('ember_grid_classic_ties') === 'true';
         let classicTiesThisMatch = false;
         let pendingMechFx = [];
+        const GRID_PRESETS = {
+            3: {size: 3, cells: 9, hand: 5, draftPool: 16},
+            4: {size: 4, cells: 16, hand: 8, draftPool: 16},
+            5: {size: 5, cells: 25, hand: 13, draftPool: 26},
+            hex: {size: 'hex', cells: 19, hand: 10, draftPool: 20}
+        };
+        function normalizeGridChoice(val) {
+            if (val === 'hex' || val === 'H') return 'hex';
+            const n = parseInt(val, 10);
+            return GRID_PRESETS[n] ? n : 3;
+        }
+        function loadPreferredGrid() {
+            return normalizeGridChoice(localStorage.getItem('ember_grid_size') || '3');
+        }
+        let preferredGridSize = loadPreferredGrid();
+        let gridSize = 3;
+        const VISIBLE_HAND = 5;
+        function isHexGrid() { return gridSize === 'hex'; }
+        function cellCount() {
+            const preset = GRID_PRESETS[gridSize];
+            return preset ? preset.cells : 9;
+        }
+        function matchHandSize() { return GRID_PRESETS[gridSize].hand; }
+        function matchDraftPoolSize() { return GRID_PRESETS[gridSize].draftPool; }
+
+        const HEX_DIRS = [
+            {dq: 0, dr: -1, p: 0, n: 2},
+            {dq: 1, dr: -1, p: 4, n: 3},
+            {dq: 1, dr: 0, p: 1, n: 5},
+            {dq: 0, dr: 1, p: 2, n: 0},
+            {dq: -1, dr: 1, p: 3, n: 4},
+            {dq: -1, dr: 0, p: 5, n: 1}
+        ];
+        const HEX = {cells: [], at: new Map(), boxes: [], aspect: 0.9238};
+        (function buildHexLayout() {
+            const cells = [];
+            for (let q = -2; q <= 2; q++) {
+                for (let r = -2; r <= 2; r++) {
+                    if (Math.max(Math.abs(q), Math.abs(r), Math.abs(-q - r)) <= 2) cells.push({q, r});
+                }
+            }
+            cells.sort((a, b) => a.r - b.r || a.q - b.q);
+            const key = (q, r) => `${q},${r}`;
+            const at = new Map(cells.map((c, i) => [key(c.q, c.r), i]));
+            const size = 1;
+            const pts = cells.map(c => ({
+                x: size * 1.5 * c.q,
+                y: size * (Math.sqrt(3) / 2 * c.q + Math.sqrt(3) * c.r)
+            }));
+            const fullHw = size;
+            const fullHh = Math.sqrt(3) / 2 * size;
+            const minX = Math.min(...pts.map(p => p.x)) - fullHw;
+            const maxX = Math.max(...pts.map(p => p.x)) + fullHw;
+            const minY = Math.min(...pts.map(p => p.y)) - fullHh;
+            const maxY = Math.max(...pts.map(p => p.y)) + fullHh;
+            const bw = maxX - minX;
+            const bh = maxY - minY;
+            const scale = 0.9;
+            const inset = 0.028;
+            const span = 1 - 2 * inset;
+            HEX.cells = cells;
+            HEX.at = at;
+            HEX.key = key;
+            HEX.aspect = bw / bh;
+            HEX.boxes = pts.map(p => {
+                const w = (2 * fullHw * scale) / bw * span;
+                const h = (2 * fullHh * scale) / bh * span;
+                const left = inset + ((p.x - fullHw * scale) - minX) / bw * span;
+                const top = inset + ((p.y - fullHh * scale) - minY) / bh * span;
+                return {
+                    left: `${(left * 100).toFixed(3)}%`,
+                    top: `${(top * 100).toFixed(3)}%`,
+                    width: `${(w * 100).toFixed(3)}%`,
+                    height: `${(h * 100).toFixed(3)}%`
+                };
+            });
+            document.documentElement.style.setProperty('--hex-aspect', HEX.aspect.toFixed(4));
+        })();
+        function boardCellEls() {
+            const grid = document.getElementById('board-grid');
+            return grid ? grid.querySelectorAll(':scope > .cell') : [];
+        }
+        function boardCellEl(index) {
+            return boardCellEls()[index] || null;
+        }
+
+        function applyGridSize(n) {
+            gridSize = GRID_PRESETS[n] ? n : 3;
+            const hex = gridSize === 'hex';
+            document.body.classList.toggle('grid-4', gridSize === 4 || hex);
+            document.body.classList.toggle('grid-5', gridSize === 5);
+            document.body.classList.toggle('grid-hex', hex);
+        }
+        function snakeSeq2(starter, n) {
+            const other = starter === 'player' ? 'ai' : 'player';
+            const seq = [starter];
+            let who = other;
+            let left = n * 2 - 1;
+            while (left > 0) {
+                const take = Math.min(2, left);
+                for (let i = 0; i < take; i++) seq.push(who);
+                left -= take;
+                who = who === starter ? other : starter;
+            }
+            return seq;
+        }
+        function currentSnakeSeq() {
+            return leagueDrafting ? leagueDraftSeq : snakeSeq2(draftStarter, matchHandSize());
+        }
         let currentRuleset = 'ember';
         let deckPicks = loadDeckPicks();
         let resolvedDecks = {player: null, ai: null};
@@ -3852,16 +5047,14 @@
         let aiPlayTimer = null;
         let blastPreviewTimer = null;
         const shownStatValues = new Map();
-        const pointerDrag = {pointerId: null, index: null, startX: 0, startY: 0, active: false, sourceEl: null, ghost: null};
+        const pointerDrag = {pointerId: null, index: null, startX: 0, startY: 0, active: false, sourceEl: null, ghost: null, overIdx: null};
         let swallowClick = false;
+        let swallowForIndex = null;
         let gameoverClickLock = false;
         let gameoverUnlockTimer = null;
         let coach = { active: false, step: null, cellIndex: 4, pendingCapture: false, taughtHand: false };
         let tutorial = null;
-        const SNAKE_SEQ = (starter) => {
-            const other = starter === 'player' ? 'ai' : 'player';
-            return [starter, other, other, starter, starter, other, other, starter, starter, other];
-        };
+        const SNAKE_SEQ = (starter) => snakeSeq2(starter, matchHandSize());
 
         const LEAGUE_KEY = 'ember_grid_league';
         const LEAGUE_CROWNS_KEY = 'ember_grid_league_crowns';
@@ -4141,13 +5334,35 @@
             }).filter(Boolean);
         }
 
+        function hexShouldersOf(card) {
+            const master = (card && masterCards.find(c => (card.id && c.id === card.id) || c.name === card.name)) || card;
+            const hex = master && master.hexStats;
+            if (hex && hex.length >= 2) return [clampStat(hex[0]), clampStat(hex[1])];
+            return [1, 1];
+        }
+
+        function facesFor(card, sourceStats) {
+            const stats = (sourceStats || (card && card.baseStats) || [1, 1, 1, 1]).slice();
+            const square = stats.slice(0, 4).map(clampStat);
+            if (!isHexGrid()) return square;
+            if (stats.length >= 6) return stats.slice(0, 6).map(clampStat);
+            return square.concat(hexShouldersOf(card));
+        }
+
+        function staticShoulderHTML(card) {
+            const [ne, nw] = hexShouldersOf(card);
+            return `<div class="stat-ne" title="Upper right">${formatStat(ne)}</div><div class="stat-nw" title="Upper left">${formatStat(nw)}</div>`;
+        }
+
         function draftCardFaceHTML(card) {
+            const shoulders = isHexGrid() ? staticShoulderHTML(card) : '';
             return `
                 ${card.ability ? `<div class="ability-badge">${card.ability.icon}</div>` : ''}
                 <div class="stat-top">${formatStat(card.baseStats[0])}</div>
                 <div class="stat-right">${formatStat(card.baseStats[1])}</div>
                 <div class="stat-bottom">${formatStat(card.baseStats[2])}</div>
                 <div class="stat-left">${formatStat(card.baseStats[3])}</div>
+                ${shoulders}
                 <div class="card-emoji">${card.emoji}</div>
                 ${nameplateHTML(card)}
             `;
@@ -4264,6 +5479,7 @@
         }
 
         function startNewLeague(fromMenu) {
+            applyGridSize(3);
             hideModal('league-modal');
             leagueHubConfirm = null;
             league = createLeague();
@@ -4345,7 +5561,8 @@
 
         function startLeagueDraft() {
             hideTooltip();
-            hideModals(['main-menu-modal', 'league-modal', 'deck-modal', 'gameover-modal', 'battle-log-modal']);
+            applyGridSize(3);
+            hideModals(['main-menu-modal', 'league-modal', 'deck-modal', 'gameover-modal', 'battle-log-modal', 'changelog-modal']);
             document.body.classList.add('menu-open');
             hydrateLeagueDraft();
             const draftedOut = ['you', 'ash', 'vesper', 'rook'].every(id => (leagueHandsLive[id] || []).length >= LEAGUE_HAND_SIZE);
@@ -4371,6 +5588,8 @@
             const seats = document.getElementById('draft-seats');
             const rosters = document.getElementById('draft-rosters');
             modal.classList.toggle('league-draft', !!isLeague);
+            modal.classList.toggle('draft-dense', !isLeague && (preferredGridSize === 5 || preferredGridSize === 'hex'));
+            modal.classList.toggle('draft-hex', !isLeague && preferredGridSize === 'hex');
             if (isLeague) {
                 title.textContent = 'League Draft';
                 order.hidden = true;
@@ -4378,9 +5597,15 @@
                 seats.classList.remove('hidden');
                 rosters.classList.add('hidden');
             } else {
+                const hand = matchHandSize();
+                const pool = matchDraftPoolSize();
                 title.textContent = 'Draft Hands';
                 order.hidden = false;
-                order.textContent = 'Sixteen cards from the deck. Snake order: 1 pick, then pairs of 2, until each hand is five.';
+                order.textContent = pool === 16 && hand === 5
+                    ? 'Sixteen cards from the deck. Snake order: 1 pick, then pairs of 2, until each hand is five.'
+                    : hand === 10
+                        ? 'Twenty cards. Snake until each side is dealt ten. Hands stay five; extras stay in your draw pile.'
+                        : `${pool === 16 ? 'Sixteen' : 'Twenty-six'} cards. Snake until each side is dealt ${hand === 8 ? 'eight' : 'thirteen'}. Hands stay five; extras stay in your draw pile.`;
                 cancel.textContent = 'Cancel Draft';
                 seats.classList.add('hidden');
                 rosters.classList.remove('hidden');
@@ -4603,7 +5828,7 @@
 
         function showLeagueHub() {
             hideTooltip();
-            hideModals(['main-menu-modal', 'draft-modal', 'deck-modal', 'gameover-modal', 'battle-log-modal']);
+            hideModals(['main-menu-modal', 'draft-modal', 'deck-modal', 'gameover-modal', 'battle-log-modal', 'changelog-modal']);
             document.body.classList.add('menu-open');
             renderLeagueHub();
             document.getElementById('league-modal').classList.remove('hidden');
@@ -4706,7 +5931,8 @@
             leftoverThisMatch = league.leftover;
             skipCoachOnce = true;
             activeMode = 'league';
-            hideModals(['league-modal', 'main-menu-modal', 'draft-modal', 'deck-modal', 'gameover-modal', 'battle-log-modal']);
+            hideModals(['league-modal', 'main-menu-modal', 'draft-modal', 'deck-modal', 'gameover-modal', 'battle-log-modal', 'changelog-modal']);
+            applyGridSize(3);
             resetTable();
             gameState = 'playing';
             const youIds = league.hands.you;
@@ -4776,6 +6002,8 @@
                 leftoverThisMatch,
                 matchCaptures: {blue: matchCaptures.blue, red: matchCaptures.red},
                 classicTiesThisMatch,
+                playerDeck: playerDeck.slice(),
+                aiDeck: aiDeck.slice(),
                 turn,
                 gameState,
                 selectedCard,
@@ -4791,6 +6019,8 @@
             leftoverThisMatch = snap.leftoverThisMatch;
             matchCaptures = snap.matchCaptures ? {blue: snap.matchCaptures.blue, red: snap.matchCaptures.red} : {blue: 0, red: 0};
             classicTiesThisMatch = snap.classicTiesThisMatch;
+            playerDeck = snap.playerDeck ? snap.playerDeck.slice() : [];
+            aiDeck = snap.aiDeck ? snap.aiDeck.slice() : [];
             turn = snap.turn;
             gameState = snap.gameState;
             selectedCard = snap.selectedCard;
@@ -4806,12 +6036,16 @@
             cloneRulesetOverride = ruleset;
             leftoverThisMatch = leftover;
             classicTiesThisMatch = ruleset === 'classic' && !!(league && league.classicTies);
+            const prevGrid = gridSize;
+            applyGridSize(3);
             resetTable();
+            playerDeck = [];
+            aiDeck = [];
             playerHand = (blueIds || []).map(id => cloneForOwner(masterCards.find(c => c.id === id), 'blue', ruleset));
             aiHand = (redIds || []).map(id => cloneForOwner(masterCards.find(c => c.id === id), 'red', ruleset));
             let whose = firstColor === 'red' ? 'red' : 'blue';
             let safety = 0;
-            while (board.some(c => c === null) && safety++ < 12) {
+            while (board.some(c => c === null) && safety++ < cellCount() + 4) {
                 const hand = whose === 'blue' ? playerHand : aiHand;
                 if (!hand.length) break;
                 const diff = whose === 'blue' ? blueDiff : redDiff;
@@ -4827,6 +6061,7 @@
             const blue = ownedCount('blue');
             const red = ownedCount('red');
             const winner = blue > red ? 'blue' : red > blue ? 'red' : 'draw';
+            applyGridSize(prevGrid);
             restoreSimTable(snap);
             silentSim = prevSilent;
             cloneRulesetOverride = prevOverride;
@@ -4924,7 +6159,7 @@
             return stats.map(clampStat);
         }
         function facingMarkup(dir, live, printed, prev) {
-            const labels = {top: 'Top', right: 'Right', bottom: 'Bottom', left: 'Left'};
+            const labels = {top: 'Top', right: 'Right', bottom: 'Bottom', left: 'Left', ne: 'Upper right', nw: 'Upper left'};
             const cls = [];
             if (live > printed) cls.push('stat-up');
             else if (live < printed) cls.push('stat-down');
@@ -4981,27 +6216,43 @@
             if (gameState === 'playing' || gameState === 'gameover') render();
         }
         function leftoverVictoryCopy() {
-            if (leftoverScores) {
-                return {
-                    compact: "Fill the 3x3. Most cards wins - leftover in hand still counts.",
-                    rules: "Two hands of five is ten cards. After the board fills, leftover in hand still counts, so 6+ wins and 5-5 is a draw.",
-                    option: "<strong>On:</strong> Unplayed cards count. A 5-4 board is a 5-5 draw."
-                };
-            }
-            return {
-                compact: "Fill the 3x3. Most cards on the board wins. Leftover in hand does not count.",
-                rules: "Two hands of five. After the board fills, most cards on the board wins. Leftover in hand does not count. Options can turn leftover scores on, which makes a 5-4 board a 5-5 draw.",
-                option: "<strong>Off (default):</strong> Only the board counts. Unplayed cards are choices, not points."
-            };
+            return leftoverScores
+                ? "<strong>On:</strong> Cards left in hand count too."
+                : "<strong>Off (default):</strong> Only cards on the grid count. Cards left in hand are choices, not points.";
         }
         function refreshVictoryCopy() {
-            const copy = leftoverVictoryCopy();
-            const compact = document.getElementById('victory-compact');
-            const rules = document.getElementById('victory-rules');
             const desc = document.getElementById('leftover-desc');
-            if (compact) compact.textContent = copy.compact;
-            if (rules) rules.textContent = copy.rules;
-            if (desc) desc.innerHTML = copy.option;
+            if (desc) desc.innerHTML = leftoverVictoryCopy();
+        }
+        function gridChoiceCopy(n) {
+            if (n === 'hex') return {long: "<strong>Honeycomb:</strong> Nineteen cells. Ten dealt. Open five, draw after you play. Each card shows an upper-left and upper-right number. League and Tribe Decks stay 3×3.", short: "Nineteen cells. Ten dealt, five in hand. League and Tribe Decks stay 3×3."};
+            if (n === 4) return {long: "<strong>4×4:</strong> Eight dealt. Open five, draw after you play. League and Tribe Decks stay 3×3.", short: "Eight dealt. Open five, draw after you play."};
+            if (n === 5) return {long: "<strong>5×5:</strong> Thirteen dealt. Open five, draw after you play. League and Tribe Decks stay 3×3.", short: "Thirteen dealt. Open five, draw after you play."};
+            return {long: "<strong>3×3 (default):</strong> Five each. League and Tribe Decks always use this size.", short: "Five each. The usual table."};
+        }
+        function paintGridChoices() {
+            const current = String(preferredGridSize);
+            document.querySelectorAll('[data-grid-choice]').forEach(btn => {
+                const on = btn.dataset.gridChoice === current;
+                btn.classList.toggle('selected', on);
+                btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+            });
+        }
+        function refreshGridSizeDesc() {
+            const copy = gridChoiceCopy(preferredGridSize);
+            const el = document.getElementById('grid-size-desc');
+            if (el) el.innerHTML = copy.long;
+            const menu = document.getElementById('menu-grid-note');
+            if (menu) menu.textContent = copy.short;
+            paintGridChoices();
+        }
+        function updatePreferredGrid(val) {
+            sfx.click();
+            preferredGridSize = normalizeGridChoice(val);
+            localStorage.setItem('ember_grid_size', String(preferredGridSize));
+            refreshGridSizeDesc();
+            refreshVictoryCopy();
+            if (gameState === 'menu') applyGridSize(preferredGridSize);
         }
         function updateLeftoverScores(checked) {
             sfx.click();
@@ -5018,7 +6269,7 @@
         }
         function hapticForPlay(fx) {
             const ability = fx.abilityFx || fx.buffFx || fx.silenceFx || fx.chillFx || fx.psnFx || fx.pendulumFx;
-            const captured = !!(fx.capLog || fx.psnCapLog || fx.groveCapLog);
+            const captured = !!(fx.capLog || fx.psnCapLog);
             if (ability && ability.kind === 'bolt') haptic(captured ? [10, 28, 36, 40, 18] : [10, 30, 36]);
             else if (captured) haptic([12, 28, 22]);
             else if (ability) haptic([16, 24, 20]);
@@ -5042,8 +6293,8 @@
             }
             if (desc) {
                 desc.innerHTML = classicTies
-                    ? '<strong>On:</strong> Equal facings capture. Classic Mode only. Ember Mode never uses this, so Equalizer stays unique.'
-                    : '<strong>Off (default):</strong> Equal facings do nothing. On: you capture when touching stats match. Ember Mode ignores this so Equalizer stays unique.';
+                    ? '<strong>On:</strong> Equal numbers capture. Classic Mode only. Ember Mode leaves this off so Equalizer stays special.'
+                    : '<strong>Off (default):</strong> Equal numbers do nothing.';
             }
         }
         function updateClassicTies(checked) {
@@ -5056,8 +6307,8 @@
             const descBox = document.getElementById('ruleset-desc');
             if (!descBox) return;
             descBox.innerHTML = currentRuleset === 'classic'
-                ? "<strong>Classic Mode:</strong> Pure, tactical gameplay. All special abilities and card badges are disabled."
-                : "<strong>Ember Mode:</strong> Every card has an ability. Fourteen tribes share the pile: Buff, Curse, Blast, Poison, Equalizer, Spite, Silence, Cinder, Bolt, Chill, Parasite, Siphon, Pendulum, and Symbiosis.";
+                ? "<strong>Classic Mode:</strong> Abilities off. Capture is stats only."
+                : "<strong>Ember Mode:</strong> Every card has an ability. Fourteen tribes.";
             refreshClassicTiesUi();
         }
         function updateRuleset(val) {
@@ -5069,12 +6320,13 @@
             const onBoard = board.filter(c => c && c.owner === color).length;
             if (!leftoverThisMatch) return onBoard;
             const hand = color === 'blue' ? playerHand : aiHand;
-            return onBoard + hand.length;
+            const deck = color === 'blue' ? playerDeck : aiDeck;
+            return onBoard + hand.length + deck.length;
         }
 
         function resetTable() {
-            board = Array(9).fill(null);
-            cellEffects = Array(9).fill(null);
+            board = Array(cellCount()).fill(null);
+            cellEffects = Array(cellCount()).fill(null);
             matchCaptures = {blue: 0, red: 0};
             selectedCard = null;
             shownStatValues.clear();
@@ -5084,24 +6336,43 @@
             if (blastPreviewTimer) {clearTimeout(blastPreviewTimer); blastPreviewTimer = null;}
         }
 
+        function neighborDirs(index) {
+            if (isHexGrid()) {
+                const cell = HEX.cells[index];
+                if (!cell) return [];
+                return HEX_DIRS.map(d => {
+                    const idx = HEX.at.get(HEX.key(cell.q + d.dq, cell.r + d.dr));
+                    return {idx: idx == null ? -1 : idx, p: d.p, n: d.n, ok: idx != null};
+                });
+            }
+            const n = gridSize;
+            const row = Math.floor(index / n), col = index % n;
+            return [
+                {idx: index - n, p: 0, n: 2, ok: row > 0},
+                {idx: index + 1, p: 1, n: 3, ok: col < n - 1},
+                {idx: index + n, p: 2, n: 0, ok: row < n - 1},
+                {idx: index - 1, p: 3, n: 1, ok: col > 0}
+            ];
+        }
+
         function neighborIndexes(index) {
-            const row = Math.floor(index / 3), col = index % 3;
-            const out = [];
-            if (row > 0) out.push(index - 3);
-            if (col < 2) out.push(index + 1);
-            if (row < 2) out.push(index + 3);
-            if (col > 0) out.push(index - 1);
-            return out;
+            return neighborDirs(index).filter(d => d.ok).map(d => d.idx);
         }
 
         function facingPairs(index) {
-            const row = Math.floor(index / 3), col = index % 3;
-            const pairs = [];
-            if (row > 0) pairs.push({idx: index - 3, mine: 0, theirs: 2});
-            if (col < 2) pairs.push({idx: index + 1, mine: 1, theirs: 3});
-            if (row < 2) pairs.push({idx: index + 3, mine: 2, theirs: 0});
-            if (col > 0) pairs.push({idx: index - 1, mine: 3, theirs: 1});
-            return pairs;
+            return neighborDirs(index).filter(d => d.ok).map(d => ({idx: d.idx, mine: d.p, theirs: d.n}));
+        }
+
+        function oppositeFacing(statIndex) {
+            if (isHexGrid()) return [2, 5, 0, 4, 3, 1][statIndex];
+            return (statIndex + 2) % 4;
+        }
+
+        function swingAxes(row) {
+            if (!row || row.length < 4) return row;
+            const next = [row[3], row[2], row[1], row[0]];
+            if (row.length > 4) next.push(...row.slice(4));
+            return next;
         }
 
         function isSilenceCard(card) {
@@ -5177,6 +6448,16 @@
             hideModal('expanded-rules-modal');
         }
 
+        function showChangelogModal() {
+            sfx.click(); hideTooltip();
+            document.getElementById('changelog-modal').classList.remove('hidden');
+        }
+
+        function closeChangelogModal() {
+            sfx.click(); hideTooltip();
+            hideModal('changelog-modal');
+        }
+
         function closeCompendiumModal() {
             sfx.click(); hideTooltip();
             hideModal('compendium-modal');
@@ -5217,10 +6498,11 @@
             resetFingerDrag();
             hideTurnBanner();
             document.body.classList.add('menu-open');
-            hideModals(['draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal', 'battle-log-modal', 'league-modal', 'league-roster', 'tutorial-modal']);
+            hideModals(['draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal', 'battle-log-modal', 'league-modal', 'league-roster', 'tutorial-modal', 'changelog-modal']);
             closeLeagueRoster();
             document.getElementById('main-menu-modal').classList.remove('hidden');
-            gameState = 'menu'; resetTable(); playerHand = []; aiHand = [];
+            applyGridSize(preferredGridSize);
+            gameState = 'menu'; resetTable(); playerHand = []; aiHand = []; playerDeck = []; aiDeck = [];
             lastBlueScore = null; lastRedScore = null; lastMatch = null;
             leagueMatch = null;
             cloneRulesetOverride = null;
@@ -5264,7 +6546,9 @@
             document.getElementById('leftover-check').checked = leftoverScores;
             const hapticsCheck = document.getElementById('haptics-check');
             if (hapticsCheck) hapticsCheck.checked = hapticsOn;
+            paintGridChoices();
             refreshRulesetDesc();
+            refreshGridSizeDesc();
             refreshVictoryCopy();
             refreshClassicTiesUi();
             const leagueNote = document.getElementById('league-options-note');
@@ -5282,7 +6566,7 @@
             masterCards.forEach(card => {
                 if (filter !== 'all' && (!card.ability || card.ability.type !== filter)) return;
                 const el = document.createElement('div');
-                el.className = 'compendium-card';
+                el.className = 'compendium-card has-hex-faces';
                 el.innerHTML = `
                     ${card.ability ? `<div class="ability-badge">${card.ability.icon}</div>` : ''}
                     <div class="card-set-num">${card.id}</div>
@@ -5290,6 +6574,7 @@
                     <div class="stat-right">${formatStat(card.baseStats[1])}</div>
                     <div class="stat-bottom">${formatStat(card.baseStats[2])}</div>
                     <div class="stat-left">${formatStat(card.baseStats[3])}</div>
+                    ${staticShoulderHTML(card)}
                     <div class="card-emoji">${card.emoji}</div>
                     ${nameplateHTML(card)}
                 `;
@@ -5386,15 +6671,17 @@
             clearAiPlayTimer();
             hideTurnBanner();
             clearShareHash();
-            hideModals(['main-menu-modal', 'draft-modal', 'deck-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal', 'battle-log-modal', 'league-modal', 'tutorial-modal']);
+            hideModals(['main-menu-modal', 'draft-modal', 'deck-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal', 'battle-log-modal', 'league-modal', 'tutorial-modal', 'changelog-modal']);
 
             if (mode === 'random') {
+                applyGridSize(preferredGridSize);
                 resetTable(); gameState = 'playing';
                 const shuffled = [...masterCards].sort(() => Math.random() - 0.5);
+                const n = matchHandSize();
 
-                playerHand = shuffled.slice(0, 5).map(c => cloneCard(c, {owner: 'blue'}));
+                playerHand = shuffled.slice(0, n).map(c => cloneCard(c, {owner: 'blue'}));
 
-                aiHand = shuffled.slice(5, 10).map(c => cloneCard(c, {owner: 'red'}));
+                aiHand = shuffled.slice(n, n * 2).map(c => cloneCard(c, {owner: 'red'}));
 
                 beginMatch();
             } else if (mode === 'draft') {
@@ -5477,6 +6764,7 @@
         }
 
         function startDeckMatch() {
+            applyGridSize(3);
             resetTable();
             gameState = 'playing';
             resolvedDecks = {
@@ -5494,13 +6782,14 @@
         }
 
         function startDraftMode() {
+            applyGridSize(preferredGridSize);
             leagueDrafting = false;
             draftedPlayerCards = []; draftedAICards = [];
             draftPickIndex = 0;
             draftStarter = Math.random() < 0.5 ? 'player' : 'ai';
-            draftTurn = SNAKE_SEQ(draftStarter)[0];
+            draftTurn = snakeSeq2(draftStarter, matchHandSize())[0];
 
-            draftPool = [...masterCards].sort(() => Math.random() - 0.5).slice(0, 16).map(c => cloneCard(c, {draftedBy: null}));
+            draftPool = [...masterCards].sort(() => Math.random() - 0.5).slice(0, matchDraftPoolSize()).map(c => cloneCard(c, {draftedBy: null}));
 
             setupDraftChrome(false);
             renderDraftPool();
@@ -5519,9 +6808,10 @@
             const master = masterCards.find(c => c.id === card.id) || card;
             const copy = {
                 ...card,
-                baseStats: [...card.baseStats],
-                printedStats: [...(card.printedStats || master.baseStats)],
-                stats: [...card.baseStats],
+                baseStats: facesFor(master, card.baseStats || master.baseStats),
+                printedStats: facesFor(master, card.printedStats || master.baseStats),
+                stats: facesFor(master, card.baseStats || master.baseStats).slice(),
+                hexStats: hexShouldersOf(master),
                 ...extra
             };
             if (card.ability) {
@@ -5537,14 +6827,52 @@
             return cloneCard(card, {owner}, ruleset);
         }
 
+        function shuffleCopy(cards) {
+            const pile = cards.slice();
+            for (let i = pile.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                const tmp = pile[i];
+                pile[i] = pile[j];
+                pile[j] = tmp;
+            }
+            return pile;
+        }
+
+        function openHandsFromDeal() {
+            const split = (cards) => {
+                const pile = shuffleCopy(cards || []);
+                const n = Math.min(VISIBLE_HAND, pile.length);
+                return {hand: pile.slice(0, n), deck: pile.slice(n)};
+            };
+            const you = split(playerHand);
+            const them = split(aiHand);
+            playerHand = you.hand;
+            playerDeck = you.deck;
+            aiHand = them.hand;
+            aiDeck = them.deck;
+        }
+
+        function drawAfterPlay(owner) {
+            if (board.every(cell => cell !== null)) return;
+            const deck = owner === 'blue' ? playerDeck : aiDeck;
+            const hand = owner === 'blue' ? playerHand : aiHand;
+            if (!deck.length) return;
+            const i = Math.floor(Math.random() * deck.length);
+            const card = deck.splice(i, 1)[0];
+            if (!silentSim && (owner === 'blue' || showBothHands)) card.drawAnimAt = performance.now();
+            hand.push(card);
+            return card;
+        }
+
         function snapshotMatch(first) {
             lastMatch = {
                 mode: activeMode,
                 ruleset: (isLeagueMatch() && league) ? league.ruleset : currentRuleset,
                 leftover: leftoverThisMatch,
                 classicTies: classicTiesThisMatch,
-                playerIds: playerHand.map(c => c.id),
-                aiIds: aiHand.map(c => c.id),
+                gridSize,
+                playerIds: playerHand.concat(playerDeck).map(c => c.id),
+                aiIds: aiHand.concat(aiDeck).map(c => c.id),
                 first
             };
         }
@@ -5567,13 +6895,17 @@
 
         function encodeMatchCode(match) {
             if (!match || match.mode === 'league' || match.mode === 'tutorial' || !match.playerIds || !match.aiIds) return '';
-            if (match.playerIds.length !== 5 || match.aiIds.length !== 5) return '';
+            const size = GRID_PRESETS[match.gridSize] ? match.gridSize : 3;
+            const hand = GRID_PRESETS[size].hand;
+            if (match.playerIds.length !== hand || match.aiIds.length !== hand) return '';
             const nums = idsToNums(match.playerIds.concat(match.aiIds));
             if (nums.some(n => !n || n < 1 || n > masterCards.length)) return '';
             const modeCh = match.mode === 'draft' ? 'D' : match.mode === 'decks' ? 'T' : 'R';
             const ruleCh = match.ruleset === 'classic' ? 'C' : 'E';
             const firstCh = match.first === 'ai' ? 'A' : 'P';
-            return `EG1${modeCh}${ruleCh}${firstCh}${nums.map(n => String(n).padStart(2, '0')).join('')}`;
+            if (size === 3) return `EG1${modeCh}${ruleCh}${firstCh}${nums.map(n => String(n).padStart(2, '0')).join('')}`;
+            const sizeCh = size === 'hex' ? 'H' : String(size);
+            return `EG2${modeCh}${ruleCh}${firstCh}${sizeCh}${nums.map(n => String(n).padStart(2, '0')).join('')}`;
         }
 
         function extractMatchCode(raw) {
@@ -5586,6 +6918,8 @@
                 const hm = (u.hash || '').match(/m=([^&]+)/i);
                 if (hm) return decodeURIComponent(hm[1]).trim();
             } catch (e) {}
+            const found2 = text.match(/EG2[RDTrdt][ECec][PApa][45H]\d{32,}/i);
+            if (found2) return found2[0];
             const found = text.match(/EG1[RDTrdt][ECec][PApa]\d{20}/);
             if (found) return found[0];
             return text;
@@ -5593,6 +6927,27 @@
 
         function decodeMatchCode(raw) {
             const code = extractMatchCode(raw).toUpperCase().replace(/[^A-Z0-9]/g, '');
+            const m2 = code.match(/^EG2([RDT])([EC])([PA])([45H])((?:\d{2})+)$/);
+            if (m2) {
+                const size = m2[4] === 'H' ? 'hex' : parseInt(m2[4], 10);
+                if (!GRID_PRESETS[size]) return null;
+                const hand = GRID_PRESETS[size].hand;
+                const digits = m2[5];
+                if (digits.length !== hand * 4) return null;
+                const nums = [];
+                for (let i = 0; i < digits.length; i += 2) nums.push(parseInt(digits.slice(i, i + 2), 10));
+                if (nums.some(n => n < 1 || n > masterCards.length)) return null;
+                const ids = numsToIds(nums);
+                if (ids.some(id => !masterCards.some(c => c.id === id))) return null;
+                return {
+                    mode: m2[1] === 'D' ? 'draft' : m2[1] === 'T' ? 'decks' : 'random',
+                    ruleset: m2[2] === 'C' ? 'classic' : 'ember',
+                    first: m2[3] === 'A' ? 'ai' : 'player',
+                    gridSize: size,
+                    playerIds: ids.slice(0, hand),
+                    aiIds: ids.slice(hand)
+                };
+            }
             const m = code.match(/^EG1([RDT])([EC])([PA])((?:\d{2}){10})$/);
             if (!m) return null;
             const mode = m[1] === 'D' ? 'draft' : m[1] === 'T' ? 'decks' : 'random';
@@ -5607,6 +6962,7 @@
                 mode,
                 ruleset,
                 first,
+                gridSize: 3,
                 playerIds: ids.slice(0, 5),
                 aiIds: ids.slice(5, 10)
             };
@@ -5668,12 +7024,13 @@
             hideTooltip();
             clearAiPlayTimer();
             hideTurnBanner();
-            hideModals(['main-menu-modal', 'draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal', 'battle-log-modal', 'league-modal']);
+            hideModals(['main-menu-modal', 'draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal', 'battle-log-modal', 'league-modal', 'tutorial-modal', 'changelog-modal']);
             currentRuleset = decoded.ruleset;
             const sel = document.getElementById('ruleset-select');
             if (sel) sel.value = currentRuleset;
             refreshRulesetDesc();
             activeMode = decoded.mode;
+            applyGridSize(decoded.gridSize || 3);
             resolvedDecks = decoded.mode === 'decks'
                 ? {player: tribeOfCardId(decoded.playerIds[0]), ai: tribeOfCardId(decoded.aiIds[0])}
                 : {player: null, ai: null};
@@ -5777,6 +7134,7 @@
             sfx.click(); hideTooltip();
             hideModal('gameover-modal');
             hideModal('main-menu-modal');
+            applyGridSize(lastMatch.gridSize || 3);
             resetTable(); gameState = 'playing';
             handsFromIds(lastMatch.playerIds, lastMatch.aiIds);
             beginMatch(lastMatch.first === 'player' ? 'ai' : 'player', 'rematch');
@@ -5787,9 +7145,9 @@
             unlockGameoverClicks();
             sfx.click();
             hideModal('gameover-modal');
-            statusMsg.textContent = "Final board. Replay the same hands, or deal new ones.";
-            if (isLeagueMatch()) statusMsg.textContent = "Final board. Open the league table for standings.";
-            if (activeMode === 'tutorial') statusMsg.textContent = "Final board. Replay this lesson, or pick another.";
+            statusMsg.textContent = "Final grid. Replay the same hands, or deal new ones.";
+            if (isLeagueMatch()) statusMsg.textContent = "Final grid. Open the league table for standings.";
+            if (activeMode === 'tutorial') statusMsg.textContent = "Final grid. Replay this lesson, or pick another.";
             render();
         }
 
@@ -5806,6 +7164,7 @@
         function lockGameoverClicks() {
             gameoverClickLock = true;
             swallowClick = false;
+            swallowForIndex = null;
             window.removeEventListener('pointerdown', unlockGameoverClicks, true);
             window.addEventListener('pointerdown', unlockGameoverClicks, true);
             clearTimeout(gameoverUnlockTimer);
@@ -5820,8 +7179,9 @@
         }
 
         function draftCardClass(card) {
-            if (!card.draftedBy) return 'draft-card';
-            return leagueDrafting ? `draft-card taken taken-${card.draftedBy}` : 'draft-card drafted';
+            const hex = isHexGrid() ? ' has-hex-faces' : '';
+            if (!card.draftedBy) return 'draft-card' + hex;
+            return (leagueDrafting ? `draft-card taken taken-${card.draftedBy}` : 'draft-card drafted') + hex;
         }
 
         function bindDraftGridClicks() {
@@ -5845,12 +7205,10 @@
         function renderDraftPool() {
             const grid = document.getElementById('draft-pool-grid');
             bindDraftGridClicks();
-            const reuse = grid.childElementCount === draftPool.length;
-            if (!reuse) grid.innerHTML = '';
-            draftPool.forEach((card, i) => {
-                let el = reuse ? grid.children[i] : document.createElement('div');
+            grid.innerHTML = '';
+            draftPool.forEach((card) => {
+                const el = document.createElement('div');
                 el.className = draftCardClass(card);
-                if (reuse) return;
                 el.innerHTML = draftCardFaceHTML(card);
                 addTooltipListeners(el, abilityTip(card));
                 paintCardFaces(el);
@@ -5867,13 +7225,14 @@
                 document.getElementById('draft-status').textContent = draftTurn === 'player'
                     ? (isSnakeDoublePick() ? "Your pick - you choose twice." : "Your pick.")
                     : (isSnakeDoublePick() ? "AI is choosing twice..." : "AI is choosing...");
+                const hand = matchHandSize();
                 document.getElementById('draft-rosters').textContent =
-                    `Pick ${draftPickIndex + 1}/10 · Your Hand: ${draftedPlayerCards.length}/5 | AI Hand: ${draftedAICards.length}/5`;
+                    `Pick ${draftPickIndex + 1}/${hand * 2} · Your Hand: ${draftedPlayerCards.length}/${hand} | AI Hand: ${draftedAICards.length}/${hand}`;
             }
         }
 
         function isSnakeDoublePick() {
-            const seq = leagueDrafting ? leagueDraftSeq : SNAKE_SEQ(draftStarter);
+            const seq = currentSnakeSeq();
             return seq[draftPickIndex] && seq[draftPickIndex] === seq[draftPickIndex + 1];
         }
 
@@ -5904,7 +7263,7 @@
                 checkDraftProgress();
                 return;
             }
-            if (draftTurn !== 'ai' || draftedAICards.length >= 5) return;
+            if (draftTurn !== 'ai' || draftedAICards.length >= matchHandSize()) return;
             available.sort((a, b) => getCardDraftScore(b) - getCardDraftScore(a));
             available[0].draftedBy = 'ai';
             draftedAICards.push(available[0]);
@@ -5949,7 +7308,7 @@
                 if (draftTurn && draftTurn !== 'you') scheduleAiDraftPick(480);
                 return;
             }
-            if (draftedPlayerCards.length === 5 && draftedAICards.length === 5) {
+            if (draftedPlayerCards.length === matchHandSize() && draftedAICards.length === matchHandSize()) {
                 hideModal('draft-modal');
                 resetTable(); gameState = 'playing';
                 playerHand = draftedPlayerCards.map(c => cloneCard(c, {owner: 'blue'}));
@@ -5957,7 +7316,7 @@
                 beginMatch();
             } else {
                 draftPickIndex++;
-                draftTurn = SNAKE_SEQ(draftStarter)[draftPickIndex];
+                draftTurn = snakeSeq2(draftStarter, matchHandSize())[draftPickIndex];
                 renderDraftPool();
                 if (draftTurn === 'ai') scheduleAiDraftPick(550);
             }
@@ -5996,6 +7355,7 @@
                 : (origin === 'league' && league ? !!league.classicTies : classicTies);
             classicTiesThisMatch = matchRuleset === 'classic' && !!tiesOpt;
             turn = first || (Math.random() < 0.5 ? 'player' : 'ai');
+            openHandsFromDeal();
             snapshotMatch(turn);
             lastBlueScore = null; lastRedScore = null;
             resetActionLog();
@@ -6017,7 +7377,11 @@
                 statusMsg.textContent = vs
                     ? (turn === 'player' ? `${vs}. Your turn - play a card.` : `${vs}. AI plays first.`)
                     : (turn === 'player' ? `${shared}Hands dealt. Your turn - play a card.` : `${shared}Hands dealt. AI plays first.`);
-                logAction(vs || (origin === 'share' ? "Shared hands of five." : "Hands of five."));
+                const n = matchHandSize();
+                const words = n === 5 ? 'five' : n === 8 ? 'eight' : 'thirteen';
+                logAction(vs || (origin === 'share'
+                    ? (n === 5 ? `Shared hands of ${words}.` : `Shared deal of ${words}. Five in hand.`)
+                    : (n === 5 ? `Hands of ${words}.` : `Dealt ${words} each. Five in hand.`)));
             }
             recalculateDynamicStats(); render();
             maybeStartCoach();
@@ -6071,66 +7435,63 @@
         const TUTORIALS = [
             {
                 title: 'Capture',
-                kicker: 'Lesson 1 · Capture',
-                log: 'Tutorial — captures. Abilities are off.',
+                log: 'This match is captures. Abilities stay off.',
                 ruleset: 'classic',
-                blurb: 'How the four numbers fight, why ties do nothing, and how a full board is won.',
+                blurb: 'How your four numbers fight, why a match does nothing, and how you win a full board.',
                 player: ['Dragon', 'Vampire', 'Celestial', 'Paladin', 'T-Rex'],
                 ai: ['Frog', 'Zombie', 'Lizard', 'Imp', 'Owl'],
                 steps: [
-                    {who: 'note', text: 'Abilities are off. Only the four numbers matter: top, right, bottom, left. Each turn lights up one card, then the cell it goes on. Their deck is weak, and this match is not saved to your record.'},
-                    {who: 'player', card: 'Dragon', cell: 4, before: 'Pick Dragon and play it in the center. Nothing is touching it yet, so nobody fights.', after: 'Dragon holds the middle. Each side can fight the one card that shares that edge. A diagonal does not fight.'},
-                    {who: 'ai', card: 'Frog', cell: 1, after: 'Frog is above Dragon. Frog\'s bottom is 5 and Dragon\'s top is 9. 5 does not beat 9, so nothing flips.'},
-                    {who: 'player', card: 'Vampire', cell: 2, before: 'Pick Vampire and play it to the right of Frog. Vampire\'s left is 6. Frog\'s right is 4.', after: '6 beats 4. Frog turns blue. That is a capture: their card is yours, and it scores for you.'},
-                    {who: 'log', before: 'Open the Battle log under the board. Every play from this match is written there.', after: 'Names wear the team color they had on that play. A capture stays in the list, so you can reread a fight. Continue when you have seen it.'},
-                    {who: 'ai', card: 'Zombie', cell: 3, after: 'Zombie is left of Dragon. Both touching numbers are 2. Equal numbers do not capture. You need a strictly higher stat.'},
-                    {who: 'player', card: 'Celestial', cell: 0, before: 'Pick Celestial. The A on top means 10. Play it above Zombie, and watch which side actually touches.', after: 'Celestial\'s bottom is 3 and Zombie\'s top is 4. The 10 is on top, and that side is not touching Zombie, so there is no capture. Compare only the touching sides.'},
-                    {who: 'ai', card: 'Lizard', cell: 8, after: 'Lizard is in the corner and touches nobody. Only neighbors fight.'},
-                    {who: 'player', card: 'Paladin', cell: 7, before: 'Pick Paladin and play it to the left of Lizard. Paladin\'s right is 8. Lizard\'s left is 4.', after: '8 beats 4, so Lizard is yours. Paladin\'s top ties Dragon, and your own cards do not capture each other.'},
-                    {who: 'ai', card: 'Imp', cell: 5, after: 'Imp\'s top ties Vampire\'s bottom at 3. Imp\'s left is 5, which loses to Dragon\'s right 7. No capture.'},
-                    {who: 'player', card: 'T-Rex', cell: 6, before: 'Last card. Play T-Rex under Zombie. T-Rex\'s top is 8. Zombie\'s bottom is 6.', after: '8 beats 6. The board is full: you have 8 cards, they have 1. Owl never played, and a card still in hand does not score.', spotlight: 'ai'}
+                    {who: 'note', text: 'Abilities stay off. Only the four numbers matter: top, right, bottom, left. Play the highlighted card on the highlighted cell. Their deck is weak, and this match is not saved to your record.'},
+                    {who: 'player', card: 'Dragon', cell: 4, before: 'Pick Dragon and play it in the center. Nothing sits next to it yet, so nobody fights.', after: 'Your Dragon holds the middle. Each side fights the one card that shares that edge. A diagonal does not fight.'},
+                    {who: 'ai', card: 'Frog', cell: 1, after: 'They put Frog above your Dragon. Frog\'s bottom is 5. Your top is 9. 5 does not beat 9, so you keep Dragon.'},
+                    {who: 'player', card: 'Vampire', cell: 2, before: 'Pick Vampire and play it to the right of Frog. Your left is 6. Their right is 4.', after: 'Your 6 beats their 4. Frog turns blue. That is a capture: their card is yours, and it scores for you.'},
+                    {who: 'log', before: 'Open the Battle log under the board. Every play from this match is written there.', after: 'Names wear the color they had on that play. A capture stays in the list, so you can reread a fight. Continue when you have seen it.'},
+                    {who: 'ai', card: 'Zombie', cell: 3, after: 'They put Zombie left of your Dragon. Both touching numbers are 2. A match does nothing. You need a higher number.'},
+                    {who: 'player', card: 'Celestial', cell: 0, before: 'Pick Celestial. The A on top means 10. Play it above Zombie, and watch which side actually touches.', after: 'Your bottom is 3. Their top is 4. The 10 is on top, and that side is not touching Zombie, so you do not take it. Compare only the sides that touch.'},
+                    {who: 'ai', card: 'Lizard', cell: 8, after: 'They put Lizard in the corner, touching nobody. Only neighbors fight.'},
+                    {who: 'player', card: 'Paladin', cell: 7, before: 'Pick Paladin and play it to the left of Lizard. Your right is 8. Their left is 4.', after: 'Your 8 beats their 4, so Lizard is yours. Paladin\'s top matches Dragon, and your own cards do not capture each other.'},
+                    {who: 'ai', card: 'Imp', cell: 5, after: 'They put Imp beside you. Their top matches Vampire\'s bottom at 3. Their left is 5, which loses to Dragon\'s right 7. They take nothing.'},
+                    {who: 'player', card: 'T-Rex', cell: 6, before: 'Last card. Play T-Rex under Zombie. Your top is 8. Their bottom is 6.', after: 'Your 8 beats their 6. The board is full: you have 8 cards, they have 1. Owl is still in their hand, and a card you never play does not score.', spotlight: 'ai'}
                 ]
             },
             {
                 title: 'On play',
-                kicker: 'Lesson 2 · On play',
-                log: 'Tutorial — abilities that fire when a card is played.',
+                log: 'This match is abilities that fire when you play a card.',
                 ruleset: 'ember',
-                blurb: 'Cinder, Blast, Curse, Bolt, Buff, Siphon, and Parasite. Each note says what just triggered.',
+                blurb: 'Cinder, Blast, Curse, Bolt, Buff, Siphon, and Parasite. After each play, you see what just happened.',
                 player: ['Scorch', 'Dragon', 'Ghost', 'Wizard', 'Mimic'],
                 ai: ['Robot', 'Fairy', 'Monk', 'Kraken', 'Owl'],
                 steps: [
-                    {who: 'note', text: 'Abilities are on. The note after each play says what triggered. Each turn lights up one card, then the cell it goes on. Bolt and Cinder are aimed for you in this lesson, so they are not random.'},
-                    {who: 'player', card: 'Scorch', cell: 0, roll: 1, before: 'Play Scorch in the top-left. Cinder paints one empty cell. Whoever sits there later is -1 to every stat.', after: 'The top-right cell is orange. It is empty for now. The -1 starts when a card lands on it.'},
-                    {who: 'ai', card: 'Robot', cell: 6, after: 'Robot is in the bottom-left, touching nobody. Equalizer only matters when numbers tie, and there is no neighbor to tie.'},
-                    {who: 'player', card: 'Dragon', cell: 3, before: 'Play Dragon above Robot. Dragon\'s printed bottom is 4. Robot\'s top is 5. Blast is what makes this fight.', after: 'Blast adds 2 on the turn a card is played. Bottom 4 becomes 6, and 6 beats 5, so Robot flips. The +2 fades after the turn. Without it, 4 would not beat 5.'},
-                    {who: 'ai', card: 'Fairy', cell: 4, after: 'Fairy\'s left is 6 and Dragon\'s right is 7, so she does not capture. Buff does nothing yet: she has no friendly neighbor.'},
-                    {who: 'player', card: 'Ghost', cell: 7, before: 'Play Ghost under Fairy. Curse hits the strongest enemy for -1 on every side, then you capture.', after: 'Fairy was the only enemy, so she is cursed. Her bottom goes from 3 to 2, and Ghost\'s top 3 takes her. It would have been a tie without Curse. She is yours now, so Buff turns on: Dragon and Ghost beside her are +1.'},
-                    {who: 'ai', card: 'Monk', cell: 8, after: 'Monk\'s left is 5 and Ghost\'s right is 8. Equalizer captures ties only. 5 is not a tie, so Monk stays red.'},
-                    {who: 'player', card: 'Wizard', cell: 5, roll: 0, before: 'Play Wizard above Monk. Bolt zaps one enemy for -2 before the capture. Monk is the only enemy.', after: 'Bolt drops Monk from 5s to 3s. Wizard\'s bottom is 3, plus 1 from Fairy beside him, so 4 beats 3. Without the zap, 4 would lose to 5.'},
-                    {who: 'ai', card: 'Kraken', cell: 2, after: 'Kraken landed on the cindered cell, so he is -1. Siphon stole 1 from Wizard\'s top and added it to Kraken\'s top, the opposite side. His bottom is still too low to capture.'},
-                    {who: 'player', card: 'Mimic', cell: 1, before: 'Play Mimic left of Kraken. Parasite copies an adjacent enemy, and if that ability fires on play, it fires before the capture.', after: 'Mimic copies Kraken\'s Siphon. The copy steals 1 from Kraken\'s left. Your right is 2 plus Fairy\'s buff, so 3 beats his 2. The whole board is yours. Owl is still in their hand and does not score.', spotlight: 'ai'}
+                    {who: 'note', text: 'Abilities are on. After each play, you will see what just happened. Play the highlighted card on the highlighted cell. Bolt and Cinder hit the same spots every time you replay this.'},
+                    {who: 'player', card: 'Scorch', cell: 0, roll: 1, before: 'Play Scorch in the top-left. Cinder burns one empty cell. Whoever sits there later is -1 to every number.', after: 'The top-right cell is orange. It is empty for now. The -1 starts when someone sits there.'},
+                    {who: 'ai', card: 'Robot', cell: 6, after: 'They put Robot in the bottom-left, touching nobody. Equalizer only takes a card when the numbers match, and there is no neighbor to match.'},
+                    {who: 'player', card: 'Dragon', cell: 3, before: 'Play Dragon above Robot. Your bottom is 4. Their top is 5. Blast is what makes this fight.', after: 'Blast adds 2 on the turn you play the card. Your bottom 4 becomes 6, and 6 beats 5, so you take Robot. The +2 is gone after the turn. Without it, 4 would not beat 5.'},
+                    {who: 'ai', card: 'Fairy', cell: 4, after: 'They put Fairy in the middle. Her left is 6 and your Dragon\'s right is 7, so she does not take you. Buff does nothing yet: she has no friendly neighbor.'},
+                    {who: 'player', card: 'Ghost', cell: 7, before: 'Play Ghost under Fairy. Curse hits the strongest enemy for -1 on every side, then you capture.', after: 'Fairy was the only enemy, so she is cursed. Her bottom goes from 3 to 2, and your top 3 takes her. It would have been a match without Curse. She is yours now, so Buff turns on: Dragon and Ghost beside her are +1.'},
+                    {who: 'ai', card: 'Monk', cell: 8, after: 'They put Monk in the corner. Their left is 5 and your Ghost\'s right is 8. Equalizer only takes on a match. 5 is not a match, so Monk stays red.'},
+                    {who: 'player', card: 'Wizard', cell: 5, roll: 0, before: 'Play Wizard above Monk. Bolt zaps one enemy for -2 before you capture. Monk is the only enemy.', after: 'Bolt drops Monk from 5s to 3s. Your bottom is 3, plus 1 from Fairy beside you, so 4 beats 3. Without the zap, 4 would lose to 5.'},
+                    {who: 'ai', card: 'Kraken', cell: 2, after: 'They put Kraken on the burned cell, so he is -1. Siphon stole 1 from your Wizard\'s top and added it to Kraken\'s top, the opposite side. His bottom is still too low to take you.'},
+                    {who: 'player', card: 'Mimic', cell: 1, before: 'Play Mimic left of Kraken. Parasite copies an adjacent enemy. If that ability fires when you play, it fires before you capture.', after: 'Mimic copies Kraken\'s Siphon. The copy steals 1 from Kraken\'s left. Your right is 2 plus Fairy\'s buff, so 3 beats his 2. The whole board is yours. Owl is still in their hand and does not score.', spotlight: 'ai'}
                 ]
             },
             {
                 title: 'On the board',
-                kicker: 'Lesson 3 · On the board',
-                log: 'Tutorial — abilities that keep working after the play.',
+                log: 'This match is abilities that keep working after you play.',
                 ruleset: 'ember',
-                blurb: 'Pendulum, Chill, Spite, Poison, Equalizer, and Symbiosis. Silence is the card they never get to play.',
-                player: ['Pendulum', 'Frost', 'Spider', 'Monk', 'Mycelium'],
+                blurb: 'Pendulum, Chill, Spite, Poison, Equalizer, and Symbiosis. Silence sits in their hand and never comes down.',
+                player: ['Clock', 'Frost', 'Spider', 'Monk', 'Mycelium'],
                 ai: ['Vendetta', 'Owl', 'Robot', 'Wrath', 'Dread'],
                 steps: [
-                    {who: 'note', text: 'These abilities keep working after the card is played. Pendulum swings every turn. Chill and Buff are auras. Poison ticks at the end of a turn. Symbiosis grows with your captures, including in your hand.'},
-                    {who: 'player', card: 'Pendulum', cell: 0, before: 'Play Pendulum in the top-left. It swaps top and bottom with left and right at the end of every turn, until the board is full.', after: 'It was played as 8 on top and bottom, 2 on the sides. It has already swung: the 8s are on the left and right. It will swing back next turn.'},
-                    {who: 'ai', card: 'Vendetta', cell: 6, after: 'Vendetta touches nobody, so Spite is waiting. Pendulum swung again. The 8s are back on top and bottom. It keeps trading like that every turn.'},
-                    {who: 'player', card: 'Frost', cell: 3, before: 'Play Frost above Vendetta. Chill lowers adjacent enemies by 1, and that counts for the capture. Her top is 4. Your bottom is 4.', after: 'Chill made her top 3 for the fight, so your 4 takes her. Chill lets go once she is yours, so her top reads 4 again. Spite then took 1 from every side of Frost. Those numbers are red.'},
-                    {who: 'ai', card: 'Owl', cell: 1, after: 'Owl\'s left is 6 and Pendulum\'s right is 8, so Owl does not capture. Equalizer would have needed a tie.'},
-                    {who: 'player', card: 'Spider', cell: 2, before: 'Play Spider to the right of Owl. Spider\'s left is 3 and Owl\'s right is 3. Poison captures after the tick, not on the way in.', after: 'The play ties, so nothing flips yet. Then Poison takes 1 from Owl and Spider captures. Poison sticks, unlike Chill. It repeats at the end of every turn while an enemy sits beside Spider.'},
-                    {who: 'ai', card: 'Robot', cell: 7, after: 'Robot\'s left is 2 and Vendetta\'s right is 6. No tie, so Equalizer does not fire. Owl is yours now, so Spider has no enemy neighbor and Poison has nothing to tick.'},
-                    {who: 'player', card: 'Monk', cell: 4, before: 'Play Monk above Robot. Monk\'s bottom is 5 and Robot\'s top is 5. Equalizer captures that tie.', after: 'A normal card would stop on a tie. Equalizer takes Robot. Mycelium is still in your hand and already reads 7: +1 for each of your 3 captures.'},
-                    {who: 'ai', card: 'Wrath', cell: 8, after: 'Wrath\'s left ties Robot\'s right at 5. Spite does nothing until Wrath is captured.'},
-                    {who: 'player', card: 'Mycelium', cell: 5, before: 'Play Mycelium above Wrath. It should already show 7 on every side. Printed 4 would lose to Wrath\'s top 6.', after: 'Bottom 7 beats top 6, so the bonus is why you capture. Spite then takes 1 from Mycelium, and the new capture grows it again. Dread never played. Silence turns off adjacent enemy abilities. Two Silence cards next to each other cancel, and capture still works.', spotlight: 'ai'}
+                    {who: 'note', text: 'These abilities keep working after you play the card. Pendulum swings every turn. Chill and Buff stay on while the card sits there. Poison hits at the end of a turn. Symbiosis grows with your captures, even in your hand.'},
+                    {who: 'player', card: 'Clock', cell: 0, before: 'Play Clock in the top-left. Pendulum swaps top and bottom with left and right at the end of every turn, until the board is full.', after: 'You played it as 8 on top and bottom, 2 on the sides. It has already swung: the 8s are on the left and right. It will swing back next turn.'},
+                    {who: 'ai', card: 'Vendetta', cell: 6, after: 'They put Vendetta where it touches nobody, so Spite is waiting. Your Clock swung again. The 8s are back on top and bottom. It keeps trading like that every turn.'},
+                    {who: 'player', card: 'Frost', cell: 3, before: 'Play Frost above Vendetta. Chill lowers adjacent enemies by 1, and that counts when you capture. Her top is 4. Your bottom is 4.', after: 'Chill made her top 3 for the fight, so your 4 takes her. Chill lets go once she is yours, so her top reads 4 again. Spite then took 1 from every side of Frost. Those numbers are red.'},
+                    {who: 'ai', card: 'Owl', cell: 1, after: 'They put Owl next to Clock. Owl\'s left is 6 and your Clock\'s right is 8, so Owl does not take you. Equalizer would have needed a match.'},
+                    {who: 'player', card: 'Spider', cell: 2, before: 'Play Spider to the right of Owl. Your left is 3 and their right is 3. Poison takes the card after it hits, not when you sit down.', after: 'The numbers match, so nothing changes yet. Then Poison takes 1 from Owl and you capture. Poison sticks, unlike Chill. It repeats at the end of every turn while an enemy sits beside Spider.'},
+                    {who: 'ai', card: 'Robot', cell: 7, after: 'They put Robot next to Vendetta. Robot\'s left is 2 and Vendetta\'s right is 6. No match, so Equalizer does nothing. Owl is yours now, so Spider has no enemy neighbor and Poison has nothing to hit.'},
+                    {who: 'player', card: 'Monk', cell: 4, before: 'Play Monk above Robot. Your bottom is 5 and their top is 5. Equalizer takes that match.', after: 'A normal card would stop on a match. Equalizer takes Robot. Mycelium is still in your hand and already reads 7: +1 for each of your 3 captures.'},
+                    {who: 'ai', card: 'Wrath', cell: 8, after: 'They put Wrath in the corner. Wrath\'s left matches Robot\'s right at 5. Spite does nothing until you take Wrath.'},
+                    {who: 'player', card: 'Mycelium', cell: 5, before: 'Play Mycelium above Wrath. It should already show 7 on every side. Without your captures, 4 would lose to Wrath\'s top 6.', after: 'Your bottom 7 beats their top 6, so the bonus is why you take Wrath. Spite then takes 1 from Mycelium, and the new capture grows it again. Dread never came down. Silence turns off enemy abilities next to it. Two Silence cards next to each other cancel, and you can still capture.', spotlight: 'ai'}
                 ]
             }
         ];
@@ -6156,7 +7517,7 @@
             if (!tutorial || !step) return 'Continue when you are ready.';
             if (tutorial.phase === 'log' && !tutorial.logOpened) return 'Open the Battle log.';
             if (tutorial.phase !== 'play') return 'Read the note, then continue.';
-            if (step.who === 'player' && cell != null && cell !== step.cell && tutorial.armed) return 'That cell is not the one. Use the highlighted cell.';
+            if (step.who === 'player' && cell != null && cell !== step.cell && tutorial.armed) return 'Not that cell. Play on the highlighted one.';
             return `Play ${step.card}.`;
         }
 
@@ -6183,7 +7544,7 @@
             if (cardEl) cardEl.classList.add('tutorial-coach');
             if (kicker) {
                 kicker.hidden = false;
-                kicker.textContent = lesson ? lesson.kicker : 'Tutorial';
+                kicker.textContent = lesson ? lesson.title : 'Tutorial';
             }
             if (skip) skip.textContent = 'Exit tutorial';
             coach.active = true;
@@ -6236,7 +7597,7 @@
                 statusMsg.textContent = 'Open the Battle log.';
             } else if (step.who === 'ai') {
                 tutorial.phase = 'resolving';
-                tutorialSetText('Their card is coming.');
+                tutorialSetText('They are about to play.');
                 tutorialShowNext(false);
                 statusMsg.textContent = 'Their play.';
                 clearAiPlayTimer();
@@ -6305,7 +7666,7 @@
                 const block = document.createElement('div');
                 block.className = 'tutorial-lesson';
                 const title = document.createElement('h3');
-                title.textContent = `${index + 1}. ${lesson.title}`;
+                title.textContent = lesson.title;
                 const copy = document.createElement('p');
                 copy.textContent = lesson.blurb;
                 const btn = document.createElement('button');
@@ -6332,7 +7693,7 @@
             document.body.classList.remove('tutorial-live');
             unlockGameoverClicks();
             document.body.classList.add('menu-open');
-            hideModals(['main-menu-modal', 'draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal', 'battle-log-modal', 'league-modal', 'league-roster']);
+            hideModals(['main-menu-modal', 'draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal', 'battle-log-modal', 'league-modal', 'league-roster', 'changelog-modal']);
             gameState = 'menu';
             resetTable();
             playerHand = [];
@@ -6374,10 +7735,11 @@
             hideTurnBanner();
             resetFingerDrag();
             unlockGameoverClicks();
-            hideModals(['tutorial-modal', 'main-menu-modal', 'draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal', 'battle-log-modal', 'league-modal', 'league-roster']);
+            hideModals(['tutorial-modal', 'main-menu-modal', 'draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal', 'battle-log-modal', 'league-modal', 'league-roster', 'changelog-modal']);
             localStorage.setItem('ember_grid_coached', 'true');
             activeMode = 'tutorial';
             skipCoachOnce = true;
+            applyGridSize(3);
             tutorial = {
                 lessonIndex: index,
                 stepIndex: 0,
@@ -6478,16 +7840,14 @@
 
         function firstEmptyCell() {
             const i = board.findIndex(c => c === null);
-            return i < 0 ? 4 : i;
+            return i < 0 ? Math.floor(cellCount() / 2) : i;
         }
 
         function captureLessonCell() {
             const emptyAdj = [];
             board.forEach((c, i) => {
                 if (!c || c.owner !== 'red') return;
-                const row = Math.floor(i / 3), col = i % 3;
-                [{idx: i - 3, ok: row > 0}, {idx: i + 1, ok: col < 2}, {idx: i + 3, ok: row < 2}, {idx: i - 1, ok: col > 0}]
-                    .forEach(n => { if (n.ok && board[n.idx] === null) emptyAdj.push(n.idx); });
+                neighborDirs(i).forEach(n => { if (n.ok && board[n.idx] === null) emptyAdj.push(n.idx); });
             });
             return emptyAdj[0] ?? firstEmptyCell();
         }
@@ -6686,9 +8046,12 @@
         }
 
         function getEffectiveStat(card, statIndex, isPlacementTurn, silenced) {
-            let val = (card.stats || card.baseStats)[statIndex];
+            const row = card.stats || card.baseStats || [];
+            let val = row[statIndex];
+            if (val == null) val = 1;
             if (silenced && liveAbilityType(card) === 'symbiosis' && !board.includes(card)) {
-                val = (card.baseStats || card.stats)[statIndex];
+                const base = card.baseStats || row;
+                val = base[statIndex] == null ? 1 : base[statIndex];
             }
             if (isPlacementTurn && !silenced && liveAbilityType(card) === 'blast') {
                 val += 2;
@@ -6718,7 +8081,7 @@
                 if (!n || n.owner === placedCard.owner) return;
                 if (n.baseStats[p.theirs] <= 1) return;
                 n.baseStats[p.theirs] = Math.max(1, n.baseStats[p.theirs] - 1);
-                const opp = (p.mine + 2) % 4;
+                const opp = oppositeFacing(p.mine);
                 placedCard.baseStats[opp] = Math.min(10, placedCard.baseStats[opp] + 1);
                 n.fxType = 'siphon';
                 stolen.push({name: n.name, owner: n.owner});
@@ -6864,8 +8227,8 @@
             const hits = [];
             board.forEach((card, index) => {
                 if (!card || liveAbilityType(card) !== 'pendulum' || isSilenced(index)) return;
-                const b = card.baseStats;
-                card.baseStats = [b[3], b[2], b[1], b[0]];
+                card.baseStats = swingAxes(card.baseStats);
+                if (card.stats) card.stats = swingAxes(card.stats);
                 card.fxType = 'pendulum';
                 hits.push(index);
                 queueMechFx('pendulum', index, []);
@@ -6873,7 +8236,7 @@
             return hits.length ? {text: `${hits.length === 1 ? logCard(board[hits[0]]) : 'Pendulum cards'} swung`, kind: 'pendulum'} : null;
         }
 
-        function applySymbiosis(placedCard, capturedCount, grownOut) {
+        function applySymbiosis(placedCard, capturedCount) {
             if (!capturedCount) return null;
             const owner = placedCard.owner;
             matchCaptures[owner] = (matchCaptures[owner] || 0) + capturedCount;
@@ -6884,7 +8247,6 @@
                 if (liveAbilityType(card) !== 'symbiosis' || isSilenced(index)) return;
                 card.fxType = 'symbiosis';
                 names.push({name: card.name, owner: card.owner});
-                if (grownOut) grownOut.push(index);
                 queueMechFx('symbiosis', index, []);
             });
             return names.length ? {text: `${listLogNames(names)} grew (${total} capture${total === 1 ? '' : 's'} this game)`, kind: 'symbiosis'} : null;
@@ -6898,7 +8260,7 @@
             return out;
         }
 
-        function resolveTickCaptures(indexes, grownOut) {
+        function resolveTickCaptures(indexes) {
             const sources = [];
             (indexes || []).forEach(index => {
                 const card = board[index];
@@ -6908,7 +8270,7 @@
             sources.forEach(({index, owner, card}) => {
                 const now = board[index];
                 if (!now || now !== card || now.owner !== owner || isSilenced(index)) return;
-                const log = checkCaptures(index, now, grownOut);
+                const log = checkCaptures(index, now);
                 if (log) parts.push(log);
             });
             return parts.join(' · ');
@@ -6928,8 +8290,7 @@
         }
 
         function cellFxPoint(index) {
-            const grid = document.getElementById('board-grid');
-            const cell = grid && grid.children[index];
+            const cell = boardCellEl(index);
             if (!cell) return null;
             const a = cell.getBoundingClientRect();
             if (a.width < 4 || a.height < 4) return null;
@@ -6968,7 +8329,7 @@
         }
 
         function tapCardFx(index, cls, ms) {
-            const cell = document.getElementById('board-grid') && document.getElementById('board-grid').children[index];
+            const cell = boardCellEl(index);
             const card = cell && cell.querySelector('.card');
             if (!card) return;
             card.classList.add(cls);
@@ -7187,6 +8548,15 @@
             requestAnimationFrame(() => requestAnimationFrame(run));
         }
 
+        function mountOpponentHand(topArea) {
+            if (!revealHands() || !topArea) return;
+            const opp = document.createElement('div');
+            const live = gameState === 'playing' && turn === 'ai' && aiHand.length;
+            opp.className = live ? 'hand active-turn' : 'hand';
+            aiHand.forEach((card, index) => opp.appendChild(createCardElement(card, index, 'ai')));
+            topArea.appendChild(opp);
+        }
+
         function render() {
             hideTooltip();
             const topArea = document.getElementById('top-area');
@@ -7207,23 +8577,13 @@
             }
 
             if (gameState === 'playing') {
-                if (revealHands() && aiHand.length) {
-                    const opp = document.createElement('div');
-                    opp.className = `hand ${turn === 'ai' ? 'active-turn' : ''}`;
-                    aiHand.forEach((card, index) => opp.appendChild(createCardElement(card, index, 'ai')));
-                    topArea.appendChild(opp);
-                }
+                mountOpponentHand(topArea);
                 const handDiv = document.createElement('div');
                 handDiv.className = `hand ${turn === 'player' ? 'active-turn' : ''}`;
                 playerHand.forEach((card, index) => handDiv.appendChild(createCardElement(card, index, 'player')));
                 bottomArea.appendChild(handDiv);
             } else if (gameState === 'gameover') {
-                if (revealHands() && aiHand.length && topArea) {
-                    const opp = document.createElement('div');
-                    opp.className = 'hand';
-                    aiHand.forEach((card, index) => opp.appendChild(createCardElement(card, index, 'ai')));
-                    topArea.appendChild(opp);
-                }
+                mountOpponentHand(topArea);
                 const gameoverOpen = !document.getElementById('gameover-modal').classList.contains('hidden');
                 if (!gameoverOpen) {
                     const bar = document.createElement('div');
@@ -7274,8 +8634,16 @@
             }
 
             const gridEl = document.getElementById('board-grid'); gridEl.innerHTML = '';
+            gridEl.classList.toggle('hex-board', isHexGrid());
             board.forEach((cell, index) => {
                 const cellEl = document.createElement('div'); cellEl.className = 'cell';
+                if (isHexGrid() && HEX.boxes[index]) {
+                    const box = HEX.boxes[index];
+                    cellEl.style.left = box.left;
+                    cellEl.style.top = box.top;
+                    cellEl.style.width = box.width;
+                    cellEl.style.height = box.height;
+                }
                 if (cellEffects[index] === 'cinder') {
                     cellEl.classList.add('cell-cinder');
                     const cinderTip = 'Cindered: whoever sits here is -1 to all stats.';
@@ -7304,12 +8672,48 @@
             requestAnimationFrame(updateCoach);
         }
 
+        function paintHandSelection() {
+            const on = turn === 'player' && gameState === 'playing';
+            document.querySelectorAll('#bottom-area .hand .card').forEach(el => {
+                const idx = Number(el.dataset.handIndex);
+                el.classList.toggle('selected', on && selectedCard === idx);
+            });
+        }
+
+        function selectHandCard(index, card) {
+            selectedCard = (selectedCard === index) ? null : index;
+            statusMsg.textContent = selectedCard !== null
+                ? withMatchup(`Selected: ${card.name}${abilityNameOf(card) ? ` (${abilityNameOf(card)})` : ''}. Play it on an empty cell.`)
+                : withMatchup("Your turn - play a card from your hand.");
+            paintHandSelection();
+            if (selectedCard !== null) onCoachSelected();
+        }
+
         function createCardElement(card, index, source) {
             const div = document.createElement('div');
             const didFlip = !!card.justFlipped;
-            div.className = `card ${card.owner} ${didFlip ? 'flipped' : ''}`;
+            div.className = `card ${card.owner} ${didFlip ? 'flipped' : ''}${isHexGrid() ? ' has-hex-faces' : ''}`;
             if (card.justFlipped) card.justFlipped = false;
+            if (source === 'player') div.dataset.handIndex = String(index);
             if (source === 'player' && selectedCard === index && turn === 'player' && gameState === 'playing') div.classList.add('selected');
+            if (card.drawAnimAt && source !== 'board') {
+                const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                const elapsed = performance.now() - card.drawAnimAt;
+                const dur = 580;
+                if (reduce || elapsed >= dur) {
+                    card.drawAnimAt = 0;
+                } else {
+                    div.classList.add('draw-in');
+                    if (elapsed > 16) div.style.animationDelay = `-${Math.round(elapsed)}ms`;
+                    div.addEventListener('animationend', (e) => {
+                        if (e.target !== div) return;
+                        if (e.animationName !== 'cardDrawIn' && e.animationName !== 'cardDrawInTop') return;
+                        div.classList.remove('draw-in');
+                        div.style.animationDelay = '';
+                        card.drawAnimAt = 0;
+                    }, {once: true});
+                }
+            }
             if (coach.active && coach.step === 'hand' && source === 'player' && index === 0) div.classList.add('coach-target');
             if (tutorial && source === 'player' && tutorial.phase === 'play') {
                 const step = tutorialStep();
@@ -7332,6 +8736,8 @@
                 ${facingMarkup('right', activeStats[1], printed[1], prevStats && prevStats[1])}
                 ${facingMarkup('bottom', activeStats[2], printed[2], prevStats && prevStats[2])}
                 ${facingMarkup('left', activeStats[3], printed[3], prevStats && prevStats[3])}
+                ${isHexGrid() ? facingMarkup('ne', activeStats[4], printed[4], prevStats && prevStats[4]) : ''}
+                ${isHexGrid() ? facingMarkup('nw', activeStats[5], printed[5], prevStats && prevStats[5]) : ''}
                 <div class="card-emoji">${card.emoji}</div>
                 ${nameplateHTML(card, silenced)}
                 ${didFlip ? '<div class="capture-pop">CAPTURED</div>' : ''}
@@ -7353,28 +8759,33 @@
                         return;
                     }
                     selectedCard = index;
+                    paintHandSelection();
                     e.dataTransfer.setData('text/plain', index);
                     div.classList.add('dragging');
                     onCoachSelected();
                 });
-                div.addEventListener('dragend', () => div.classList.remove('dragging'));
+                div.addEventListener('dragend', () => {
+                    div.classList.remove('dragging');
+                    paintHandSelection();
+                });
                 div.addEventListener('pointerdown', (e) => onHandPointerDown(e, index, div));
 
                 div.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    if (swallowClick) {swallowClick = false; return;}
+                    if (swallowClick && swallowForIndex === index) {
+                        swallowClick = false;
+                        swallowForIndex = null;
+                        return;
+                    }
+                    swallowClick = false;
+                    swallowForIndex = null;
                     if (tutorialBlocksCard(card)) {
                         sfx.click(); hideTooltip();
                         statusMsg.textContent = tutorialBlockMessage();
                         return;
                     }
                     sfx.click(); hideTooltip();
-                    selectedCard = (selectedCard === index) ? null : index;
-                    statusMsg.textContent = selectedCard !== null
-                        ? withMatchup(`Selected: ${card.name}${abilityNameOf(card) ? ` (${abilityNameOf(card)})` : ''}. Play it on an empty cell.`)
-                        : withMatchup("Your turn - play a card from your hand.");
-                    if (selectedCard !== null) onCoachSelected();
-                    render();
+                    selectHandCard(index, card);
                 });
             }
             return div;
@@ -7395,7 +8806,7 @@
             if (!hit) return null;
             const cell = hit.closest('#board-grid .cell');
             if (!cell) return null;
-            const cells = document.getElementById('board-grid').children;
+            const cells = boardCellEls();
             for (let i = 0; i < cells.length; i++) if (cells[i] === cell) return i;
             return null;
         }
@@ -7405,10 +8816,12 @@
         }
 
         function highlightCellAt(x, y) {
-            clearCellDragOver();
             const idx = cellIndexFromPoint(x, y);
+            if (idx === pointerDrag.overIdx) return;
+            pointerDrag.overIdx = idx;
+            clearCellDragOver();
             if (idx === null || board[idx] !== null) return;
-            const cell = document.getElementById('board-grid').children[idx];
+            const cell = boardCellEl(idx);
             if (cell) cell.classList.add('drag-over');
         }
 
@@ -7424,6 +8837,7 @@
             hideTooltip();
             pointerDrag.active = true;
             selectedCard = pointerDrag.index;
+            paintHandSelection();
             hideTooltip();
             onCoachSelected();
             if (pointerDrag.sourceEl) pointerDrag.sourceEl.classList.add('dragging');
@@ -7448,6 +8862,7 @@
             if (pointerDrag.sourceEl) pointerDrag.sourceEl.classList.remove('dragging');
             pointerDrag.active = false;
             pointerDrag.ghost = null;
+            pointerDrag.overIdx = null;
         }
 
         function resetFingerDrag() {
@@ -7461,6 +8876,10 @@
             if (!isFingerPointer(e) || e.isPrimary === false) return;
             if (gameState !== 'playing' || turn !== 'player') return;
             if (tutorialBlocksCard(playerHand[index])) return;
+            if (swallowClick && swallowForIndex !== index) {
+                swallowClick = false;
+                swallowForIndex = null;
+            }
             pointerDrag.pointerId = e.pointerId;
             pointerDrag.index = index;
             pointerDrag.startX = e.clientX;
@@ -7471,7 +8890,9 @@
 
         function onFingerDragMove(e) {
             if (pointerDrag.pointerId === null || e.pointerId !== pointerDrag.pointerId) return;
-            const dist = Math.hypot(e.clientX - pointerDrag.startX, e.clientY - pointerDrag.startY);
+            const dx = e.clientX - pointerDrag.startX;
+            const dy = e.clientY - pointerDrag.startY;
+            const dist = Math.hypot(dx, dy);
             if (!pointerDrag.active) {
                 if (dist < 12) return;
                 if (e.cancelable) e.preventDefault();
@@ -7489,9 +8910,12 @@
                 const cellIdx = cellIndexFromPoint(clientX, clientY);
                 const handIndex = pointerDrag.index;
                 swallowClick = true;
+                swallowForIndex = handIndex;
                 resetFingerDrag();
                 if (cellIdx !== null && board[cellIdx] === null && gameState === 'playing' && turn === 'player') {
                     executeCardPlay(handIndex, cellIdx);
+                } else {
+                    paintHandSelection();
                 }
                 return;
             }
@@ -7543,26 +8967,23 @@
             const buffFx = tagAuraBuffs(placedCard, index);
             const silenceFx = tagSilence(placedCard, index);
             const chillFx = tagChill(placedCard, index);
-            const grownThisTurn = [];
-            const capLog = checkCaptures(index, placedCard, grownThisTurn);
+            const capLog = checkCaptures(index, placedCard);
             recalculateDynamicStats();
             const psnFx = applyEndOfTurnEffects();
             recalculateDynamicStats();
-            const psnCapLog = resolveTickCaptures(poisonSourceIndexes(), grownThisTurn);
-            recalculateDynamicStats();
-            const groveWave = [...new Set(grownThisTurn)];
-            const groveCapLog = resolveTickCaptures(groveWave, null);
+            const psnCapLog = resolveTickCaptures(poisonSourceIndexes());
             recalculateDynamicStats();
             const pendulumFx = tickPendulum();
             recalculateDynamicStats();
-            return {enemyNeighbor, abilityFx, buffFx, silenceFx, chillFx, capLog, psnFx, psnCapLog, groveCapLog, pendulumFx};
+            return {enemyNeighbor, abilityFx, buffFx, silenceFx, chillFx, capLog, psnFx, psnCapLog, pendulumFx};
         }
 
         function processCardPlacement(index, placedCard) {
             const fx = applyPlacementCore(index, placedCard);
+            drawAfterPlay(placedCard.owner);
             if (silentSim) return;
 
-            const fxParts = [fx.abilityFx && fx.abilityFx.text, fx.buffFx && fx.buffFx.text, fx.silenceFx && fx.silenceFx.text, fx.chillFx && fx.chillFx.text, fx.capLog, fx.psnFx && fx.psnFx.text, fx.psnCapLog, fx.groveCapLog, fx.pendulumFx && fx.pendulumFx.text].filter(Boolean);
+            const fxParts = [fx.abilityFx && fx.abilityFx.text, fx.buffFx && fx.buffFx.text, fx.silenceFx && fx.silenceFx.text, fx.chillFx && fx.chillFx.text, fx.capLog, fx.psnFx && fx.psnFx.text, fx.psnCapLog, fx.pendulumFx && fx.pendulumFx.text].filter(Boolean);
             logAction(fxParts.length ? fxParts.join(' · ') : `${logCard(placedCard)} played.`);
 
             const placedBy = placedCard.owner === 'blue' ? 'player' : 'ai';
@@ -7572,7 +8993,7 @@
             hapticForPlay(fx);
             requestAnimationFrame(updateCoach);
 
-            if (placedBy === 'player' && !tutorial) onCoachPlaced(!!(fx.capLog || fx.psnCapLog || fx.groveCapLog), fx.enemyNeighbor);
+            if (placedBy === 'player' && !tutorial) onCoachPlaced(!!(fx.capLog || fx.psnCapLog), fx.enemyNeighbor);
 
             if (placedCard.blastPreview) {
                 if (blastPreviewTimer) clearTimeout(blastPreviewTimer);
@@ -7610,12 +9031,8 @@
             return {captures: false, equalized: false};
         }
 
-        function checkCaptures(placedIndex, placedCard, grownOut) {
-            const row = Math.floor(placedIndex / 3), col = placedIndex % 3;
-            const neighbors = [
-                {idx: placedIndex - 3, p: 0, n: 2, ok: row > 0}, {idx: placedIndex + 1, p: 1, n: 3, ok: col < 2},
-                {idx: placedIndex + 3, p: 2, n: 0, ok: row < 2}, {idx: placedIndex - 1, p: 3, n: 1, ok: col > 0}
-            ].filter(n => n.ok && board[n.idx]);
+        function checkCaptures(placedIndex, placedCard) {
+            const neighbors = neighborDirs(placedIndex).filter(n => n.ok && board[n.idx]);
 
             let blueFlipped = false, redFlipped = false;
             const captured = [];
@@ -7661,7 +9078,7 @@
             const parts = [];
             if (captured.length) parts.push(`${logCard(placedCard)} captured ${listLogNames(captured)}`);
             if (spiteHits.length) parts.push(`Spite from ${listLogNames(spiteHits)} hit ${logCard(placedCard)} (-1)`);
-            const sym = applySymbiosis(placedCard, captured.length, grownOut);
+            const sym = applySymbiosis(placedCard, captured.length);
             if (sym) parts.push(sym.text);
             return parts.join(' · ');
         }
@@ -7688,16 +9105,12 @@
             hand.forEach((card, cardIndex) => {
                 emptyCells.forEach(cellIdx => {
                     let score = 0, flipsCount = 0, exposureRisk = 0;
-                    const row = Math.floor(cellIdx / 3), col = cellIdx % 3;
                     const silencedHere = wouldBeSilenced(owner, cellIdx);
                     const hushCancels = liveAbilityType(card) === 'silence' && neighborIndexes(cellIdx).some(i => isSilenceCard(board[i]) && board[i].owner === enemy);
-                    const neighbors = [
-                        {idx: cellIdx - 3, p: 0, n: 2, c: row > 0}, {idx: cellIdx + 1, p: 1, n: 3, c: col < 2},
-                        {idx: cellIdx + 3, p: 2, n: 0, c: row < 2}, {idx: cellIdx - 1, p: 3, n: 1, c: col > 0}
-                    ];
+                    const neighbors = neighborDirs(cellIdx);
 
                     neighbors.forEach(n => {
-                        if (n.c && board[n.idx]) {
+                        if (n.ok && board[n.idx]) {
                             const neighborCard = board[n.idx];
                             const myVal = getEffectiveStat(card, n.p, true, silencedHere);
                             const theirVal = getEffectiveStat(neighborCard, n.n, false, isSilenced(n.idx));
@@ -7720,7 +9133,7 @@
                                 if (!captures && liveAbilityType(card) === 'poison' && !silencedHere && myVal > Math.max(1, theirVal - 1)) captures = true;
                                 if (captures) flipsCount++;
                             }
-                        } else if (n.c && board[n.idx] === null && difficulty === 'hard') {
+                        } else if (n.ok && board[n.idx] === null && difficulty === 'hard') {
                             const exposedStatVal = getEffectiveStat(card, n.p, true, silencedHere);
                             if (exposedStatVal <= 4) exposureRisk += (5 - exposedStatVal);
                         }
@@ -7843,8 +9256,8 @@
                     const lesson = tutorialLesson();
                     const last = tutorial.lessonIndex >= TUTORIALS.length - 1;
                     tutorialNote.textContent = last
-                        ? `${lesson.title} complete. Replay any lesson from the list.`
-                        : `${lesson.title} complete. The next lesson is ready.`;
+                        ? `You finished ${lesson.title}. Replay any lesson from the list.`
+                        : `You finished ${lesson.title}. The next lesson is ready.`;
                     const next = document.getElementById('gameover-tutorial-next');
                     if (next) {
                         next.hidden = false;
@@ -7906,7 +9319,9 @@
         }
 
         refreshRulesetDesc();
+        refreshGridSizeDesc();
         refreshVictoryCopy();
+        applyGridSize(preferredGridSize);
         if (!bootSharedMatch()) showModeMenu();
         window.addEventListener('pointermove', onFingerDragMove, {passive: false});
         window.addEventListener('pointerup', onFingerDragEnd);
@@ -7915,9 +9330,17 @@
         window.addEventListener('touchcancel', onFingerTouchEnd, {passive: false});
         document.addEventListener('click', (e) => {
             if (!swallowClick) return;
+            const card = e.target && e.target.closest && e.target.closest('#bottom-area .hand .card');
+            const idx = card ? Number(card.dataset.handIndex) : NaN;
+            if (card && Number.isFinite(idx) && idx !== swallowForIndex) {
+                swallowClick = false;
+                swallowForIndex = null;
+                return;
+            }
             e.stopPropagation();
             e.preventDefault();
             swallowClick = false;
+            swallowForIndex = null;
         }, true);
         document.addEventListener('pointerdown', (e) => {
             if (!tooltipPinned || !tooltipAnchor) return;
@@ -7931,7 +9354,7 @@
         window.addEventListener('pageshow', (e) => {
             if (!e.persisted) return;
             clearDraftTimer();
-            hideModals(['draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'battle-log-modal', 'league-modal', 'league-roster']);
+            hideModals(['draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'battle-log-modal', 'league-modal', 'league-roster', 'tutorial-modal', 'changelog-modal']);
             if (gameState !== 'playing' && gameState !== 'gameover') showModeMenu();
         });
         window.addEventListener('keydown', (e) => {
@@ -7940,6 +9363,8 @@
             if (!document.getElementById('league-roster').classList.contains('hidden')) {closeLeagueRoster(); return;}
             if (!document.getElementById('battle-log-modal').classList.contains('hidden')) {closeBattleLogModal(); return;}
             if (!document.getElementById('expanded-rules-modal').classList.contains('hidden')) {closeRulesModal(); return;}
+            if (!document.getElementById('changelog-modal').classList.contains('hidden')) {closeChangelogModal(); return;}
+            if (!document.getElementById('tutorial-modal').classList.contains('hidden')) {closeTutorialMenu(); return;}
             if (!document.getElementById('compendium-modal').classList.contains('hidden')) {closeCompendiumModal(); return;}
             if (!document.getElementById('options-modal').classList.contains('hidden')) {closeOptionsModal(); return;}
             if (!document.getElementById('stats-modal').classList.contains('hidden')) {closeStatsModal(); return;}
