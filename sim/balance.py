@@ -12,7 +12,7 @@ import random
 import statistics
 from collections import defaultdict
 
-# --- Base Set (same order as index.html, ids BS-01 .. BS-70) ---
+# --- Base Set (same order as js/cards.js, ids BS-01 .. BS-70) ---
 
 CARDS = [
     {"name": "Celestial", "base": [10, 2, 3, 4], "ability": "aura_buff"},
@@ -75,7 +75,7 @@ CARDS = [
     {"name": "Lamprey", "base": [4, 5, 6, 4], "ability": "siphon"},
     {"name": "Mosquito", "base": [3, 7, 3, 6], "ability": "siphon"},
     {"name": "Siphon", "base": [5, 6, 4, 4], "ability": "siphon"},
-    {"name": "Pendulum", "base": [8, 2, 8, 2], "ability": "pendulum"},
+    {"name": "Clock", "base": [8, 2, 8, 2], "ability": "pendulum"},
     {"name": "Tide", "base": [7, 3, 6, 3], "ability": "pendulum"},
     {"name": "Moon", "base": [2, 7, 2, 8], "ability": "pendulum"},
     {"name": "Hourglass", "base": [6, 3, 7, 3], "ability": "pendulum"},
@@ -392,9 +392,6 @@ class Match:
         self.recalc()
         self.resolve_tick_captures(self.poison_source_indexes(), grown)
         self.recalc()
-        grove_wave = list(dict.fromkeys(grown))
-        self.resolve_tick_captures(grove_wave)
-        self.recalc()
         self.plays += 1
         if self.plays < 9:
             self.tick_pendulum()
@@ -409,7 +406,7 @@ class Match:
             card["base"] = [l, b, r, t]
 
     def pick_move(self, owner: str) -> tuple[int, int]:
-        """Normal AI heuristic, same weights as index.html, for either seat."""
+        """Normal AI heuristic, same weights as js/ai.js, for either seat."""
         opp = "red" if owner == "blue" else "blue"
         empty = [i for i, c in enumerate(self.board) if c is None]
         hand = self.hands[owner]
@@ -1020,7 +1017,7 @@ def write_report(path: str, random_b: dict, tribe_b: dict, n_random: int, n_pair
         a("")
     if symbiosis_field:
         sym_mixed = next(r for r in rand_abs if r["ability"] == "symbiosis")
-        a(f"**Symbiosis is +1 per capture this game.** Mixed {fmt_pct(sym_mixed['seat_win_pct'])} (mean power {sym_mixed['power']:.1f}), mono-Grove {fmt_pct(symbiosis_field[1])}. A late Grove card still sits at the player's capture count, including in hand. One capture pass after it grows.")
+        a(f"**Symbiosis is +1 per capture this game.** Mixed {fmt_pct(sym_mixed['seat_win_pct'])} (mean power {sym_mixed['power']:.1f}), mono-Grove {fmt_pct(symbiosis_field[1])}. A late Grove card still sits at the player's capture count, including in hand. It does not capture again when it grows.")
         a("")
     if poison_field:
         psn_mixed = next(r for r in rand_abs if r["ability"] == "poison")
@@ -1055,11 +1052,11 @@ def write_report(path: str, random_b: dict, tribe_b: dict, n_random: int, n_pair
 
     a("## Suggestions (do not apply yet)")
     a("")
-    a("1. **Do not nerf Pendulum as a rule.** Mixed Tide is a lead, not a broken on-play. The tribe-deck runaway is five cards that all swing axes. If Tribe Decks stay a first-class mode, shave the extreme axis faces (Moon's Left 8, Pendulum's 8/2/8/2) rather than the swap.")
+    a("1. **Do not nerf Pendulum as a rule.** Mixed Tide is a lead, not a broken on-play. The tribe-deck runaway is five cards that all swing axes. If Tribe Decks stay a first-class mode, shave the extreme axis faces (Moon's Left 8, Clock's 8/2/8/2) rather than the swap.")
     if moon:
         a(f"2. **Moon** mixed {fmt_pct(moon['win_pct'])}, keep {moon['keep_pct']:.0f}%, power {moon['power']}. Printed 2/7/2/8 becomes 8/2/7/2 after one swing. Shave Left 8→7 so the live top after the first swing is 7. That is the one Tide face to touch.")
     if lichen and ivy:
-        a(f"3. **Grove is capture-count, not sit-and-wait.** Lichen {fmt_pct(lichen['win_pct'])} / Ivy {fmt_pct(ivy['win_pct'])}. Re-read mixed-hand and the tribe matrix. If Grove overshoots Chill, take back the capture pass before adding body power.")
+        a(f"3. **Grove is capture-count, not sit-and-wait.** Lichen {fmt_pct(lichen['win_pct'])} / Ivy {fmt_pct(ivy['win_pct'])}. Re-read mixed-hand and the tribe matrix. Grove no longer captures when it grows.")
     if mimic:
         a(f"4. **Mimic** mixed {fmt_pct(mimic['win_pct'])}, A-left (3/2/4/A), keep {mimic['keep_pct']:.0f}%. Left was the empty axis, so the 19-power copy card jumped. If it stays S, move the A to Right (3/A/4/2) so it shares Paladin 8 / Kraken 9 instead of sitting alone.")
     if worldtree:
@@ -1209,11 +1206,11 @@ def self_test() -> None:
     assert sip.board[1]["base"][0] == 7, "Siphon should add the stolen point to the opposite facing"
     # Pendulum swaps axes at the start of the next turn.
     rng = random.Random(7)
-    pend = clone_card(next(c for c in CARDS if c["name"] == "Pendulum"), "blue")
+    pend = clone_card(next(c for c in CARDS if c["name"] == "Clock"), "blue")
     filler = clone_card(next(c for c in CARDS if c["name"] == "Frog"), "red")
     pm = Match([pend], [filler], "blue", rng)
     pm.place("blue", 0, 4)
-    assert pm.board[4]["base"] == [2, 8, 2, 8], "Pendulum should swing before the next turn"
+    assert pm.board[4]["base"] == [2, 8, 2, 8], "Clock should swing before the next turn"
     gyro = clone_card(next(c for c in CARDS if c["name"] == "Gyro"), "blue")
     gy = Match([gyro], [clone_card(next(c for c in CARDS if c["name"] == "Frog"), "red")], "blue", random.Random(7))
     gy.place("blue", 0, 4)
@@ -1255,7 +1252,7 @@ def self_test() -> None:
     late.place("blue", 0, 0)
     assert late.board[0]["base"] == [2, 10, 3, 2], "Late Worldtree printed face stays 2/A/3/2"
     assert late.board[0]["stats"] == [3, 10, 4, 3], "Late Worldtree should already be +1"
-    # Grown Grove can capture a neighbor it was tying with. One extra pass only.
+    # Grown Grove does not capture later. Only Poison captures after play.
     coral = clone_card(next(c for c in CARDS if c["name"] == "Coral"), "blue")
     monk = clone_card(next(c for c in CARDS if c["name"] == "Monk"), "blue")
     owl = clone_card(next(c for c in CARDS if c["name"] == "Owl"), "red")
@@ -1267,9 +1264,9 @@ def self_test() -> None:
     gro_cap.place("red", 0, 5)
     gro_cap.place("blue", 0, 2)
     assert gro_cap.board[5]["owner"] == "blue", "Monk should equalize-capture Robot"
-    assert gro_cap.board[4]["owner"] == "blue", "Grown Coral should capture Owl after +1"
+    assert gro_cap.board[4]["owner"] == "red", "Grown Coral should not capture Owl on a later turn"
     assert gro_cap.board[1]["base"] == [5, 3, 5, 3], "Coral printed face should not change"
-    assert gro_cap.board[1]["stats"] == [7, 5, 7, 5], "Coral should sit at +2 after Monk and its own capture"
+    assert gro_cap.board[1]["stats"] == [6, 4, 6, 4], "Coral should sit at +1 after Monk's capture"
     print("self-test ok")
 
 

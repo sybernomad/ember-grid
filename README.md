@@ -74,4 +74,5 @@ No ability destroys a card or blocks capture.
 - Live stats tint gold when buffed and red when debuffed. The printed face stays on the pip tooltip.
 - Battle log window for the current match. Card names wear the team color they had on that play. Captures still flash on the cards; the grid itself stays clear of ellipsized text.
 - Short table effects when an ability actually hits (Bolt arcs, Cinder sparks to the cell, and so on). Reduced motion keeps the color ring.
-- Alpha build number on the main menu. Tap it for the changelog. Bump `0.36` in `index.html` on every PR until 1.0 ships.
+- Alpha build number on the main menu. Tap it for the changelog. Bump `0.37` in `index.html` on every PR until 1.0 ships.
+- Source is split for editing: `css/table.css`, `js/cards.js`, `js/engine.js`, `js/ai.js`, `js/league.js`, `js/ui.js`. `index.html` is the page.
