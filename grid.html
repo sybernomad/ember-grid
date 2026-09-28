@@ -1133,7 +1133,9 @@
         .stat-top,
         .stat-right,
         .stat-bottom,
-        .stat-left {
+        .stat-left,
+        .stat-ne,
+        .stat-nw {
             z-index: 5;
             width: 1.15em;
             height: 1.15em;
@@ -1171,6 +1173,25 @@
             left: 4px;
             top: calc((100% - var(--nameplate-h)) / 2);
             transform: translateY(-50%);
+        }
+
+        .stat-ne {
+            top: 22%;
+            right: 5px;
+        }
+
+        .stat-nw {
+            top: 22%;
+            left: 5px;
+        }
+
+        .has-hex-faces .stat-right,
+        .has-hex-faces .stat-left {
+            top: 64%;
+        }
+
+        .has-hex-faces .stat-bottom {
+            bottom: calc(var(--nameplate-h) + 6px);
         }
 
         .stat-up {
@@ -3596,6 +3617,201 @@
                 grid-template-columns: repeat(2, minmax(0, 1fr));
             }
         }
+
+        /* Honeycomb: flat-top hexes. Body also carries grid-4 so the five-card hand chrome stays. */
+        body.grid-hex .grid {
+            display: block;
+            position: relative;
+            aspect-ratio: var(--hex-aspect, 0.9238);
+            width: min(100cqw, calc(100cqh * var(--hex-aspect, 0.9238)));
+            height: min(100cqh, calc(100cqw / var(--hex-aspect, 0.9238)));
+            max-width: 100%;
+            max-height: 100%;
+            padding: 0;
+            gap: 0;
+            grid-template-columns: none;
+            grid-template-rows: none;
+            overflow: visible;
+        }
+
+        body.grid-hex .cell {
+            position: absolute;
+            display: block;
+            border: none;
+            border-radius: 0;
+            aspect-ratio: auto;
+            box-shadow: none;
+            container-type: size;
+            background:
+                linear-gradient(165deg, rgba(255, 255, 255, 0.07), rgba(0, 0, 0, 0.28) 62%),
+                var(--cell-bg);
+            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+            filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 0.6px rgba(232, 195, 106, 0.55));
+            z-index: 1;
+        }
+
+        body.grid-hex .cell::after {
+            inset: 0;
+            border: 0;
+            border-radius: 0;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 86.6'%3E%3Cpolygon points='30,9 70,9 90,43.3 70,77.6 30,77.6 10,43.3' fill='none' stroke='%23e8c36a' stroke-opacity='0.42' stroke-width='1.15' stroke-dasharray='2.5 2.3' stroke-linejoin='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+        }
+
+        body.grid-hex .cell:hover:not(:has(.card)),
+        body.grid-hex .cell.drag-over {
+            z-index: 4;
+            background:
+                linear-gradient(165deg, rgba(232, 163, 23, 0.28), rgba(232, 163, 23, 0.08) 70%),
+                var(--cell-bg);
+            filter: drop-shadow(0 0 7px rgba(232, 163, 23, 0.72)) drop-shadow(0 0 0.8px rgba(232, 195, 106, 0.9));
+        }
+
+        body.grid-hex .cell.cell-cinder {
+            border: none;
+            background:
+                linear-gradient(165deg, rgba(255, 150, 60, 0.42), rgba(140, 32, 0, 0.28)),
+                var(--cell-bg);
+            filter: drop-shadow(0 0 8px rgba(255, 110, 30, 0.8));
+        }
+
+        body.grid-hex .cell.cell-cinder::after {
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 86.6'%3E%3Cpolygon points='30,9 70,9 90,43.3 70,77.6 30,77.6 10,43.3' fill='none' stroke='%23ffb068' stroke-opacity='0.8' stroke-width='1.2' stroke-linejoin='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+        }
+
+        body.grid-hex .cell:has(.card) {
+            background: transparent;
+            filter: drop-shadow(0 7px 9px rgba(0, 0, 0, 0.42));
+            z-index: 2;
+        }
+
+        body.grid-hex .cell:has(.card.blue) {
+            filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.46)) drop-shadow(0 0 0.85px rgba(147, 197, 253, 0.95));
+        }
+
+        body.grid-hex .cell:has(.card.red) {
+            filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.46)) drop-shadow(0 0 0.85px rgba(253, 164, 175, 0.95));
+        }
+
+        body.grid-hex .cell.cell-cinder:has(.card) {
+            background: transparent;
+            filter: drop-shadow(0 0 8px rgba(255, 110, 30, 0.85)) drop-shadow(0 6px 8px rgba(0, 0, 0, 0.4));
+        }
+
+        body.grid-hex .cell.coach-target {
+            z-index: 5;
+            filter: drop-shadow(0 0 8px rgba(232, 163, 23, 0.85)) drop-shadow(0 0 0.8px rgba(232, 195, 106, 1));
+        }
+
+        body.grid-hex .cell .card {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            max-width: none;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            font-size: clamp(7px, 16cqh, 15px);
+        }
+
+        body.grid-hex .cell .card::before {
+            inset: 0;
+            border: none;
+            border-radius: 0;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 86.6'%3E%3Cpolygon points='27,5 73,5 95,43.3 73,81.6 27,81.6 5,43.3' fill='none' stroke='%23fff1c2' stroke-opacity='0.4' stroke-width='1.35' stroke-linejoin='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+        }
+
+        body.grid-hex .cell .card::after {
+            border-radius: 0;
+        }
+
+        body.grid-hex .cell .ability-badge {
+            top: 6%;
+            left: 60%;
+            transform: none;
+            font-size: 0.42rem;
+            padding: 0 2px;
+            z-index: 6;
+        }
+
+        body.grid-hex .cell .card-emoji {
+            top: 40%;
+            width: 1.45em;
+            height: 1.45em;
+            font-size: clamp(11px, 20cqh, 20px);
+        }
+
+        body.grid-hex .cell .card-name {
+            bottom: 4%;
+            width: 52%;
+            font-size: clamp(6px, 8.5cqh, 8px);
+            line-height: 1.02;
+            padding: 0 2px 1px;
+        }
+
+        body.grid-hex .cell .stat-top,
+        body.grid-hex .cell .stat-right,
+        body.grid-hex .cell .stat-bottom,
+        body.grid-hex .cell .stat-left,
+        body.grid-hex .cell .stat-ne,
+        body.grid-hex .cell .stat-nw {
+            width: 1.05em;
+            height: 1.05em;
+        }
+
+        body.grid-hex .cell .stat-top {
+            top: 3%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        body.grid-hex .cell .stat-ne {
+            top: 27%;
+            right: auto;
+            left: 76%;
+            transform: translate(-50%, -50%);
+        }
+
+        body.grid-hex .cell .stat-right {
+            top: 60%;
+            right: auto;
+            left: 76%;
+            transform: translate(-50%, -50%);
+        }
+
+        body.grid-hex .cell .stat-bottom {
+            top: auto;
+            bottom: 26%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        body.grid-hex .cell .stat-left {
+            top: 60%;
+            left: 24%;
+            transform: translate(-50%, -50%);
+        }
+
+        body.grid-hex .cell .stat-nw {
+            top: 27%;
+            left: 24%;
+            transform: translate(-50%, -50%);
+        }
+
+        body[data-theme="light"].grid-hex .cell {
+            filter: drop-shadow(0 1px 1px rgba(80, 48, 16, 0.28)) drop-shadow(0 0 0.6px rgba(140, 96, 32, 0.45));
+        }
+
+        body[data-theme="light"].grid-hex .cell:has(.card) {
+            filter: drop-shadow(0 6px 8px rgba(80, 48, 16, 0.22));
+        }
+
+        @media (min-width: 768px) {
+            body.grid-hex .cell .card-emoji {
+                width: 1.85em;
+                height: 1.85em;
+            }
+        }
     </style>
 </head>
 
@@ -3720,7 +3936,7 @@
             </details>
             <div class="menu-foot">
                 <!-- Bump BUILD on every PR. Still pre-1.0, so this stays Alpha until 1.0 ships. -->
-                <button type="button" class="build-stamp" onclick="showChangelogModal()" title="Changelog">0.33 Alpha</button>
+                <button type="button" class="build-stamp" onclick="showChangelogModal()" title="Changelog">0.34 Alpha</button>
                 <p class="dev-note">Still in active development. Cards and rules may change.</p>
             </div>
         </div>
@@ -3739,7 +3955,7 @@
                     <strong>Your turn:</strong> Play one card from your hand onto an empty cell. Drag it, or tap the card then the cell.
                 </div>
                 <div class="rule-detail-item">
-                    <strong>Capture:</strong> Compare the touching sides (top, right, bottom, left). Strictly higher takes the enemy card.
+                    <strong>Capture:</strong> Compare the touching sides. On a square grid that is top, right, bottom, and left. On a honeycomb, each card also has an upper-right and upper-left number, and you compare whichever sides touch. Strictly higher takes the enemy card.
                 </div>
                 <div class="rule-detail-item">
                     <strong>Ties:</strong> If the touching numbers are equal, nothing happens. Equalizer still captures on a tie. In Classic Mode, you can turn on Ties capture in Options so equal numbers capture too. Ember Mode never uses that setting.
@@ -3762,7 +3978,7 @@
             <div class="menu-section-title">The Table</div>
             <div class="expanded-rules-list">
                 <div class="rule-detail-item">
-                    <strong>Grid:</strong> The usual grid is 3×3, five cards each. In Options you can play 4×4 (eight cards dealt) or 5×5 (thirteen dealt). You still start with five in hand. League and Tribe Decks always use 3×3.
+                    <strong>Grid:</strong> The usual grid is 3×3, five cards each. In Options you can play 4×4 (eight dealt), 5×5 (thirteen dealt), or a Honeycomb of nineteen cells (ten dealt). You still start with five in hand. League and Tribe Decks always use 3×3.
                 </div>
                 <div class="rule-detail-item">
                     <strong>The deck:</strong> The Base Set is 50 cards in ten tribes. Every Ember card has an ability. Classic Mode turns abilities off.
@@ -3775,7 +3991,7 @@
                     <strong>Deal Hands:</strong> Shuffle the Base Set and deal cards for the grid size in Options.
                 </div>
                 <div class="rule-detail-item">
-                    <strong>Draft Hands:</strong> Take turns picking cards, back and forth, until both sides have a full deal. Five each on 3×3, eight each on 4×4, thirteen each on 5×5.
+                    <strong>Draft Hands:</strong> Take turns picking cards, back and forth, until both sides have a full deal. Five each on 3×3, eight each on 4×4, thirteen each on 5×5, ten each on Honeycomb.
                 </div>
                 <div class="rule-detail-item">
                     <strong>Tribe Decks:</strong> Each side gets one tribe of five on 3×3. Pick both decks, or leave either one random. Same tribe is a mirror match.
@@ -3814,6 +4030,13 @@
             <h2 class="modal-title">Changelog</h2>
             <p class="set-blurb">Alpha stamps. Newest first. Tap the version on the menu anytime.</p>
             <div class="changelog-list">
+                <section class="changelog-ver">
+                    <h3>0.34 Alpha</h3>
+                    <ul>
+                        <li>Honeycomb in Options. Nineteen cells. Ten dealt, open five, draw after you play. League and Tribe Decks stay 3×3.</li>
+                        <li>Each card gains an upper-left and upper-right number, so every side of a hex has a facing. Square grids still use the original four.</li>
+                    </ul>
+                </section>
                 <section class="changelog-ver">
                     <h3>0.33 Alpha</h3>
                     <ul>
@@ -4029,6 +4252,7 @@
                     <option value="3" selected>3×3 · five each</option>
                     <option value="4">4×4 · eight dealt</option>
                     <option value="5">5×5 · thirteen dealt</option>
+                    <option value="hex">Honeycomb · ten dealt</option>
                 </select>
             </div>
             <div id="grid-size-desc" class="ruleset-desc-box">
@@ -4333,56 +4557,56 @@
 
         // --- Card Database ---
         const masterCards = [
-            {name: "Celestial", emoji: "✨", baseStats: [10, 2, 3, 4], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.'}},
-            {name: "Fairy", emoji: "🧚", baseStats: [3, 4, 3, 6], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.'}},
-            {name: "Unicorn", emoji: "🦄", baseStats: [4, 4, 5, 7], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.'}},
-            {name: "Paladin", emoji: "🛡️", baseStats: [4, 8, 7, 2], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.'}},
-            {name: "Angel", emoji: "👼", baseStats: [4, 5, 4, 6], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.'}},
-            {name: "Ghost", emoji: "👻", baseStats: [3, 7, 2, 5], ability: {type: 'curse_adj', icon: '💀', desc: 'On play, the strongest enemy loses 1 from all stats, then this card captures.'}},
-            {name: "Vampire", emoji: "🧛", baseStats: [7, 3, 3, 6], ability: {type: 'curse_adj', icon: '💀', desc: 'On play, the strongest enemy loses 1 from all stats, then this card captures.'}},
-            {name: "Skull", emoji: "💀", baseStats: [8, 2, 4, 3], ability: {type: 'curse_adj', icon: '💀', desc: 'On play, the strongest enemy loses 1 from all stats, then this card captures.'}},
-            {name: "Zombie", emoji: "🧟", baseStats: [4, 2, 6, 4], ability: {type: 'curse_adj', icon: '💀', desc: 'On play, the strongest enemy loses 1 from all stats, then this card captures.'}},
-            {name: "Bat", emoji: "🦇", baseStats: [5, 6, 3, 4], ability: {type: 'curse_adj', icon: '💀', desc: 'On play, the strongest enemy loses 1 from all stats, then this card captures.'}},
-            {name: "Dragon", emoji: "🐲", baseStats: [9, 7, 4, 2], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
-            {name: "T-Rex", emoji: "🦖", baseStats: [8, 5, 6, 2], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
-            {name: "Lion", emoji: "🦁", baseStats: [7, 6, 4, 2], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
-            {name: "Shark", emoji: "🦈", baseStats: [7, 4, 5, 4], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
-            {name: "Eagle", emoji: "🦅", baseStats: [6, 6, 3, 3], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
-            {name: "Spider", emoji: "🕷️", baseStats: [4, 6, 5, 3], ability: {type: 'poison', icon: '🦠', desc: 'At the end of every turn, neighboring enemies lose 1 from all stats. Poison does not capture; later plays use the lower numbers.'}},
-            {name: "Scorpion", emoji: "🦂", baseStats: [6, 4, 7, 2], ability: {type: 'poison', icon: '🦠', desc: 'At the end of every turn, neighboring enemies lose 1 from all stats. Poison does not capture; later plays use the lower numbers.'}},
-            {name: "Snake", emoji: "🐍", baseStats: [5, 4, 4, 5], ability: {type: 'poison', icon: '🦠', desc: 'At the end of every turn, neighboring enemies lose 1 from all stats. Poison does not capture; later plays use the lower numbers.'}},
-            {name: "Frog", emoji: "🐸", baseStats: [2, 4, 5, 3], ability: {type: 'poison', icon: '🦠', desc: 'At the end of every turn, neighboring enemies lose 1 from all stats. Poison does not capture; later plays use the lower numbers.'}},
-            {name: "Beetle", emoji: "🪲", baseStats: [4, 5, 5, 3], ability: {type: 'poison', icon: '🦠', desc: 'At the end of every turn, neighboring enemies lose 1 from all stats. Poison does not capture; later plays use the lower numbers.'}},
-            {name: "Monk", emoji: "☯️", baseStats: [5, 5, 5, 5], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
-            {name: "Titan", emoji: "🗿", baseStats: [10, 3, 4, 2], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
-            {name: "Robot", emoji: "🤖", baseStats: [5, 5, 5, 2], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
-            {name: "Owl", emoji: "🦉", baseStats: [5, 3, 2, 6], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
-            {name: "Alien", emoji: "👽", baseStats: [7, 3, 5, 2], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
-            {name: "Cyclops", emoji: "👹", baseStats: [8, 4, 7, 1], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
-            {name: "Gorilla", emoji: "🦍", baseStats: [7, 5, 6, 3], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
-            {name: "Wrath", emoji: "😡", baseStats: [6, 4, 3, 5], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
-            {name: "Vendetta", emoji: "😤", baseStats: [4, 6, 5, 3], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
-            {name: "Oni", emoji: "👺", baseStats: [6, 5, 4, 4], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
-            {name: "Dread", emoji: "😱", baseStats: [3, 6, 5, 4], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel.'}},
-            {name: "Hush", emoji: "🤫", baseStats: [5, 4, 5, 4], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel.'}},
-            {name: "Raven", emoji: "🐦‍⬛", baseStats: [4, 6, 4, 5], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel.'}},
-            {name: "Ninja", emoji: "🥷", baseStats: [5, 6, 3, 5], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel.'}},
-            {name: "Cat", emoji: "🐱", baseStats: [2, 5, 7, 3], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel.'}},
-            {name: "Scorch", emoji: "🥵", baseStats: [5, 5, 3, 5], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
-            {name: "Brand", emoji: "🫠", baseStats: [4, 5, 6, 3], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
-            {name: "Fox", emoji: "🦊", baseStats: [6, 5, 2, 3], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
-            {name: "Phoenix", emoji: "🐦‍🔥", baseStats: [5, 4, 6, 4], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
-            {name: "Lizard", emoji: "🦎", baseStats: [5, 4, 5, 4], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
-            {name: "Wizard", emoji: "🧙", baseStats: [5, 7, 3, 5], ability: {type: 'bolt', icon: '🔮', desc: 'On play, zaps a random enemy by -2 to all stats before this card captures. The zap can help this play steal that card.'}},
-            {name: "Genie", emoji: "🧞", baseStats: [6, 5, 5, 5], ability: {type: 'bolt', icon: '🔮', desc: 'On play, zaps a random enemy by -2 to all stats before this card captures. The zap can help this play steal that card.'}},
-            {name: "Witch", emoji: "🧙‍♀️", baseStats: [4, 6, 5, 4], ability: {type: 'bolt', icon: '🔮', desc: 'On play, zaps a random enemy by -2 to all stats before this card captures. The zap can help this play steal that card.'}},
-            {name: "Mage", emoji: "🪄", baseStats: [6, 3, 6, 4], ability: {type: 'bolt', icon: '🔮', desc: 'On play, zaps a random enemy by -2 to all stats before this card captures. The zap can help this play steal that card.'}},
-            {name: "Imp", emoji: "👿", baseStats: [3, 6, 4, 5], ability: {type: 'bolt', icon: '🔮', desc: 'On play, zaps a random enemy by -2 to all stats before this card captures. The zap can help this play steal that card.'}},
-            {name: "Frost", emoji: "🥶", baseStats: [4, 5, 4, 6], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, adjacent enemies are -1 to all stats. Counts for captures.'}},
-            {name: "Wolf", emoji: "🐺", baseStats: [6, 5, 4, 3], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, adjacent enemies are -1 to all stats. Counts for captures.'}},
-            {name: "Penguin", emoji: "🐧", baseStats: [3, 4, 6, 5], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, adjacent enemies are -1 to all stats. Counts for captures.'}},
-            {name: "Polar", emoji: "🐻‍❄️", baseStats: [6, 3, 7, 3], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, adjacent enemies are -1 to all stats. Counts for captures.'}},
-            {name: "Seal", emoji: "🦭", baseStats: [3, 5, 5, 5], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, adjacent enemies are -1 to all stats. Counts for captures.'}}
+            {name: "Celestial", emoji: "✨", baseStats: [10, 2, 3, 4], hexStats: [8, 7], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.'}},
+            {name: "Fairy", emoji: "🧚", baseStats: [3, 4, 3, 6], hexStats: [3, 4], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.'}},
+            {name: "Unicorn", emoji: "🦄", baseStats: [4, 4, 5, 7], hexStats: [4, 3], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.'}},
+            {name: "Paladin", emoji: "🛡️", baseStats: [4, 8, 7, 2], hexStats: [5, 6], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.'}},
+            {name: "Angel", emoji: "👼", baseStats: [4, 5, 4, 6], hexStats: [6, 6], ability: {type: 'aura_buff', val: 1, icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.'}},
+            {name: "Ghost", emoji: "👻", baseStats: [3, 7, 2, 5], hexStats: [7, 6], ability: {type: 'curse_adj', icon: '💀', desc: 'On play, the strongest enemy loses 1 from all stats, then this card captures.'}},
+            {name: "Vampire", emoji: "🧛", baseStats: [7, 3, 3, 6], hexStats: [7, 5], ability: {type: 'curse_adj', icon: '💀', desc: 'On play, the strongest enemy loses 1 from all stats, then this card captures.'}},
+            {name: "Skull", emoji: "💀", baseStats: [8, 2, 4, 3], hexStats: [4, 4], ability: {type: 'curse_adj', icon: '💀', desc: 'On play, the strongest enemy loses 1 from all stats, then this card captures.'}},
+            {name: "Zombie", emoji: "🧟", baseStats: [4, 2, 6, 4], hexStats: [1, 2], ability: {type: 'curse_adj', icon: '💀', desc: 'On play, the strongest enemy loses 1 from all stats, then this card captures.'}},
+            {name: "Bat", emoji: "🦇", baseStats: [5, 6, 3, 4], hexStats: [7, 4], ability: {type: 'curse_adj', icon: '💀', desc: 'On play, the strongest enemy loses 1 from all stats, then this card captures.'}},
+            {name: "Dragon", emoji: "🐲", baseStats: [9, 7, 4, 2], hexStats: [6, 6], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
+            {name: "T-Rex", emoji: "🦖", baseStats: [8, 5, 6, 2], hexStats: [8, 4], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
+            {name: "Lion", emoji: "🦁", baseStats: [7, 6, 4, 2], hexStats: [7, 6], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
+            {name: "Shark", emoji: "🦈", baseStats: [7, 4, 5, 4], hexStats: [7, 5], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
+            {name: "Eagle", emoji: "🦅", baseStats: [6, 6, 3, 3], hexStats: [3, 3], ability: {type: 'blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'}},
+            {name: "Spider", emoji: "🕷️", baseStats: [4, 6, 5, 3], hexStats: [7, 3], ability: {type: 'poison', icon: '🦠', desc: 'At the end of every turn, neighboring enemies lose 1 from all stats. Poison does not capture; later plays use the lower numbers.'}},
+            {name: "Scorpion", emoji: "🦂", baseStats: [6, 4, 7, 2], hexStats: [5, 6], ability: {type: 'poison', icon: '🦠', desc: 'At the end of every turn, neighboring enemies lose 1 from all stats. Poison does not capture; later plays use the lower numbers.'}},
+            {name: "Snake", emoji: "🐍", baseStats: [5, 4, 4, 5], hexStats: [6, 5], ability: {type: 'poison', icon: '🦠', desc: 'At the end of every turn, neighboring enemies lose 1 from all stats. Poison does not capture; later plays use the lower numbers.'}},
+            {name: "Frog", emoji: "🐸", baseStats: [2, 4, 5, 3], hexStats: [2, 5], ability: {type: 'poison', icon: '🦠', desc: 'At the end of every turn, neighboring enemies lose 1 from all stats. Poison does not capture; later plays use the lower numbers.'}},
+            {name: "Beetle", emoji: "🪲", baseStats: [4, 5, 5, 3], hexStats: [4, 3], ability: {type: 'poison', icon: '🦠', desc: 'At the end of every turn, neighboring enemies lose 1 from all stats. Poison does not capture; later plays use the lower numbers.'}},
+            {name: "Monk", emoji: "☯️", baseStats: [5, 5, 5, 5], hexStats: [4, 5], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
+            {name: "Titan", emoji: "🗿", baseStats: [10, 3, 4, 2], hexStats: [5, 6], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
+            {name: "Robot", emoji: "🤖", baseStats: [5, 5, 5, 2], hexStats: [7, 6], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
+            {name: "Owl", emoji: "🦉", baseStats: [5, 3, 2, 6], hexStats: [3, 4], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
+            {name: "Alien", emoji: "👽", baseStats: [7, 3, 5, 2], hexStats: [3, 5], ability: {type: 'equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'}},
+            {name: "Cyclops", emoji: "👹", baseStats: [8, 4, 7, 1], hexStats: [7, 7], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
+            {name: "Gorilla", emoji: "🦍", baseStats: [7, 5, 6, 3], hexStats: [8, 7], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
+            {name: "Wrath", emoji: "😡", baseStats: [6, 4, 3, 5], hexStats: [4, 6], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
+            {name: "Vendetta", emoji: "😤", baseStats: [4, 6, 5, 3], hexStats: [3, 2], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
+            {name: "Oni", emoji: "👺", baseStats: [6, 5, 4, 4], hexStats: [4, 3], ability: {type: 'spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'}},
+            {name: "Dread", emoji: "😱", baseStats: [3, 6, 5, 4], hexStats: [7, 4], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel.'}},
+            {name: "Hush", emoji: "🤫", baseStats: [5, 4, 5, 4], hexStats: [6, 6], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel.'}},
+            {name: "Raven", emoji: "🐦‍⬛", baseStats: [4, 6, 4, 5], hexStats: [6, 3], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel.'}},
+            {name: "Ninja", emoji: "🥷", baseStats: [5, 6, 3, 5], hexStats: [6, 5], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel.'}},
+            {name: "Cat", emoji: "🐱", baseStats: [2, 5, 7, 3], hexStats: [5, 2], ability: {type: 'silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel.'}},
+            {name: "Scorch", emoji: "🥵", baseStats: [5, 5, 3, 5], hexStats: [3, 7], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
+            {name: "Brand", emoji: "🫠", baseStats: [4, 5, 6, 3], hexStats: [6, 4], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
+            {name: "Fox", emoji: "🦊", baseStats: [6, 5, 2, 3], hexStats: [4, 4], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
+            {name: "Phoenix", emoji: "🐦‍🔥", baseStats: [5, 4, 6, 4], hexStats: [4, 7], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
+            {name: "Lizard", emoji: "🦎", baseStats: [5, 4, 5, 4], hexStats: [4, 5], ability: {type: 'cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'}},
+            {name: "Wizard", emoji: "🧙", baseStats: [5, 7, 3, 5], hexStats: [4, 3], ability: {type: 'bolt', icon: '🔮', desc: 'On play, zaps a random enemy by -2 to all stats before this card captures. The zap can help this play steal that card.'}},
+            {name: "Genie", emoji: "🧞", baseStats: [6, 5, 5, 5], hexStats: [3, 5], ability: {type: 'bolt', icon: '🔮', desc: 'On play, zaps a random enemy by -2 to all stats before this card captures. The zap can help this play steal that card.'}},
+            {name: "Witch", emoji: "🧙‍♀️", baseStats: [4, 6, 5, 4], hexStats: [6, 5], ability: {type: 'bolt', icon: '🔮', desc: 'On play, zaps a random enemy by -2 to all stats before this card captures. The zap can help this play steal that card.'}},
+            {name: "Mage", emoji: "🪄", baseStats: [6, 3, 6, 4], hexStats: [7, 4], ability: {type: 'bolt', icon: '🔮', desc: 'On play, zaps a random enemy by -2 to all stats before this card captures. The zap can help this play steal that card.'}},
+            {name: "Imp", emoji: "👿", baseStats: [3, 6, 4, 5], hexStats: [4, 2], ability: {type: 'bolt', icon: '🔮', desc: 'On play, zaps a random enemy by -2 to all stats before this card captures. The zap can help this play steal that card.'}},
+            {name: "Frost", emoji: "🥶", baseStats: [4, 5, 4, 6], hexStats: [7, 4], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, adjacent enemies are -1 to all stats. Counts for captures.'}},
+            {name: "Wolf", emoji: "🐺", baseStats: [6, 5, 4, 3], hexStats: [4, 5], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, adjacent enemies are -1 to all stats. Counts for captures.'}},
+            {name: "Penguin", emoji: "🐧", baseStats: [3, 4, 6, 5], hexStats: [3, 3], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, adjacent enemies are -1 to all stats. Counts for captures.'}},
+            {name: "Polar", emoji: "🐻‍❄️", baseStats: [6, 3, 7, 3], hexStats: [4, 7], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, adjacent enemies are -1 to all stats. Counts for captures.'}},
+            {name: "Seal", emoji: "🦭", baseStats: [3, 5, 5, 5], hexStats: [6, 6], ability: {type: 'chill', icon: '❄️', desc: 'While this card sits there, adjacent enemies are -1 to all stats. Counts for captures.'}}
         ].map((card, i) => ({
             ...card,
             id: `BS-${String(i + 1).padStart(2, '0')}`,
@@ -4506,20 +4730,83 @@
         let classicTiesThisMatch = false;
         let pendingMechFx = [];
         const GRID_PRESETS = {
-            3: {size: 3, hand: 5, draftPool: 16},
-            4: {size: 4, hand: 8, draftPool: 16},
-            5: {size: 5, hand: 13, draftPool: 26}
+            3: {size: 3, cells: 9, hand: 5, draftPool: 16},
+            4: {size: 4, cells: 16, hand: 8, draftPool: 16},
+            5: {size: 5, cells: 25, hand: 13, draftPool: 26},
+            hex: {size: 'hex', cells: 19, hand: 10, draftPool: 20}
         };
-        function loadPreferredGrid() {
-            const n = parseInt(localStorage.getItem('ember_grid_size') || '3', 10);
+        function normalizeGridChoice(val) {
+            if (val === 'hex' || val === 'H') return 'hex';
+            const n = parseInt(val, 10);
             return GRID_PRESETS[n] ? n : 3;
+        }
+        function loadPreferredGrid() {
+            return normalizeGridChoice(localStorage.getItem('ember_grid_size') || '3');
         }
         let preferredGridSize = loadPreferredGrid();
         let gridSize = 3;
         const VISIBLE_HAND = 5;
-        function cellCount() { return gridSize * gridSize; }
+        function isHexGrid() { return gridSize === 'hex'; }
+        function cellCount() {
+            const preset = GRID_PRESETS[gridSize];
+            return preset ? preset.cells : 9;
+        }
         function matchHandSize() { return GRID_PRESETS[gridSize].hand; }
         function matchDraftPoolSize() { return GRID_PRESETS[gridSize].draftPool; }
+
+        const HEX_DIRS = [
+            {dq: 0, dr: -1, p: 0, n: 2},
+            {dq: 1, dr: -1, p: 4, n: 3},
+            {dq: 1, dr: 0, p: 1, n: 5},
+            {dq: 0, dr: 1, p: 2, n: 0},
+            {dq: -1, dr: 1, p: 3, n: 4},
+            {dq: -1, dr: 0, p: 5, n: 1}
+        ];
+        const HEX = {cells: [], at: new Map(), boxes: [], aspect: 0.9238};
+        (function buildHexLayout() {
+            const cells = [];
+            for (let q = -2; q <= 2; q++) {
+                for (let r = -2; r <= 2; r++) {
+                    if (Math.max(Math.abs(q), Math.abs(r), Math.abs(-q - r)) <= 2) cells.push({q, r});
+                }
+            }
+            cells.sort((a, b) => a.r - b.r || a.q - b.q);
+            const key = (q, r) => `${q},${r}`;
+            const at = new Map(cells.map((c, i) => [key(c.q, c.r), i]));
+            const size = 1;
+            const pts = cells.map(c => ({
+                x: size * 1.5 * c.q,
+                y: size * (Math.sqrt(3) / 2 * c.q + Math.sqrt(3) * c.r)
+            }));
+            const fullHw = size;
+            const fullHh = Math.sqrt(3) / 2 * size;
+            const minX = Math.min(...pts.map(p => p.x)) - fullHw;
+            const maxX = Math.max(...pts.map(p => p.x)) + fullHw;
+            const minY = Math.min(...pts.map(p => p.y)) - fullHh;
+            const maxY = Math.max(...pts.map(p => p.y)) + fullHh;
+            const bw = maxX - minX;
+            const bh = maxY - minY;
+            const scale = 0.9;
+            const inset = 0.028;
+            const span = 1 - 2 * inset;
+            HEX.cells = cells;
+            HEX.at = at;
+            HEX.key = key;
+            HEX.aspect = bw / bh;
+            HEX.boxes = pts.map(p => {
+                const w = (2 * fullHw * scale) / bw * span;
+                const h = (2 * fullHh * scale) / bh * span;
+                const left = inset + ((p.x - fullHw * scale) - minX) / bw * span;
+                const top = inset + ((p.y - fullHh * scale) - minY) / bh * span;
+                return {
+                    left: `${(left * 100).toFixed(3)}%`,
+                    top: `${(top * 100).toFixed(3)}%`,
+                    width: `${(w * 100).toFixed(3)}%`,
+                    height: `${(h * 100).toFixed(3)}%`
+                };
+            });
+            document.documentElement.style.setProperty('--hex-aspect', HEX.aspect.toFixed(4));
+        })();
         function boardCellEls() {
             const grid = document.getElementById('board-grid');
             return grid ? grid.querySelectorAll(':scope > .cell') : [];
@@ -4530,8 +4817,10 @@
 
         function applyGridSize(n) {
             gridSize = GRID_PRESETS[n] ? n : 3;
-            document.body.classList.toggle('grid-4', gridSize === 4);
+            const hex = gridSize === 'hex';
+            document.body.classList.toggle('grid-4', gridSize === 4 || hex);
             document.body.classList.toggle('grid-5', gridSize === 5);
+            document.body.classList.toggle('grid-hex', hex);
         }
         function snakeSeq2(starter, n) {
             const other = starter === 'player' ? 'ai' : 'player';
@@ -4846,13 +5135,35 @@
             }).filter(Boolean);
         }
 
+        function hexShouldersOf(card) {
+            const master = (card && masterCards.find(c => (card.id && c.id === card.id) || c.name === card.name)) || card;
+            const hex = master && master.hexStats;
+            if (hex && hex.length >= 2) return [clampStat(hex[0]), clampStat(hex[1])];
+            return [1, 1];
+        }
+
+        function facesFor(card, sourceStats) {
+            const stats = (sourceStats || (card && card.baseStats) || [1, 1, 1, 1]).slice();
+            const square = stats.slice(0, 4).map(clampStat);
+            if (!isHexGrid()) return square;
+            if (stats.length >= 6) return stats.slice(0, 6).map(clampStat);
+            return square.concat(hexShouldersOf(card));
+        }
+
+        function staticShoulderHTML(card) {
+            const [ne, nw] = hexShouldersOf(card);
+            return `<div class="stat-ne" title="Upper right">${formatStat(ne)}</div><div class="stat-nw" title="Upper left">${formatStat(nw)}</div>`;
+        }
+
         function draftCardFaceHTML(card) {
+            const shoulders = isHexGrid() ? staticShoulderHTML(card) : '';
             return `
                 ${card.ability ? `<div class="ability-badge">${card.ability.icon}</div>` : ''}
                 <div class="stat-top">${formatStat(card.baseStats[0])}</div>
                 <div class="stat-right">${formatStat(card.baseStats[1])}</div>
                 <div class="stat-bottom">${formatStat(card.baseStats[2])}</div>
                 <div class="stat-left">${formatStat(card.baseStats[3])}</div>
+                ${shoulders}
                 <div class="card-emoji">${card.emoji}</div>
                 ${nameplateHTML(card)}
             `;
@@ -5092,7 +5403,9 @@
                 order.hidden = false;
                 order.textContent = pool === 16 && hand === 5
                     ? 'Sixteen cards from the deck. Snake order: 1 pick, then pairs of 2, until each hand is five.'
-                    : `${pool === 16 ? 'Sixteen' : 'Twenty-six'} cards. Snake until each side is dealt ${hand === 8 ? 'eight' : 'thirteen'}. Hands stay five; extras stay in your draw pile.`;
+                    : hand === 10
+                        ? 'Twenty cards. Snake until each side is dealt ten. Hands stay five; extras stay in your draw pile.'
+                        : `${pool === 16 ? 'Sixteen' : 'Twenty-six'} cards. Snake until each side is dealt ${hand === 8 ? 'eight' : 'thirteen'}. Hands stay five; extras stay in your draw pile.`;
                 cancel.textContent = 'Cancel Draft';
                 seats.classList.add('hidden');
                 rosters.classList.remove('hidden');
@@ -5624,7 +5937,7 @@
             return stats.map(clampStat);
         }
         function facingMarkup(dir, live, printed, prev) {
-            const labels = {top: 'Top', right: 'Right', bottom: 'Bottom', left: 'Left'};
+            const labels = {top: 'Top', right: 'Right', bottom: 'Bottom', left: 'Left', ne: 'Upper right', nw: 'Upper left'};
             const cls = [];
             if (live > printed) cls.push('stat-up');
             else if (live < printed) cls.push('stat-down');
@@ -5670,7 +5983,9 @@
             const el = document.getElementById('grid-size-desc');
             if (!el) return;
             const n = preferredGridSize;
-            el.innerHTML = n === 3
+            el.innerHTML = n === 'hex'
+                ? "<strong>Honeycomb:</strong> Nineteen cells. Ten dealt. Open five, draw after you play. Each card shows an upper-left and upper-right number. League and Tribe Decks stay 3×3."
+                : n === 3
                 ? "<strong>3×3 (default):</strong> Five each. League and Tribe Decks always use this size."
                 : n === 4
                     ? "<strong>4×4:</strong> Eight dealt. Open five, draw after you play. League and Tribe Decks stay 3×3."
@@ -5678,11 +5993,11 @@
         }
         function updatePreferredGrid(val) {
             sfx.click();
-            const n = parseInt(val, 10);
-            preferredGridSize = GRID_PRESETS[n] ? n : 3;
+            preferredGridSize = normalizeGridChoice(val);
             localStorage.setItem('ember_grid_size', String(preferredGridSize));
             refreshGridSizeDesc();
             refreshVictoryCopy();
+            if (gameState === 'menu') applyGridSize(preferredGridSize);
         }
         function updateLeftoverScores(checked) {
             sfx.click();
@@ -5766,6 +6081,14 @@
         }
 
         function neighborDirs(index) {
+            if (isHexGrid()) {
+                const cell = HEX.cells[index];
+                if (!cell) return [];
+                return HEX_DIRS.map(d => {
+                    const idx = HEX.at.get(HEX.key(cell.q + d.dq, cell.r + d.dr));
+                    return {idx: idx == null ? -1 : idx, p: d.p, n: d.n, ok: idx != null};
+                });
+            }
             const n = gridSize;
             const row = Math.floor(index / n), col = index % n;
             return [
@@ -5970,7 +6293,7 @@
             masterCards.forEach(card => {
                 if (filter !== 'all' && (!card.ability || card.ability.type !== filter)) return;
                 const el = document.createElement('div');
-                el.className = 'compendium-card';
+                el.className = 'compendium-card has-hex-faces';
                 el.innerHTML = `
                     ${card.ability ? `<div class="ability-badge">${card.ability.icon}</div>` : ''}
                     <div class="card-set-num">${card.id}</div>
@@ -5978,6 +6301,7 @@
                     <div class="stat-right">${formatStat(card.baseStats[1])}</div>
                     <div class="stat-bottom">${formatStat(card.baseStats[2])}</div>
                     <div class="stat-left">${formatStat(card.baseStats[3])}</div>
+                    ${staticShoulderHTML(card)}
                     <div class="card-emoji">${card.emoji}</div>
                     ${nameplateHTML(card)}
                 `;
@@ -6211,8 +6535,9 @@
             const master = masterCards.find(c => c.id === card.id) || card;
             const copy = {
                 ...card,
-                baseStats: [...card.baseStats],
-                printedStats: [...(card.printedStats || master.baseStats)],
+                baseStats: facesFor(master, card.baseStats || master.baseStats),
+                printedStats: facesFor(master, card.printedStats || master.baseStats),
+                hexStats: hexShouldersOf(master),
                 ...extra
             };
             if (card.ability) copy.ability = {...card.ability};
@@ -6302,7 +6627,8 @@
             const ruleCh = match.ruleset === 'classic' ? 'C' : 'E';
             const firstCh = match.first === 'ai' ? 'A' : 'P';
             if (size === 3) return `EG1${modeCh}${ruleCh}${firstCh}${nums.map(n => String(n).padStart(2, '0')).join('')}`;
-            return `EG2${modeCh}${ruleCh}${firstCh}${size}${nums.map(n => String(n).padStart(2, '0')).join('')}`;
+            const sizeCh = size === 'hex' ? 'H' : String(size);
+            return `EG2${modeCh}${ruleCh}${firstCh}${sizeCh}${nums.map(n => String(n).padStart(2, '0')).join('')}`;
         }
 
         function extractMatchCode(raw) {
@@ -6315,7 +6641,7 @@
                 const hm = (u.hash || '').match(/m=([^&]+)/i);
                 if (hm) return decodeURIComponent(hm[1]).trim();
             } catch (e) {}
-            const found2 = text.match(/EG2[RDTrdt][ECec][PApa][45]\d{32,}/i);
+            const found2 = text.match(/EG2[RDTrdt][ECec][PApa][45H]\d{32,}/i);
             if (found2) return found2[0];
             const found = text.match(/EG1[RDTrdt][ECec][PApa]\d{20}/);
             if (found) return found[0];
@@ -6324,9 +6650,10 @@
 
         function decodeMatchCode(raw) {
             const code = extractMatchCode(raw).toUpperCase().replace(/[^A-Z0-9]/g, '');
-            const m2 = code.match(/^EG2([RDT])([EC])([PA])([45])((?:\d{2})+)$/);
+            const m2 = code.match(/^EG2([RDT])([EC])([PA])([45H])((?:\d{2})+)$/);
             if (m2) {
-                const size = parseInt(m2[4], 10);
+                const size = m2[4] === 'H' ? 'hex' : parseInt(m2[4], 10);
+                if (!GRID_PRESETS[size]) return null;
                 const hand = GRID_PRESETS[size].hand;
                 const digits = m2[5];
                 if (digits.length !== hand * 4) return null;
@@ -6574,8 +6901,9 @@
         }
 
         function draftCardClass(card) {
-            if (!card.draftedBy) return 'draft-card';
-            return leagueDrafting ? `draft-card taken taken-${card.draftedBy}` : 'draft-card drafted';
+            const hex = isHexGrid() ? ' has-hex-faces' : '';
+            if (!card.draftedBy) return 'draft-card' + hex;
+            return (leagueDrafting ? `draft-card taken taken-${card.draftedBy}` : 'draft-card drafted') + hex;
         }
 
         function bindDraftGridClicks() {
@@ -7010,7 +7338,9 @@
         }
 
         function getEffectiveStat(card, statIndex, isPlacementTurn, silenced) {
-            let val = (card.stats || card.baseStats)[statIndex];
+            const row = card.stats || card.baseStats || [];
+            let val = row[statIndex];
+            if (val == null) val = 1;
             if (isPlacementTurn && !silenced && card.ability && card.ability.type === 'blast') {
                 val += 2;
             }
@@ -7457,8 +7787,16 @@
             }
 
             const gridEl = document.getElementById('board-grid'); gridEl.innerHTML = '';
+            gridEl.classList.toggle('hex-board', isHexGrid());
             board.forEach((cell, index) => {
                 const cellEl = document.createElement('div'); cellEl.className = 'cell';
+                if (isHexGrid() && HEX.boxes[index]) {
+                    const box = HEX.boxes[index];
+                    cellEl.style.left = box.left;
+                    cellEl.style.top = box.top;
+                    cellEl.style.width = box.width;
+                    cellEl.style.height = box.height;
+                }
                 if (cellEffects[index] === 'cinder') {
                     cellEl.classList.add('cell-cinder');
                     const cinderTip = 'Cindered: whoever sits here is -1 to all stats.';
@@ -7505,7 +7843,7 @@
         function createCardElement(card, index, source) {
             const div = document.createElement('div');
             const didFlip = !!card.justFlipped;
-            div.className = `card ${card.owner} ${didFlip ? 'flipped' : ''}`;
+            div.className = `card ${card.owner} ${didFlip ? 'flipped' : ''}${isHexGrid() ? ' has-hex-faces' : ''}`;
             if (card.justFlipped) card.justFlipped = false;
             if (source === 'player') div.dataset.handIndex = String(index);
             if (source === 'player' && selectedCard === index && turn === 'player' && gameState === 'playing') div.classList.add('selected');
@@ -7540,6 +7878,8 @@
                 ${facingMarkup('right', activeStats[1], printed[1], prevStats && prevStats[1])}
                 ${facingMarkup('bottom', activeStats[2], printed[2], prevStats && prevStats[2])}
                 ${facingMarkup('left', activeStats[3], printed[3], prevStats && prevStats[3])}
+                ${isHexGrid() ? facingMarkup('ne', activeStats[4], printed[4], prevStats && prevStats[4]) : ''}
+                ${isHexGrid() ? facingMarkup('nw', activeStats[5], printed[5], prevStats && prevStats[5]) : ''}
                 <div class="card-emoji">${card.emoji}</div>
                 ${nameplateHTML(card, silenced)}
                 ${didFlip ? '<div class="capture-pop">CAPTURED</div>' : ''}
