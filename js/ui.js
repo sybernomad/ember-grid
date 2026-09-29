@@ -830,6 +830,13 @@ function paintDeckControls() {
         dir.setAttribute('aria-label', deckSortDesc ? 'Descending. Switch to ascending.' : 'Ascending. Switch to descending.');
         dir.title = deckSortDesc ? 'Descending' : 'Ascending';
     }
+    const filtersFold = document.getElementById('deck-filters-fold');
+    if (filtersFold && !filtersFold.dataset.bound) {
+        filtersFold.dataset.bound = '1';
+        filtersFold.addEventListener('toggle', () => {
+            if (!filtersFold.open) closeDeckSortMenu();
+        });
+    }
 }
 
 function deckCollectionList() {
@@ -936,12 +943,18 @@ function paintDeckCollection() {
     }
     paintCardFaces(grid);
     grid.scrollTop = keepScroll;
-    const count = document.getElementById('deck-filter-count');
-    if (count) {
-        const noun = cards.length === 1 ? '1 card' : `${cards.length} cards`;
-        const names = TRIBES.filter(tribe => deckTribeFilters.includes(tribe.id)).map(tribe => tribe.name);
-        count.textContent = names.length ? `${noun} · ${names.join(', ')}` : noun;
-    }
+    const summary = document.getElementById('deck-filter-summary');
+    if (summary) summary.textContent = deckFilterSummary(cards.length);
+}
+
+function deckFilterSummary(count) {
+    const noun = count === 1 ? '1 card' : `${count} cards`;
+    const names = TRIBES.filter(tribe => deckTribeFilters.includes(tribe.id)).map(tribe => tribe.name);
+    const bits = [noun];
+    if (deckCostFilter !== 'all') bits.push(deckCostFilter === '0' ? 'Free' : `${deckCostFilter} ember`);
+    if (names.length) bits.push(names.join(', '));
+    else bits.push({name: 'Name', cost: 'Ember', tribe: 'Mechanic'}[deckSortKey] || 'Name');
+    return bits.join(' · ');
 }
 
 function paintDeckMeter() {

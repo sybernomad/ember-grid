@@ -149,7 +149,7 @@
             </details>
             <div class="menu-foot">
                 <!-- Bump BUILD on every PR. Still pre-1.0, so this stays Alpha until 1.0 ships. -->
-                <button type="button" class="build-stamp" onclick="showChangelogModal()" title="Changelog">0.38 Alpha</button>
+                <button type="button" class="build-stamp" onclick="showChangelogModal()" title="Changelog">0.39 Alpha</button>
                 <p class="dev-note">Still in active development. Cards and rules may change.</p>
             </div>
         </div>
@@ -247,6 +247,14 @@
             <h2 class="modal-title">Changelog</h2>
             <p class="set-blurb">Alpha stamps. Newest first. Tap the version on the menu anytime.</p>
             <div class="changelog-list">
+                <section class="changelog-ver">
+                    <h3>0.39 Alpha</h3>
+                    <ul>
+                        <li>The deck builder folds filters and the deck code away, so the cards have the room. Open a section when you need it.</li>
+                        <li>Draft Hands sits on a table. A turn chip, a bench for both sides, and the snake rules folded until you ask.</li>
+                        <li>Card art fills the face. The numbers, the name, and the marks sit on top of it.</li>
+                    </ul>
+                </section>
                 <section class="changelog-ver">
                     <h3>0.38 Alpha</h3>
                     <ul>
@@ -584,11 +592,19 @@
         <div class="modal-content" onclick="event.stopPropagation()">
             <button type="button" class="modal-close" onclick="cancelDraft()" aria-label="Cancel draft"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
             <h2 id="draft-title" class="modal-title">Draft Hands</h2>
-            <p id="draft-order" class="draft-order">Sixteen cards from the deck. Snake order: 1 pick, then pairs of 2, until each hand is five.</p>
             <p id="draft-status" class="draft-status"></p>
+            <details class="fold" id="draft-how">
+                <summary>
+                    <span class="fold-label">How this draft works</span>
+                    <svg class="ui-icon fold-chevron" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+                </summary>
+                <p id="draft-order" class="draft-order">Sixteen cards from the deck. Snake order: 1 pick, then pairs of 2, until each hand is five.</p>
+            </details>
             <div class="draft-seats hidden" id="draft-seats"></div>
-            <div class="draft-grid" id="draft-pool-grid"></div>
-            <div class="draft-rosters" id="draft-rosters">Your Hand: 0/5 | AI Hand: 0/5</div>
+            <div class="draft-stage">
+                <div class="draft-grid" id="draft-pool-grid"></div>
+            </div>
+            <div class="draft-rosters" id="draft-rosters" aria-label="Draft progress"></div>
             <button class="btn btn-muted btn-dismiss" id="draft-cancel-btn" onclick="cancelDraft()">Cancel Draft</button>
         </div>
     </div>
@@ -620,47 +636,59 @@
                 <button class="btn btn-alt" type="button" onclick="fillRandomDeck()">Random</button>
                 <button class="btn btn-muted" type="button" onclick="clearBuiltDeck()">Clear</button>
             </div>
-            <div class="deck-code-row">
-                <span class="deck-filter-kicker">Deck code</span>
-                <div class="deck-code-controls">
-                    <input id="deck-code" class="deck-code" type="text" maxlength="80" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="Paste a friend's code" aria-label="Deck code">
-                    <button type="button" class="btn btn-alt" id="deck-code-copy" onclick="copyDeckCode()">Copy</button>
-                    <button type="button" class="btn btn-alt" onclick="loadDeckCode()">Load</button>
-                </div>
-                <p id="deck-code-note" class="deck-code-note" aria-live="polite"></p>
-            </div>
-            <div class="deck-filters">
-                <div class="deck-filter-block">
-                    <span class="deck-filter-kicker">Mechanics</span>
-                    <div id="deck-tribe-filters" class="deck-chip-row" role="group" aria-label="Mechanics"></div>
-                </div>
-                <div class="deck-filter-bar">
+            <details class="fold" id="deck-filters-fold">
+                <summary>
+                    <span class="fold-label">Filters</span>
+                    <span class="fold-meta" id="deck-filter-summary">All cards</span>
+                    <svg class="ui-icon fold-chevron" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+                </summary>
+                <div class="deck-filters">
                     <div class="deck-filter-block">
-                        <span class="deck-filter-kicker">Ember</span>
-                        <div id="deck-cost-filters" class="deck-cost-row" role="group" aria-label="Ember cost"></div>
+                        <span class="deck-filter-kicker">Mechanics</span>
+                        <div id="deck-tribe-filters" class="deck-chip-row" role="group" aria-label="Mechanics"></div>
                     </div>
-                    <div class="deck-sort">
-                        <span class="deck-filter-kicker">Sort</span>
-                        <div class="deck-sort-controls">
-                            <div class="deck-sort-menu" id="deck-sort-menu">
-                                <button type="button" id="deck-sort" class="deck-sort-btn" aria-haspopup="listbox" aria-expanded="false" aria-label="Sort cards by" onclick="toggleDeckSortMenu()">
-                                    <span id="deck-sort-label">Name</span>
-                                    <svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+                    <div class="deck-filter-bar">
+                        <div class="deck-filter-block">
+                            <span class="deck-filter-kicker">Ember</span>
+                            <div id="deck-cost-filters" class="deck-cost-row" role="group" aria-label="Ember cost"></div>
+                        </div>
+                        <div class="deck-sort">
+                            <span class="deck-filter-kicker">Sort</span>
+                            <div class="deck-sort-controls">
+                                <div class="deck-sort-menu" id="deck-sort-menu">
+                                    <button type="button" id="deck-sort" class="deck-sort-btn" aria-haspopup="listbox" aria-expanded="false" aria-label="Sort cards by" onclick="toggleDeckSortMenu()">
+                                        <span id="deck-sort-label">Name</span>
+                                        <svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+                                    </button>
+                                    <ul class="deck-sort-list" id="deck-sort-list" role="listbox" aria-label="Sort cards by" hidden>
+                                        <li><button type="button" role="option" data-sort="name" onclick="chooseDeckSort('name')">Name</button></li>
+                                        <li><button type="button" role="option" data-sort="cost" onclick="chooseDeckSort('cost')">Ember</button></li>
+                                        <li><button type="button" role="option" data-sort="tribe" onclick="chooseDeckSort('tribe')">Mechanic</button></li>
+                                    </ul>
+                                </div>
+                                <button type="button" id="deck-sort-dir" class="deck-sort-dir" onclick="toggleDeckSortDir()" aria-label="Ascending. Switch to descending.">
+                                    <svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M12 19V5"/><path d="m6 11 6-6 6 6"/></svg>
                                 </button>
-                                <ul class="deck-sort-list" id="deck-sort-list" role="listbox" aria-label="Sort cards by" hidden>
-                                    <li><button type="button" role="option" data-sort="name" onclick="chooseDeckSort('name')">Name</button></li>
-                                    <li><button type="button" role="option" data-sort="cost" onclick="chooseDeckSort('cost')">Ember</button></li>
-                                    <li><button type="button" role="option" data-sort="tribe" onclick="chooseDeckSort('tribe')">Mechanic</button></li>
-                                </ul>
                             </div>
-                            <button type="button" id="deck-sort-dir" class="deck-sort-dir" onclick="toggleDeckSortDir()" aria-label="Ascending. Switch to descending.">
-                                <svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M12 19V5"/><path d="m6 11 6-6 6 6"/></svg>
-                            </button>
                         </div>
                     </div>
                 </div>
-                <p id="deck-filter-count" class="deck-filter-count"></p>
-            </div>
+            </details>
+            <details class="fold" id="deck-code-fold">
+                <summary>
+                    <span class="fold-label">Deck code</span>
+                    <span class="fold-meta">Copy or paste</span>
+                    <svg class="ui-icon fold-chevron" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+                </summary>
+                <div class="deck-code-row">
+                    <div class="deck-code-controls">
+                        <input id="deck-code" class="deck-code" type="text" maxlength="80" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="Paste a friend's code" aria-label="Deck code">
+                        <button type="button" class="btn btn-alt" id="deck-code-copy" onclick="copyDeckCode()">Copy</button>
+                        <button type="button" class="btn btn-alt" onclick="loadDeckCode()">Load</button>
+                    </div>
+                    <p id="deck-code-note" class="deck-code-note" aria-live="polite"></p>
+                </div>
+            </details>
             <div id="deck-collection" class="deck-collection" aria-label="Card collection"></div>
             <button class="btn btn-muted btn-dismiss" onclick="cancelDeckPicker()">Close</button>
         </div>

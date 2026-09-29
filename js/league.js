@@ -572,19 +572,22 @@ function resumeLeagueDraft() {
     startLeagueDraft();
 }
 
+let draftLandId = null;
+
 function setupDraftChrome(isLeague) {
     const modal = document.getElementById('draft-modal');
     const title = document.getElementById('draft-title');
     const order = document.getElementById('draft-order');
+    const how = document.getElementById('draft-how');
     const cancel = document.getElementById('draft-cancel-btn');
     const seats = document.getElementById('draft-seats');
     const rosters = document.getElementById('draft-rosters');
     modal.classList.toggle('league-draft', !!isLeague);
     modal.classList.toggle('draft-dense', !isLeague && (preferredGridSize === 5 || preferredGridSize === 'hex'));
     modal.classList.toggle('draft-hex', !isLeague && preferredGridSize === 'hex');
+    if (how) how.hidden = !!isLeague;
     if (isLeague) {
         title.textContent = 'League Draft';
-        order.hidden = true;
         cancel.textContent = 'Save & Leave';
         seats.classList.remove('hidden');
         rosters.classList.add('hidden');
@@ -602,6 +605,45 @@ function setupDraftChrome(isLeague) {
         seats.classList.add('hidden');
         rosters.classList.remove('hidden');
     }
+}
+
+function paintDraftTurn(text, yours) {
+    const status = document.getElementById('draft-status');
+    if (!status) return;
+    status.textContent = text;
+    status.classList.toggle('is-you', !!yours);
+    status.classList.toggle('is-wait', !yours);
+}
+
+function paintCasualDraftBench() {
+    const el = document.getElementById('draft-rosters');
+    if (!el) return;
+    const hand = matchHandSize();
+    if (el.dataset.hand !== String(hand) || !el.querySelector('.draft-bench-side')) {
+        el.dataset.hand = String(hand);
+        el.innerHTML = `
+            <div class="draft-bench-side you">
+                <div class="draft-bench-top"><span>You</span><b data-bench="you-count"></b></div>
+                <span class="draft-bench-bar" aria-hidden="true"><span data-bench="you-bar"></span></span>
+            </div>
+            <div class="draft-bench-pick"><b data-bench="pick"></b><span data-bench="pick-total"></span></div>
+            <div class="draft-bench-side ai">
+                <div class="draft-bench-top"><span>AI</span><b data-bench="ai-count"></b></div>
+                <span class="draft-bench-bar" aria-hidden="true"><span data-bench="ai-bar"></span></span>
+            </div>`;
+    }
+    const you = draftedPlayerCards.length;
+    const ai = draftedAICards.length;
+    const yours = draftTurn === 'player';
+    const pick = Math.min(draftPickIndex + 1, hand * 2);
+    el.querySelector('[data-bench="you-count"]').textContent = `${you}/${hand}`;
+    el.querySelector('[data-bench="ai-count"]').textContent = `${ai}/${hand}`;
+    el.querySelector('[data-bench="pick"]').textContent = String(pick);
+    el.querySelector('[data-bench="pick-total"]').textContent = `of ${hand * 2}`;
+    el.querySelector('[data-bench="you-bar"]').style.width = `${hand ? Math.round(you / hand * 100) : 0}%`;
+    el.querySelector('[data-bench="ai-bar"]').style.width = `${hand ? Math.round(ai / hand * 100) : 0}%`;
+    el.querySelector('.draft-bench-side.you').classList.toggle('active', yours);
+    el.querySelector('.draft-bench-side.ai').classList.toggle('active', !yours);
 }
 
 function renderLeagueDraftSeats() {
@@ -1077,8 +1119,11 @@ function startDraftMode() {
 
 function draftCardClass(card) {
     const hex = isHexGrid() ? ' has-hex-faces' : '';
-    if (!card.draftedBy) return 'draft-card' + hex;
-    return (leagueDrafting ? `draft-card taken taken-${card.draftedBy}` : 'draft-card drafted') + hex;
+    const land = card.id && card.id === draftLandId ? ' draft-land' : '';
+    if (!card.draftedBy) return 'draft-card' + land + hex;
+    if (leagueDrafting) return `draft-card taken taken-${card.draftedBy}${land}` + hex;
+    const side = card.draftedBy === 'player' ? 'you' : 'ai';
+    return `draft-card drafted drafted-${side}${land}` + hex;
 }
 
 function bindDraftGridClicks() {
@@ -1111,20 +1156,21 @@ function renderDraftPool() {
         paintCardFaces(el);
         grid.appendChild(el);
     });
+    draftLandId = null;
     if (leagueDrafting) {
         const picker = leaguePlayer(draftTurn);
         const twice = isSnakeDoublePick();
-        document.getElementById('draft-status').textContent = draftTurn === 'you'
+        const yours = draftTurn === 'you';
+        paintDraftTurn(yours
             ? (twice ? "Your pick — you choose twice." : "Your pick.")
-            : (twice ? `${picker.name} is choosing twice...` : `${picker.name} is choosing...`);
+            : (twice ? `${picker.name} is choosing twice...` : `${picker.name} is choosing...`), yours);
         renderLeagueDraftSeats();
     } else {
-        document.getElementById('draft-status').textContent = draftTurn === 'player'
-            ? (isSnakeDoublePick() ? "Your pick - you choose twice." : "Your pick.")
-            : (isSnakeDoublePick() ? "AI is choosing twice..." : "AI is choosing...");
-        const hand = matchHandSize();
-        document.getElementById('draft-rosters').textContent =
-            `Pick ${draftPickIndex + 1}/${hand * 2} · Your Hand: ${draftedPlayerCards.length}/${hand} | AI Hand: ${draftedAICards.length}/${hand}`;
+        const yours = draftTurn === 'player';
+        paintDraftTurn(yours
+            ? (isSnakeDoublePick() ? "Your pick — twice." : "Your pick")
+            : (isSnakeDoublePick() ? "AI is choosing twice" : "AI is choosing"), yours);
+        paintCasualDraftBench();
     }
 }
 
@@ -1139,12 +1185,16 @@ function playerDraftPick(card) {
         if (draftTurn !== 'you') return;
         card.draftedBy = 'you';
         leagueHandsLive.you.push(card);
+        draftLandId = card.id;
         persistLeagueDraft();
         checkDraftProgress();
         return;
     }
     if (draftTurn !== 'player') return;
-    card.draftedBy = 'player'; draftedPlayerCards.push(card); checkDraftProgress();
+    card.draftedBy = 'player';
+    draftedPlayerCards.push(card);
+    draftLandId = card.id;
+    checkDraftProgress();
 }
 
 function aiDraftPick() {
@@ -1156,6 +1206,7 @@ function aiDraftPick() {
         available.sort((a, b) => leagueDraftScore(b, draftTurn) - leagueDraftScore(a, draftTurn));
         available[0].draftedBy = draftTurn;
         leagueHandsLive[draftTurn].push(available[0]);
+        draftLandId = available[0].id;
         persistLeagueDraft();
         checkDraftProgress();
         return;
@@ -1164,6 +1215,7 @@ function aiDraftPick() {
     available.sort((a, b) => getCardDraftScore(b) - getCardDraftScore(a));
     available[0].draftedBy = 'ai';
     draftedAICards.push(available[0]);
+    draftLandId = available[0].id;
     checkDraftProgress();
 }
 
@@ -1171,6 +1223,7 @@ function checkDraftProgress() {
     if (leagueDrafting) {
         const done = ['you', 'ash', 'vesper', 'rook'].every(id => (leagueHandsLive[id] || []).length >= LEAGUE_HAND_SIZE);
         if (done) {
+            draftLandId = null;
             finishLeagueDraft();
             return;
         }
@@ -1182,6 +1235,7 @@ function checkDraftProgress() {
         return;
     }
     if (draftedPlayerCards.length === matchHandSize() && draftedAICards.length === matchHandSize()) {
+        draftLandId = null;
         hideModal('draft-modal');
         resetTable(); gameState = 'playing';
         playerHand = draftedPlayerCards.map(c => cloneCard(c, {owner: 'blue'}));
