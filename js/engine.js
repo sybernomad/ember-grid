@@ -160,7 +160,7 @@ function currentSnakeSeq() {
 
 let currentRuleset = 'ember';
 
-let resolvedDecks = {player: null, ai: null};
+let deckMatchLabel = '';
 
 let lastBlueScore = null, lastRedScore = null;
 
@@ -372,7 +372,6 @@ function recalculateDynamicStats() {
         if (!card || cellEffects[index] !== 'cinder') return;
         card.stats = card.stats.map(s => Math.max(1, Math.min(10, s - 1)));
     });
-    board.forEach((card, index) => applyCaptureCountBonus(card, isSilenced(index)));
     playerHand.forEach(card => applyCaptureCountBonus(card, false));
     aiHand.forEach(card => applyCaptureCountBonus(card, false));
 }
@@ -381,9 +380,14 @@ function getEffectiveStat(card, statIndex, isPlacementTurn, silenced) {
     const row = card.stats || card.baseStats || [];
     let val = row[statIndex];
     if (val == null) val = 1;
-    if (silenced && liveAbilityType(card) === 'symbiosis' && !board.includes(card)) {
+    const onBoard = board.includes(card);
+    if (silenced && liveAbilityType(card) === 'symbiosis' && !onBoard) {
         const base = card.baseStats || row;
         val = base[statIndex] == null ? 1 : base[statIndex];
+    }
+    if (isPlacementTurn && !silenced && onBoard && liveAbilityType(card) === 'symbiosis') {
+        const bonus = ownerCaptureCount(card.owner);
+        if (bonus) val = Math.max(1, Math.min(10, val + bonus));
     }
     if (isPlacementTurn && !silenced && liveAbilityType(card) === 'blast') {
         val += 2;
@@ -573,15 +577,13 @@ function applySymbiosis(placedCard, capturedCount) {
     const owner = placedCard.owner;
     matchCaptures[owner] = (matchCaptures[owner] || 0) + capturedCount;
     const total = matchCaptures[owner];
+    const hand = owner === 'blue' ? playerHand : aiHand;
     const names = [];
-    board.forEach((card, index) => {
-        if (!card || card.owner !== owner) return;
-        if (liveAbilityType(card) !== 'symbiosis' || isSilenced(index)) return;
-        card.fxType = 'symbiosis';
+    hand.forEach(card => {
+        if (!card || liveAbilityType(card) !== 'symbiosis') return;
         names.push({name: card.name, owner: card.owner});
-        queueMechFx('symbiosis', index, []);
     });
-    return names.length ? {text: `${listLogNames(names)} grew (${total} capture${total === 1 ? '' : 's'} this game)`, kind: 'symbiosis'} : null;
+    return names.length ? {text: `${listLogNames(names)} grew in hand (${total} capture${total === 1 ? '' : 's'} this game)`, kind: 'symbiosis'} : null;
 }
 
 function poisonSourceIndexes() {

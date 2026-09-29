@@ -297,10 +297,10 @@ function refreshVictoryCopy() {
 }
 
 function gridChoiceCopy(n) {
-    if (n === 'hex') return {long: "<strong>Honeycomb:</strong> Nineteen cells. Ten dealt. Open five, draw after you play. Each card shows an upper-left and upper-right number. League and Tribe Decks stay 3×3.", short: "Nineteen cells. Ten dealt, five in hand. League and Tribe Decks stay 3×3."};
-    if (n === 4) return {long: "<strong>4×4:</strong> Eight dealt. Open five, draw after you play. League and Tribe Decks stay 3×3.", short: "Eight dealt. Open five, draw after you play."};
-    if (n === 5) return {long: "<strong>5×5:</strong> Thirteen dealt. Open five, draw after you play. League and Tribe Decks stay 3×3.", short: "Thirteen dealt. Open five, draw after you play."};
-    return {long: "<strong>3×3 (default):</strong> Five each. League and Tribe Decks always use this size.", short: "Five each. The usual table."};
+    if (n === 'hex') return {long: "<strong>Honeycomb:</strong> Nineteen cells. Ten dealt. Open five, draw after you play. Each card shows an upper-left and upper-right number. Decks are ten cards. League stays 3×3.", short: "Nineteen cells. Ten dealt, five in hand."};
+    if (n === 4) return {long: "<strong>4×4:</strong> Eight dealt. Open five, draw after you play. Decks are eight cards. League stays 3×3.", short: "Eight dealt. Open five, draw after you play."};
+    if (n === 5) return {long: "<strong>5×5:</strong> Thirteen dealt. Open five, draw after you play. Decks are thirteen cards. League stays 3×3.", short: "Thirteen dealt. Open five, draw after you play."};
+    return {long: "<strong>3×3 (default):</strong> Five each. Decks are five cards. League always uses this size.", short: "Five each. The usual table."};
 }
 
 function paintGridChoices() {
@@ -550,7 +550,7 @@ function renderCompendium() {
             <div class="card-emoji">${card.emoji}</div>
             ${nameplateHTML(card)}
         `;
-        const tip = abilityTip(card, {withId: true});
+        const tip = `${abilityTip(card, {withId: true})} Costs ${emberCostOf(card)} embers.`;
         addTooltipListeners(el, tip);
         paintCardFaces(el);
         grid.appendChild(el);
@@ -645,6 +645,7 @@ function startGame(mode) {
     clearShareHash();
     hideModals(['main-menu-modal', 'draft-modal', 'deck-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'gameover-modal', 'battle-log-modal', 'league-modal', 'tutorial-modal', 'changelog-modal']);
 
+    deckMatchLabel = '';
     if (mode === 'random') {
         applyGridSize(preferredGridSize);
         resetTable(); gameState = 'playing';
@@ -663,76 +664,570 @@ function startGame(mode) {
     }
 }
 
-function deckVsLine() {
-    const you = tribeById(resolvedDecks.player);
-    const them = tribeById(resolvedDecks.ai);
-    if (!you || !them) return '';
-    return `${you.icon} ${you.name} vs ${them.icon} ${them.name}`;
-}
-
 function withMatchup(msg) {
     if (isLeagueMatch()) {
         const opp = leaguePlayer(leagueMatch.oppId);
         return `You vs ${opp.name}. ${msg}`;
     }
-    if (activeMode !== 'decks') return msg;
-    const vs = deckVsLine();
-    return vs ? `${vs}. ${msg}` : msg;
+    if (activeMode !== 'decks' || !deckMatchLabel) return msg;
+    return `${deckMatchLabel}. ${msg}`;
 }
 
-function paintDeckPicks(elId, who) {
-    const el = document.getElementById(elId);
+let deckTribeFilters = [];
+let deckCostFilter = 'all';
+let deckSortKey = 'name';
+let deckSortDesc = false;
+
+function deckGridKey() {
+    return String(preferredGridSize);
+}
+
+function builtSlotAt(key, index) {
+    const book = builtDecks.grids[key];
+    return book ? book[index] : null;
+}
+
+function currentBuiltSlot() {
+    const key = deckGridKey();
+    return builtSlotAt(key, builtDecks.active[key] || 0);
+}
+
+function ensureBuiltSlot() {
+    const key = deckGridKey();
+    const index = builtDecks.active[key] || 0;
+    if (!builtDecks.grids[key][index]) {
+        builtDecks.grids[key][index] = {name: `Deck ${index + 1}`, ids: []};
+    }
+    const slot = builtDecks.grids[key][index];
+    if (!slot.name) slot.name = `Deck ${index + 1}`;
+    return slot;
+}
+
+function commitDeckName() {
+    const input = document.getElementById('deck-name');
+    const slot = currentBuiltSlot();
+    if (!input || !slot) return;
+    const index = builtDecks.active[deckGridKey()] || 0;
+    const name = input.value.trim().slice(0, 24);
+    slot.name = name || `Deck ${index + 1}`;
+}
+
+function deckFaceHTML(card) {
+    const shoulders = deckGridKey() === 'hex' ? staticShoulderHTML(card) : '';
+    const cost = emberCostOf(card);
+    return `
+        <span class="ember-cost">${cost}</span>
+        ${card.ability ? `<span class="ability-badge">${card.ability.icon}</span>` : ''}
+        <span class="stat-top">${formatStat(card.baseStats[0])}</span>
+        <span class="stat-right">${formatStat(card.baseStats[1])}</span>
+        <span class="stat-bottom">${formatStat(card.baseStats[2])}</span>
+        <span class="stat-left">${formatStat(card.baseStats[3])}</span>
+        ${shoulders}
+        <span class="card-emoji">${card.emoji}</span>
+        <span class="card-name">${card.name}</span>
+    `;
+}
+
+function deckCardTip(card) {
+    const cost = emberCostOf(card);
+    const price = cost === 0 ? 'Free.' : `Costs ${cost} ember${cost === 1 ? '' : 's'}.`;
+    return `${abilityTip(card, {withId: true})} ${price}`;
+}
+
+function paintDeckControls() {
+    const tribes = document.getElementById('deck-tribe-filters');
+    const costs = document.getElementById('deck-cost-filters');
+    if (tribes && !tribes.dataset.ready) {
+        TRIBES.forEach(tribe => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'deck-mech';
+            btn.dataset.tribe = tribe.id;
+            btn.setAttribute('aria-label', tribe.name);
+            const glyph = document.createElement('span');
+            glyph.className = 'deck-mech-glyph';
+            glyph.textContent = tribe.icon;
+            glyph.setAttribute('aria-hidden', 'true');
+            btn.appendChild(glyph);
+            addTooltipListeners(btn, tribe.name);
+            btn.addEventListener('click', () => toggleDeckMechanic(tribe.id));
+            tribes.appendChild(btn);
+        });
+        paintCardFaces(tribes);
+        tribes.dataset.ready = '1';
+    }
+    if (costs && !costs.dataset.ready) {
+        [{id: 'all', label: 'Any'}, {id: '0', label: '0'}, {id: '1', label: '1'}, {id: '2', label: '2'}, {id: '3', label: '3'}, {id: '4', label: '4'}].forEach(choice => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'deck-cost-chip' + (choice.id === 'all' ? ' any' : '');
+            btn.dataset.cost = choice.id;
+            btn.textContent = choice.label;
+            btn.setAttribute('aria-label', choice.id === 'all' ? 'Any ember cost' : `${choice.label} embers`);
+            btn.addEventListener('click', () => setDeckCost(choice.id));
+            costs.appendChild(btn);
+        });
+        costs.dataset.ready = '1';
+    }
+    if (tribes) {
+        tribes.querySelectorAll('[data-tribe]').forEach(btn => {
+            const on = deckTribeFilters.includes(btn.dataset.tribe);
+            btn.classList.toggle('selected', on);
+            btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        });
+    }
+    if (costs) {
+        costs.querySelectorAll('[data-cost]').forEach(btn => {
+            const on = btn.dataset.cost === deckCostFilter;
+            btn.classList.toggle('selected', on);
+            btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        });
+    }
+    const sortLabel = document.getElementById('deck-sort-label');
+    if (sortLabel) sortLabel.textContent = {name: 'Name', cost: 'Ember', tribe: 'Mechanic'}[deckSortKey] || 'Name';
+    document.querySelectorAll('#deck-sort-list [data-sort]').forEach(btn => {
+        const on = btn.dataset.sort === deckSortKey;
+        btn.classList.toggle('selected', on);
+        btn.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    const dir = document.getElementById('deck-sort-dir');
+    if (dir) {
+        dir.classList.toggle('desc', deckSortDesc);
+        dir.setAttribute('aria-pressed', deckSortDesc ? 'true' : 'false');
+        dir.setAttribute('aria-label', deckSortDesc ? 'Descending. Switch to ascending.' : 'Ascending. Switch to descending.');
+        dir.title = deckSortDesc ? 'Descending' : 'Ascending';
+    }
+}
+
+function deckCollectionList() {
+    const tribeOrder = {};
+    TRIBES.forEach((tribe, index) => { tribeOrder[tribe.id] = index; });
+    const cards = masterCards.filter(card => {
+        if (deckTribeFilters.length && (!card.ability || !deckTribeFilters.includes(card.ability.type))) return false;
+        if (deckCostFilter !== 'all' && String(emberCostOf(card)) !== deckCostFilter) return false;
+        return true;
+    });
+    const dir = deckSortDesc ? -1 : 1;
+    cards.sort((a, b) => {
+        let cmp = 0;
+        if (deckSortKey === 'cost') cmp = emberCostOf(a) - emberCostOf(b);
+        else if (deckSortKey === 'tribe') cmp = tribeOrder[a.ability.type] - tribeOrder[b.ability.type];
+        if (!cmp) cmp = a.name.localeCompare(b.name);
+        return cmp * dir;
+    });
+    return cards;
+}
+
+function paintDeckSlotChips() {
+    const el = document.getElementById('deck-slots');
     if (!el) return;
+    const key = deckGridKey();
+    const active = builtDecks.active[key] || 0;
     el.innerHTML = '';
-    const choices = [{id: 'random', name: 'Random', icon: '🎲'}].concat(TRIBES);
-    choices.forEach(choice => {
+    for (let i = 0; i < EMBER_DECK_SLOTS; i++) {
+        const slot = builtSlotAt(key, i);
         const btn = document.createElement('button');
         btn.type = 'button';
-        btn.className = 'deck-chip' + (deckPicks[who] === choice.id ? ' selected' : '');
-        btn.textContent = `${choice.icon} ${choice.name}`;
-        if (choice.ability) btn.title = `${choice.ability} - ${choice.name}`;
-        btn.addEventListener('click', () => {
-            sfx.click();
-            deckPicks[who] = choice.id;
-            paintDeckPicks(elId, who);
-        });
+        const ready = !!(slot && deckIsPlayable(slot.ids, key));
+        btn.className = 'deck-slot-chip' + (i === active ? ' selected' : '') + (ready ? ' ready' : '');
+        btn.setAttribute('aria-pressed', i === active ? 'true' : 'false');
+        const num = document.createElement('span');
+        num.className = 'deck-slot-num';
+        num.textContent = String(i + 1);
+        const name = document.createElement('span');
+        name.className = 'deck-slot-name';
+        name.textContent = slot && slot.name ? slot.name : `Deck ${i + 1}`;
+        btn.appendChild(num);
+        btn.appendChild(name);
+        btn.addEventListener('click', () => selectDeckSlot(i));
         el.appendChild(btn);
+    }
+}
+
+function paintDeckTray() {
+    const tray = document.getElementById('deck-tray');
+    if (!tray) return;
+    const key = deckGridKey();
+    const size = deckSizeFor(key);
+    const slot = currentBuiltSlot();
+    const ids = slot ? slot.ids : [];
+    tray.innerHTML = '';
+    for (let i = 0; i < size; i++) {
+        const id = ids[i];
+        if (!id) {
+            const empty = document.createElement('div');
+            empty.className = 'deck-card deck-card-empty' + (deckGridKey() === 'hex' ? ' has-hex' : '');
+            empty.setAttribute('aria-hidden', 'true');
+            tray.appendChild(empty);
+            continue;
+        }
+        const card = masterCards.find(c => c.id === id);
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'deck-card' + (deckGridKey() === 'hex' ? ' has-hex' : '');
+        btn.innerHTML = deckFaceHTML(card);
+        btn.title = `Take ${card.name} out`;
+        btn.setAttribute('aria-label', `Take ${card.name} out`);
+        btn.addEventListener('click', () => removeDeckCard(id));
+        tray.appendChild(btn);
+    }
+    paintCardFaces(tray);
+}
+
+function paintDeckCollection() {
+    const grid = document.getElementById('deck-collection');
+    if (!grid) return;
+    const keepScroll = grid.scrollTop;
+    const slot = currentBuiltSlot();
+    const ids = slot ? slot.ids : [];
+    const cards = deckCollectionList();
+    grid.innerHTML = '';
+    cards.forEach(card => {
+        const inDeck = ids.includes(card.id);
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'deck-card' + (deckGridKey() === 'hex' ? ' has-hex' : '') + (inDeck ? ' in-deck' : '');
+        btn.innerHTML = deckFaceHTML(card);
+        const tip = deckCardTip(card);
+        btn.title = tip;
+        btn.setAttribute('aria-label', inDeck ? `${card.name}, in this deck, ${emberCostOf(card)} embers` : `${card.name}, ${emberCostOf(card)} embers`);
+        addTooltipListeners(btn, tip);
+        btn.addEventListener('click', () => toggleDeckCard(card.id));
+        grid.appendChild(btn);
     });
+    if (!cards.length) {
+        const empty = document.createElement('p');
+        empty.className = 'deck-empty';
+        empty.textContent = 'No cards match those filters.';
+        grid.appendChild(empty);
+    }
+    paintCardFaces(grid);
+    grid.scrollTop = keepScroll;
+    const count = document.getElementById('deck-filter-count');
+    if (count) {
+        const noun = cards.length === 1 ? '1 card' : `${cards.length} cards`;
+        const names = TRIBES.filter(tribe => deckTribeFilters.includes(tribe.id)).map(tribe => tribe.name);
+        count.textContent = names.length ? `${noun} · ${names.join(', ')}` : noun;
+    }
+}
+
+function paintDeckMeter() {
+    const key = deckGridKey();
+    const size = deckSizeFor(key);
+    const budget = emberBudgetFor(key);
+    const slot = currentBuiltSlot();
+    const ids = slot ? slot.ids : [];
+    const spent = deckEmberSpent(ids);
+    const over = spent > budget;
+    const label = document.getElementById('deck-meter-label');
+    const fill = document.getElementById('deck-meter-fill');
+    if (label) label.textContent = `${spent} / ${budget}`;
+    if (fill) {
+        const pct = budget ? Math.min(100, Math.round((spent / budget) * 100)) : 0;
+        fill.style.width = `${pct}%`;
+        fill.classList.toggle('over', over);
+    }
+    const play = document.getElementById('deck-play');
+    const ready = deckIsPlayable(ids, key);
+    if (play) play.disabled = !ready;
+    const hint = document.getElementById('deck-hint');
+    if (!hint) return;
+    if (ready) hint.textContent = 'Ready. The computer brings a random deck under the same ember cap.';
+    else if (over) hint.textContent = `Over the cap by ${spent - budget}. Take a card out before this deck can play.`;
+    else hint.textContent = `${ids.length} of ${size} cards. ${budget - spent} embers left.`;
+}
+
+function paintDeckBuilder() {
+    paintDeckControls();
+    paintDeckCode();
+    paintGridChoices();
+    const input = document.getElementById('deck-name');
+    const slot = currentBuiltSlot();
+    const index = builtDecks.active[deckGridKey()] || 0;
+    if (input && document.activeElement !== input) input.value = slot && slot.name ? slot.name : `Deck ${index + 1}`;
+    paintDeckSlotChips();
+    paintDeckTray();
+    paintDeckCollection();
+    paintDeckMeter();
+}
+
+function selectDeckSlot(index) {
+    sfx.click();
+    commitDeckName();
+    saveBuiltDecks();
+    builtDecks.active[deckGridKey()] = index;
+    saveBuiltDecks();
+    paintDeckBuilder();
+}
+
+function setDeckGrid(val) {
+    commitDeckName();
+    saveBuiltDecks();
+    updatePreferredGrid(val);
+    paintDeckBuilder();
+}
+
+function toggleDeckMechanic(id) {
+    sfx.click();
+    const index = deckTribeFilters.indexOf(id);
+    if (index >= 0) deckTribeFilters.splice(index, 1);
+    else deckTribeFilters.push(id);
+    const grid = document.getElementById('deck-collection');
+    if (grid) grid.scrollTop = 0;
+    paintDeckControls();
+    paintDeckCollection();
+}
+
+function setDeckCost(id) {
+    sfx.click();
+    deckCostFilter = id || 'all';
+    const grid = document.getElementById('deck-collection');
+    if (grid) grid.scrollTop = 0;
+    paintDeckControls();
+    paintDeckCollection();
+}
+
+function setDeckSort(val) {
+    deckSortKey = val || 'name';
+    const grid = document.getElementById('deck-collection');
+    if (grid) grid.scrollTop = 0;
+    paintDeckCollection();
+}
+
+function toggleDeckSortMenu() {
+    const list = document.getElementById('deck-sort-list');
+    const btn = document.getElementById('deck-sort');
+    if (!list || !btn) return;
+    const willOpen = list.hidden;
+    list.hidden = !willOpen;
+    btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+}
+
+function closeDeckSortMenu() {
+    const list = document.getElementById('deck-sort-list');
+    const btn = document.getElementById('deck-sort');
+    if (list) list.hidden = true;
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+}
+
+function chooseDeckSort(val) {
+    sfx.click();
+    closeDeckSortMenu();
+    setDeckSort(val);
+    paintDeckControls();
+}
+
+function encodeDeckCode(gridKey, ids) {
+    const list = ids || [];
+    if (!list.length || list.length > deckSizeFor(gridKey)) return '';
+    const nums = idsToNums(list);
+    if (nums.some(n => !n || n < 1 || n > masterCards.length)) return '';
+    if (new Set(nums).size !== nums.length) return '';
+    const sizeCh = gridKey === 'hex' ? 'H' : String(gridKey);
+    return `ED1${sizeCh}${nums.map(n => String(n).padStart(2, '0')).join('')}`;
+}
+
+function decodeDeckCode(raw) {
+    const code = String(raw || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+    const match = code.match(/^ED1([345H])((?:\d{2})+)$/);
+    if (!match) return null;
+    const gridKey = match[1] === 'H' ? 'hex' : match[1];
+    const digits = match[2];
+    const nums = [];
+    for (let i = 0; i < digits.length; i += 2) nums.push(parseInt(digits.slice(i, i + 2), 10));
+    if (!nums.length || nums.length > deckSizeFor(gridKey)) return null;
+    if (nums.some(n => n < 1 || n > masterCards.length)) return null;
+    if (new Set(nums).size !== nums.length) return null;
+    const ids = numsToIds(nums);
+    if (ids.some(id => !masterCards.some(card => card.id === id))) return null;
+    return {gridKey, ids};
+}
+
+function deckGridWord(key) {
+    if (key === 'hex') return 'Honeycomb';
+    return `${key}×${key}`;
+}
+
+function setDeckCodeNote(msg) {
+    const note = document.getElementById('deck-code-note');
+    if (note) note.textContent = msg || '';
+}
+
+function paintDeckCode() {
+    const input = document.getElementById('deck-code');
+    if (!input || document.activeElement === input) return;
+    const slot = currentBuiltSlot();
+    const ids = slot && slot.ids ? slot.ids : [];
+    input.value = ids.length ? encodeDeckCode(deckGridKey(), ids) : '';
+    setDeckCodeNote('');
+}
+
+async function copyDeckCode() {
+    sfx.click();
+    const slot = currentBuiltSlot();
+    const ids = slot && slot.ids ? slot.ids : [];
+    const code = encodeDeckCode(deckGridKey(), ids);
+    const btn = document.getElementById('deck-code-copy');
+    if (!code) {
+        setDeckCodeNote('Add a card before copying a code.');
+        return;
+    }
+    const input = document.getElementById('deck-code');
+    if (input) input.value = code;
+    const ok = await copyText(code);
+    if (btn) {
+        btn.textContent = ok ? 'Copied' : 'Copy failed';
+        setTimeout(() => { btn.textContent = 'Copy'; }, 1400);
+    }
+    setDeckCodeNote(ok ? 'Code copied.' : 'Select the code and copy it.');
+}
+
+function loadDeckCode() {
+    sfx.click();
+    const input = document.getElementById('deck-code');
+    const decoded = decodeDeckCode(input ? input.value : '');
+    if (!decoded) {
+        setDeckCodeNote('That deck code is not valid.');
+        return;
+    }
+    commitDeckName();
+    saveBuiltDecks();
+    if (deckGridKey() !== decoded.gridKey) {
+        preferredGridSize = normalizeGridChoice(decoded.gridKey);
+        localStorage.setItem('ember_grid_size', String(preferredGridSize));
+        refreshGridSizeDesc();
+        if (gameState === 'menu') applyGridSize(preferredGridSize);
+    }
+    const key = deckGridKey();
+    const index = builtDecks.active[key] || 0;
+    const prev = builtSlotAt(key, index);
+    builtDecks.grids[key][index] = {
+        name: (prev && prev.name) || `Deck ${index + 1}`,
+        ids: decoded.ids.slice()
+    };
+    saveBuiltDecks();
+    paintDeckBuilder();
+    setDeckCodeNote(`Loaded ${decoded.ids.length} for ${deckGridWord(key)}.`);
+}
+
+function toggleDeckSortDir() {
+    sfx.click();
+    deckSortDesc = !deckSortDesc;
+    const grid = document.getElementById('deck-collection');
+    if (grid) grid.scrollTop = 0;
+    paintDeckControls();
+    paintDeckCollection();
+}
+
+function onDeckNameInput(el) {
+    const slot = ensureBuiltSlot();
+    slot.name = el.value.slice(0, 24);
+    saveBuiltDecks();
+    paintDeckSlotChips();
+}
+
+function toggleDeckCard(id) {
+    sfx.click();
+    const key = deckGridKey();
+    const slot = ensureBuiltSlot();
+    const index = slot.ids.indexOf(id);
+    if (index >= 0) slot.ids.splice(index, 1);
+    else if (slot.ids.length >= deckSizeFor(key)) {
+        const hint = document.getElementById('deck-hint');
+        if (hint) hint.textContent = 'That deck is full. Tap a card in the tray to take it out.';
+        return;
+    } else slot.ids.push(id);
+    saveBuiltDecks();
+    paintDeckSlotChips();
+    paintDeckTray();
+    paintDeckCollection();
+    paintDeckMeter();
+}
+
+function removeDeckCard(id) {
+    const slot = currentBuiltSlot();
+    if (!slot) return;
+    sfx.click();
+    const index = slot.ids.indexOf(id);
+    if (index >= 0) slot.ids.splice(index, 1);
+    saveBuiltDecks();
+    paintDeckSlotChips();
+    paintDeckTray();
+    paintDeckCollection();
+    paintDeckMeter();
+}
+
+function fillRandomDeck() {
+    sfx.click();
+    const key = deckGridKey();
+    const index = builtDecks.active[key] || 0;
+    const prev = builtSlotAt(key, index);
+    builtDecks.grids[key][index] = {
+        name: (prev && prev.name) || `Deck ${index + 1}`,
+        ids: randomEmberDeck(key)
+    };
+    saveBuiltDecks();
+    paintDeckBuilder();
+}
+
+function clearBuiltDeck() {
+    sfx.click();
+    const key = deckGridKey();
+    const index = builtDecks.active[key] || 0;
+    const prev = builtSlotAt(key, index);
+    builtDecks.grids[key][index] = {
+        name: (prev && prev.name) || `Deck ${index + 1}`,
+        ids: []
+    };
+    saveBuiltDecks();
+    paintDeckBuilder();
 }
 
 function openDeckPicker() {
-    sfx.click(); hideTooltip();
+    sfx.click();
+    hideTooltip();
     hideModal('main-menu-modal');
-    paintDeckPicks('deck-you-picks', 'player');
-    paintDeckPicks('deck-ai-picks', 'ai');
+    paintDeckBuilder();
     document.getElementById('deck-modal').classList.remove('hidden');
 }
 
 function cancelDeckPicker() {
+    commitDeckName();
+    saveBuiltDecks();
     hideModal('deck-modal');
     showModeMenu();
 }
 
 function confirmDeckMatch() {
-    saveDeckPicks();
+    commitDeckName();
+    saveBuiltDecks();
+    const key = deckGridKey();
+    const slot = currentBuiltSlot();
+    if (!slot || !deckIsPlayable(slot.ids, key)) return;
     startGame('decks');
 }
 
 function startDeckMatch() {
-    applyGridSize(3);
-    resetTable();
-    gameState = 'playing';
-    resolvedDecks = {
-        player: resolveTribePick(deckPicks.player),
-        ai: resolveTribePick(deckPicks.ai)
-    };
-    playerHand = dealTribeHand(resolvedDecks.player, 'blue');
-    aiHand = dealTribeHand(resolvedDecks.ai, 'red');
-    if (playerHand.length !== 5 || aiHand.length !== 5) {
-        logAction('That tribe deck is missing cards.');
+    const key = deckGridKey();
+    const slot = currentBuiltSlot();
+    const ids = slot && slot.ids ? slot.ids.slice() : [];
+    applyGridSize(key === 'hex' ? 'hex' : Number(key));
+    if (!deckIsPlayable(ids, key)) {
+        logAction('That deck is not ready.');
         showModeMenu();
         return;
     }
+    const aiIds = randomEmberDeck(key);
+    if (aiIds.length !== ids.length) {
+        logAction('Could not build a computer deck.');
+        showModeMenu();
+        return;
+    }
+    resetTable();
+    gameState = 'playing';
+    deckMatchLabel = `${(slot && slot.name) || 'Your deck'} vs Random deck`;
+    playerHand = ids.map(id => cloneForOwner(masterCards.find(c => c.id === id), 'blue'));
+    aiHand = aiIds.map(id => cloneForOwner(masterCards.find(c => c.id === id), 'red'));
     beginMatch();
 }
 
@@ -905,9 +1400,7 @@ function playSharedMatch(decoded) {
     refreshRulesetDesc();
     activeMode = decoded.mode;
     applyGridSize(decoded.gridSize || 3);
-    resolvedDecks = decoded.mode === 'decks'
-        ? {player: tribeOfCardId(decoded.playerIds[0]), ai: tribeOfCardId(decoded.aiIds[0])}
-        : {player: null, ai: null};
+    deckMatchLabel = decoded.mode === 'decks' ? 'Shared decks' : '';
     resetTable();
     gameState = 'playing';
     handsFromIds(decoded.playerIds, decoded.aiIds);
@@ -1102,13 +1595,13 @@ function beginMatch(first, origin) {
             : `Week ${week} game ${gameN} vs ${opp.name}. ${opp.name} plays first.`;
         logAction(`League week ${week} game ${gameN} — You vs ${opp.name}.`);
     } else {
-        const vs = activeMode === 'decks' ? deckVsLine() : '';
+        const vs = activeMode === 'decks' ? deckMatchLabel : '';
         const shared = origin === 'share' ? 'Shared match. ' : '';
         statusMsg.textContent = vs
             ? (turn === 'player' ? `${vs}. Your turn - play a card.` : `${vs}. AI plays first.`)
             : (turn === 'player' ? `${shared}Hands dealt. Your turn - play a card.` : `${shared}Hands dealt. AI plays first.`);
         const n = matchHandSize();
-        const words = n === 5 ? 'five' : n === 8 ? 'eight' : 'thirteen';
+        const words = n === 5 ? 'five' : n === 8 ? 'eight' : n === 10 ? 'ten' : 'thirteen';
         logAction(vs || (origin === 'share'
             ? (n === 5 ? `Shared hands of ${words}.` : `Shared deal of ${words}. Five in hand.`)
             : (n === 5 ? `Hands of ${words}.` : `Dealt ${words} each. Five in hand.`)));
@@ -1208,7 +1701,7 @@ const TUTORIALS = [
         player: ['Clock', 'Frost', 'Spider', 'Monk', 'Mycelium'],
         ai: ['Vendetta', 'Owl', 'Robot', 'Wrath', 'Dread'],
         steps: [
-            {who: 'note', text: 'These abilities keep working after you play the card. Pendulum swings every turn. Chill and Buff stay on while the card sits there. Poison hits at the end of a turn. Symbiosis grows with your captures, even in your hand.'},
+            {who: 'note', text: 'These abilities keep working after you play the card. Pendulum swings every turn. Chill and Buff stay on while the card sits there. Poison hits at the end of a turn. Symbiosis grows in your hand as you capture. The bonus counts on the turn you play the card, then the card goes back to its printed numbers.'},
             {who: 'player', card: 'Clock', cell: 0, before: 'Play Clock in the top-left. Pendulum swaps top and bottom with left and right at the end of every turn, until the board is full.', after: 'You played it as 8 on top and bottom, 2 on the sides. It has already swung: the 8s are on the left and right. It will swing back next turn.'},
             {who: 'ai', card: 'Vendetta', cell: 6, after: 'They put Vendetta where it touches nobody, so Spite is waiting. Your Clock swung again. The 8s are back on top and bottom. It keeps trading like that every turn.'},
             {who: 'player', card: 'Frost', cell: 3, before: 'Play Frost above Vendetta. Chill lowers adjacent enemies by 1, and that counts when you capture. Her top is 4. Your bottom is 4.', after: 'Chill made her top 3 for the fight, so your 4 takes her. Chill lets go once she is yours, so her top reads 4 again. Spite then took 1 from every side of Frost. Those numbers are red.'},
@@ -1217,7 +1710,7 @@ const TUTORIALS = [
             {who: 'ai', card: 'Robot', cell: 7, after: 'They put Robot next to Vendetta. Robot\'s left is 2 and Vendetta\'s right is 6. No match, so Equalizer does nothing. Owl is yours now, so Spider has no enemy neighbor and Poison has nothing to hit.'},
             {who: 'player', card: 'Monk', cell: 4, before: 'Play Monk above Robot. Your bottom is 5 and their top is 5. Equalizer takes that match.', after: 'A normal card would stop on a match. Equalizer takes Robot. Mycelium is still in your hand and already reads 7: +1 for each of your 3 captures.'},
             {who: 'ai', card: 'Wrath', cell: 8, after: 'They put Wrath in the corner. Wrath\'s left matches Robot\'s right at 5. Spite does nothing until you take Wrath.'},
-            {who: 'player', card: 'Mycelium', cell: 5, before: 'Play Mycelium above Wrath. It should already show 7 on every side. Without your captures, 4 would lose to Wrath\'s top 6.', after: 'Your bottom 7 beats their top 6, so the bonus is why you take Wrath. Spite then takes 1 from Mycelium, and the new capture grows it again. Dread never came down. Silence turns off enemy abilities next to it. Two Silence cards next to each other cancel, and you can still capture.', spotlight: 'ai'}
+            {who: 'player', card: 'Mycelium', cell: 5, before: 'Play Mycelium above Wrath. It should already show 7 on every side. Without your captures, 4 would lose to Wrath\'s top 6.', after: 'Your bottom 7 beats their top 6, so the bonus is why you take Wrath. Spite then takes 1 from the printed 4s, and Mycelium sits at 3. The bonus was only for that fight. Dread never came down. Silence turns off enemy abilities next to it. Two Silence cards next to each other cancel, and you can still capture.', spotlight: 'ai'}
         ]
     }
 ];
@@ -2587,6 +3080,12 @@ window.addEventListener('pageshow', (e) => {
     clearDraftTimer();
     hideModals(['draft-modal', 'deck-modal', 'stats-modal', 'expanded-rules-modal', 'compendium-modal', 'options-modal', 'battle-log-modal', 'league-modal', 'league-roster', 'tutorial-modal', 'changelog-modal']);
     if (gameState !== 'playing' && gameState !== 'gameover') showModeMenu();
+});
+
+document.addEventListener('click', (e) => {
+    const menu = document.getElementById('deck-sort-menu');
+    if (!menu || menu.contains(e.target)) return;
+    closeDeckSortMenu();
 });
 
 window.addEventListener('keydown', (e) => {

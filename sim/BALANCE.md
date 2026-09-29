@@ -322,7 +322,7 @@ Ability spread in mixed hands is **8.9 points** from Blast (53.6%) to Cinder (44
 
 **Parasite and Siphon land near even** in mixed hands (47.6% / 50.8%). Tribe decks 56.2% / 52.1%. Copy and steal need an adjacent enemy, so they do not snowball as a five-of the way Pendulum does.
 
-**Symbiosis is +1 per capture this game.** Mixed 51.4% (mean power 16.2), mono-Grove 31.8%. A late Grove card still sits at the player's capture count, including in hand. One capture pass after it grows.
+**Symbiosis counts on the play, then the card returns to its printed stats.** The percentages in this file were measured while a Grove card kept that bonus on the board, so they are not the live numbers. The bonus still shows in hand and is used for the fight. It does not stay on the board.
 
 **Poison ticks adjacent enemies, then those cards can capture.** Mixed-hand seat win 47.6%. Mono-tribe 32.1%. Friendlies are safe. One capture pass after the tick, no second wave.
 

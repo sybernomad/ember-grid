@@ -92,20 +92,20 @@ for i, card in enumerate(CARDS):
     card["power"] = sum(card["base"])
 
 TRIBES = [
-    ("aura_buff", "Radiance", "Buff"),
-    ("curse_adj", "Grave", "Curse"),
-    ("blast", "Beasts", "Blast"),
-    ("poison", "Vermin", "Poison"),
-    ("equalizer", "Balance", "Equalizer"),
-    ("spite", "Wrath", "Spite"),
-    ("silence", "Hush", "Silence"),
-    ("cinder", "Ember", "Cinder"),
-    ("bolt", "Arcane", "Bolt"),
-    ("chill", "Frost", "Chill"),
-    ("parasite", "Host", "Parasite"),
-    ("siphon", "Well", "Siphon"),
-    ("pendulum", "Tide", "Pendulum"),
-    ("symbiosis", "Grove", "Symbiosis"),
+    ("aura_buff", "Buff", "Buff"),
+    ("curse_adj", "Curse", "Curse"),
+    ("blast", "Blast", "Blast"),
+    ("poison", "Poison", "Poison"),
+    ("equalizer", "Equalizer", "Equalizer"),
+    ("spite", "Spite", "Spite"),
+    ("silence", "Silence", "Silence"),
+    ("cinder", "Cinder", "Cinder"),
+    ("bolt", "Bolt", "Bolt"),
+    ("chill", "Chill", "Chill"),
+    ("parasite", "Parasite", "Parasite"),
+    ("siphon", "Siphon", "Siphon"),
+    ("pendulum", "Pendulum", "Pendulum"),
+    ("symbiosis", "Symbiosis", "Symbiosis"),
 ]
 TRIBE_BY_ID = {t[0]: t for t in TRIBES}
 ABILITY_NAME = {t[0]: t[2] for t in TRIBES}
@@ -250,16 +250,19 @@ class Match:
             if not card or self.cell_effects[index] != "cinder":
                 continue
             card["stats"] = [max(1, min(10, s - 1)) for s in card["stats"]]
-        for index, card in enumerate(self.board):
-            self.apply_capture_count_bonus(card, self.is_silenced(index))
         for owner in self.hands:
             for card in self.hands[owner]:
                 self.apply_capture_count_bonus(card, False)
 
     def effective_stat(self, card: dict, stat_index: int, placement_turn: bool, silenced: bool) -> int:
         val = (card.get("stats") or card["base"])[stat_index]
-        if silenced and live_ability(card) == "symbiosis" and card not in self.board:
+        on_board = card in self.board
+        if silenced and live_ability(card) == "symbiosis" and not on_board:
             val = card["base"][stat_index]
+        if placement_turn and not silenced and on_board and live_ability(card) == "symbiosis":
+            bonus = self.captures.get(card["owner"], 0)
+            if bonus:
+                val = max(1, min(10, val + bonus))
         if placement_turn and not silenced and live_ability(card) == "blast":
             val += 2
         return val
@@ -479,11 +482,6 @@ class Match:
                         score += 3
                 if live_ability(card) == "symbiosis" and not silenced_here:
                     score += 2 + self.captures.get(owner, 0) * 3
-                if flips and (
-                    live_ability(card) == "symbiosis"
-                    or any(c and c["owner"] == owner and live_ability(c) == "symbiosis" for c in self.board)
-                ):
-                    score += flips * 2
                 if score > max_score:
                     max_score = score
                     best = (card_index, cell)
@@ -871,8 +869,8 @@ def write_report(path: str, random_b: dict, tribe_b: dict, n_random: int, n_pair
     a("")
     a("Ability seat win leftover-off vs leftover-on (draws dropped):")
     a("")
-    a("| Rank | Ability | Tribe | Leftover-off (live) | Leftover-on (option) | Delta |")
-    a("| --- | --- | --- | --- | --- | --- |")
+    a("| Rank | Ability | Leftover-off (live) | Leftover-on (option) | Delta |")
+    a("| --- | --- | --- | --- | --- |")
     on_by = {r["ability"]: r for r in leftover_abs}
     for i, r in enumerate(rand_abs, 1):
         on = on_by.get(r["ability"])
@@ -882,7 +880,7 @@ def write_report(path: str, random_b: dict, tribe_b: dict, n_random: int, n_pair
         if on_wp is not None and off_wp is not None:
             delta = f"{off_wp - on_wp:+.1f}"
         a(
-            f"| {i} | {r['ability_name']} | {r['tribe']} | {fmt_pct(off_wp)} | "
+            f"| {i} | {r['ability_name']} | {fmt_pct(off_wp)} | "
             f"{fmt_pct(on_wp)} | {delta} |"
         )
     a("")
@@ -907,11 +905,11 @@ def write_report(path: str, random_b: dict, tribe_b: dict, n_random: int, n_pair
     a("")
     a("Seat win rate = a player was dealt at least one card of that ability, then won.")
     a("")
-    a("| Rank | Ability | Tribe | Seat win | Card-avg win | Captures / play | Captured / play | Mean power |")
-    a("| --- | --- | --- | --- | --- | --- | --- | --- |")
+    a("| Rank | Ability | Seat win | Card-avg win | Captures / play | Captured / play | Mean power |")
+    a("| --- | --- | --- | --- | --- | --- | --- |")
     for i, r in enumerate(rand_abs, 1):
         a(
-            f"| {i} | {r['ability_name']} | {r['tribe']} | {fmt_pct(r['seat_win_pct'])} | "
+            f"| {i} | {r['ability_name']} | {fmt_pct(r['seat_win_pct'])} | "
             f"{fmt_pct(r['card_win_avg'])} | {r['captures_per_play']:.2f} | {r['captured_per_play']:.2f} | {r['power']:.1f} |"
         )
     a("")
@@ -961,7 +959,7 @@ def write_report(path: str, random_b: dict, tribe_b: dict, n_random: int, n_pair
     a("Tribe standing when playing a full five-card tribe deck:")
     a("")
     for i, (ab, field, tw, tl, td) in enumerate(tribe_field, 1):
-        a(f"{i}. **{ABILITY_NAME[ab]}** ({TRIBE_BY_ID[ab][1]}) {fmt_pct(field)} ({tw}-{tl}-{td})")
+        a(f"{i}. **{ABILITY_NAME[ab]}** {fmt_pct(field)} ({tw}-{tl}-{td})")
     a("")
 
     a("## Tribe decks - card tiers (mono-tribe seats only)")
@@ -1017,7 +1015,7 @@ def write_report(path: str, random_b: dict, tribe_b: dict, n_random: int, n_pair
         a("")
     if symbiosis_field:
         sym_mixed = next(r for r in rand_abs if r["ability"] == "symbiosis")
-        a(f"**Symbiosis is +1 per capture this game.** Mixed {fmt_pct(sym_mixed['seat_win_pct'])} (mean power {sym_mixed['power']:.1f}), mono-Grove {fmt_pct(symbiosis_field[1])}. A late Grove card still sits at the player's capture count, including in hand. It does not capture again when it grows.")
+        a(f"**Symbiosis counts on the play, then the card returns to its printed stats.** Mixed {fmt_pct(sym_mixed['seat_win_pct'])} (mean power {sym_mixed['power']:.1f}), mono-Grove {fmt_pct(symbiosis_field[1])}. The bonus shows in hand and is used for that fight. It does not stay on the board.")
         a("")
     if poison_field:
         psn_mixed = next(r for r in rand_abs if r["ability"] == "poison")
@@ -1224,7 +1222,7 @@ def self_test() -> None:
     par.place("blue", 0, 1)
     assert par.board[1]["copied"] == "bolt", "Mimic should copy adjacent Bolt"
     assert par.board[4]["base"] == [3, 5, 1, 3], "Copied Bolt should zap Wizard before capture"
-    # Symbiosis is +1 all stats per capture this player has made this game.
+    # Symbiosis shows in hand and counts on the play, then the board card returns to its printed face.
     rng = random.Random(9)
     tree = clone_card(next(c for c in CARDS if c["name"] == "Worldtree"), "blue")
     monk = clone_card(next(c for c in CARDS if c["name"] == "Monk"), "blue")
@@ -1235,8 +1233,8 @@ def self_test() -> None:
     gro.place("blue", 0, 1)
     assert gro.board[4]["owner"] == "blue", "Monk should equalize-capture Robot"
     assert gro.board[0]["base"] == [2, 10, 3, 2], "Worldtree printed face should not change"
-    assert gro.board[0]["stats"] == [3, 10, 4, 3], "Worldtree should sit at +1 from the friendly capture"
-    # A Grove card played after captures already have the bonus.
+    assert gro.board[0]["stats"] == [2, 10, 3, 2], "Worldtree on the board should return to its printed face"
+    # A Grove card played after captures uses the bonus for that fight, then settles.
     tree2 = clone_card(next(c for c in CARDS if c["name"] == "Worldtree"), "blue")
     monk2 = clone_card(next(c for c in CARDS if c["name"] == "Monk"), "blue")
     robot2 = clone_card(next(c for c in CARDS if c["name"] == "Robot"), "red")
@@ -1251,7 +1249,19 @@ def self_test() -> None:
     assert held["stats"] == [3, 10, 4, 3], "Worldtree in hand should already show +1"
     late.place("blue", 0, 0)
     assert late.board[0]["base"] == [2, 10, 3, 2], "Late Worldtree printed face stays 2/A/3/2"
-    assert late.board[0]["stats"] == [3, 10, 4, 3], "Late Worldtree should already be +1"
+    assert late.board[0]["stats"] == [2, 10, 3, 2], "Late Worldtree should settle back to its printed face"
+    tree3 = clone_card(next(c for c in CARDS if c["name"] == "Worldtree"), "blue")
+    monk3 = clone_card(next(c for c in CARDS if c["name"] == "Monk"), "blue")
+    robot3 = clone_card(next(c for c in CARDS if c["name"] == "Robot"), "red")
+    ghost = clone_card(next(c for c in CARDS if c["name"] == "Ghost"), "red")
+    fight = Match([monk3, tree3], [robot3, ghost], "red", random.Random(9))
+    fight.place("red", 0, 4)
+    fight.place("blue", 0, 1)
+    assert fight.captures.get("blue") == 1
+    fight.place("red", 0, 3)
+    fight.place("blue", 0, 0)
+    assert fight.board[3]["owner"] == "blue", "Worldtree's play-turn bonus should beat Ghost's top 3"
+    assert fight.board[0]["stats"] == [2, 10, 3, 2], "Worldtree should return to printed stats after the capture"
     # Grown Grove does not capture later. Only Poison captures after play.
     coral = clone_card(next(c for c in CARDS if c["name"] == "Coral"), "blue")
     monk = clone_card(next(c for c in CARDS if c["name"] == "Monk"), "blue")
@@ -1266,7 +1276,7 @@ def self_test() -> None:
     assert gro_cap.board[5]["owner"] == "blue", "Monk should equalize-capture Robot"
     assert gro_cap.board[4]["owner"] == "red", "Grown Coral should not capture Owl on a later turn"
     assert gro_cap.board[1]["base"] == [5, 3, 5, 3], "Coral printed face should not change"
-    assert gro_cap.board[1]["stats"] == [6, 4, 6, 4], "Coral should sit at +1 after Monk's capture"
+    assert gro_cap.board[1]["stats"] == [5, 3, 5, 3], "Coral on the board should not keep the later capture bonus"
     print("self-test ok")
 
 

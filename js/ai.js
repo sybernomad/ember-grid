@@ -64,7 +64,6 @@ function pickAiMoveFor(owner, difficulty, personality) {
     }
 
     const enemyOnBoard = board.some(c => c && c.owner === enemy);
-    const groveOnBoard = board.some(c => c && c.owner === owner && liveAbilityType(c) === 'symbiosis');
     let bestMove = null, maxScore = -999;
     hand.forEach((card, cardIndex) => {
         const powerBias = card.baseStats.reduce((a, b) => a + b, 0) * 0.1 + (card.ability ? 3 : 0);
@@ -109,7 +108,6 @@ function pickAiMoveFor(owner, difficulty, personality) {
             if (silencedHere && liveAbilityType(card) !== 'silence') score -= 3;
             if (liveAbilityType(card) === 'bolt' && !silencedHere && enemyOnBoard) score += 3;
             if (liveAbilityType(card) === 'symbiosis' && !silencedHere) score += 2 + ownerCaptureCount(owner) * 3;
-            if (flipsCount && (liveAbilityType(card) === 'symbiosis' || groveOnBoard)) score += flipsCount * 2;
             score += personalityPlayBias(card, personality);
             if (score > maxScore) {maxScore = score; bestMove = {cardIndex, cellIdx};}
         });

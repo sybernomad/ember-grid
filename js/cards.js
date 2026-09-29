@@ -11,20 +11,20 @@ function makeAbility(type) {
 }
 
 const TRIBES = [
-    {id: 'aura_buff', name: 'Radiance', ability: 'Buff', icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.', val: 1},
-    {id: 'curse_adj', name: 'Grave', ability: 'Curse', icon: '💀', desc: 'On play, the strongest enemy loses 1 from all stats, then this card captures.'},
-    {id: 'blast', name: 'Beasts', ability: 'Blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'},
-    {id: 'poison', name: 'Vermin', ability: 'Poison', icon: '🦠', desc: 'At the end of every turn, adjacent enemies lose 1 from all stats, then this card can capture.'},
-    {id: 'equalizer', name: 'Balance', ability: 'Equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'},
-    {id: 'spite', name: 'Wrath', ability: 'Spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'},
-    {id: 'silence', name: 'Hush', ability: 'Silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel.'},
-    {id: 'cinder', name: 'Ember', ability: 'Cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'},
-    {id: 'bolt', name: 'Arcane', ability: 'Bolt', icon: '🔮', desc: 'On play, zaps a random enemy by -2 to all stats before this card captures. The zap can help this play steal that card.'},
-    {id: 'chill', name: 'Frost', ability: 'Chill', icon: '❄️', desc: 'While this card sits there, adjacent enemies are -1 to all stats. Counts for captures.'},
-    {id: 'parasite', name: 'Host', ability: 'Parasite', icon: '🪞', desc: 'On play, copies the ability of an adjacent enemy for the rest of the match. If that ability fires on play, it fires before this card captures.'},
-    {id: 'siphon', name: 'Well', ability: 'Siphon', icon: '🌀', desc: 'On play, steals 1 from each adjacent enemy\'s touching stat and adds it permanently to this card\'s opposite facing.'},
-    {id: 'pendulum', name: 'Tide', ability: 'Pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top/bottom stats with its left/right stats.'},
-    {id: 'symbiosis', name: 'Grove', ability: 'Symbiosis', icon: '🌱', desc: 'Plus 1 to all stats for each capture this card\'s player has made this game. The numbers update in your hand.'}
+    {id: 'aura_buff', name: 'Buff', ability: 'Buff', icon: '⚡', desc: 'While this card sits there, adjacent friendly cards get +1 to all stats.', val: 1},
+    {id: 'curse_adj', name: 'Curse', ability: 'Curse', icon: '💀', desc: 'On play, the strongest enemy loses 1 from all stats, then this card captures.'},
+    {id: 'blast', name: 'Blast', ability: 'Blast', icon: '💥', desc: 'Temporarily grants +2 to all stats on the turn it is played.'},
+    {id: 'poison', name: 'Poison', ability: 'Poison', icon: '🦠', desc: 'At the end of every turn, adjacent enemies lose 1 from all stats, then this card can capture.'},
+    {id: 'equalizer', name: 'Equalizer', ability: 'Equalizer', icon: '⚖️', desc: 'Captures adjacent cards if the touching stats match exactly.'},
+    {id: 'spite', name: 'Spite', ability: 'Spite', icon: '💢', desc: 'When this card is captured, the captor loses 1 from all stats.'},
+    {id: 'silence', name: 'Silence', ability: 'Silence', icon: '🔇', desc: 'Adjacent enemies lose their abilities while this card sits there. Capture still works. Next to an enemy Silence, both cancel.'},
+    {id: 'cinder', name: 'Cinder', ability: 'Cinder', icon: '🔥', desc: 'On play, a random empty cell becomes Cindered. Whoever sits there is -1 to all stats. The cell glows orange.'},
+    {id: 'bolt', name: 'Bolt', ability: 'Bolt', icon: '🔮', desc: 'On play, zaps a random enemy by -2 to all stats before this card captures. The zap can help this play steal that card.'},
+    {id: 'chill', name: 'Chill', ability: 'Chill', icon: '❄️', desc: 'While this card sits there, adjacent enemies are -1 to all stats. Counts for captures.'},
+    {id: 'parasite', name: 'Parasite', ability: 'Parasite', icon: '🪞', desc: 'On play, copies the ability of an adjacent enemy for the rest of the match. If that ability fires on play, it fires before this card captures.'},
+    {id: 'siphon', name: 'Siphon', ability: 'Siphon', icon: '🌀', desc: 'On play, steals 1 from each adjacent enemy\'s touching stat and adds it permanently to this card\'s opposite facing.'},
+    {id: 'pendulum', name: 'Pendulum', ability: 'Pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top/bottom stats with its left/right stats.'},
+    {id: 'symbiosis', name: 'Symbiosis', ability: 'Symbiosis', icon: '🌱', desc: 'Plus 1 to all stats for each capture this player has made. The bonus shows in your hand and counts on the turn you play the card, then the card goes back to its printed numbers.'}
 ];
 
 const masterCards = [
@@ -158,7 +158,7 @@ function twemojiFile(emoji) {
 }
 function paintCardFaces(root) {
     if (!root || !root.querySelectorAll) return;
-    root.querySelectorAll('.card-emoji').forEach(el => {
+    root.querySelectorAll('.card-emoji, .deck-mech-glyph').forEach(el => {
         if (el.querySelector('img')) return;
         const emoji = el.textContent;
         if (!emoji) return;
@@ -172,22 +172,113 @@ function paintCardFaces(root) {
         el.appendChild(img);
     });
 }
-function isDeckPick(value) {
-    return value === 'random' || TRIBES.some(tribe => tribe.id === value);
+function cardPower(card) {
+    return (card.baseStats || []).reduce((sum, n) => sum + n, 0);
 }
-function loadDeckPicks() {
+const emberCostById = (() => {
+    const costs = {};
+    TRIBES.forEach(tribe => {
+        const list = masterCards.filter(card => card.ability && card.ability.type === tribe.id)
+            .slice()
+            .sort((a, b) => cardPower(a) - cardPower(b) || a.number - b.number);
+        if (!list.length) return;
+        // Weakest to strongest: 0, 1, 2, 3, 4. A full tribe is 10 embers, so it fits a 3×3 deck.
+        list.forEach((card, rank) => {
+            costs[card.id] = rank;
+        });
+    });
+    return costs;
+})();
+function emberCostOf(cardOrId) {
+    const id = typeof cardOrId === 'string' ? cardOrId : (cardOrId && cardOrId.id);
+    const cost = emberCostById[id];
+    return cost == null ? 0 : cost;
+}
+function deckSizeFor(gridKey) {
+    const key = gridKey === 'hex' ? 'hex' : Number(gridKey);
+    const preset = typeof GRID_PRESETS !== 'undefined' ? GRID_PRESETS[key] : null;
+    if (preset) return preset.hand;
+    if (key === 4) return 8;
+    if (key === 5) return 13;
+    if (gridKey === 'hex') return 10;
+    return 5;
+}
+function emberBudgetFor(gridKey) {
+    return deckSizeFor(gridKey) * 2;
+}
+const EMBER_DECK_SLOTS = 8;
+const EMBER_DECK_KEY = 'ember_grid_built_decks';
+function emptyBuiltBook() {
+    const grids = {};
+    ['3', '4', '5', 'hex'].forEach(key => {
+        grids[key] = Array.from({length: EMBER_DECK_SLOTS}, () => null);
+    });
+    return {grids, active: {3: 0, 4: 0, 5: 0, hex: 0}};
+}
+function normalizeBuiltSlot(slot) {
+    if (!slot || !Array.isArray(slot.ids)) return null;
+    const ids = [];
+    slot.ids.forEach(id => {
+        if (!ids.includes(id) && masterCards.some(card => card.id === id)) ids.push(id);
+    });
+    const name = String(slot.name || '').trim().slice(0, 24);
+    return {name, ids};
+}
+function loadBuiltDecks() {
+    const book = emptyBuiltBook();
     try {
-        const raw = JSON.parse(localStorage.getItem('ember_grid_decks') || 'null');
-        if (raw && isDeckPick(raw.player) && isDeckPick(raw.ai)) {
-            return {player: raw.player, ai: raw.ai};
-        }
+        const raw = JSON.parse(localStorage.getItem(EMBER_DECK_KEY) || 'null');
+        if (!raw || !raw.grids) return book;
+        ['3', '4', '5', 'hex'].forEach(key => {
+            const list = Array.isArray(raw.grids[key]) ? raw.grids[key] : [];
+            book.grids[key] = Array.from({length: EMBER_DECK_SLOTS}, (_, i) => normalizeBuiltSlot(list[i]));
+            const active = raw.active && raw.active[key];
+            book.active[key] = active >= 0 && active < EMBER_DECK_SLOTS ? active : 0;
+        });
     } catch (e) {}
-    return {player: 'random', ai: 'random'};
+    return book;
 }
-function saveDeckPicks() {
-    localStorage.setItem('ember_grid_decks', JSON.stringify(deckPicks));
+function saveBuiltDecks() {
+    localStorage.setItem(EMBER_DECK_KEY, JSON.stringify(builtDecks));
 }
-let deckPicks = loadDeckPicks();
+let builtDecks = loadBuiltDecks();
+function deckEmberSpent(ids) {
+    return (ids || []).reduce((sum, id) => sum + emberCostOf(id), 0);
+}
+function deckIsPlayable(ids, gridKey) {
+    const list = ids || [];
+    return list.length === deckSizeFor(gridKey) && deckEmberSpent(list) <= emberBudgetFor(gridKey);
+}
+function weightedPick(items, weights) {
+    let total = 0;
+    weights.forEach(weight => { total += weight; });
+    let roll = Math.random() * total;
+    for (let i = 0; i < items.length; i++) {
+        roll -= weights[i];
+        if (roll <= 0) return items[i];
+    }
+    return items[items.length - 1];
+}
+function randomEmberDeck(gridKey) {
+    const size = deckSizeFor(gridKey);
+    const budget = emberBudgetFor(gridKey);
+    const pool = masterCards.slice();
+    const ids = [];
+    let spent = 0;
+    for (let slot = 0; slot < size; slot++) {
+        const slotsLeft = size - slot;
+        const room = budget - spent;
+        const target = room / slotsLeft;
+        const legal = pool.filter(card => emberCostOf(card) <= room);
+        if (!legal.length) break;
+        const weights = legal.map(card => 1 / (1 + Math.abs(emberCostOf(card) - target)));
+        const pick = weightedPick(legal, weights);
+        ids.push(pick.id);
+        spent += emberCostOf(pick);
+        pool.splice(pool.indexOf(pick), 1);
+    }
+    return ids;
+}
 function hexShouldersOf(card) {
     const master = (card && masterCards.find(c => (card.id && c.id === card.id) || c.name === card.name)) || card;
     const hex = master && master.hexStats;
@@ -225,19 +316,6 @@ function printedStatsOf(card) {
     const master = card && masterCards.find(c => (card.id && c.id === card.id) || c.name === card.name);
     return (master && master.baseStats) || (card && card.baseStats) || [1, 1, 1, 1];
 }
-function tribeById(id) {
-    return TRIBES.find(tribe => tribe.id === id) || null;
-}
-function cardsForTribe(tribeId) {
-    return masterCards.filter(card => card.ability && card.ability.type === tribeId);
-}
-function resolveTribePick(pick) {
-    if (pick && pick !== 'random') return pick;
-    return TRIBES[Math.floor(Math.random() * TRIBES.length)].id;
-}
-function dealTribeHand(tribeId, owner) {
-    return [...cardsForTribe(tribeId)].sort(() => Math.random() - 0.5).map(card => cloneForOwner(card, owner));
-}
 function cloneCard(card, extra, ruleset) {
     const master = masterCards.find(c => c.id === card.id) || card;
     const copy = {
@@ -268,10 +346,6 @@ function shuffleCopy(cards) {
         pile[j] = tmp;
     }
     return pile;
-}
-function tribeOfCardId(id) {
-    const card = masterCards.find(c => c.id === id);
-    return card && card.ability ? card.ability.type : null;
 }
 function cardByName(name) {
     return masterCards.find(c => c.name === name);

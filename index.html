@@ -121,7 +121,7 @@
                 <button class="btn btn-alt" onclick="startGame('draft')">Draft Hands</button>
             </div>
             <div class="menu-play-actions">
-                <button class="btn btn-alt" onclick="openDeckPicker()">Tribe Decks</button>
+                <button class="btn btn-alt" onclick="openDeckPicker()">Decks</button>
                 <button class="btn" id="league-menu-btn" onclick="openLeague()">League</button>
             </div>
             <details class="match-code-box" id="match-code-box">
@@ -134,7 +134,7 @@
             </details>
             <div class="menu-foot">
                 <!-- Bump BUILD on every PR. Still pre-1.0, so this stays Alpha until 1.0 ships. -->
-                <button type="button" class="build-stamp" onclick="showChangelogModal()" title="Changelog">0.37 Alpha</button>
+                <button type="button" class="build-stamp" onclick="showChangelogModal()" title="Changelog">0.38 Alpha</button>
                 <p class="dev-note">Still in active development. Cards and rules may change.</p>
             </div>
         </div>
@@ -176,7 +176,7 @@
             <div class="menu-section-title">The Table</div>
             <div class="expanded-rules-list">
                 <div class="rule-detail-item">
-                    <strong>Grid:</strong> The usual grid is 3×3, five cards each. In Options you can play 4×4 (eight dealt), 5×5 (thirteen dealt), or a Honeycomb of nineteen cells (ten dealt). You still start with five in hand. League and Tribe Decks always use 3×3.
+                    <strong>Grid:</strong> The usual grid is 3×3, five cards each. In Options you can play 4×4 (eight dealt), 5×5 (thirteen dealt), or a Honeycomb of nineteen cells (ten dealt). You still start with five in hand. Decks use that same deal size. League always uses 3×3.
                 </div>
                 <div class="rule-detail-item">
                     <strong>The deck:</strong> The Base Set is 70 cards in fourteen tribes. Every Ember card has an ability. Classic Mode turns abilities off.
@@ -192,7 +192,7 @@
                     <strong>Draft Hands:</strong> Take turns picking cards, back and forth, until both sides have a full deal. Five each on 3×3, eight each on 4×4, thirteen each on 5×5, ten each on Honeycomb.
                 </div>
                 <div class="rule-detail-item">
-                    <strong>Tribe Decks:</strong> Each side gets one tribe of five on 3×3. Pick both decks, or leave either one random. Same tribe is a mirror match.
+                    <strong>Decks:</strong> Build a deck for the grid in Options and save up to eight per grid. 3×3 is five cards, 4×4 is eight, 5×5 is thirteen, and Honeycomb is ten. Each card costs embers. In a tribe the weakest card is free, then 1, 2, 3, and 4. A whole tribe is 10 embers, so it fits on 3×3. Copy the deck code to send that list to a friend, or paste one in to load it. The computer brings a random deck under the same cap. Deal Hands is still a shuffle when you want a fast game.
                 </div>
                 <div class="rule-detail-item">
                     <strong>League:</strong> You plus Ash, Vesper, and Rook. Draft twenty cards (five each), then play a season on 3×3 where everyone plays everyone twice. Each meeting is best of three. Rankings use series wins, then game wins, then grid score. Leftover scores and Ember/Classic stay locked for the season.
@@ -217,7 +217,7 @@
                 <div class="rule-detail-item"><strong>🪞 Parasite:</strong> On play, copies an adjacent enemy's ability. If that ability fires on play, it fires before this card captures.</div>
                 <div class="rule-detail-item"><strong>🌀 Siphon:</strong> On play, steals 1 from each adjacent enemy's touching number onto the opposite side of this card.</div>
                 <div class="rule-detail-item"><strong>⏳ Pendulum:</strong> At the start of every turn, swaps top and bottom with left and right.</div>
-                <div class="rule-detail-item"><strong>🌱 Symbiosis:</strong> +1 to all stats for each capture this player has made this game. The numbers update in your hand.</div>
+                <div class="rule-detail-item"><strong>🌱 Symbiosis:</strong> +1 to all stats for each capture you have made. You see it in your hand, and it counts on the turn you play the card. After that fight, the card goes back to its printed numbers.</div>
             </div>
 
             <button class="btn btn-alt btn-dismiss" onclick="closeRulesModal()">Close</button>
@@ -232,6 +232,17 @@
             <h2 class="modal-title">Changelog</h2>
             <p class="set-blurb">Alpha stamps. Newest first. Tap the version on the menu anytime.</p>
             <div class="changelog-list">
+                <section class="changelog-ver">
+                    <h3>0.38 Alpha</h3>
+                    <ul>
+                        <li>Symbiosis counts on the turn you play the card, then the card goes back to its printed numbers. Cards still in your hand keep growing.</li>
+                        <li>Decks replace Tribe Decks. Build and save eight decks for each grid. Cards cost embers, and the weakest card in each tribe is free.</li>
+                        <li>A tribe is the ability name. Buff, Curse, Blast, and the rest. The old flavor names are gone.</li>
+                        <li>Every tribe costs the same: free, then 1, 2, 3, and 4. A whole tribe fits in a 3×3 deck.</li>
+                        <li>The deck builder shows every mechanic as an icon. Pick more than one. Hover an icon to see its name. Sort by name, ember, or mechanic, then flip ascending or descending.</li>
+                        <li>A deck code copies the current list so a friend can load the same cards. The deck window stays one size, and a click outside it leaves it open.</li>
+                    </ul>
+                </section>
                 <section class="changelog-ver">
                     <h3>0.37 Alpha</h3>
                     <ul>
@@ -486,7 +497,7 @@
                 </div>
             </div>
             <div id="grid-size-desc" class="ruleset-desc-box">
-                <strong>3×3 (default):</strong> Five each. League and Tribe Decks always use this size.
+                <strong>3×3 (default):</strong> Five each. Decks are five cards. League always uses this size.
             </div>
             <label class="settings-row" for="open-hands-check">
                 <span>Show Hands</span>
@@ -563,19 +574,76 @@
         </div>
     </div>
 
-    <!-- Tribe Decks Modal -->
-    <div id="deck-modal" class="modal modal-ember hidden" onclick="onModalBackdrop(event, cancelDeckPicker)">
+    <!-- Deck builder -->
+    <div id="deck-modal" class="modal modal-ember hidden">
         <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button type="button" class="modal-close" onclick="cancelDeckPicker()" aria-label="Cancel deck pick"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
-            <h2 class="modal-title">Tribe Decks</h2>
-            <p class="draft-order">Each deck is one tribe of five on the 3×3 table. Pick yours and the opponent's, or leave either one random.</p>
-            <div class="menu-section-title" style="margin-top: 8px;">Your deck</div>
-            <div id="deck-you-picks" class="deck-picks"></div>
-            <div class="menu-section-title">Opponent</div>
-            <div id="deck-ai-picks" class="deck-picks"></div>
-            <button class="btn" onclick="confirmDeckMatch()">Play</button>
-            <button class="btn btn-muted btn-dismiss" onclick="cancelDeckPicker()">Cancel</button>
+            <button type="button" class="modal-close" onclick="cancelDeckPicker()" aria-label="Close decks"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+            <h2 class="modal-title">Decks</h2>
+            <div class="grid-choices" role="group" aria-label="Deck grid">
+                <button type="button" class="grid-choice" data-grid-choice="3" onclick="setDeckGrid('3')">3×3</button>
+                <button type="button" class="grid-choice" data-grid-choice="4" onclick="setDeckGrid('4')">4×4</button>
+                <button type="button" class="grid-choice" data-grid-choice="5" onclick="setDeckGrid('5')">5×5</button>
+                <button type="button" class="grid-choice" data-grid-choice="hex" onclick="setDeckGrid('hex')">Honeycomb</button>
+            </div>
+            <div id="deck-slots" class="deck-slots" role="tablist" aria-label="Saved decks"></div>
+            <div class="deck-name-row">
+                <input id="deck-name" class="deck-name" type="text" maxlength="24" aria-label="Deck name" oninput="onDeckNameInput(this)">
+                <div class="ember-meter" aria-live="polite">
+                    <div class="ember-meter-track"><span id="deck-meter-fill"></span></div>
+                    <span id="deck-meter-label" class="ember-meter-label">0 / 10</span>
+                </div>
+            </div>
+            <div id="deck-tray" class="deck-tray" aria-label="Cards in this deck"></div>
+            <p id="deck-hint" class="deck-hint"></p>
+            <div class="deck-actions">
+                <button class="btn" id="deck-play" onclick="confirmDeckMatch()" disabled>Play</button>
+                <button class="btn btn-alt" type="button" onclick="fillRandomDeck()">Random</button>
+                <button class="btn btn-muted" type="button" onclick="clearBuiltDeck()">Clear</button>
+            </div>
+            <div class="deck-code-row">
+                <span class="deck-filter-kicker">Deck code</span>
+                <div class="deck-code-controls">
+                    <input id="deck-code" class="deck-code" type="text" maxlength="80" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="Paste a friend's code" aria-label="Deck code">
+                    <button type="button" class="btn btn-alt" id="deck-code-copy" onclick="copyDeckCode()">Copy</button>
+                    <button type="button" class="btn btn-alt" onclick="loadDeckCode()">Load</button>
+                </div>
+                <p id="deck-code-note" class="deck-code-note" aria-live="polite"></p>
+            </div>
+            <div class="deck-filters">
+                <div class="deck-filter-block">
+                    <span class="deck-filter-kicker">Mechanics</span>
+                    <div id="deck-tribe-filters" class="deck-chip-row" role="group" aria-label="Mechanics"></div>
+                </div>
+                <div class="deck-filter-bar">
+                    <div class="deck-filter-block">
+                        <span class="deck-filter-kicker">Ember</span>
+                        <div id="deck-cost-filters" class="deck-cost-row" role="group" aria-label="Ember cost"></div>
+                    </div>
+                    <div class="deck-sort">
+                        <span class="deck-filter-kicker">Sort</span>
+                        <div class="deck-sort-controls">
+                            <div class="deck-sort-menu" id="deck-sort-menu">
+                                <button type="button" id="deck-sort" class="deck-sort-btn" aria-haspopup="listbox" aria-expanded="false" aria-label="Sort cards by" onclick="toggleDeckSortMenu()">
+                                    <span id="deck-sort-label">Name</span>
+                                    <svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+                                </button>
+                                <ul class="deck-sort-list" id="deck-sort-list" role="listbox" aria-label="Sort cards by" hidden>
+                                    <li><button type="button" role="option" data-sort="name" onclick="chooseDeckSort('name')">Name</button></li>
+                                    <li><button type="button" role="option" data-sort="cost" onclick="chooseDeckSort('cost')">Ember</button></li>
+                                    <li><button type="button" role="option" data-sort="tribe" onclick="chooseDeckSort('tribe')">Mechanic</button></li>
+                                </ul>
+                            </div>
+                            <button type="button" id="deck-sort-dir" class="deck-sort-dir" onclick="toggleDeckSortDir()" aria-label="Ascending. Switch to descending.">
+                                <svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M12 19V5"/><path d="m6 11 6-6 6 6"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <p id="deck-filter-count" class="deck-filter-count"></p>
+            </div>
+            <div id="deck-collection" class="deck-collection" aria-label="Card collection"></div>
+            <button class="btn btn-muted btn-dismiss" onclick="cancelDeckPicker()">Close</button>
         </div>
     </div>
 
