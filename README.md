@@ -2,10 +2,6 @@
 
 A Triple Triad-style card battle you can play in the browser. The **Base Set** is 70 cards in fourteen tribes. Every Ember card has an ability. Shuffle it, deal each player a **hand of five**, and play onto a 3x3 grid. Options can open a 4x4 (eight dealt), a 5x5 (thirteen dealt), or a Honeycomb of nineteen cells (ten dealt): you still hold five and draw from the rest of that deal after each play. Capture adjacent enemies by beating their touching stats. On the honeycomb, each card also has an upper-left and upper-right number so every hex side has a facing. Control the most cards when the grid fills.
 
-## Balance sim
-
-`python3 sim/balance.py` plays thousands of Ember matches with the same Normal AI the game uses. It writes `sim/BALANCE.md` (card tiers, ability win rates, tribe-vs-tribe). It does not change cards.
-
 ## How to play
 
 **Play.** Put a card from your hand onto an empty cell. Drag it, or tap the card then the cell.
@@ -76,3 +72,7 @@ No ability destroys a card or blocks capture.
 - Short table effects when an ability actually hits (Bolt arcs, Cinder sparks to the cell, and so on). Reduced motion keeps the color ring.
 - Alpha build number on the main menu. Tap it for the changelog. Bump `0.38` in `index.html` on every PR until 1.0 ships.
 - Source is split for editing: `css/table.css`, `js/cards.js`, `js/engine.js`, `js/ai.js`, `js/league.js`, `js/ui.js`. `index.html` is the page.
+
+## Balance sim
+
+`python3 sim/balance.py` plays thousands of Ember matches with the same Normal AI the game uses. It writes `sim/BALANCE.md` (card tiers, ability win rates, tribe-vs-tribe). It does not change cards.
