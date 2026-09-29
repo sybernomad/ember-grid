@@ -328,6 +328,7 @@ function updatePreferredGrid(val) {
     refreshGridSizeDesc();
     refreshVictoryCopy();
     if (gameState === 'menu') applyGridSize(preferredGridSize);
+    refreshMenuDeck();
 }
 
 function updateLeftoverScores(checked) {
@@ -482,6 +483,7 @@ function showModeMenu() {
     cloneRulesetOverride = null;
     leagueHubConfirm = null;
     refreshLeagueMenuButton();
+    refreshMenuDeck();
     clearShareHash();
     setMatchCodeError('');
     const codeBox = document.getElementById('match-code-box');
@@ -636,6 +638,37 @@ function addTooltipListeners(el, descText, opts) {
             else pinTooltip(descText, el);
         });
     }
+}
+
+function playMenuDeck() {
+    const slot = currentBuiltSlot();
+    const key = deckGridKey();
+    if (slot && deckIsPlayable(slot.ids, key)) startGame('decks');
+    else openDeckPicker();
+}
+
+function refreshMenuDeck() {
+    const title = document.getElementById('menu-play-title');
+    const caption = document.getElementById('menu-play-caption');
+    const kicker = document.getElementById('menu-play-kicker');
+    const tile = document.getElementById('menu-play-deck');
+    if (!title || !caption || !kicker || !tile) return;
+    const key = deckGridKey();
+    const slot = currentBuiltSlot();
+    const size = deckSizeFor(key);
+    const ready = !!(slot && deckIsPlayable(slot.ids, key));
+    kicker.textContent = deckGridWord(key);
+    tile.classList.toggle('is-ready', ready);
+    if (ready) {
+        title.textContent = slot.name || 'Your deck';
+        caption.textContent = 'Play this deck';
+        return;
+    }
+    title.textContent = 'Build a deck';
+    const count = slot && slot.ids ? slot.ids.length : 0;
+    caption.textContent = count
+        ? `${count} of ${size} cards. Finish it to play.`
+        : `${size} cards. ${emberBudgetFor(key)} embers.`;
 }
 
 function startGame(mode) {
@@ -927,12 +960,10 @@ function paintDeckMeter() {
         fill.style.width = `${pct}%`;
         fill.classList.toggle('over', over);
     }
-    const play = document.getElementById('deck-play');
     const ready = deckIsPlayable(ids, key);
-    if (play) play.disabled = !ready;
     const hint = document.getElementById('deck-hint');
     if (!hint) return;
-    if (ready) hint.textContent = 'Ready. The computer brings a random deck under the same ember cap.';
+    if (ready) hint.textContent = 'Ready. Save, then play it from the menu.';
     else if (over) hint.textContent = `Over the cap by ${spent - budget}. Take a card out before this deck can play.`;
     else hint.textContent = `${ids.length} of ${size} cards. ${budget - spent} embers left.`;
 }
@@ -1192,19 +1223,14 @@ function openDeckPicker() {
 }
 
 function cancelDeckPicker() {
+    saveDeckPicker();
+}
+
+function saveDeckPicker() {
     commitDeckName();
     saveBuiltDecks();
     hideModal('deck-modal');
     showModeMenu();
-}
-
-function confirmDeckMatch() {
-    commitDeckName();
-    saveBuiltDecks();
-    const key = deckGridKey();
-    const slot = currentBuiltSlot();
-    if (!slot || !deckIsPlayable(slot.ids, key)) return;
-    startGame('decks');
 }
 
 function startDeckMatch() {

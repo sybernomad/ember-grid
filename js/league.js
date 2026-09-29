@@ -367,12 +367,23 @@ function createLeague() {
 }
 
 function refreshLeagueMenuButton() {
-    const btn = document.getElementById('league-menu-btn');
-    if (!btn) return;
-    if (!league) btn.textContent = 'League';
-    else if (league.phase === 'complete') btn.textContent = 'League Crown';
-    else if (league.phase === 'draft') btn.textContent = 'Continue Draft';
-    else btn.textContent = 'Continue League';
+    const label = document.getElementById('league-menu-label');
+    const caption = document.getElementById('league-menu-caption');
+    if (!label) return;
+    let title = 'League';
+    let line = 'Draft or bring a deck';
+    if (league && league.phase === 'complete') {
+        title = 'League Crown';
+        line = 'The season is finished';
+    } else if (league && league.phase === 'draft') {
+        title = 'Continue Draft';
+        line = 'Your picks are saved';
+    } else if (league) {
+        title = 'Continue League';
+        line = 'The season is on';
+    }
+    label.textContent = title;
+    if (caption) caption.textContent = line;
 }
 
 function openLeague() {
@@ -380,13 +391,80 @@ function openLeague() {
     hideModal('main-menu-modal');
     document.body.classList.add('menu-open');
     if (!league) {
-        startNewLeague(true);
+        showLeagueChooser();
         return;
     }
     if (league.phase === 'draft') {
         resumeLeagueDraft();
         return;
     }
+    resolvePendingAutoMatches();
+    showLeagueHub();
+}
+
+function showLeagueChooser() {
+    hideTooltip();
+    hideModals(['main-menu-modal', 'draft-modal', 'deck-modal', 'gameover-modal', 'battle-log-modal', 'changelog-modal']);
+    document.body.classList.add('menu-open');
+    renderLeagueChooser();
+    document.getElementById('league-modal').classList.remove('hidden');
+}
+
+function renderLeagueChooser() {
+    const hub = document.getElementById('league-hub');
+    if (!hub) return;
+    const slot = builtSlotAt('3', (builtDecks.active && builtDecks.active['3']) || 0);
+    const ready = !!(slot && deckIsPlayable(slot.ids, '3'));
+    const name = ready ? (slot.name || 'Your deck') : '';
+    hub.innerHTML = `<p class="league-chooser-lead">A season is six weeks on 3×3. Ash, Vesper, and Rook each bring their own cards.</p>
+        <div class="league-chooser">
+            <button type="button" class="play-tile" onclick="chooseDraftLeague()">
+                <span class="play-kicker">Open pack</span>
+                <span class="play-title">Draft the season</span>
+                <span class="play-caption">Twenty cards. Five each. You pick with the table.</span>
+            </button>
+            <button type="button" class="play-tile" onclick="startConstructedLeague()"${ready ? '' : ' disabled'}>
+                <span class="play-kicker">Your list</span>
+                <span class="play-title">Bring your deck</span>
+                <span class="play-caption">${ready ? `${name} plays the season.` : 'Build a full 3×3 deck first. Five cards, ten embers.'}</span>
+            </button>
+        </div>
+        <div class="league-actions"><button class="btn btn-alt" onclick="leaveLeagueToMenu()">Back to Menu</button></div>`;
+}
+
+function chooseDraftLeague() {
+    sfx.click();
+    startNewLeague(true);
+}
+
+function startConstructedLeague() {
+    sfx.click();
+    const slot = builtSlotAt('3', (builtDecks.active && builtDecks.active['3']) || 0);
+    if (!slot || !deckIsPlayable(slot.ids, '3')) return;
+    applyGridSize(3);
+    leagueHubConfirm = null;
+    league = {
+        version: 2,
+        phase: 'season',
+        createdAt: Date.now(),
+        ruleset: currentRuleset === 'classic' ? 'classic' : 'ember',
+        leftover: !!leftoverScores,
+        classicTies: currentRuleset === 'classic' && !!classicTies,
+        players: [youSeat(), ...LEAGUE_RIVALS],
+        draftOrder: shuffleCopy(['you', 'ash', 'vesper', 'rook']),
+        draftPickIndex: LEAGUE_HAND_SIZE * 4,
+        pool: [],
+        hands: {
+            you: slot.ids.slice(),
+            ash: randomEmberDeck('3'),
+            vesper: randomEmberDeck('3'),
+            rook: randomEmberDeck('3')
+        },
+        fixtures: makeLeagueFixtures(),
+        recap: '',
+        champion: null
+    };
+    saveLeague();
     resolvePendingAutoMatches();
     showLeagueHub();
 }
@@ -407,7 +485,8 @@ function requestNewLeague() {
         renderLeagueHub();
         return;
     }
-    startNewLeague(true);
+    clearLeague();
+    showLeagueChooser();
 }
 
 function confirmLeagueAction(action) {
@@ -418,8 +497,8 @@ function confirmLeagueAction(action) {
         return;
     }
     if (action === 'new') {
-        leagueHubConfirm = null;
-        startNewLeague(true);
+        clearLeague();
+        showLeagueChooser();
     }
 }
 
@@ -796,7 +875,7 @@ function renderLeagueHub() {
     if (leagueHubConfirm === 'end') {
         html = `<div class="league-confirm">This season is gone — standings, draft, and remaining matches. Casual games stay.<div class="row"><button class="btn" onclick="confirmLeagueAction('end')">End It</button><button class="btn btn-alt" onclick="cancelLeagueConfirm()">Keep It</button></div></div>` + html;
     } else if (leagueHubConfirm === 'new') {
-        html = `<div class="league-confirm">Start a new season? The current draft and table will be wiped.<div class="row"><button class="btn" onclick="confirmLeagueAction('new')">Start New</button><button class="btn btn-alt" onclick="cancelLeagueConfirm()">Keep This One</button></div></div>` + html;
+        html = `<div class="league-confirm">Start a new season? This table is wiped. You can draft again or bring a 3×3 deck.<div class="row"><button class="btn" onclick="confirmLeagueAction('new')">Start New</button><button class="btn btn-alt" onclick="cancelLeagueConfirm()">Keep This One</button></div></div>` + html;
     }
     hub.innerHTML = html;
     if (leagueHubConfirm) {

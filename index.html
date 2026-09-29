@@ -95,7 +95,7 @@
                     <li><strong>Capture.</strong> If your touching number is higher, you take that card.</li>
                     <li><strong>Win.</strong> <span id="victory-compact">When the grid fills, most cards on the grid wins.</span></li>
                 </ul>
-                <p class="how-to-play-hint">Rules is the full book. Options holds the extra rules.</p>
+                <p class="how-to-play-hint">Rules is the full book. Options holds the extra rules. <button type="button" class="menu-text-link" onclick="openTutorial()">Need a tutorial?</button></p>
             </div>
 
             <nav class="menu-links">
@@ -103,26 +103,41 @@
                     <svg class="ui-icon" aria-hidden="true"><use href="#i-book"></use></svg>
                     Rules
                 </button>
-                <button type="button" class="btn btn-alt" onclick="showCompendiumModal()">
-                    <svg class="ui-icon" aria-hidden="true"><use href="#i-library"></use></svg>
-                    Compendium
-                </button>
                 <button type="button" class="btn btn-alt" onclick="showOptionsModal()">
                     <svg class="ui-icon" aria-hidden="true"><use href="#i-sliders"></use></svg>
                     Options
                 </button>
             </nav>
             <div class="menu-rule" aria-hidden="true"></div>
-            <div class="menu-play-actions">
-                <button class="btn" onclick="openTutorial()">Tutorial</button>
-            </div>
-            <div class="menu-play-actions">
-                <button class="btn" onclick="startGame('random')">Deal Hands</button>
-                <button class="btn btn-alt" onclick="startGame('draft')">Draft Hands</button>
-            </div>
-            <div class="menu-play-actions">
-                <button class="btn btn-alt" onclick="openDeckPicker()">Decks</button>
-                <button class="btn" id="league-menu-btn" onclick="openLeague()">League</button>
+            <div class="play-board">
+                <button type="button" class="play-tile play-tile-lead" id="menu-play-deck" onclick="playMenuDeck()">
+                    <span class="play-glow" aria-hidden="true"></span>
+                    <span class="play-kicker" id="menu-play-kicker">3×3</span>
+                    <span class="play-title" id="menu-play-title">Build a deck</span>
+                    <span class="play-caption" id="menu-play-caption">Five cards. Ten embers.</span>
+                </button>
+                <div class="play-pair">
+                    <button type="button" class="play-tile" onclick="startGame('random')">
+                        <span class="play-kicker">Shuffle</span>
+                        <span class="play-title">Deal Hands</span>
+                        <span class="play-caption">Random cards. Saved decks stay put.</span>
+                    </button>
+                    <button type="button" class="play-tile" onclick="startGame('draft')">
+                        <span class="play-kicker">Pick</span>
+                        <span class="play-title">Draft Hands</span>
+                        <span class="play-caption">Take turns choosing the deal.</span>
+                    </button>
+                </div>
+                <div class="play-pair">
+                    <button type="button" class="play-tile play-tile-quiet" onclick="openDeckPicker()">
+                        <span class="play-title">Decks</span>
+                        <span class="play-caption">Edit and save</span>
+                    </button>
+                    <button type="button" class="play-tile play-tile-quiet" id="league-menu-btn" onclick="openLeague()">
+                        <span class="play-title" id="league-menu-label">League</span>
+                        <span class="play-caption" id="league-menu-caption">Draft or bring a deck</span>
+                    </button>
+                </div>
             </div>
             <details class="match-code-box" id="match-code-box">
                 <summary>Have a match code?</summary>
@@ -192,10 +207,10 @@
                     <strong>Draft Hands:</strong> Take turns picking cards, back and forth, until both sides have a full deal. Five each on 3×3, eight each on 4×4, thirteen each on 5×5, ten each on Honeycomb.
                 </div>
                 <div class="rule-detail-item">
-                    <strong>Decks:</strong> Build a deck for the grid in Options and save up to eight per grid. 3×3 is five cards, 4×4 is eight, 5×5 is thirteen, and Honeycomb is ten. Each card costs embers. In a tribe the weakest card is free, then 1, 2, 3, and 4. A whole tribe is 10 embers, so it fits on 3×3. Copy the deck code to send that list to a friend, or paste one in to load it. The computer brings a random deck under the same cap. Deal Hands is still a shuffle when you want a fast game.
+                    <strong>Decks:</strong> Build a deck for the grid in Options and save up to eight per grid. 3×3 is five cards, 4×4 is eight, 5×5 is thirteen, and Honeycomb is ten. Each card costs embers. In a tribe the weakest card is free, then 1, 2, 3, and 4. A whole tribe is 10 embers, so it fits on 3×3. A finished deck plays from the menu. Decks is where you edit the list. Copy the deck code to send that list to a friend, or paste one in to load it. The computer brings a random deck under the same cap. Deal Hands is still a shuffle when you want a fast game.
                 </div>
                 <div class="rule-detail-item">
-                    <strong>League:</strong> You plus Ash, Vesper, and Rook. Draft twenty cards (five each), then play a season on 3×3 where everyone plays everyone twice. Each meeting is best of three. Rankings use series wins, then game wins, then grid score. Leftover scores and Ember/Classic stay locked for the season.
+                    <strong>League:</strong> You plus Ash, Vesper, and Rook on 3×3. Draft twenty cards, five each, or bring a finished 3×3 deck. When you bring yours, Ash, Vesper, and Rook each bring a random deck. Then everyone plays everyone twice. Each meeting is best of three. Rankings use series wins, then game wins, then grid score. Leftover scores and Ember/Classic stay locked for the season.
                 </div>
                 <div class="rule-detail-item">
                     <strong>Ember / Classic:</strong> Ember Mode uses abilities. Classic Mode is numbers only. Set this in Options before you deal.
@@ -241,6 +256,10 @@
                         <li>Every tribe costs the same: free, then 1, 2, 3, and 4. A whole tribe fits in a 3×3 deck.</li>
                         <li>The deck builder shows every mechanic as an icon. Pick more than one. Hover an icon to see its name. Sort by name, ember, or mechanic, then flip ascending or descending.</li>
                         <li>A deck code copies the current list so a friend can load the same cards. The deck window stays one size, and a click outside it leaves it open.</li>
+                        <li>A finished deck plays from the menu in one tap. Deal Hands and Draft Hands stay their own games. The tutorial is a line under How to Play.</li>
+                        <li>The deck builder saves and returns to the menu. Play stays on the menu tile.</li>
+                        <li>League can open with a draft, or with a finished 3×3 deck. The other three seats bring random decks.</li>
+                        <li>5×5 deck cards show the mechanic mark. On a phone the sort list stays a short pill.</li>
                     </ul>
                 </section>
                 <section class="changelog-ver">
@@ -597,7 +616,7 @@
             <div id="deck-tray" class="deck-tray" aria-label="Cards in this deck"></div>
             <p id="deck-hint" class="deck-hint"></p>
             <div class="deck-actions">
-                <button class="btn" id="deck-play" onclick="confirmDeckMatch()" disabled>Play</button>
+                <button class="btn" id="deck-save" type="button" onclick="saveDeckPicker()">Save</button>
                 <button class="btn btn-alt" type="button" onclick="fillRandomDeck()">Random</button>
                 <button class="btn btn-muted" type="button" onclick="clearBuiltDeck()">Clear</button>
             </div>
