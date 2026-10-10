@@ -206,14 +206,38 @@ function deckSizeFor(gridKey) {
 function emberBudgetFor(gridKey) {
     return deckSizeFor(gridKey) * 2;
 }
-const EMBER_DECK_SLOTS = 8;
+const EMBER_DECK_CAP = 10;
+const EMBER_DECK_PAGE = 5;
 const EMBER_DECK_KEY = 'ember_grid_built_decks';
+function emptyDeckSlot(index) {
+    return {name: `Deck ${index + 1}`, ids: []};
+}
 function emptyBuiltBook() {
     const grids = {};
     ['3', '4', '5', 'hex'].forEach(key => {
-        grids[key] = Array.from({length: EMBER_DECK_SLOTS}, () => null);
+        grids[key] = [emptyDeckSlot(0)];
     });
     return {grids, active: {3: 0, 4: 0, 5: 0, hex: 0}};
+}
+function deckSlotUntouched(slot, index) {
+    if (!slot || (slot.ids && slot.ids.length)) return false;
+    const name = String(slot.name || '').trim();
+    return !name || name === `Deck ${index + 1}`;
+}
+function migrateDeckList(list) {
+    const raw = Array.isArray(list) ? list.slice(0, EMBER_DECK_CAP) : [];
+    if (!raw.length) return [emptyDeckSlot(0)];
+    const legacy = raw.some(item => !item || !Array.isArray(item.ids));
+    const slots = raw.map((item, i) => {
+        const slot = normalizeBuiltSlot(item);
+        if (!slot) return emptyDeckSlot(i);
+        if (!slot.name) slot.name = `Deck ${i + 1}`;
+        return slot;
+    });
+    if (legacy) {
+        while (slots.length > 1 && deckSlotUntouched(slots[slots.length - 1], slots.length - 1)) slots.pop();
+    }
+    return slots.length ? slots : [emptyDeckSlot(0)];
 }
 function normalizeBuiltSlot(slot) {
     if (!slot || !Array.isArray(slot.ids)) return null;
@@ -231,9 +255,9 @@ function loadBuiltDecks() {
         if (!raw || !raw.grids) return book;
         ['3', '4', '5', 'hex'].forEach(key => {
             const list = Array.isArray(raw.grids[key]) ? raw.grids[key] : [];
-            book.grids[key] = Array.from({length: EMBER_DECK_SLOTS}, (_, i) => normalizeBuiltSlot(list[i]));
+            book.grids[key] = migrateDeckList(list);
             const active = raw.active && raw.active[key];
-            book.active[key] = active >= 0 && active < EMBER_DECK_SLOTS ? active : 0;
+            book.active[key] = active >= 0 && active < book.grids[key].length ? active : 0;
         });
     } catch (e) {}
     return book;

@@ -16,7 +16,7 @@ A Triple Triad-style card battle you can play in the browser. The **Base Set** i
 
 The menu shows those three steps. **Rules** is the full book (How to Play, How to Win, The Table, Game Modes, Abilities). **Options** holds Game Mode (Ember / Classic), Ties capture (Classic only, off by default), AI difficulty, Grid (3x3 / 4x4 / 5x5 / Honeycomb), Show Hands, Leftover scores, and Haptics. The card list lives in the deck builder. League stays 3x3. Decks use the grid you picked.
 
-**Deal Hands** shuffles the Base Set (five on 3x3, eight on 4x4, thirteen on 5x5, ten on Honeycomb). You always start with five in hand; bigger grids draw after you play. **Draft Hands** takes turns picking cards until both sides have a full deal. A finished deck plays from the menu in one tap. **Decks** is where you build and save: five cards on 3x3, eight on 4x4, thirteen on 5x5, ten on Honeycomb, up to eight lists per grid. Each card costs embers. Inside a tribe the costs are 0, 1, 2, 3, and 4, weakest to strongest, so a whole tribe is 10 embers and fits on 3x3. A deck has two embers to spend per card. The computer brings a random deck under the same cap. **League** is you plus three named AI on 3x3. Draft twenty cards, or bring a finished 3x3 deck (the other three bring random decks). Then everyone plays everyone twice, best of three.
+**Deal Hands** shuffles the Base Set (five on 3x3, eight on 4x4, thirteen on 5x5, ten on Honeycomb). You always start with five in hand; bigger grids draw after you play. **Draft Hands** takes turns picking cards until both sides have a full deal. A finished deck plays from the menu in one tap. **Decks** is where you build and save: five cards on 3x3, eight on 4x4, thirteen on 5x5, ten on Honeycomb, up to ten lists per grid. Each card costs embers. Inside a tribe the costs are 0, 1, 2, 3, and 4, weakest to strongest, so a whole tribe is 10 embers and fits on 3x3. A deck has two embers to spend per card. The computer brings a random deck under the same cap. **League** is you plus three named AI on 3x3. Draft twenty cards, or bring a finished 3x3 deck (the other three bring random decks). Then everyone plays everyone twice, best of three.
 
 The first match shows a short coach: pick a card from your hand, play it on an empty cell, then capture an enemy. You can skip it. **Tutorial** on the menu is three replayable lessons. Each turn shows you which card to play and where, against a weak opponent deck, so those plays win. Capture teaches the fight and the Battle log. On play teaches abilities that fire when you play a card. On the board teaches abilities that keep working. Tutorial matches are not added to your record.
 
@@ -60,7 +60,7 @@ No ability destroys a card or blocks capture.
 ## Features
 
 - Deal two hands of five from the Base Set, or draft them. Bigger grids deal more and draw into a hand of five.
-- Decks: build and save eight decks per grid. A finished deck plays from the menu. Cards cost embers. Deal Hands stays a random shuffle
+- Decks: build and save ten decks per grid. A finished deck plays from the menu. Cards cost embers. Deal Hands stays a random shuffle
 - Ember League: you plus three AI on 3x3. Draft twenty, or bring a finished 3x3 deck. Everyone plays everyone twice, best of three, crown. Saves if you leave. End or new season anytime.
 - Ember / Classic modes in Options
 - Rules and Options on the menu. The deck builder is the card list. Tutorial is a line under How to Play
@@ -74,5 +74,5 @@ No ability destroys a card or blocks capture.
 - Live stats tint gold when buffed and red when debuffed. The printed face stays on the pip tooltip.
 - Battle log window for the current match. Card names wear the team color they had on that play. Captures still flash on the cards; the grid itself stays clear of ellipsized text.
 - Short table effects when an ability actually hits (Bolt arcs, Cinder sparks to the cell, and so on). Reduced motion keeps the color ring.
-- Alpha build number on the main menu. Tap it for the changelog. Bump `0.38` in `index.html` on every PR until 1.0 ships.
+- Alpha build number on the main menu. Tap it for the changelog. Bump `0.39` in `index.html` on every PR until 1.0 ships.
 - Source is split for editing: `css/table.css`, `js/cards.js`, `js/engine.js`, `js/ai.js`, `js/league.js`, `js/ui.js`. `index.html` is the page.

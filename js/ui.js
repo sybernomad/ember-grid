@@ -710,6 +710,9 @@ let deckTribeFilters = [];
 let deckCostFilter = 'all';
 let deckSortKey = 'name';
 let deckSortDesc = false;
+let deckSearchQuery = '';
+let deckSlotPage = 0;
+let deckSwapId = null;
 
 function deckGridKey() {
     return String(preferredGridSize);
@@ -727,13 +730,16 @@ function currentBuiltSlot() {
 
 function ensureBuiltSlot() {
     const key = deckGridKey();
-    const index = builtDecks.active[key] || 0;
-    if (!builtDecks.grids[key][index]) {
-        builtDecks.grids[key][index] = {name: `Deck ${index + 1}`, ids: []};
+    const list = builtDecks.grids[key];
+    let index = builtDecks.active[key] || 0;
+    if (!list.length) list.push(emptyDeckSlot(0));
+    if (index < 0 || index >= list.length) {
+        index = 0;
+        builtDecks.active[key] = 0;
     }
-    const slot = builtDecks.grids[key][index];
-    if (!slot.name) slot.name = `Deck ${index + 1}`;
-    return slot;
+    if (!list[index]) list[index] = emptyDeckSlot(index);
+    if (!list[index].name) list[index].name = `Deck ${index + 1}`;
+    return list[index];
 }
 
 function commitDeckName() {
@@ -816,13 +822,18 @@ function paintDeckControls() {
             btn.setAttribute('aria-pressed', on ? 'true' : 'false');
         });
     }
-    const sortLabel = document.getElementById('deck-sort-label');
-    if (sortLabel) sortLabel.textContent = {name: 'Name', cost: 'Ember', tribe: 'Mechanic'}[deckSortKey] || 'Name';
-    document.querySelectorAll('#deck-sort-list [data-sort]').forEach(btn => {
+    document.querySelectorAll('#deck-filter-panel [data-sort]').forEach(btn => {
         const on = btn.dataset.sort === deckSortKey;
         btn.classList.toggle('selected', on);
-        btn.setAttribute('aria-selected', on ? 'true' : 'false');
+        btn.setAttribute('aria-checked', on ? 'true' : 'false');
     });
+    const filterBtn = document.getElementById('deck-filter-toggle');
+    if (filterBtn) {
+        const active = deckTribeFilters.length > 0 || deckCostFilter !== 'all';
+        filterBtn.classList.toggle('active', active);
+        const marks = deckTribeFilters.length + (deckCostFilter !== 'all' ? 1 : 0);
+        filterBtn.textContent = marks ? `Filter ${marks}` : 'Filter';
+    }
     const dir = document.getElementById('deck-sort-dir');
     if (dir) {
         dir.classList.toggle('desc', deckSortDesc);
@@ -835,9 +846,11 @@ function paintDeckControls() {
 function deckCollectionList() {
     const tribeOrder = {};
     TRIBES.forEach((tribe, index) => { tribeOrder[tribe.id] = index; });
+    const query = deckSearchQuery.trim().toLowerCase();
     const cards = masterCards.filter(card => {
         if (deckTribeFilters.length && (!card.ability || !deckTribeFilters.includes(card.ability.type))) return false;
         if (deckCostFilter !== 'all' && String(emberCostOf(card)) !== deckCostFilter) return false;
+        if (query && !card.name.toLowerCase().includes(query)) return false;
         return true;
     });
     const dir = deckSortDesc ? -1 : 1;
@@ -855,26 +868,48 @@ function paintDeckSlotChips() {
     const el = document.getElementById('deck-slots');
     if (!el) return;
     const key = deckGridKey();
+    const list = builtDecks.grids[key] || [];
     const active = builtDecks.active[key] || 0;
+    if (deckSlotPage !== 0 && deckSlotPage !== 1) deckSlotPage = 0;
+    const start = deckSlotPage * EMBER_DECK_PAGE;
     el.innerHTML = '';
-    for (let i = 0; i < EMBER_DECK_SLOTS; i++) {
-        const slot = builtSlotAt(key, i);
+    el.setAttribute('aria-label', deckSlotPage === 0 ? 'Decks 1 through 5' : 'Decks 6 through 10');
+    const selectionHere = active >= start && active < start + EMBER_DECK_PAGE;
+    let tabbed = false;
+    for (let n = 0; n < EMBER_DECK_PAGE; n++) {
+        const i = start + n;
+        const exists = i < list.length;
+        const slot = exists ? list[i] : null;
         const btn = document.createElement('button');
         btn.type = 'button';
+        btn.setAttribute('role', 'radio');
         const ready = !!(slot && deckIsPlayable(slot.ids, key));
-        btn.className = 'deck-slot-chip' + (i === active ? ' selected' : '') + (ready ? ' ready' : '');
-        btn.setAttribute('aria-pressed', i === active ? 'true' : 'false');
-        const num = document.createElement('span');
-        num.className = 'deck-slot-num';
-        num.textContent = String(i + 1);
-        const name = document.createElement('span');
-        name.className = 'deck-slot-name';
-        name.textContent = slot && slot.name ? slot.name : `Deck ${i + 1}`;
-        btn.appendChild(num);
-        btn.appendChild(name);
-        btn.addEventListener('click', () => selectDeckSlot(i));
+        const selected = exists && i === active;
+        btn.className = 'deck-slot-chip' + (selected ? ' selected' : '') + (ready ? ' ready' : '');
+        btn.setAttribute('aria-checked', selected ? 'true' : 'false');
+        btn.textContent = String(i + 1);
+        btn.disabled = !exists;
+        if (exists) {
+            const label = (slot && slot.name) || `Deck ${i + 1}`;
+            btn.title = label;
+            btn.setAttribute('aria-label', ready ? `${label}, ready` : label);
+            btn.addEventListener('click', () => selectDeckSlot(i));
+        } else {
+            btn.setAttribute('aria-label', `Deck ${i + 1}, not added`);
+        }
+        if (selected || (!tabbed && exists && !selectionHere)) {
+            btn.tabIndex = 0;
+            tabbed = true;
+        } else btn.tabIndex = -1;
         el.appendChild(btn);
     }
+    const prev = document.getElementById('deck-page-prev');
+    const next = document.getElementById('deck-page-next');
+    if (prev) prev.disabled = deckSlotPage === 0;
+    if (next) next.disabled = deckSlotPage === 1;
+    const pager = document.querySelector('.deck-pager');
+    if (pager) pager.dataset.page = String(deckSlotPage);
+    paintDeckMenu();
 }
 
 function paintDeckTray() {
@@ -884,7 +919,9 @@ function paintDeckTray() {
     const size = deckSizeFor(key);
     const slot = currentBuiltSlot();
     const ids = slot ? slot.ids : [];
+    tray.dataset.size = String(size);
     tray.innerHTML = '';
+    const swapping = !!deckSwapId;
     for (let i = 0; i < size; i++) {
         const id = ids[i];
         if (!id) {
@@ -897,10 +934,11 @@ function paintDeckTray() {
         const card = masterCards.find(c => c.id === id);
         const btn = document.createElement('button');
         btn.type = 'button';
-        btn.className = 'deck-card' + (deckGridKey() === 'hex' ? ' has-hex' : '');
+        const incoming = swapping ? masterCards.find(c => c.id === deckSwapId) : null;
+        btn.className = 'deck-card' + (deckGridKey() === 'hex' ? ' has-hex' : '') + (incoming ? ' swap-target' : '');
         btn.innerHTML = deckFaceHTML(card);
-        btn.title = `Take ${card.name} out`;
-        btn.setAttribute('aria-label', `Take ${card.name} out`);
+        btn.title = incoming ? `Swap in ${incoming.name}` : `Take ${card.name} out`;
+        btn.setAttribute('aria-label', incoming ? `Swap ${card.name} for ${incoming.name}` : `Take ${card.name} out`);
         btn.addEventListener('click', () => removeDeckCard(id));
         tray.appendChild(btn);
     }
@@ -917,9 +955,10 @@ function paintDeckCollection() {
     grid.innerHTML = '';
     cards.forEach(card => {
         const inDeck = ids.includes(card.id);
+        const armed = deckSwapId === card.id;
         const btn = document.createElement('button');
         btn.type = 'button';
-        btn.className = 'deck-card' + (deckGridKey() === 'hex' ? ' has-hex' : '') + (inDeck ? ' in-deck' : '');
+        btn.className = 'deck-card' + (deckGridKey() === 'hex' ? ' has-hex' : '') + (inDeck ? ' in-deck' : '') + (armed ? ' swap-source' : '');
         btn.innerHTML = deckFaceHTML(card);
         const tip = deckCardTip(card);
         btn.title = tip;
@@ -940,7 +979,11 @@ function paintDeckCollection() {
     if (count) {
         const noun = cards.length === 1 ? '1 card' : `${cards.length} cards`;
         const names = TRIBES.filter(tribe => deckTribeFilters.includes(tribe.id)).map(tribe => tribe.name);
-        count.textContent = names.length ? `${noun} · ${names.join(', ')}` : noun;
+        const bits = [noun];
+        if (names.length) bits.push(names.join(', '));
+        const query = deckSearchQuery.trim();
+        if (query) bits.push(query);
+        count.textContent = bits.join(' · ');
     }
 }
 
@@ -963,7 +1006,9 @@ function paintDeckMeter() {
     const ready = deckIsPlayable(ids, key);
     const hint = document.getElementById('deck-hint');
     if (!hint) return;
-    if (ready) hint.textContent = 'Ready. Save, then play it from the menu.';
+    const incoming = deckSwapId ? masterCards.find(card => card.id === deckSwapId) : null;
+    if (incoming) hint.textContent = `Deck is full. Tap a card above to swap in ${incoming.name}.`;
+    else if (ready) hint.textContent = 'Ready. Close this, then play it from the menu.';
     else if (over) hint.textContent = `Over the cap by ${spent - budget}. Take a card out before this deck can play.`;
     else hint.textContent = `${ids.length} of ${size} cards. ${budget - spent} embers left.`;
 }
@@ -983,18 +1028,34 @@ function paintDeckBuilder() {
 }
 
 function selectDeckSlot(index) {
+    const list = builtDecks.grids[deckGridKey()] || [];
+    if (index < 0 || index >= list.length) return;
     sfx.click();
     commitDeckName();
-    saveBuiltDecks();
+    deckSwapId = null;
+    closeDeckMenu();
     builtDecks.active[deckGridKey()] = index;
+    deckSlotPage = Math.floor(index / EMBER_DECK_PAGE);
     saveBuiltDecks();
     paintDeckBuilder();
+}
+
+function setDeckSlotPage(page) {
+    const next = page <= 0 ? 0 : 1;
+    if (next === deckSlotPage) return;
+    sfx.click();
+    deckSlotPage = next;
+    closeDeckMenu();
+    paintDeckSlotChips();
 }
 
 function setDeckGrid(val) {
     commitDeckName();
     saveBuiltDecks();
     updatePreferredGrid(val);
+    deckSwapId = null;
+    closeDeckMenu();
+    deckSlotPage = Math.floor((builtDecks.active[deckGridKey()] || 0) / EMBER_DECK_PAGE);
     paintDeckBuilder();
 }
 
@@ -1025,25 +1086,31 @@ function setDeckSort(val) {
     paintDeckCollection();
 }
 
-function toggleDeckSortMenu() {
-    const list = document.getElementById('deck-sort-list');
-    const btn = document.getElementById('deck-sort');
-    if (!list || !btn) return;
-    const willOpen = list.hidden;
-    list.hidden = !willOpen;
+function closeDeckFilterPanel() {
+    const panel = document.getElementById('deck-filter-panel');
+    const btn = document.getElementById('deck-filter-toggle');
+    if (panel) panel.hidden = true;
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+}
+
+function toggleDeckFilterPanel() {
+    const panel = document.getElementById('deck-filter-panel');
+    const btn = document.getElementById('deck-filter-toggle');
+    if (!panel || !btn) return;
+    const willOpen = panel.hidden;
+    if (willOpen) closeDeckMenu();
+    else { sfx.click(); }
+    panel.hidden = !willOpen;
     btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+    if (willOpen) sfx.click();
 }
 
 function closeDeckSortMenu() {
-    const list = document.getElementById('deck-sort-list');
-    const btn = document.getElementById('deck-sort');
-    if (list) list.hidden = true;
-    if (btn) btn.setAttribute('aria-expanded', 'false');
+    closeDeckFilterPanel();
 }
 
 function chooseDeckSort(val) {
     sfx.click();
-    closeDeckSortMenu();
     setDeckSort(val);
     paintDeckControls();
 }
@@ -1085,44 +1152,40 @@ function setDeckCodeNote(msg) {
 }
 
 function paintDeckCode() {
-    const input = document.getElementById('deck-code');
-    if (!input || document.activeElement === input) return;
-    const slot = currentBuiltSlot();
-    const ids = slot && slot.ids ? slot.ids : [];
-    input.value = ids.length ? encodeDeckCode(deckGridKey(), ids) : '';
+    const input = document.getElementById('deck-paste-input');
+    if (input && document.activeElement === input) return;
+    const row = document.getElementById('deck-paste-row');
+    if (row) row.hidden = true;
     setDeckCodeNote('');
 }
 
-async function copyDeckCode() {
-    sfx.click();
-    const slot = currentBuiltSlot();
-    const ids = slot && slot.ids ? slot.ids : [];
-    const code = encodeDeckCode(deckGridKey(), ids);
-    const btn = document.getElementById('deck-code-copy');
-    if (!code) {
-        setDeckCodeNote('Add a card before copying a code.');
-        return;
-    }
-    const input = document.getElementById('deck-code');
-    if (input) input.value = code;
-    const ok = await copyText(code);
-    if (btn) {
-        btn.textContent = ok ? 'Copied' : 'Copy failed';
-        setTimeout(() => { btn.textContent = 'Copy'; }, 1400);
-    }
-    setDeckCodeNote(ok ? 'Code copied.' : 'Select the code and copy it.');
+function parsePastedDeck(raw) {
+    const decoded = decodeDeckCode(raw);
+    if (decoded) return decoded;
+    const compact = String(raw || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+    if (compact.startsWith('ED1')) return {error: 'That deck code is not valid.'};
+    const nums = [];
+    const re = /\d+/g;
+    let match;
+    while ((match = re.exec(String(raw || '')))) nums.push(parseInt(match[0], 10));
+    if (!nums.length) return {error: 'That deck code is not valid.'};
+    if (new Set(nums).size !== nums.length) return {error: 'Those cards repeat. A deck needs each card once.'};
+    if (nums.some(n => n < 1 || n > masterCards.length)) return {error: 'That list has a card this set does not have.'};
+    const sizeToGrid = {5: '3', 8: '4', 10: 'hex', 13: '5'};
+    const gridKey = sizeToGrid[nums.length];
+    if (!gridKey) return {error: 'Paste 5, 8, 10, or 13 different card numbers.'};
+    const ids = numsToIds(nums);
+    if (ids.some(id => !masterCards.some(card => card.id === id))) return {error: 'That list has a card this set does not have.'};
+    return {gridKey, ids};
 }
 
-function loadDeckCode() {
-    sfx.click();
-    const input = document.getElementById('deck-code');
-    const decoded = decodeDeckCode(input ? input.value : '');
-    if (!decoded) {
-        setDeckCodeNote('That deck code is not valid.');
-        return;
+function applyPastedDeck(raw) {
+    const decoded = parsePastedDeck(raw);
+    if (!decoded || decoded.error) {
+        setDeckCodeNote(decoded && decoded.error ? decoded.error : 'That deck code is not valid.');
+        return false;
     }
     commitDeckName();
-    saveBuiltDecks();
     if (deckGridKey() !== decoded.gridKey) {
         preferredGridSize = normalizeGridChoice(decoded.gridKey);
         localStorage.setItem('ember_grid_size', String(preferredGridSize));
@@ -1136,9 +1199,60 @@ function loadDeckCode() {
         name: (prev && prev.name) || `Deck ${index + 1}`,
         ids: decoded.ids.slice()
     };
+    deckSwapId = null;
+    deckSlotPage = Math.floor(index / EMBER_DECK_PAGE);
     saveBuiltDecks();
     paintDeckBuilder();
     setDeckCodeNote(`Loaded ${decoded.ids.length} for ${deckGridWord(key)}.`);
+    return true;
+}
+
+function showDeckPasteFallback(msg) {
+    const row = document.getElementById('deck-paste-row');
+    const input = document.getElementById('deck-paste-input');
+    if (row) row.hidden = false;
+    if (input) {
+        input.value = '';
+        input.focus();
+    }
+    setDeckCodeNote(msg || 'Paste a deck code.');
+}
+
+async function copyDeckCode() {
+    sfx.click();
+    closeDeckMenu();
+    const slot = currentBuiltSlot();
+    const ids = slot && slot.ids ? slot.ids : [];
+    const code = encodeDeckCode(deckGridKey(), ids);
+    if (!code) {
+        setDeckCodeNote('Add a card before copying a code.');
+        return;
+    }
+    const ok = await copyText(code);
+    setDeckCodeNote(ok ? 'Code copied.' : 'Could not copy. Try again.');
+}
+
+async function pasteDeckCode() {
+    sfx.click();
+    closeDeckMenu();
+    let text = '';
+    try {
+        text = await navigator.clipboard.readText();
+    } catch (e) {
+        showDeckPasteFallback('Clipboard is blocked. Paste the code here.');
+        return;
+    }
+    if (!String(text || '').trim()) {
+        showDeckPasteFallback('Clipboard is empty. Paste a code here.');
+        return;
+    }
+    applyPastedDeck(text);
+}
+
+function loadDeckPasteInput() {
+    sfx.click();
+    const input = document.getElementById('deck-paste-input');
+    applyPastedDeck(input ? input.value : '');
 }
 
 function toggleDeckSortDir() {
@@ -1154,7 +1268,14 @@ function onDeckNameInput(el) {
     const slot = ensureBuiltSlot();
     slot.name = el.value.slice(0, 24);
     saveBuiltDecks();
-    paintDeckSlotChips();
+}
+
+function onDeckSearchInput(el) {
+    deckSearchQuery = String(el.value || '').slice(0, 24);
+    const grid = document.getElementById('deck-collection');
+    if (grid) grid.scrollTop = 0;
+    paintDeckControls();
+    paintDeckCollection();
 }
 
 function toggleDeckCard(id) {
@@ -1162,12 +1283,19 @@ function toggleDeckCard(id) {
     const key = deckGridKey();
     const slot = ensureBuiltSlot();
     const index = slot.ids.indexOf(id);
-    if (index >= 0) slot.ids.splice(index, 1);
-    else if (slot.ids.length >= deckSizeFor(key)) {
-        const hint = document.getElementById('deck-hint');
-        if (hint) hint.textContent = 'That deck is full. Tap a card in the tray to take it out.';
+    if (index >= 0) {
+        deckSwapId = null;
+        slot.ids.splice(index, 1);
+    } else if (slot.ids.length >= deckSizeFor(key)) {
+        deckSwapId = deckSwapId === id ? null : id;
+        paintDeckTray();
+        paintDeckCollection();
+        paintDeckMeter();
         return;
-    } else slot.ids.push(id);
+    } else {
+        deckSwapId = null;
+        slot.ids.push(id);
+    }
     saveBuiltDecks();
     paintDeckSlotChips();
     paintDeckTray();
@@ -1180,7 +1308,11 @@ function removeDeckCard(id) {
     if (!slot) return;
     sfx.click();
     const index = slot.ids.indexOf(id);
-    if (index >= 0) slot.ids.splice(index, 1);
+    if (index < 0) return;
+    if (deckSwapId && deckSwapId !== id && !slot.ids.includes(deckSwapId)) {
+        slot.ids[index] = deckSwapId;
+        deckSwapId = null;
+    } else slot.ids.splice(index, 1);
     saveBuiltDecks();
     paintDeckSlotChips();
     paintDeckTray();
@@ -1190,6 +1322,7 @@ function removeDeckCard(id) {
 
 function fillRandomDeck() {
     sfx.click();
+    closeDeckMenu();
     const key = deckGridKey();
     const index = builtDecks.active[key] || 0;
     const prev = builtSlotAt(key, index);
@@ -1197,6 +1330,7 @@ function fillRandomDeck() {
         name: (prev && prev.name) || `Deck ${index + 1}`,
         ids: randomEmberDeck(key)
     };
+    deckSwapId = null;
     saveBuiltDecks();
     paintDeckBuilder();
 }
@@ -1210,14 +1344,123 @@ function clearBuiltDeck() {
         name: (prev && prev.name) || `Deck ${index + 1}`,
         ids: []
     };
+    deckSwapId = null;
     saveBuiltDecks();
     paintDeckBuilder();
+}
+
+function paintDeckMenu() {
+    const add = document.getElementById('deck-menu-add');
+    if (!add) return;
+    const list = builtDecks.grids[deckGridKey()] || [];
+    const full = list.length >= EMBER_DECK_CAP;
+    add.disabled = full;
+    add.setAttribute('aria-disabled', full ? 'true' : 'false');
+}
+
+function closeDeckMenu() {
+    const panel = document.getElementById('deck-menu-panel');
+    const btn = document.getElementById('deck-menu-btn');
+    const backdrop = document.getElementById('deck-menu-backdrop');
+    const modal = document.getElementById('deck-modal');
+    if (panel) panel.hidden = true;
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+    if (backdrop) backdrop.hidden = true;
+    if (modal) modal.classList.remove('deck-menu-open');
+}
+
+function toggleDeckMenu() {
+    const panel = document.getElementById('deck-menu-panel');
+    if (!panel) return;
+    if (!panel.hidden) {
+        closeDeckMenu();
+        return;
+    }
+    sfx.click();
+    closeDeckSortMenu();
+    panel.hidden = false;
+    const btn = document.getElementById('deck-menu-btn');
+    const backdrop = document.getElementById('deck-menu-backdrop');
+    const modal = document.getElementById('deck-modal');
+    if (btn) btn.setAttribute('aria-expanded', 'true');
+    if (backdrop) backdrop.hidden = false;
+    if (modal) modal.classList.add('deck-menu-open');
+    paintDeckMenu();
+}
+
+function addBuiltDeck() {
+    const key = deckGridKey();
+    const list = builtDecks.grids[key];
+    closeDeckMenu();
+    if (list.length >= EMBER_DECK_CAP) {
+        sfx.click();
+        setDeckCodeNote(`This grid already has ${EMBER_DECK_CAP} decks.`);
+        return;
+    }
+    sfx.click();
+    commitDeckName();
+    list.push(emptyDeckSlot(list.length));
+    builtDecks.active[key] = list.length - 1;
+    deckSlotPage = Math.floor(builtDecks.active[key] / EMBER_DECK_PAGE);
+    deckSwapId = null;
+    saveBuiltDecks();
+    paintDeckBuilder();
+    setDeckCodeNote(`Added deck ${list.length}.`);
+}
+
+function askDeleteDeck() {
+    sfx.click();
+    closeDeckMenu();
+    const key = deckGridKey();
+    const list = builtDecks.grids[key] || [];
+    const index = builtDecks.active[key] || 0;
+    const slot = list[index];
+    const name = (slot && slot.name) || `Deck ${index + 1}`;
+    const title = document.getElementById('deck-confirm-title');
+    const body = document.getElementById('deck-confirm-body');
+    if (title) title.textContent = 'Delete this deck?';
+    if (body) {
+        body.textContent = list.length <= 1
+            ? `${name} is the only deck on this grid. Delete it and start from an empty list?`
+            : `Delete ${name}? Later decks shift down, and deck 1 opens next.`;
+    }
+    const dialog = document.getElementById('deck-confirm');
+    if (dialog) dialog.classList.remove('hidden');
+}
+
+function cancelDeleteDeck() {
+    const dialog = document.getElementById('deck-confirm');
+    if (dialog) dialog.classList.add('hidden');
+}
+
+function confirmDeleteDeck() {
+    sfx.click();
+    const key = deckGridKey();
+    const list = builtDecks.grids[key];
+    const index = builtDecks.active[key] || 0;
+    if (list.length <= 1) {
+        list[0] = emptyDeckSlot(0);
+    } else if (index >= 0 && index < list.length) {
+        list.splice(index, 1);
+    }
+    builtDecks.active[key] = 0;
+    deckSlotPage = 0;
+    deckSwapId = null;
+    saveBuiltDecks();
+    cancelDeleteDeck();
+    paintDeckBuilder();
+    setDeckCodeNote('Deck deleted.');
 }
 
 function openDeckPicker() {
     sfx.click();
     hideTooltip();
     hideModal('main-menu-modal');
+    deckSwapId = null;
+    closeDeckMenu();
+    closeDeckSortMenu();
+    cancelDeleteDeck();
+    deckSlotPage = Math.floor((builtDecks.active[deckGridKey()] || 0) / EMBER_DECK_PAGE);
     paintDeckBuilder();
     document.getElementById('deck-modal').classList.remove('hidden');
 }
@@ -3109,9 +3352,14 @@ window.addEventListener('pageshow', (e) => {
 });
 
 document.addEventListener('click', (e) => {
-    const menu = document.getElementById('deck-sort-menu');
-    if (!menu || menu.contains(e.target)) return;
-    closeDeckSortMenu();
+    const filters = document.getElementById('deck-filters');
+    const filterPanel = document.getElementById('deck-filter-panel');
+    if (filterPanel && !filterPanel.hidden && filters && !filters.contains(e.target)) closeDeckFilterPanel();
+    const deckMenu = document.getElementById('deck-menu');
+    const panel = document.getElementById('deck-menu-panel');
+    if (!panel || panel.hidden) return;
+    if (deckMenu && deckMenu.contains(e.target)) return;
+    closeDeckMenu();
 });
 
 window.addEventListener('keydown', (e) => {
@@ -3126,6 +3374,15 @@ window.addEventListener('keydown', (e) => {
     if (!document.getElementById('options-modal').classList.contains('hidden')) {closeOptionsModal(); return;}
     if (!document.getElementById('stats-modal').classList.contains('hidden')) {closeStatsModal(); return;}
     if (!document.getElementById('draft-modal').classList.contains('hidden')) {cancelDraft(); return;}
-    if (!document.getElementById('deck-modal').classList.contains('hidden')) {cancelDeckPicker(); return;}
+    if (!document.getElementById('deck-modal').classList.contains('hidden')) {
+        const confirm = document.getElementById('deck-confirm');
+        if (confirm && !confirm.classList.contains('hidden')) {cancelDeleteDeck(); return;}
+        const panel = document.getElementById('deck-menu-panel');
+        if (panel && !panel.hidden) {closeDeckMenu(); return;}
+        const filterPanel = document.getElementById('deck-filter-panel');
+        if (filterPanel && !filterPanel.hidden) {closeDeckFilterPanel(); return;}
+        cancelDeckPicker();
+        return;
+    }
     if (!document.getElementById('league-modal').classList.contains('hidden')) {leaveLeagueToMenu(); return;}
 });

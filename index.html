@@ -149,7 +149,7 @@
             </details>
             <div class="menu-foot">
                 <!-- Bump BUILD on every PR. Still pre-1.0, so this stays Alpha until 1.0 ships. -->
-                <button type="button" class="build-stamp" onclick="showChangelogModal()" title="Changelog">0.38 Alpha</button>
+                <button type="button" class="build-stamp" onclick="showChangelogModal()" title="Changelog">0.39 Alpha</button>
                 <p class="dev-note">Still in active development. Cards and rules may change.</p>
             </div>
         </div>
@@ -207,7 +207,7 @@
                     <strong>Draft Hands:</strong> Take turns picking cards, back and forth, until both sides have a full deal. Five each on 3×3, eight each on 4×4, thirteen each on 5×5, ten each on Honeycomb.
                 </div>
                 <div class="rule-detail-item">
-                    <strong>Decks:</strong> Build a deck for the grid in Options and save up to eight per grid. 3×3 is five cards, 4×4 is eight, 5×5 is thirteen, and Honeycomb is ten. Each card costs embers. In a tribe the weakest card is free, then 1, 2, 3, and 4. A whole tribe is 10 embers, so it fits on 3×3. A finished deck plays from the menu. Decks is where you edit the list. Copy the deck code to send that list to a friend, or paste one in to load it. The computer brings a random deck under the same cap. Deal Hands is still a shuffle when you want a fast game.
+                    <strong>Decks:</strong> Build a deck for the grid in Options and save up to ten per grid. 3×3 is five cards, 4×4 is eight, 5×5 is thirteen, and Honeycomb is ten. Each card costs embers. In a tribe the weakest card is free, then 1, 2, 3, and 4. A whole tribe is 10 embers, so it fits on 3×3. A finished deck plays from the menu. Decks is where you edit the list. The menu on that screen can copy a deck code for a friend, or paste one in to load it. The computer brings a random deck under the same cap. Deal Hands is still a shuffle when you want a fast game.
                 </div>
                 <div class="rule-detail-item">
                     <strong>League:</strong> You plus Ash, Vesper, and Rook on 3×3. Draft twenty cards, five each, or bring a finished 3×3 deck. When you bring yours, Ash, Vesper, and Rook each bring a random deck. Then everyone plays everyone twice. Each meeting is best of three. Rankings use series wins, then game wins, then grid score. Leftover scores and Ember/Classic stay locked for the season.
@@ -247,6 +247,15 @@
             <h2 class="modal-title">Changelog</h2>
             <p class="set-blurb">Alpha stamps. Newest first. Tap the version on the menu anytime.</p>
             <div class="changelog-list">
+                <section class="changelog-ver">
+                    <h3>0.39 Alpha</h3>
+                    <ul>
+                        <li>The deck builder on a phone fills the screen. Your deck sits in a tight grid (two rows of four on 4×4). The collection scrolls underneath, four cards across on a phone and five or six on a wider screen.</li>
+                        <li>Deck slots page five at a time, up to ten lists. The menu adds a deck, deletes one, fills a random legal list, and copies or pastes a deck code.</li>
+                        <li>Search cards by name. A full deck can swap: tap the card you want, then tap the deck card it replaces.</li>
+                        <li>Collection cards each get their own slot. Mechanic, ember, and sort filters open from a Filter button so the list can use the screen.</li>
+                    </ul>
+                </section>
                 <section class="changelog-ver">
                     <h3>0.38 Alpha</h3>
                     <ul>
@@ -598,6 +607,7 @@
         <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="modal-content" onclick="event.stopPropagation()">
             <button type="button" class="modal-close" onclick="cancelDeckPicker()" aria-label="Close decks"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+            <button type="button" class="deck-menu-backdrop" id="deck-menu-backdrop" hidden onclick="closeDeckMenu()" tabindex="-1" aria-hidden="true"></button>
             <h2 class="modal-title">Decks</h2>
             <div class="grid-choices" role="group" aria-label="Deck grid">
                 <button type="button" class="grid-choice" data-grid-choice="3" onclick="setDeckGrid('3')">3×3</button>
@@ -605,7 +615,34 @@
                 <button type="button" class="grid-choice" data-grid-choice="5" onclick="setDeckGrid('5')">5×5</button>
                 <button type="button" class="grid-choice" data-grid-choice="hex" onclick="setDeckGrid('hex')">Honeycomb</button>
             </div>
-            <div id="deck-slots" class="deck-slots" role="tablist" aria-label="Saved decks"></div>
+            <div class="deck-toolbar">
+                <div class="deck-pager" data-page="0">
+                    <button type="button" class="deck-page-btn" id="deck-page-prev" onclick="setDeckSlotPage(0)" aria-label="Show decks 1 through 5">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+                    </button>
+                    <div id="deck-slots" class="deck-slots" role="radiogroup" aria-label="Saved decks"></div>
+                    <button type="button" class="deck-page-btn" id="deck-page-next" onclick="setDeckSlotPage(1)" aria-label="Show decks 6 through 10">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+                    </button>
+                </div>
+                <div class="deck-menu" id="deck-menu">
+                    <button type="button" class="deck-menu-btn" id="deck-menu-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="deck-menu-panel" aria-label="Deck actions" onclick="toggleDeckMenu()">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></svg>
+                    </button>
+                    <div id="deck-menu-panel" class="deck-menu-panel" role="menu" hidden>
+                        <button type="button" role="menuitem" id="deck-menu-add" onclick="addBuiltDeck()">Add Deck</button>
+                        <button type="button" role="menuitem" id="deck-menu-delete" onclick="askDeleteDeck()">Delete</button>
+                        <button type="button" role="menuitem" onclick="fillRandomDeck()">Random</button>
+                        <button type="button" role="menuitem" onclick="copyDeckCode()">Copy</button>
+                        <button type="button" role="menuitem" onclick="pasteDeckCode()">Paste</button>
+                    </div>
+                </div>
+            </div>
+            <p id="deck-code-note" class="deck-code-note" aria-live="polite"></p>
+            <div id="deck-paste-row" class="deck-paste-row" hidden>
+                <input id="deck-paste-input" class="deck-code" type="text" maxlength="80" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="Paste a deck code" aria-label="Deck code" onkeydown="if (event.key === 'Enter') loadDeckPasteInput()">
+                <button type="button" class="btn btn-alt" onclick="loadDeckPasteInput()">Load</button>
+            </div>
             <div class="deck-name-row">
                 <input id="deck-name" class="deck-name" type="text" maxlength="24" aria-label="Deck name" oninput="onDeckNameInput(this)">
                 <div class="ember-meter" aria-live="polite">
@@ -613,56 +650,49 @@
                     <span id="deck-meter-label" class="ember-meter-label">0 / 10</span>
                 </div>
             </div>
-            <div id="deck-tray" class="deck-tray" aria-label="Cards in this deck"></div>
+            <div id="deck-tray" class="deck-tray" data-size="5" aria-label="Cards in this deck"></div>
             <p id="deck-hint" class="deck-hint"></p>
-            <div class="deck-actions">
-                <button class="btn" id="deck-save" type="button" onclick="saveDeckPicker()">Save</button>
-                <button class="btn btn-alt" type="button" onclick="fillRandomDeck()">Random</button>
-                <button class="btn btn-muted" type="button" onclick="clearBuiltDeck()">Clear</button>
-            </div>
-            <div class="deck-code-row">
-                <span class="deck-filter-kicker">Deck code</span>
-                <div class="deck-code-controls">
-                    <input id="deck-code" class="deck-code" type="text" maxlength="80" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="Paste a friend's code" aria-label="Deck code">
-                    <button type="button" class="btn btn-alt" id="deck-code-copy" onclick="copyDeckCode()">Copy</button>
-                    <button type="button" class="btn btn-alt" onclick="loadDeckCode()">Load</button>
+            <div class="deck-filters" id="deck-filters">
+                <div class="deck-tool-row">
+                    <label class="deck-search">
+                        <input id="deck-search" type="search" maxlength="24" placeholder="Search by name" aria-label="Search cards by name" oninput="onDeckSearchInput(this)" autocomplete="off">
+                    </label>
+                    <button type="button" id="deck-filter-toggle" class="deck-filter-toggle" aria-expanded="false" aria-controls="deck-filter-panel" onclick="toggleDeckFilterPanel()">Filter</button>
+                    <button type="button" id="deck-sort-dir" class="deck-sort-dir" onclick="toggleDeckSortDir()" aria-label="Ascending. Switch to descending.">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M12 19V5"/><path d="m6 11 6-6 6 6"/></svg>
+                    </button>
                 </div>
-                <p id="deck-code-note" class="deck-code-note" aria-live="polite"></p>
-            </div>
-            <div class="deck-filters">
-                <div class="deck-filter-block">
-                    <span class="deck-filter-kicker">Mechanics</span>
-                    <div id="deck-tribe-filters" class="deck-chip-row" role="group" aria-label="Mechanics"></div>
-                </div>
-                <div class="deck-filter-bar">
+                <div id="deck-filter-panel" class="deck-filter-panel" hidden>
+                    <div class="deck-filter-block">
+                        <span class="deck-filter-kicker">Mechanics</span>
+                        <div id="deck-tribe-filters" class="deck-chip-row" role="group" aria-label="Mechanics"></div>
+                    </div>
                     <div class="deck-filter-block">
                         <span class="deck-filter-kicker">Ember</span>
                         <div id="deck-cost-filters" class="deck-cost-row" role="group" aria-label="Ember cost"></div>
                     </div>
-                    <div class="deck-sort">
+                    <div class="deck-filter-block">
                         <span class="deck-filter-kicker">Sort</span>
-                        <div class="deck-sort-controls">
-                            <div class="deck-sort-menu" id="deck-sort-menu">
-                                <button type="button" id="deck-sort" class="deck-sort-btn" aria-haspopup="listbox" aria-expanded="false" aria-label="Sort cards by" onclick="toggleDeckSortMenu()">
-                                    <span id="deck-sort-label">Name</span>
-                                    <svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
-                                </button>
-                                <ul class="deck-sort-list" id="deck-sort-list" role="listbox" aria-label="Sort cards by" hidden>
-                                    <li><button type="button" role="option" data-sort="name" onclick="chooseDeckSort('name')">Name</button></li>
-                                    <li><button type="button" role="option" data-sort="cost" onclick="chooseDeckSort('cost')">Ember</button></li>
-                                    <li><button type="button" role="option" data-sort="tribe" onclick="chooseDeckSort('tribe')">Mechanic</button></li>
-                                </ul>
-                            </div>
-                            <button type="button" id="deck-sort-dir" class="deck-sort-dir" onclick="toggleDeckSortDir()" aria-label="Ascending. Switch to descending.">
-                                <svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M12 19V5"/><path d="m6 11 6-6 6 6"/></svg>
-                            </button>
+                        <div class="deck-sort-picks" role="radiogroup" aria-label="Sort cards by">
+                            <button type="button" role="radio" data-sort="name" onclick="chooseDeckSort('name')">Name</button>
+                            <button type="button" role="radio" data-sort="cost" onclick="chooseDeckSort('cost')">Ember</button>
+                            <button type="button" role="radio" data-sort="tribe" onclick="chooseDeckSort('tribe')">Mechanic</button>
                         </div>
                     </div>
+                    <p id="deck-filter-count" class="deck-filter-count"></p>
                 </div>
-                <p id="deck-filter-count" class="deck-filter-count"></p>
             </div>
             <div id="deck-collection" class="deck-collection" aria-label="Card collection"></div>
-            <button class="btn btn-muted btn-dismiss" onclick="cancelDeckPicker()">Close</button>
+            <div id="deck-confirm" class="deck-confirm hidden" role="alertdialog" aria-modal="true" aria-labelledby="deck-confirm-title" aria-describedby="deck-confirm-body">
+                <div class="deck-confirm-card">
+                    <h3 id="deck-confirm-title">Delete this deck?</h3>
+                    <p id="deck-confirm-body"></p>
+                    <div class="deck-confirm-actions">
+                        <button type="button" class="btn btn-muted" onclick="cancelDeleteDeck()">Cancel</button>
+                        <button type="button" class="btn" onclick="confirmDeleteDeck()">Delete</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
