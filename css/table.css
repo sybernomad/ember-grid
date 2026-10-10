@@ -38,6 +38,7 @@
     --draft-h: 100px;
     --draft-font-main: 0.72rem;
     --draft-font-name: 0.44rem;
+    --card-art: 78%;
 }
 
 @media (max-width: 360px) {
@@ -76,12 +77,6 @@
         --draft-font-main: 0.78rem;
         --draft-font-name: 0.5rem;
         --nameplate-h: 30px;
-    }
-
-    .card-emoji {
-        width: 2.1em;
-        height: 2.1em;
-        font-size: 1.28em;
     }
 }
 
@@ -454,31 +449,6 @@ body.grid-5 {
         --nameplate-h: 20px;
     }
 
-    body.grid-4 .card-emoji,
-    body.grid-5 .card-emoji {
-        width: 2.1em;
-        height: 2.1em;
-        font-size: 1.1rem;
-    }
-
-    body.grid-4 .cell .card,
-    body.grid-5 .cell .card {
-        container-type: size;
-    }
-
-    body.grid-4 .cell .card-emoji,
-    body.grid-5 .cell .card-emoji {
-        font-size: clamp(1.1rem, 22cqh, 2rem);
-        width: 2.1em;
-        height: 2.1em;
-    }
-
-    body.grid-4 .cell .card-emoji img.twemoji,
-    body.grid-5 .cell .card-emoji img.twemoji {
-        width: 1.15em;
-        height: 1.15em;
-    }
-
     body.grid-4 #top-area .hand,
     body.grid-5 #top-area .hand {
         --fan-w: 66px;
@@ -742,14 +712,6 @@ body.grid-5 .ability-badge {
     left: 2px;
     font-size: 0.4rem;
     padding: 1px 3px;
-}
-
-@media (max-width: 767px) {
-    body.grid-5 .card-emoji {
-        width: 1.35em;
-        height: 1.35em;
-        font-size: 0.9em;
-    }
 }
 
 .cell {
@@ -1033,24 +995,27 @@ body.grid-5 .ability-badge {
     top: calc((100% - var(--nameplate-h)) / 2);
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 1.9em;
-    height: 1.9em;
+    width: var(--card-art);
+    aspect-ratio: 1;
+    height: auto;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.15em;
+    font-size: 2.6em;
     z-index: 1;
-    background: radial-gradient(circle at 50% 38%, rgba(255,255,255,0.2), rgba(0,0,0,0.28));
+    background: radial-gradient(circle at 50% 42%, rgba(255,255,255,0.32), rgba(255,255,255,0.06) 42%, rgba(0,0,0,0.2) 74%);
     border-radius: 50%;
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.16), 0 4px 8px rgba(0,0,0,0.35);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.2), 0 8px 16px rgba(0,0,0,0.28);
     filter: none;
 }
 
 .card-emoji img.twemoji {
-    width: 1.15em;
-    height: 1.15em;
+    width: 88%;
+    height: auto;
+    aspect-ratio: 1;
     display: block;
     pointer-events: none;
+    filter: drop-shadow(0 3px 3px rgba(0,0,0,0.4));
 }
 
 .stat-top,
@@ -2960,11 +2925,6 @@ body.grid-5 .deck-card .ability-badge {
     font-size: 13cqw;
     padding: 2px 3px;
 }
-.deck-card .card-emoji {
-    width: 2.1em;
-    height: 2.1em;
-    font-size: 1.2em;
-}
 
 .deck-card .ember-cost {
     position: absolute;
@@ -3252,12 +3212,6 @@ body.grid-5 .deck-card .ability-badge {
     --draft-font-name: 0.32rem;
 }
 
-#draft-modal.draft-dense .draft-card .card-emoji {
-    width: 1.35em;
-    height: 1.35em;
-    font-size: 0.95em;
-}
-
 #draft-modal.draft-dense .draft-card:hover {
     transform: none;
 }
@@ -3359,12 +3313,6 @@ body.grid-5 .deck-card .ability-badge {
 
 .compendium-card .stat-top,
 .draft-card .stat-top { top: 2px; }
-.compendium-card .card-emoji,
-.draft-card .card-emoji {
-    width: 1.85em;
-    height: 1.85em;
-    font-size: 1.1em;
-}
 
 .stats-grid {
     display: grid;
@@ -4774,12 +4722,6 @@ body.grid-5 .rematch-bar {
     --draft-font-name: 0.4rem;
 }
 
-#draft-modal.league-draft .draft-card .card-emoji {
-    width: 1.45em;
-    height: 1.45em;
-    font-size: 1.05em;
-}
-
 #draft-modal.league-draft .draft-card:hover {
     transform: none;
 }
@@ -4965,10 +4907,8 @@ body.grid-hex .cell .ability-badge {
 }
 
 body.grid-hex .cell .card-emoji {
-    top: 40%;
-    width: 1.45em;
-    height: 1.45em;
-    font-size: clamp(11px, 20cqh, 20px);
+    --card-art: 62%;
+    top: 42%;
 }
 
 body.grid-hex .cell .card-name {
@@ -5028,28 +4968,3 @@ body.grid-hex .cell .stat-nw {
     transform: translate(-50%, -50%);
 }
 
-@media (min-width: 768px) {
-    body.grid-hex .cell .card-emoji {
-        width: 1.85em;
-        height: 1.85em;
-    }
-}
-
-/* Face emoji is the card art. Size it from the card, not the label type,
-   on the battle grid and in the draft. Deck cards keep their own size. */
-.cell .card,
-.draft-card {
-    container-type: inline-size;
-}
-
-.cell .card-emoji,
-body.grid-4 .cell .card-emoji,
-body.grid-5 .cell .card-emoji,
-body.grid-hex .cell .card-emoji,
-.draft-card .card-emoji,
-#draft-modal.draft-dense .draft-card .card-emoji,
-#draft-modal.league-draft .draft-card .card-emoji {
-    width: 2.1em;
-    height: 2.1em;
-    font-size: clamp(11px, 20cqw, 28px);
-}
