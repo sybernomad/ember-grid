@@ -822,13 +822,18 @@ function paintDeckControls() {
             btn.setAttribute('aria-pressed', on ? 'true' : 'false');
         });
     }
-    const sortLabel = document.getElementById('deck-sort-label');
-    if (sortLabel) sortLabel.textContent = {name: 'Name', cost: 'Ember', tribe: 'Mechanic'}[deckSortKey] || 'Name';
-    document.querySelectorAll('#deck-sort-list [data-sort]').forEach(btn => {
+    document.querySelectorAll('#deck-filter-panel [data-sort]').forEach(btn => {
         const on = btn.dataset.sort === deckSortKey;
         btn.classList.toggle('selected', on);
-        btn.setAttribute('aria-selected', on ? 'true' : 'false');
+        btn.setAttribute('aria-checked', on ? 'true' : 'false');
     });
+    const filterBtn = document.getElementById('deck-filter-toggle');
+    if (filterBtn) {
+        const active = deckTribeFilters.length > 0 || deckCostFilter !== 'all';
+        filterBtn.classList.toggle('active', active);
+        const marks = deckTribeFilters.length + (deckCostFilter !== 'all' ? 1 : 0);
+        filterBtn.textContent = marks ? `Filter ${marks}` : 'Filter';
+    }
     const dir = document.getElementById('deck-sort-dir');
     if (dir) {
         dir.classList.toggle('desc', deckSortDesc);
@@ -1081,26 +1086,31 @@ function setDeckSort(val) {
     paintDeckCollection();
 }
 
-function toggleDeckSortMenu() {
-    const list = document.getElementById('deck-sort-list');
-    const btn = document.getElementById('deck-sort');
-    if (!list || !btn) return;
-    const willOpen = list.hidden;
+function closeDeckFilterPanel() {
+    const panel = document.getElementById('deck-filter-panel');
+    const btn = document.getElementById('deck-filter-toggle');
+    if (panel) panel.hidden = true;
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+}
+
+function toggleDeckFilterPanel() {
+    const panel = document.getElementById('deck-filter-panel');
+    const btn = document.getElementById('deck-filter-toggle');
+    if (!panel || !btn) return;
+    const willOpen = panel.hidden;
     if (willOpen) closeDeckMenu();
-    list.hidden = !willOpen;
+    else { sfx.click(); }
+    panel.hidden = !willOpen;
     btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+    if (willOpen) sfx.click();
 }
 
 function closeDeckSortMenu() {
-    const list = document.getElementById('deck-sort-list');
-    const btn = document.getElementById('deck-sort');
-    if (list) list.hidden = true;
-    if (btn) btn.setAttribute('aria-expanded', 'false');
+    closeDeckFilterPanel();
 }
 
 function chooseDeckSort(val) {
     sfx.click();
-    closeDeckSortMenu();
     setDeckSort(val);
     paintDeckControls();
 }
@@ -1264,6 +1274,7 @@ function onDeckSearchInput(el) {
     deckSearchQuery = String(el.value || '').slice(0, 24);
     const grid = document.getElementById('deck-collection');
     if (grid) grid.scrollTop = 0;
+    paintDeckControls();
     paintDeckCollection();
 }
 
@@ -3341,8 +3352,9 @@ window.addEventListener('pageshow', (e) => {
 });
 
 document.addEventListener('click', (e) => {
-    const menu = document.getElementById('deck-sort-menu');
-    if (menu && !menu.contains(e.target)) closeDeckSortMenu();
+    const filters = document.getElementById('deck-filters');
+    const filterPanel = document.getElementById('deck-filter-panel');
+    if (filterPanel && !filterPanel.hidden && filters && !filters.contains(e.target)) closeDeckFilterPanel();
     const deckMenu = document.getElementById('deck-menu');
     const panel = document.getElementById('deck-menu-panel');
     if (!panel || panel.hidden) return;
@@ -3367,8 +3379,8 @@ window.addEventListener('keydown', (e) => {
         if (confirm && !confirm.classList.contains('hidden')) {cancelDeleteDeck(); return;}
         const panel = document.getElementById('deck-menu-panel');
         if (panel && !panel.hidden) {closeDeckMenu(); return;}
-        const sortList = document.getElementById('deck-sort-list');
-        if (sortList && !sortList.hidden) {closeDeckSortMenu(); return;}
+        const filterPanel = document.getElementById('deck-filter-panel');
+        if (filterPanel && !filterPanel.hidden) {closeDeckFilterPanel(); return;}
         cancelDeckPicker();
         return;
     }

@@ -253,6 +253,7 @@
                         <li>The deck builder on a phone fills the screen. Your deck sits in a tight grid (two rows of four on 4×4). The collection scrolls underneath, four cards across on a phone and five or six on a wider screen.</li>
                         <li>Deck slots page five at a time, up to ten lists. The menu adds a deck, deletes one, fills a random legal list, and copies or pastes a deck code.</li>
                         <li>Search cards by name. A full deck can swap: tap the card you want, then tap the deck card it replaces.</li>
+                        <li>Collection cards each get their own slot. Mechanic, ember, and sort filters open from a Filter button so the list can use the screen.</li>
                     </ul>
                 </section>
                 <section class="changelog-ver">
@@ -651,39 +652,35 @@
             </div>
             <div id="deck-tray" class="deck-tray" data-size="5" aria-label="Cards in this deck"></div>
             <p id="deck-hint" class="deck-hint"></p>
-            <div class="deck-filters">
+            <div class="deck-filters" id="deck-filters">
                 <div class="deck-tool-row">
                     <label class="deck-search">
                         <input id="deck-search" type="search" maxlength="24" placeholder="Search by name" aria-label="Search cards by name" oninput="onDeckSearchInput(this)" autocomplete="off">
                     </label>
-                    <div class="deck-sort">
-                        <div class="deck-sort-controls">
-                            <div class="deck-sort-menu" id="deck-sort-menu">
-                                <button type="button" id="deck-sort" class="deck-sort-btn" aria-haspopup="listbox" aria-expanded="false" aria-label="Sort cards by" onclick="toggleDeckSortMenu()">
-                                    <span id="deck-sort-label">Name</span>
-                                    <svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
-                                </button>
-                                <ul class="deck-sort-list" id="deck-sort-list" role="listbox" aria-label="Sort cards by" hidden>
-                                    <li><button type="button" role="option" data-sort="name" onclick="chooseDeckSort('name')">Name</button></li>
-                                    <li><button type="button" role="option" data-sort="cost" onclick="chooseDeckSort('cost')">Ember</button></li>
-                                    <li><button type="button" role="option" data-sort="tribe" onclick="chooseDeckSort('tribe')">Mechanic</button></li>
-                                </ul>
-                            </div>
-                            <button type="button" id="deck-sort-dir" class="deck-sort-dir" onclick="toggleDeckSortDir()" aria-label="Ascending. Switch to descending.">
-                                <svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M12 19V5"/><path d="m6 11 6-6 6 6"/></svg>
-                            </button>
+                    <button type="button" id="deck-filter-toggle" class="deck-filter-toggle" aria-expanded="false" aria-controls="deck-filter-panel" onclick="toggleDeckFilterPanel()">Filter</button>
+                    <button type="button" id="deck-sort-dir" class="deck-sort-dir" onclick="toggleDeckSortDir()" aria-label="Ascending. Switch to descending.">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M12 19V5"/><path d="m6 11 6-6 6 6"/></svg>
+                    </button>
+                </div>
+                <div id="deck-filter-panel" class="deck-filter-panel" hidden>
+                    <div class="deck-filter-block">
+                        <span class="deck-filter-kicker">Mechanics</span>
+                        <div id="deck-tribe-filters" class="deck-chip-row" role="group" aria-label="Mechanics"></div>
+                    </div>
+                    <div class="deck-filter-block">
+                        <span class="deck-filter-kicker">Ember</span>
+                        <div id="deck-cost-filters" class="deck-cost-row" role="group" aria-label="Ember cost"></div>
+                    </div>
+                    <div class="deck-filter-block">
+                        <span class="deck-filter-kicker">Sort</span>
+                        <div class="deck-sort-picks" role="radiogroup" aria-label="Sort cards by">
+                            <button type="button" role="radio" data-sort="name" onclick="chooseDeckSort('name')">Name</button>
+                            <button type="button" role="radio" data-sort="cost" onclick="chooseDeckSort('cost')">Ember</button>
+                            <button type="button" role="radio" data-sort="tribe" onclick="chooseDeckSort('tribe')">Mechanic</button>
                         </div>
                     </div>
+                    <p id="deck-filter-count" class="deck-filter-count"></p>
                 </div>
-                <div class="deck-filter-block">
-                    <span class="deck-filter-kicker">Mechanics</span>
-                    <div id="deck-tribe-filters" class="deck-chip-row" role="group" aria-label="Mechanics"></div>
-                </div>
-                <div class="deck-filter-block">
-                    <span class="deck-filter-kicker">Ember</span>
-                    <div id="deck-cost-filters" class="deck-cost-row" role="group" aria-label="Ember cost"></div>
-                </div>
-                <p id="deck-filter-count" class="deck-filter-count"></p>
             </div>
             <div id="deck-collection" class="deck-collection" aria-label="Card collection"></div>
             <div id="deck-confirm" class="deck-confirm hidden" role="alertdialog" aria-modal="true" aria-labelledby="deck-confirm-title" aria-describedby="deck-confirm-body">
