@@ -2438,6 +2438,7 @@ label.settings-row {
 
 .deck-collection {
     display: grid;
+    isolation: isolate;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     grid-auto-rows: max-content;
     gap: clamp(4px, 1.4vw, 8px);
@@ -2498,7 +2499,7 @@ label.settings-row {
 
 .deck-filters {
     position: relative;
-    z-index: 6;
+    z-index: 8;
     background:
         linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 42%),
         rgba(8, 6, 4, 0.55);
@@ -2867,6 +2868,7 @@ label.settings-row {
     appearance: none;
     display: block;
     position: relative;
+    isolation: isolate;
     width: 100%;
     height: auto;
     container-type: inline-size;
