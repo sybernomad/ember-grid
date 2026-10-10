@@ -2883,7 +2883,7 @@ label.settings-row {
         linear-gradient(165deg, #6b6258, #241c16 72%);
     border: 1px solid #e8c36a;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255,255,255,0.18);
-    font-size: 0.75rem;
+    font-size: 0.8rem;
 }
 
 .deck-card::before {
@@ -2961,9 +2961,9 @@ body.grid-5 .deck-card .ability-badge {
     padding: 2px 3px;
 }
 .deck-card .card-emoji {
-    width: 1.7em;
-    height: 1.7em;
-    font-size: 30cqw;
+    width: 2.1em;
+    height: 2.1em;
+    font-size: 1.2em;
 }
 
 .deck-card .ember-cost {
