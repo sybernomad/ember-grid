@@ -3501,6 +3501,9 @@ body.grid-5 .deck-card .ability-badge {
 .mech-flash.siphon { background: radial-gradient(circle, rgba(165,243,252,0.7) 0%, rgba(6,182,212,0.32) 52%, transparent 74%); }
 .mech-flash.pendulum { background: radial-gradient(circle, rgba(254,240,138,0.7) 0%, rgba(245,158,11,0.32) 52%, transparent 74%); }
 .mech-flash.symbiosis { background: radial-gradient(circle, rgba(187,247,208,0.7) 0%, rgba(22,163,74,0.32) 52%, transparent 74%); }
+.mech-flash.wither { background: radial-gradient(circle, rgba(216,180,254,0.7) 0%, rgba(91,33,182,0.36) 52%, transparent 74%); }
+.mech-flash.march { background: radial-gradient(circle, rgba(254,215,170,0.75) 0%, rgba(234,88,12,0.34) 52%, transparent 74%); }
+.mech-flash.notch { background: radial-gradient(circle, rgba(254,215,170,0.8) 0%, rgba(249,115,22,0.4) 48%, transparent 74%); }
 
 @keyframes mechFlash {
     0% { opacity: 0; transform: scale(0.86); }
@@ -3742,6 +3745,15 @@ body.grid-5 .deck-card .ability-badge {
     box-shadow: 0 0 12px #93c5fd, 0 0 22px #3b82f6;
 }
 
+.mech-travel.march {
+    width: 10px;
+    height: 10px;
+    margin: -5px 0 0 -5px;
+    border-radius: 50%;
+    background: #fb923c;
+    box-shadow: 0 0 12px 4px rgba(251, 146, 60, 0.75);
+    transition: transform 0.42s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
 .mech-travel.cinder {
     width: 11px;
     height: 11px;
@@ -4968,3 +4980,67 @@ body.grid-hex .cell .stat-nw {
     transform: translate(-50%, -50%);
 }
 
+/* Holiday coat. Drop body.season-harvest (and the cobwebs in index.html) to restore the ember table. */
+body.season-harvest {
+    --bg-color: #140c12;
+    --text-color: #f6e7d6;
+    --panel-bg: #1c1218;
+    --border-color: #5c3a32;
+    --accent: #f97316;
+    --accent-hot: #fb923c;
+    --gold: #f0b429;
+    --grid-bg: #0c070c;
+    --cell-bg: #1a1016;
+    background-image:
+        radial-gradient(ellipse 90% 55% at 50% -15%, rgba(249, 115, 22, 0.28), transparent 55%),
+        radial-gradient(ellipse 48% 40% at 100% 0%, rgba(124, 58, 237, 0.22), transparent 52%),
+        radial-gradient(ellipse 46% 36% at 0% 100%, rgba(234, 88, 12, 0.16), transparent 50%);
+}
+
+body.season-harvest h1 {
+    background: linear-gradient(180deg, #fff4e0 0%, #fb923c 46%, #7c3aed 100%);
+    filter: drop-shadow(0 2px 10px rgba(249, 115, 22, 0.35));
+}
+
+body.season-harvest .brand-tag {
+    color: #fdba74;
+    opacity: 0.9;
+}
+
+body.season-harvest .embers span {
+    background: #fb923c;
+    box-shadow: 0 0 10px 3px rgba(251, 146, 60, 0.55);
+}
+
+body.season-harvest .embers span:nth-child(3n) {
+    background: #c084fc;
+    box-shadow: 0 0 10px 3px rgba(192, 132, 252, 0.45);
+}
+
+body.season-harvest .modal {
+    background: rgba(16, 6, 14, 0.8);
+}
+
+.cobwebs {
+    position: fixed;
+    inset: 0;
+    z-index: 140;
+    pointer-events: none;
+    color: rgba(236, 224, 210, 0.42);
+}
+
+.cobweb {
+    position: absolute;
+    width: min(168px, 34vw);
+    height: min(168px, 34vw);
+    stroke-width: 1.15;
+}
+
+.cobweb-tl { top: 0; left: 0; }
+.cobweb-tr { top: 0; right: 0; transform: scaleX(-1); }
+.cobweb-bl { bottom: 0; left: 0; width: min(120px, 26vw); height: min(120px, 26vw); transform: scaleY(-1); }
+
+@media (max-width: 520px) {
+    .cobweb { width: 108px; height: 108px; }
+    .cobweb-bl { width: 84px; height: 84px; }
+}

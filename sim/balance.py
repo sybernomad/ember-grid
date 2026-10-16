@@ -85,10 +85,25 @@ CARDS = [
     {"name": "Coral", "base": [5, 3, 5, 3], "ability": "symbiosis"},
     {"name": "Lichen", "base": [3, 5, 4, 4], "ability": "symbiosis"},
     {"name": "Ivy", "base": [4, 5, 3, 4], "ability": "symbiosis"},
+    {"name": "Wilt", "base": [2, 4, 5, 3], "ability": "wither"},
+    {"name": "Husk", "base": [3, 5, 4, 4], "ability": "wither"},
+    {"name": "Cobweb", "base": [4, 4, 5, 4], "ability": "wither"},
+    {"name": "Hex", "base": [5, 3, 6, 4], "ability": "wither"},
+    {"name": "Grave", "base": [6, 4, 5, 4], "ability": "wither"},
+    {"name": "Acorn", "base": [3, 4, 4, 4], "ability": "march"},
+    {"name": "Sheaf", "base": [4, 3, 5, 4], "ability": "march"},
+    {"name": "Cart", "base": [4, 5, 4, 4], "ability": "march"},
+    {"name": "Gobbler", "base": [5, 4, 5, 4], "ability": "march"},
+    {"name": "Hayride", "base": [5, 5, 5, 4], "ability": "march"},
+    {"name": "Candy", "base": [3, 4, 4, 4], "ability": "notch"},
+    {"name": "Jack", "base": [4, 4, 5, 3], "ability": "notch"},
+    {"name": "Slice", "base": [4, 5, 4, 4], "ability": "notch"},
+    {"name": "Carver", "base": [5, 4, 5, 4], "ability": "notch"},
+    {"name": "Feast", "base": [6, 4, 5, 4], "ability": "notch"},
 ]
 
 for i, card in enumerate(CARDS):
-    card["id"] = f"BS-{i + 1:02d}"
+    card["id"] = f"BS-{i + 1:02d}" if i < 70 else f"HV-{i - 69:02d}"
     card["power"] = sum(card["base"])
 
 TRIBES = [
@@ -106,6 +121,9 @@ TRIBES = [
     ("siphon", "Siphon", "Siphon"),
     ("pendulum", "Pendulum", "Pendulum"),
     ("symbiosis", "Symbiosis", "Symbiosis"),
+    ("wither", "Wither", "Wither"),
+    ("march", "March", "March"),
+    ("notch", "Notch", "Notch"),
 ]
 TRIBE_BY_ID = {t[0]: t for t in TRIBES}
 ABILITY_NAME = {t[0]: t[2] for t in TRIBES}
@@ -125,6 +143,7 @@ def clone_card(proto: dict, owner: str) -> dict:
         "owner": owner,
         "original": owner,
         "stats": list(proto["base"]),
+        "printed": list(proto["base"]),
         "captures_made": 0,
         "times_captured": 0,
         "played": False,
@@ -308,6 +327,26 @@ class Match:
                 neighbor["base"][theirs] = max(1, neighbor["base"][theirs] - 1)
                 opp = (mine + 2) % 4
                 placed["base"][opp] = min(10, placed["base"][opp] + 1)
+        elif kind == "wither":
+            enemy = "red" if placed["owner"] == "blue" else "blue"
+            hand = self.hands[enemy]
+            if hand:
+                pick = self.rng.choice(hand)
+                pick["base"] = [max(1, s - 1) for s in pick["base"]]
+        elif kind == "notch":
+            hits = []
+            for nidx, _mine, theirs in facing_pairs(index):
+                neighbor = self.board[nidx]
+                if not neighbor or neighbor["owner"] == placed["owner"]:
+                    continue
+                stat = neighbor["base"][theirs]
+                if stat <= 1:
+                    continue
+                hits.append((stat, theirs, neighbor))
+            if hits:
+                hits.sort(key=lambda hit: hit[0], reverse=True)
+                stat, theirs, neighbor = hits[0]
+                neighbor["base"][theirs] = max(1, stat - 2)
 
     def poison(self) -> None:
         # Snapshot who is poisoning so newly reduced cards don't extra-proc.
@@ -387,9 +426,11 @@ class Match:
         card["played_index"] = cell
         self.board[cell] = card
         self.apply_on_play(card, cell)
+        self.march(card, cell)
+        fight_at = self.board.index(card)
         self.recalc()
         grown: list[int] = []
-        self.check_captures(cell, card, grown)
+        self.check_captures(fight_at, card, grown)
         self.recalc()
         self.poison()
         self.recalc()
@@ -400,6 +441,29 @@ class Match:
             self.tick_pendulum()
             self.recalc()
         self.turn = "red" if owner == "blue" else "blue"
+
+    def march(self, placed: dict, index: int) -> None:
+        if live_ability(placed) != "march" or self.is_silenced(index):
+            return
+        if self.board[index] is not placed:
+            return
+        friends = []
+        for nidx, _mine, _theirs in facing_pairs(index):
+            neighbor = self.board[nidx]
+            if neighbor and neighbor["owner"] == placed["owner"]:
+                friends.append(nidx)
+        if not friends:
+            return
+
+        def power(i: int) -> int:
+            card = self.board[i]
+            return sum(card.get("printed") or card["base"])
+
+        friends.sort(key=power, reverse=True)
+        dest = friends[0]
+        other = self.board[dest]
+        self.board[index] = other
+        self.board[dest] = placed
 
     def tick_pendulum(self) -> None:
         for index, card in enumerate(self.board):
@@ -425,7 +489,19 @@ class Match:
                     self.board[i] and self.board[i]["owner"] == opp and live_ability(self.board[i]) == "silence"
                     for i in neighbors(cell)
                 )
+                friends = [
+                    i for i in neighbors(cell)
+                    if self.board[i] and self.board[i]["owner"] == owner
+                ] if live_ability(card) == "march" and not silenced_here else []
+                if friends:
+                    friends.sort(
+                        key=lambda i: sum(self.board[i].get("printed") or self.board[i]["base"]),
+                        reverse=True,
+                    )
+                march_dest = friends[0] if friends else None
                 for nidx, mine, theirs in facing_pairs(cell):
+                    if march_dest is not None:
+                        break
                     neighbor = self.board[nidx]
                     if neighbor:
                         my_val = self.effective_stat(card, mine, True, silenced_here)
@@ -452,6 +528,15 @@ class Match:
                             score += 5
                         if live_ability(card) == "siphon" and neighbor["owner"] == opp and not silenced_here:
                             score += 4
+                        if (
+                            live_ability(card) == "notch"
+                            and not silenced_here
+                            and neighbor["owner"] == opp
+                            and their_val > 1
+                            and my_val <= their_val
+                            and my_val > max(1, their_val - 2)
+                        ):
+                            score += 4
                         if neighbor["owner"] == opp:
                             captures = my_val > their_val
                             if (
@@ -472,14 +557,41 @@ class Match:
                                 flips += 1
                     elif neighbor is None:
                         pass
+                if march_dest is not None:
+                    score += 2
+                    dest_silenced = self.would_be_silenced(owner, march_dest)
+                    for nidx, mine, theirs in facing_pairs(march_dest):
+                        landed_card = self.board[nidx]
+                        if not landed_card or nidx == cell or landed_card["owner"] != opp:
+                            continue
+                        my_landed = self.effective_stat(card, mine, True, dest_silenced)
+                        their_landed = self.effective_stat(
+                            landed_card, theirs, False, self.is_silenced(nidx)
+                        )
+                        if live_ability(landed_card) == "poison" and not self.is_silenced(nidx):
+                            exposure += 2
+                        if live_ability(landed_card) == "spite" and not self.is_silenced(nidx):
+                            exposure += 2
+                        if my_landed > their_landed or (
+                            not dest_silenced
+                            and live_ability(card) == "equalizer"
+                            and my_landed == their_landed
+                        ):
+                            flips += 1
+                    if self.cell_effects[march_dest] == "cinder":
+                        score -= 5
+                    if dest_silenced and live_ability(card) != "silence":
+                        score -= 3
                 score += flips * 14 + sum(card["base"]) * 0.1 + 3 - exposure * 2.5
-                if self.cell_effects[cell] == "cinder":
+                if march_dest is None and self.cell_effects[cell] == "cinder":
                     score -= 5
-                if silenced_here and live_ability(card) != "silence":
+                if march_dest is None and silenced_here and live_ability(card) != "silence":
                     score -= 3
                 if live_ability(card) == "bolt" and not silenced_here:
                     if any(c and c["owner"] == opp for c in self.board):
                         score += 3
+                if live_ability(card) == "wither" and not silenced_here and self.hands[opp]:
+                    score += 2
                 if live_ability(card) == "symbiosis" and not silenced_here:
                     score += 2 + self.captures.get(owner, 0) * 3
                 if score > max_score:
@@ -809,7 +921,7 @@ def write_report(path: str, random_b: dict, tribe_b: dict, n_random: int, n_pair
 
     a("# Ember Grid balance sim")
     a("")
-    a(f"Both seats use the live **Normal** AI heuristic. Ember abilities are on. This run is the current {len(CARDS)}-card Base Set ({len(TRIBES)} tribes).")
+    a(f"Both seats use the live **Normal** AI heuristic. Ember abilities are on. This run is the current {len(CARDS)}-card pile: Base Set plus Harvest ({len(TRIBES)} tribes).")
     a("")
     a("## Method")
     a("")
@@ -1144,7 +1256,7 @@ def self_test() -> None:
     for ability, _name, _label in TRIBES:
         faces = proto_by_ability(ability)
         assert len(faces) == 5, f"{ability} should have 5 cards, has {len(faces)}"
-    assert len(CARDS) == 70
+    assert len(CARDS) == 85
     # Bolt: Wizard zaps the only enemy for -2 all stats.
     rng = random.Random(2)
     wizard = clone_card(next(c for c in CARDS if c["name"] == "Wizard"), "blue")
@@ -1277,6 +1389,42 @@ def self_test() -> None:
     assert gro_cap.board[4]["owner"] == "red", "Grown Coral should not capture Owl on a later turn"
     assert gro_cap.board[1]["base"] == [5, 3, 5, 3], "Coral printed face should not change"
     assert gro_cap.board[1]["stats"] == [5, 3, 5, 3], "Coral on the board should not keep the later capture bonus"
+    # Harvest: Wither hits the enemy hand and does not capture from it.
+    wilt = clone_card(next(c for c in CARDS if c["name"] == "Wilt"), "blue")
+    fairy = clone_card(next(c for c in CARDS if c["name"] == "Fairy"), "red")
+    wither = Match([wilt], [fairy], "blue", random.Random(4))
+    wither.place("blue", 0, 4)
+    assert fairy["base"] == [2, 3, 2, 5], "Wilt should wither the only enemy hand card by 1"
+    assert wither.board[4]["name"] == "Wilt"
+    # Notch cuts the touching stat by 2, then captures.
+    owl = clone_card(next(c for c in CARDS if c["name"] == "Owl"), "red")
+    jack = clone_card(next(c for c in CARDS if c["name"] == "Jack"), "blue")
+    notch = Match([jack], [owl], "red", random.Random(5))
+    notch.place("red", 0, 4)
+    notch.place("blue", 0, 5)
+    assert notch.board[4]["base"][1] == 1, "Jack should notch Owl's right 3 down to 1"
+    assert notch.board[4]["owner"] == "blue", "Jack's left 3 should capture the notched 1"
+    # A touching 1 is skipped.
+    cyclops = clone_card(next(c for c in CARDS if c["name"] == "Cyclops"), "red")
+    candy = clone_card(next(c for c in CARDS if c["name"] == "Candy"), "blue")
+    floor = Match([candy], [cyclops], "red", random.Random(6))
+    floor.place("red", 0, 4)
+    floor.place("blue", 0, 3)
+    assert floor.board[4]["base"] == [8, 4, 7, 1], "Candy should not notch a stat that is already 1"
+    # March swaps with the strongest friendly neighbor and does not capture from the new seat.
+    gobbler = clone_card(next(c for c in CARDS if c["name"] == "Gobbler"), "blue")
+    acorn = clone_card(next(c for c in CARDS if c["name"] == "Acorn"), "blue")
+    hayride = clone_card(next(c for c in CARDS if c["name"] == "Hayride"), "blue")
+    seal = clone_card(next(c for c in CARDS if c["name"] == "Seal"), "red")
+    parade = Match([gobbler, acorn, hayride], [seal], "blue", random.Random(7))
+    parade.place("blue", 0, 3)
+    parade.place("blue", 0, 5)
+    parade.place("red", 0, 6)
+    parade.place("blue", 0, 4)
+    assert parade.board[3]["name"] == "Hayride", "Hayride should swap with Gobbler, the stronger neighbor"
+    assert parade.board[4]["name"] == "Gobbler"
+    assert parade.board[5]["name"] == "Acorn"
+    assert parade.board[6]["owner"] == "blue", "Hayride should capture Seal from Gobbler's old seat"
     print("self-test ok")
 
 

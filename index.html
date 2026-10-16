@@ -11,7 +11,23 @@
     <link rel="stylesheet" href="css/table.css">
 </head>
 
-<body>
+<!-- Holiday theme. Remove class season-harvest, and the cobwebs block below, to restore the ember table. -->
+<body class="season-harvest">
+    <div class="cobwebs" aria-hidden="true">
+        <svg class="cobweb cobweb-tl" viewBox="0 0 180 180" fill="none" stroke="currentColor" stroke-linecap="round">
+            <path d="M6 6 L170 8 M6 6 L148 36 M6 6 L112 74 M6 6 L74 112 M6 6 L36 148 M6 6 L8 170 M6 6 L170 6 M6 6 L6 170"/>
+            <path d="M34 10 C58 28 30 40 22 62 M62 14 C92 38 52 56 38 84 M96 18 C112 52 68 72 52 104 M128 24 C132 66 84 90 66 124"/>
+            <path d="M18 34 C42 46 38 74 16 90 M44 30 C74 50 60 84 32 102"/>
+        </svg>
+        <svg class="cobweb cobweb-tr" viewBox="0 0 180 180" fill="none" stroke="currentColor" stroke-linecap="round">
+            <path d="M6 6 L170 8 M6 6 L148 36 M6 6 L112 74 M6 6 L74 112 M6 6 L36 148 M6 6 L8 170 M6 6 L170 6 M6 6 L6 170"/>
+            <path d="M34 10 C58 28 30 40 22 62 M62 14 C92 38 52 56 38 84 M96 18 C112 52 68 72 52 104"/>
+        </svg>
+        <svg class="cobweb cobweb-bl" viewBox="0 0 180 180" fill="none" stroke="currentColor" stroke-linecap="round">
+            <path d="M6 6 L170 8 M6 6 L148 36 M6 6 L112 74 M6 6 L74 112 M6 6 L36 148 M6 6 L8 170"/>
+            <path d="M34 10 C58 28 30 40 22 62 M62 14 C92 38 52 56 38 84"/>
+        </svg>
+    </div>
     <!-- Lucide-style SVG icons (ISC license, https://lucide.dev) -->
     <svg class="icon-sprite" aria-hidden="true" focusable="false">
         <symbol id="i-stats" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></symbol>
@@ -61,7 +77,7 @@
             <div id="bottom-area"></div>
         </div>
 
-        <div class="status-msg" id="status-msg">The Base Set is the deck. Each player is dealt a hand of five.</div>
+        <div class="status-msg" id="status-msg">Harvest is in the deck. Each player is dealt a hand of five.</div>
         <button type="button" class="battle-log-link" id="battle-log-link" onclick="showBattleLogModal()">Battle log</button>
     </div>
 
@@ -86,7 +102,7 @@
         <div class="embers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="modal-content">
             <h2 class="modal-title">Ember Grid</h2>
-            <p class="brand-tag">The Base Set</p>
+            <p class="brand-tag">Harvest</p>
 
             <div class="menu-section-title">How to Play</div>
             <div class="rules-compact">
@@ -149,7 +165,7 @@
             </details>
             <div class="menu-foot">
                 <!-- Bump BUILD on every PR. Still pre-1.0, so this stays Alpha until 1.0 ships. -->
-                <button type="button" class="build-stamp" onclick="showChangelogModal()" title="Changelog">0.40 Alpha</button>
+                <button type="button" class="build-stamp" onclick="showChangelogModal()" title="Changelog">0.41 Alpha</button>
                 <p class="dev-note">Still in active development. Cards and rules may change.</p>
             </div>
         </div>
@@ -194,14 +210,14 @@
                     <strong>Grid:</strong> The usual grid is 3×3, five cards each. In Options you can play 4×4 (eight dealt), 5×5 (thirteen dealt), or a Honeycomb of nineteen cells (ten dealt). You still start with five in hand. Decks use that same deal size. League always uses 3×3.
                 </div>
                 <div class="rule-detail-item">
-                    <strong>The deck:</strong> The Base Set is 70 cards in fourteen tribes. Every Ember card has an ability. Classic Mode turns abilities off.
+                    <strong>The deck:</strong> 85 cards in seventeen tribes. The Base Set is 70. Harvest adds 15, for Halloween and Thanksgiving. Every Ember card has an ability. Classic Mode turns abilities off.
                 </div>
             </div>
 
             <div class="menu-section-title">Game Modes</div>
             <div class="expanded-rules-list">
                 <div class="rule-detail-item">
-                    <strong>Deal Hands:</strong> Shuffle the Base Set and deal cards for the grid size in Options.
+                    <strong>Deal Hands:</strong> Shuffle the Base Set and Harvest, then deal cards for the grid size in Options.
                 </div>
                 <div class="rule-detail-item">
                     <strong>Draft Hands:</strong> Take turns picking cards, back and forth, until both sides have a full deal. Five each on 3×3, eight each on 4×4, thirteen each on 5×5, ten each on Honeycomb.
@@ -233,6 +249,9 @@
                 <div class="rule-detail-item"><strong>🌀 Siphon:</strong> On play, steals 1 from each adjacent enemy's touching number onto the opposite side of this card.</div>
                 <div class="rule-detail-item"><strong>⏳ Pendulum:</strong> At the start of every turn, swaps top and bottom with left and right.</div>
                 <div class="rule-detail-item"><strong>🌱 Symbiosis:</strong> +1 to all stats for each capture you have made. You see it in your hand, and it counts on the turn you play the card. After that fight, the card goes back to its printed numbers.</div>
+                <div class="rule-detail-item"><strong>🥀 Wither:</strong> On play, a random card in the enemy hand loses 1 from all stats. It does not capture. You see which card only if Show Hands is on.</div>
+                <div class="rule-detail-item"><strong>🦃 March:</strong> On play, swaps with the adjacent friendly card of highest printed power, then captures from that seat. The friend does not capture.</div>
+                <div class="rule-detail-item"><strong>🎃 Notch:</strong> On play, the adjacent enemy with the highest touching stat loses 2 from that stat only, then this card captures.</div>
             </div>
 
             <button class="btn btn-alt btn-dismiss" onclick="closeRulesModal()">Close</button>
@@ -247,6 +266,14 @@
             <h2 class="modal-title">Changelog</h2>
             <p class="set-blurb">Alpha stamps. Newest first. Tap the version on the menu anytime.</p>
             <div class="changelog-list">
+                <section class="changelog-ver">
+                    <h3>0.41 Alpha</h3>
+                    <ul>
+                        <li>Harvest, the first expansion. Fifteen cards, three tribes: Wither, March, and Notch. Names and faces are Halloween and Thanksgiving.</li>
+                        <li>Wither lowers a random card in the enemy hand. March steps into a friendly neighbor's seat and captures from there. Notch cuts one touching number by 2, then captures.</li>
+                        <li>The table wears a holiday coat: pumpkin and violet, plus cobwebs in the corners. Remove season-harvest from the page to bring the ember colors back.</li>
+                    </ul>
+                </section>
                 <section class="changelog-ver">
                     <h3>0.40 Alpha</h3>
                     <ul>
@@ -463,7 +490,7 @@
         <div class="modal-content" onclick="event.stopPropagation()">
             <button type="button" class="modal-close" onclick="closeCompendiumModal()" aria-label="Close compendium"><svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
             <h2 class="modal-title">Compendium</h2>
-            <p class="set-blurb">The Base Set is 70 cards in fourteen tribes. Every Ember card has an ability. Classic Mode still strips abilities and plays as pure stats.</p>
+            <p class="set-blurb">85 cards in seventeen tribes. The Base Set is 70. Harvest adds Wither, March, and Notch. Every Ember card has an ability. Classic Mode still strips abilities and plays as pure stats.</p>
             <select id="compendium-filter" class="settings-select compendium-filter" onchange="renderCompendium()">
                 <option value="all">All cards</option>
                 <option value="aura_buff">Buff</option>
@@ -480,6 +507,9 @@
                 <option value="siphon">Siphon</option>
                 <option value="pendulum">Pendulum</option>
                 <option value="symbiosis">Symbiosis</option>
+                <option value="wither">Wither</option>
+                <option value="march">March</option>
+                <option value="notch">Notch</option>
             </select>
             <div class="compendium-grid" id="compendium-grid"></div>
             <button class="btn btn-alt btn-dismiss" onclick="closeCompendiumModal()">Close</button>
@@ -502,7 +532,7 @@
                 </select>
             </div>
             <div id="ruleset-desc" class="ruleset-desc-box">
-                <strong>Ember Mode:</strong> Every card has an ability. Fourteen tribes.
+                <strong>Ember Mode:</strong> Every card has an ability. Seventeen tribes. Harvest is in the deck.
             </div>
             <div id="classic-ties-block" hidden>
                 <label class="settings-row" for="classic-ties-check">

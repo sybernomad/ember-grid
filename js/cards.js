@@ -24,10 +24,13 @@ const TRIBES = [
     {id: 'parasite', name: 'Parasite', ability: 'Parasite', icon: '🪞', desc: 'On play, copies the ability of an adjacent enemy for the rest of the match. If that ability fires on play, it fires before this card captures.'},
     {id: 'siphon', name: 'Siphon', ability: 'Siphon', icon: '🌀', desc: 'On play, steals 1 from each adjacent enemy\'s touching stat and adds it permanently to this card\'s opposite facing.'},
     {id: 'pendulum', name: 'Pendulum', ability: 'Pendulum', icon: '⏳', desc: 'At the start of every turn, this card swaps its top/bottom stats with its left/right stats.'},
-    {id: 'symbiosis', name: 'Symbiosis', ability: 'Symbiosis', icon: '🌱', desc: 'Plus 1 to all stats for each capture this player has made. The bonus shows in your hand and counts on the turn you play the card, then the card goes back to its printed numbers.'}
+    {id: 'symbiosis', name: 'Symbiosis', ability: 'Symbiosis', icon: '🌱', desc: 'Plus 1 to all stats for each capture this player has made. The bonus shows in your hand and counts on the turn you play the card, then the card goes back to its printed numbers.'},
+    {id: 'wither', name: 'Wither', ability: 'Wither', icon: '🥀', desc: 'On play, a random card in the enemy hand loses 1 from all stats. It does not capture.'},
+    {id: 'march', name: 'March', ability: 'March', icon: '🦃', desc: 'On play, swaps with the adjacent friendly card of highest printed power, then captures from that seat. The friend does not capture. With no friendly neighbor, it captures where you played it.'},
+    {id: 'notch', name: 'Notch', ability: 'Notch', icon: '🎃', desc: 'On play, the adjacent enemy with the highest touching stat loses 2 from that stat only, then this card captures. A stat already at 1 is skipped.'}
 ];
 
-const masterCards = [
+const baseFaces = [
     {name: "Celestial", emoji: "✨", baseStats: [10, 2, 3, 4], hexStats: [8, 7], ability: 'aura_buff'},
     {name: "Fairy", emoji: "🧚", baseStats: [3, 4, 3, 6], hexStats: [3, 4], ability: 'aura_buff'},
     {name: "Unicorn", emoji: "🦄", baseStats: [4, 4, 5, 7], hexStats: [4, 3], ability: 'aura_buff'},
@@ -98,13 +101,39 @@ const masterCards = [
     {name: "Coral", emoji: "🪸", baseStats: [5, 3, 5, 3], hexStats: [6, 6], ability: 'symbiosis'},
     {name: "Lichen", emoji: "🌿", baseStats: [3, 5, 4, 4], hexStats: [2, 2], ability: 'symbiosis'},
     {name: "Ivy", emoji: "🍃", baseStats: [4, 5, 3, 4], hexStats: [4, 2], ability: 'symbiosis'}
-].map((card, i) => ({
+];
+
+const harvestFaces = [
+    {name: "Wilt", emoji: "🍂", baseStats: [2, 4, 5, 3], hexStats: [2, 3], ability: 'wither'},
+    {name: "Husk", emoji: "🌽", baseStats: [3, 5, 4, 4], hexStats: [3, 4], ability: 'wither'},
+    {name: "Cobweb", emoji: "🕸️", baseStats: [4, 4, 5, 4], hexStats: [4, 3], ability: 'wither'},
+    {name: "Hex", emoji: "🧹", baseStats: [5, 3, 6, 4], hexStats: [4, 5], ability: 'wither'},
+    {name: "Grave", emoji: "🪦", baseStats: [6, 4, 5, 4], hexStats: [5, 4], ability: 'wither'},
+    {name: "Acorn", emoji: "🌰", baseStats: [3, 4, 4, 4], hexStats: [3, 3], ability: 'march'},
+    {name: "Sheaf", emoji: "🌾", baseStats: [4, 3, 5, 4], hexStats: [4, 3], ability: 'march'},
+    {name: "Cart", emoji: "🛞", baseStats: [4, 5, 4, 4], hexStats: [3, 5], ability: 'march'},
+    {name: "Gobbler", emoji: "🦃", baseStats: [5, 4, 5, 4], hexStats: [4, 4], ability: 'march'},
+    {name: "Hayride", emoji: "🚜", baseStats: [5, 5, 5, 4], hexStats: [6, 4], ability: 'march'},
+    {name: "Candy", emoji: "🍬", baseStats: [3, 4, 4, 4], hexStats: [2, 4], ability: 'notch'},
+    {name: "Jack", emoji: "🎃", baseStats: [4, 4, 5, 3], hexStats: [4, 3], ability: 'notch'},
+    {name: "Slice", emoji: "🥧", baseStats: [4, 5, 4, 4], hexStats: [5, 3], ability: 'notch'},
+    {name: "Carver", emoji: "🔪", baseStats: [5, 4, 5, 4], hexStats: [4, 5], ability: 'notch'},
+    {name: "Feast", emoji: "🍞", baseStats: [6, 4, 5, 4], hexStats: [5, 5], ability: 'notch'}
+];
+
+const masterCards = baseFaces.map((card, i) => ({
     ...card,
     id: `BS-${String(i + 1).padStart(2, '0')}`,
     set: 'base',
     number: i + 1,
     ability: makeAbility(card.ability)
-}));
+})).concat(harvestFaces.map((card, i) => ({
+    ...card,
+    id: `HV-${String(i + 1).padStart(2, '0')}`,
+    set: 'harvest',
+    number: i + 1,
+    ability: makeAbility(card.ability)
+})));
 
 function abilityNameOf(card) {
     if (!card || !card.ability) return '';

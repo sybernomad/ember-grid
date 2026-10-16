@@ -2,11 +2,11 @@
 function leagueDraftScore(card, playerId) {
     let score = getCardDraftScore(card);
     const t = card.ability && card.ability.type;
-    if (playerId === 'ash' && (t === 'blast' || t === 'aura_buff' || t === 'cinder' || t === 'siphon')) score += 3;
-    if (playerId === 'vesper' && (t === 'chill' || t === 'silence' || t === 'poison' || t === 'curse_adj' || t === 'parasite')) score += 3;
+    if (playerId === 'ash' && (t === 'blast' || t === 'aura_buff' || t === 'cinder' || t === 'siphon' || t === 'notch')) score += 3;
+    if (playerId === 'vesper' && (t === 'chill' || t === 'silence' || t === 'poison' || t === 'curse_adj' || t === 'parasite' || t === 'wither')) score += 3;
     if (playerId === 'rook') {
         score += 1;
-        if (t === 'equalizer' || t === 'blast' || t === 'pendulum' || t === 'symbiosis') score += 1.5;
+        if (t === 'equalizer' || t === 'blast' || t === 'pendulum' || t === 'symbiosis' || t === 'march') score += 1.5;
     }
     const noise = playerId === 'rook' ? Math.random() * 0.4 : Math.random() * 1.8;
     return score + noise;
@@ -15,9 +15,9 @@ function leagueDraftScore(card, playerId) {
 function personalityPlayBias(card, personality) {
     if (!personality || !card.ability) return 0;
     const t = card.ability.type;
-    if (personality === 'ash' && (t === 'blast' || t === 'aura_buff' || t === 'cinder' || t === 'siphon')) return 2.5;
-    if (personality === 'vesper' && (t === 'chill' || t === 'silence' || t === 'poison' || t === 'curse_adj' || t === 'parasite')) return 2.5;
-    if (personality === 'rook' && (t === 'equalizer' || t === 'blast' || t === 'pendulum' || t === 'symbiosis')) return 1.5;
+    if (personality === 'ash' && (t === 'blast' || t === 'aura_buff' || t === 'cinder' || t === 'siphon' || t === 'notch')) return 2.5;
+    if (personality === 'vesper' && (t === 'chill' || t === 'silence' || t === 'poison' || t === 'curse_adj' || t === 'parasite' || t === 'wither')) return 2.5;
+    if (personality === 'rook' && (t === 'equalizer' || t === 'blast' || t === 'pendulum' || t === 'symbiosis' || t === 'march')) return 1.5;
     return 0;
 }
 
@@ -39,6 +39,9 @@ function getCardDraftScore(card) {
             case 'symbiosis': baseScore += 4; break;
             case 'pendulum': baseScore += 3; break;
             case 'curse_adj': baseScore += 3; break;
+            case 'wither':
+            case 'march':
+            case 'notch': baseScore += 3; break;
             default: baseScore += 2;
         }
     }
@@ -72,8 +75,16 @@ function pickAiMoveFor(owner, difficulty, personality) {
             const silencedHere = wouldBeSilenced(owner, cellIdx);
             const hushCancels = liveAbilityType(card) === 'silence' && neighborIndexes(cellIdx).some(i => isSilenceCard(board[i]) && board[i].owner === enemy);
             const neighbors = neighborDirs(cellIdx);
+            let marchDest = null;
+            if (liveAbilityType(card) === 'march' && !silencedHere) {
+                const friends = neighbors.filter(d => d.ok && board[d.idx] && board[d.idx].owner === owner);
+                if (friends.length) {
+                    friends.sort((a, b) => printedPower(board[b.idx]) - printedPower(board[a.idx]));
+                    marchDest = friends[0].idx;
+                }
+            }
 
-            neighbors.forEach(n => {
+            if (marchDest == null) neighbors.forEach(n => {
                 if (n.ok && board[n.idx]) {
                     const neighborCard = board[n.idx];
                     const myVal = getEffectiveStat(card, n.p, true, silencedHere);
@@ -90,6 +101,7 @@ function pickAiMoveFor(owner, difficulty, personality) {
                     if (liveAbilityType(neighborCard) === 'spite' && neighborCard.owner === enemy) exposureRisk += 2;
                     if (liveAbilityType(card) === 'parasite' && neighborCard.owner === enemy && snapshotAbility(neighborCard) && !silencedHere) score += 5;
                     if (liveAbilityType(card) === 'siphon' && neighborCard.owner === enemy && !silencedHere) score += 4;
+                    if (liveAbilityType(card) === 'notch' && !silencedHere && neighborCard.owner === enemy && theirVal > 1 && myVal <= theirVal && myVal > Math.max(1, theirVal - 2)) score += 4;
 
                     if (neighborCard.owner === enemy) {
                         const hit = facingCaptures(myVal, theirVal, card, silencedHere);
@@ -103,10 +115,28 @@ function pickAiMoveFor(owner, difficulty, personality) {
                 }
             });
 
+            if (marchDest != null) {
+                score += 2;
+                const destSilenced = wouldBeSilenced(owner, marchDest);
+                neighborDirs(marchDest).forEach(n => {
+                    if (!n.ok || n.idx === cellIdx || !board[n.idx] || board[n.idx].owner !== enemy) return;
+                    const landed = getEffectiveStat(card, n.p, true, destSilenced);
+                    const theirs = getEffectiveStat(board[n.idx], n.n, false, isSilenced(n.idx));
+                    if (liveAbilityType(board[n.idx]) === 'poison' && !isSilenced(n.idx)) exposureRisk += 2;
+                    if (liveAbilityType(board[n.idx]) === 'spite') exposureRisk += 2;
+                    if (facingCaptures(landed, theirs, card, destSilenced).captures) flipsCount++;
+                });
+                if (cellEffects[marchDest] === 'cinder') score -= 5;
+                if (destSilenced && liveAbilityType(card) !== 'silence') score -= 3;
+            }
             score += flipsCount * 14 + powerBias - exposureRisk * 2.5;
-            if (cellEffects[cellIdx] === 'cinder') score -= 5;
-            if (silencedHere && liveAbilityType(card) !== 'silence') score -= 3;
+            if (marchDest == null && cellEffects[cellIdx] === 'cinder') score -= 5;
+            if (marchDest == null && silencedHere && liveAbilityType(card) !== 'silence') score -= 3;
             if (liveAbilityType(card) === 'bolt' && !silencedHere && enemyOnBoard) score += 3;
+            if (liveAbilityType(card) === 'wither' && !silencedHere) {
+                const enemyHand = owner === 'blue' ? aiHand : playerHand;
+                if (enemyHand.length) score += 2;
+            }
             if (liveAbilityType(card) === 'symbiosis' && !silencedHere) score += 2 + ownerCaptureCount(owner) * 3;
             score += personalityPlayBias(card, personality);
             if (score > maxScore) {maxScore = score; bestMove = {cardIndex, cellIdx};}

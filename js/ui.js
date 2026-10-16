@@ -348,7 +348,7 @@ function haptic(pattern) {
 }
 
 function hapticForPlay(fx) {
-    const ability = fx.abilityFx || fx.buffFx || fx.silenceFx || fx.chillFx || fx.psnFx || fx.pendulumFx;
+    const ability = fx.abilityFx || fx.buffFx || fx.silenceFx || fx.chillFx || fx.psnFx || fx.pendulumFx || fx.marchFx;
     const captured = !!(fx.capLog || fx.psnCapLog);
     if (ability && ability.kind === 'bolt') haptic(captured ? [10, 28, 36, 40, 18] : [10, 30, 36]);
     else if (captured) haptic([12, 28, 22]);
@@ -392,7 +392,7 @@ function refreshRulesetDesc() {
     if (!descBox) return;
     descBox.innerHTML = currentRuleset === 'classic'
         ? "<strong>Classic Mode:</strong> Abilities off. Capture is stats only."
-        : "<strong>Ember Mode:</strong> Every card has an ability. Fourteen tribes.";
+        : "<strong>Ember Mode:</strong> Every card has an ability. Seventeen tribes. Harvest is in the deck.";
     refreshClassicTiesUi();
 }
 
@@ -1522,13 +1522,16 @@ function snapshotMatch(first) {
 
 function idsToNums(ids) {
     return ids.map(id => {
-        const n = parseInt(String(id).replace(/^BS-/i, ''), 10);
-        return n;
+        const index = masterCards.findIndex(card => card.id === id);
+        return index >= 0 ? index + 1 : 0;
     });
 }
 
 function numsToIds(nums) {
-    return nums.map(n => `BS-${String(n).padStart(2, '0')}`);
+    return nums.map(n => {
+        const card = masterCards[n - 1];
+        return card ? card.id : '';
+    });
 }
 
 function encodeMatchCode(match) {
@@ -2707,6 +2710,26 @@ function playSymbiosisFx(fromIdx) {
     placeBurst(cellFxPoint(fromIdx), 'symbiosis', `<div class="mech-flash symbiosis"></div>`, 680);
 }
 
+function playWitherFx(fromIdx) {
+    placeBurst(cellFxPoint(fromIdx), 'wither', `<div class="mech-flash wither"></div><span class="mech-wisp" style="left:50%;top:42%"></span>`, 700);
+}
+
+function playNotchFx(fromIdx, toIdx) {
+    travelFx(cellFxPoint(fromIdx), cellFxPoint(toIdx), 'cinder', 320);
+    placeBurst(cellFxPoint(fromIdx), 'notch', `<div class="mech-flash notch"></div>`, 560);
+    placeBurst(cellFxPoint(toIdx), 'notch', `<div class="mech-flash notch"></div><div class="mech-crack"></div>`, 640);
+    tapCardFx(toIdx, 'mech-hit-spite', 400);
+}
+
+function playMarchFx(fromIdx, toIdx) {
+    const from = cellFxPoint(fromIdx);
+    const to = cellFxPoint(toIdx);
+    placeBurst(from, 'march', `<div class="mech-flash march"></div>`, 640);
+    placeBurst(to, 'march', `<div class="mech-flash march"></div>`, 640);
+    travelFx(from, to, 'march', 420);
+    tapCardFx(toIdx, 'mech-hit-chill', 420);
+}
+
 function playMechFx(events) {
     if (!events || !events.length) return;
     events.forEach(ev => {
@@ -2725,6 +2748,9 @@ function playMechFx(events) {
         else if (ev.kind === 'siphon') playSiphonFx(ev.from, to);
         else if (ev.kind === 'pendulum') playPendulumFx(ev.from);
         else if (ev.kind === 'symbiosis') playSymbiosisFx(ev.from);
+        else if (ev.kind === 'wither') playWitherFx(ev.from);
+        else if (ev.kind === 'notch' && to[0] != null) playNotchFx(ev.from, to[0]);
+        else if (ev.kind === 'march' && to[0] != null) playMarchFx(ev.from, to[0]);
     });
 }
 

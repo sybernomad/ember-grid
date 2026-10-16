@@ -466,8 +466,70 @@ function fireOnPlayKind(placedCard, index, abType) {
         }
     } else if (abType === 'siphon') {
         return applySiphon(placedCard, index);
+    } else if (abType === 'wither') {
+        return applyWither(placedCard, index);
+    } else if (abType === 'notch') {
+        return applyNotch(placedCard, index);
     }
     return null;
+}
+
+function applyWither(placedCard, index) {
+    const hand = placedCard.owner === 'blue' ? aiHand : playerHand;
+    if (!hand.length) return null;
+    const pick = hand[randomIndex(hand.length)];
+    let reduced = false;
+    pick.baseStats = pick.baseStats.map(s => {
+        if (s > 1) reduced = true;
+        return Math.max(1, s - 1);
+    });
+    if (!reduced) return null;
+    pick.fxType = 'wither';
+    placedCard.fxType = placedCard.fxType || 'wither';
+    queueMechFx('wither', index, []);
+    const hidden = pick.owner === 'red' && !showBothHands;
+    const who = hidden ? 'a card in their hand' : logCard(pick);
+    return {text: `${logCard(placedCard)} withered ${who} (-1)`, kind: 'wither'};
+}
+
+function applyNotch(placedCard, index) {
+    const hits = [];
+    facingPairs(index).forEach(p => {
+        const n = board[p.idx];
+        if (!n || n.owner === placedCard.owner) return;
+        const stat = n.baseStats[p.theirs];
+        if (stat == null || stat <= 1) return;
+        hits.push({n, p, stat});
+    });
+    if (!hits.length) return null;
+    hits.sort((a, b) => b.stat - a.stat);
+    const hit = hits[0];
+    hit.n.baseStats[hit.p.theirs] = Math.max(1, hit.n.baseStats[hit.p.theirs] - 2);
+    hit.n.fxType = 'notch';
+    placedCard.fxType = placedCard.fxType || 'notch';
+    queueMechFx('notch', index, [hit.p.idx]);
+    return {text: `${logCard(placedCard)} notched ${logCard(hit.n)} (-2)`, kind: 'notch'};
+}
+
+function printedPower(card) {
+    const row = (card && (card.printedStats || card.baseStats)) || [];
+    return row.reduce((sum, n) => sum + n, 0);
+}
+
+function applyMarch(placedCard, index) {
+    if (!placedCard || liveAbilityType(placedCard) !== 'march' || isSilenced(index)) return null;
+    if (board[index] !== placedCard) return null;
+    const friends = neighborDirs(index).filter(d => d.ok && board[d.idx] && board[d.idx].owner === placedCard.owner);
+    if (!friends.length) return null;
+    friends.sort((a, b) => printedPower(board[b.idx]) - printedPower(board[a.idx]));
+    const dest = friends[0].idx;
+    const other = board[dest];
+    board[index] = other;
+    board[dest] = placedCard;
+    placedCard.fxType = 'march';
+    other.fxType = other.fxType || 'march';
+    queueMechFx('march', index, [dest]);
+    return {text: `${logCard(placedCard)} marched with ${logCard(other)}`, kind: 'march'};
 }
 
 function applyOnPlayAbilities(placedCard, index) {
@@ -625,13 +687,15 @@ function queueMechFx(kind, fromIndex, toIndexes) {
 
 function applyPlacementCore(index, placedCard) {
     board.forEach(c => { if (c && c !== placedCard) c.blastPreview = false; });
-    const enemyNeighbor = hasEnemyNeighbor(index, placedCard);
     const abilityFx = applyOnPlayAbilities(placedCard, index);
+    const marchFx = applyMarch(placedCard, index);
+    const fightAt = board.indexOf(placedCard);
+    const enemyNeighbor = hasEnemyNeighbor(fightAt, placedCard);
     recalculateDynamicStats();
-    const buffFx = tagAuraBuffs(placedCard, index);
-    const silenceFx = tagSilence(placedCard, index);
-    const chillFx = tagChill(placedCard, index);
-    const capLog = checkCaptures(index, placedCard);
+    const buffFx = tagAuraBuffs(placedCard, fightAt);
+    const silenceFx = tagSilence(placedCard, fightAt);
+    const chillFx = tagChill(placedCard, fightAt);
+    const capLog = checkCaptures(fightAt, placedCard);
     recalculateDynamicStats();
     const psnFx = applyEndOfTurnEffects();
     recalculateDynamicStats();
@@ -639,7 +703,7 @@ function applyPlacementCore(index, placedCard) {
     recalculateDynamicStats();
     const pendulumFx = tickPendulum();
     recalculateDynamicStats();
-    return {enemyNeighbor, abilityFx, buffFx, silenceFx, chillFx, capLog, psnFx, psnCapLog, pendulumFx};
+    return {enemyNeighbor, abilityFx, buffFx, silenceFx, chillFx, capLog, psnFx, psnCapLog, pendulumFx, marchFx};
 }
 
 function processCardPlacement(index, placedCard) {
@@ -647,7 +711,7 @@ function processCardPlacement(index, placedCard) {
     drawAfterPlay(placedCard.owner);
     if (silentSim) return;
 
-    const fxParts = [fx.abilityFx && fx.abilityFx.text, fx.buffFx && fx.buffFx.text, fx.silenceFx && fx.silenceFx.text, fx.chillFx && fx.chillFx.text, fx.capLog, fx.psnFx && fx.psnFx.text, fx.psnCapLog, fx.pendulumFx && fx.pendulumFx.text].filter(Boolean);
+    const fxParts = [fx.abilityFx && fx.abilityFx.text, fx.buffFx && fx.buffFx.text, fx.silenceFx && fx.silenceFx.text, fx.chillFx && fx.chillFx.text, fx.capLog, fx.psnFx && fx.psnFx.text, fx.psnCapLog, fx.pendulumFx && fx.pendulumFx.text, fx.marchFx && fx.marchFx.text].filter(Boolean);
     logAction(fxParts.length ? fxParts.join(' · ') : `${logCard(placedCard)} played.`);
 
     const placedBy = placedCard.owner === 'blue' ? 'player' : 'ai';
