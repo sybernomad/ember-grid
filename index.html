@@ -5,10 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Ember Grid</title>
+    <!-- Bump this on every PR. CSS and JS load as ?v=BUILD, so phones fetch the new files. Saved games stay in localStorage. -->
+    <meta name="ember-build" content="0.41">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/table.css">
+    <script>
+        (function () {
+            var build = document.querySelector('meta[name="ember-build"]').content;
+            document.write('<link rel="stylesheet" href="css/table.css?v=' + encodeURIComponent(build) + '">');
+        })();
+    </script>
 </head>
 
 <!-- Holiday theme. Remove class season-harvest, and the cobwebs block below, to restore the ember table. -->
@@ -164,8 +171,14 @@
                 <p id="match-code-error" class="match-code-error" hidden></p>
             </details>
             <div class="menu-foot">
-                <!-- Bump BUILD on every PR. Still pre-1.0, so this stays Alpha until 1.0 ships. -->
+                <!-- Label comes from ember-build. Still pre-1.0, so this stays Alpha until 1.0 ships. -->
                 <button type="button" class="build-stamp" onclick="showChangelogModal()" title="Changelog">0.41 Alpha</button>
+                <script>
+                    (function () {
+                        var build = document.querySelector('meta[name="ember-build"]').content;
+                        document.currentScript.previousElementSibling.textContent = build + " Alpha";
+                    })();
+                </script>
                 <p class="dev-note">Still in active development. Cards and rules may change.</p>
             </div>
         </div>
@@ -272,6 +285,7 @@
                         <li>Harvest, the first expansion. Fifteen cards, three tribes: Wither, March, and Notch. Names and faces are Halloween and Thanksgiving.</li>
                         <li>Wither lowers a random card in the enemy hand. March steps into a friendly neighbor's seat and captures from there. Notch cuts one touching number by 2, then captures.</li>
                         <li>The table wears a holiday coat: pumpkin and violet, plus cobwebs in the corners. Remove season-harvest from the page to bring the ember colors back.</li>
+                        <li>A new build stamp loads fresh styles and scripts. Career stats, decks, and the league stay saved.</li>
                     </ul>
                 </section>
                 <section class="changelog-ver">
@@ -817,11 +831,14 @@
         </div>
     </div>
 
-    <script src="js/cards.js"></script>
-    <script src="js/engine.js"></script>
-    <script src="js/ai.js"></script>
-    <script src="js/league.js"></script>
-    <script src="js/ui.js"></script>
+    <script>
+        (function () {
+            var build = document.querySelector('meta[name="ember-build"]').content;
+            ["js/cards.js", "js/engine.js", "js/ai.js", "js/league.js", "js/ui.js"].forEach(function (src) {
+                document.write('<script src="' + src + '?v=' + encodeURIComponent(build) + '"><\/script>');
+            });
+        })();
+    </script>
 
 </body>
 

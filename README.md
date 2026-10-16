@@ -58,7 +58,6 @@ You plus Ash, Vesper, and Rook. Twenty cards, five each. Then six weeks so every
 | 🦃 | March | Acorn, Sheaf, Cart, Gobbler, Hayride | On play, swaps with the adjacent friendly card of highest printed power, then captures from that seat. The friend does not capture |
 | 🎃 | Notch | Candy, Jack, Slice, Carver, Feast | On play, the adjacent enemy with the highest touching stat loses 2 from that stat, then this card captures |
 
-
 No ability destroys a card or blocks capture.
 
 ## Features
@@ -78,6 +77,6 @@ No ability destroys a card or blocks capture.
 - Live stats tint gold when buffed and red when debuffed. The printed face stays on the pip tooltip.
 - Battle log window for the current match. Card names wear the team color they had on that play. Captures still flash on the cards; the grid itself stays clear of ellipsized text.
 - Short table effects when an ability actually hits (Bolt arcs, Cinder sparks to the cell, and so on). Reduced motion keeps the color ring.
-- Alpha build number on the main menu. Tap it for the changelog. Bump `0.41` in `index.html` on every PR until 1.0 ships.
+- Alpha build number on the main menu. Tap it for the changelog. Bump `ember-build` in `index.html` on every PR until 1.0 ships. That stamp is added to the stylesheet and scripts (`?v=`), so a phone fetches the new files and leaves saved games in place.
 - Holiday look: pumpkin, violet, and cobwebs. Remove `season-harvest` from `body` in `index.html` to restore the ember table.
 - Source is split for editing: `css/table.css`, `js/cards.js`, `js/engine.js`, `js/ai.js`, `js/league.js`, `js/ui.js`. `index.html` is the page.
