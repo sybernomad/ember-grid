@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Ember Grid</title>
     <!-- Bump this on every PR. CSS and JS load as ?v=BUILD, so phones fetch the new files. Saved games stay in localStorage. -->
-    <meta name="ember-build" content="0.41">
+    <meta name="ember-build" content="0.42">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -172,7 +172,7 @@
             </details>
             <div class="menu-foot">
                 <!-- Label comes from ember-build. Still pre-1.0, so this stays Alpha until 1.0 ships. -->
-                <button type="button" class="build-stamp" onclick="showChangelogModal()" title="Changelog">0.41 Alpha</button>
+                <button type="button" class="build-stamp" onclick="showChangelogModal()" title="Changelog">0.42 Alpha</button>
                 <script>
                     (function () {
                         var build = document.querySelector('meta[name="ember-build"]').content;
@@ -279,6 +279,12 @@
             <h2 class="modal-title">Changelog</h2>
             <p class="set-blurb">Alpha stamps. Newest first. Tap the version on the menu anytime.</p>
             <div class="changelog-list">
+                <section class="changelog-ver">
+                    <h3>0.42 Alpha</h3>
+                    <ul>
+                        <li>The battle-page title is the words Ember Grid again. The holiday gradient stays inside the letters.</li>
+                    </ul>
+                </section>
                 <section class="changelog-ver">
                     <h3>0.41 Alpha</h3>
                     <ul>
